@@ -1,5 +1,3 @@
----
-
 # AlgDat_Damen
 
 ## Inhaltsverzeichnis
