@@ -1,5 +1,3 @@
-Hier ist eine überarbeitete Version des Readme-Dokuments in Markdown mit einem Inhaltsverzeichnis und ausführlicheren Beschreibungen:
-
 ---
 
 # AlgDat_Damen
