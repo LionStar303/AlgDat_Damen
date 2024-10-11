@@ -1,19 +1,28 @@
 # AlgDat_Damen
 
 ## Inhaltsverzeichnis
+1. [Links](#links)
 1. [Das Damenproblem](#das-damenproblem)
    - [Einführung](#einführung)
    - [Wie man es löst](#wie-man-es-löst)
    - [Backtracking-Algorithmus](#backtracking-algorithmus)
-2. [Git-Richtlinien](#git-richtlinien)
-3. [Minecraft Server Setup](#minecraft-server-setup)
-4. [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
+1. [Git-Richtlinien](#git-richtlinien)
+1. [Minecraft Server Setup](#minecraft-server-setup)
+1. [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
    - [Schachfelder und Level](#schachfelder-und-level)
    - [Simulation des Algorithmus](#simulation-des-algorithmus)
    - [Interaktive Button-Steuerung](#interaktive-button-steuerung)
    - [Manuelles Lösen des Problems](#manuelles-lösen-des-problems)
 
 ---
+
+## Links
+
+- [Aufgaben](Aufgaben%20Übersicht.pdf)
+- [Konzept Dokument](https://docs.google.com/document/d/13CYumO2Ctvhs1VfjUhYJ1NVMbv2mjmXSdiNyZm6ToJY/edit)
+- [Abgabe Nextcloud](https://micloud.hs-mittweida.de/index.php/s/aJtmY5M6AbCNoCS)
+
+> In [dieser Tabelle](https://docs.google.com/spreadsheets/d/1tJ5OvrSQYsdzblW9wPGsDAvN1usJ43vCg_zMSZNEfME) bitte immer Arbeitszeiten und Tätigkeit nachtragen.
 
 ## Das Damenproblem
 
@@ -83,6 +92,3 @@ Alternativ kann der Spieler den Algorithmus auch **schrittweise** durch das Klic
 ### Manuelles Lösen des Problems
 
 Schließlich gibt es die Möglichkeit, dass der Spieler die Damen **manuell** auf das Schachbrett setzt. Hierbei können die Spieler die Positionen in **Kisten** oder **Blättern** speichern, um am Ende die maximale Anzahl von Damen zu bestimmen, die sicher auf dem Schachbrett platziert werden können.
-
----
-
