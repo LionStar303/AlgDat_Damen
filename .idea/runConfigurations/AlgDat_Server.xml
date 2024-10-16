@@ -2,7 +2,7 @@
   <configuration default="false" name="AlgDat Server" type="JarApplication">
     <option name="JAR_PATH" value="$PROJECT_DIR$/Server/paper-1.21-130.jar" />
     <option name="PROGRAM_PARAMETERS" value="nogui" />
-    <option name="WORKING_DIRECTORY" value="D:\GitHub\Hochschule\AlgDat_Damen\Server" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Server" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="21" />
     <method v="2">
