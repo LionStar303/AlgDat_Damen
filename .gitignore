@@ -116,11 +116,11 @@ fabric.properties
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
+.vscode/settings.json
+.vscode/*.code-snippets
 !.vscode/extensions.json
-!.vscode/*.code-snippets
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Local History for Visual Studio Code
 .history/
@@ -161,3 +161,14 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,intellij,gradle
+
+### Server
+Server/logs/
+Server/world_design
+Server/world_design_nether
+Server/world_design_the_end
+Server/server.properties
+Server/spigot.yml
+Server/config/paper-global.yml
+Server/config/paper-world-defaults.yml
+Server/bukkit.yml

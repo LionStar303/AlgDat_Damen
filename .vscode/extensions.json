@@ -1,8 +1,5 @@
 {
     "recommendations": [
-        "ms-vscode.cpptools-extension-pack",
-        "eamodio.gitlens",
-        "mhutchie.git-graph",
-        "yzhang.markdown-all-in-one"
+        "vscjava.vscode-java-pack"
     ]
 }

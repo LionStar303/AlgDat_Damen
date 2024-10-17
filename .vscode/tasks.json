@@ -1,0 +1,58 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["build"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Führt den Gradle-Build des Projekts aus."
+        },
+        {
+            "label": "Copy JAR to Server",
+            "type": "shell",
+            "command": "powershell",
+            "dependsOn": ["Build Project"],
+            "args": [
+                "Copy-Item",
+                "-force", "./build/libs/*",
+                "-Destination", "./Server/plugins/"
+            ],
+            "problemMatcher": [],
+            "detail": "Kopiert die gebaute JAR-Datei in den Server/plugins-Ordner."
+        },
+        {
+            "label": "Start Server",
+            "type": "shell",
+            "command": "java",
+            "dependsOn": ["Copy JAR to Server"],
+            "args": [
+                "-jar",
+                "paper-1.21-130.jar",
+                "nogui"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Startet den Minecraft-Server mit der JAR-Datei.",
+            "options": {
+                "cwd": "${workspaceFolder}/Server" // Set the working directory to the Server directory
+            }
+        },
+        {
+            "label": "Run All Tasks",
+            "dependsOn": [
+                "Build Project",
+                "Copy JAR to Server",
+                "Start Server"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "Führt alle Aufgaben der Kette aus."
+        }
+    ]
+}
