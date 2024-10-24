@@ -1,3 +1,4 @@
+package de.hsmw.algDatDamen;
 
 public class ChessBoardTest {
 

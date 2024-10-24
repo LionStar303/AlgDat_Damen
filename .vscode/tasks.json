@@ -52,46 +52,6 @@
             "group": "build",
             "problemMatcher": [],
             "detail": "Führt alle Aufgaben der Kette aus."
-        },
-        {
-            "label": "Compile Java Project",
-            "type": "shell",
-            "command": "javac",
-            "args": [
-                "-d",
-                "bin",
-                "src/main/java/de/hsmw/algDatDamen/Klassen/*.java"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$javac"],
-            "detail": "Compiles all Java files in the project"
-        },
-        {
-            "label": "Run Current Java File",
-            "type": "shell",
-            "command": "java",
-            "args": [
-                "-cp",
-                "${fileDirname}",
-                "${fileBasenameNoExtension}"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared"
-            },
-            "problemMatcher": ["$java"],
-            "runOptions": {
-                "runOn": "folderOpen"
-            }
         }
     ]
 }

@@ -1,4 +1,5 @@
 package de.hsmw.algDatDamen;
+
 /**
  * This class represents a Queen on the chessboard.
  * It stores the position of the queen and whether it is a "super queen."

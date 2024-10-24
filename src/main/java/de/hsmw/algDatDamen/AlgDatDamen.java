@@ -1,8 +1,9 @@
 package de.hsmw.algDatDamen;
 
+
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.hsmw.algDatDamen.Klassen;
+
 
 public final class AlgDatDamen extends JavaPlugin {
 
@@ -36,3 +37,4 @@ public final class AlgDatDamen extends JavaPlugin {
         // Plugin shutdown logic
     }
 }
+
