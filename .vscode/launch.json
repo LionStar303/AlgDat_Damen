@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "ChessBoardTest",
+            "request": "launch",
+            "mainClass": "de.hsmw.algDatDamen.Klassen.ChessBoardTest",
+            "projectName": "AlgDat_Damen"
+        },
+        {
             "name": "Run All Tasks",
             "type": "java",
             "request": "launch",

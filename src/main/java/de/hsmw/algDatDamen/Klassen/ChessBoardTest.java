@@ -1,16 +1,7 @@
-package de.hsmw.algDatDamen;
 
-import org.bukkit.plugin.java.JavaPlugin;
+public class ChessBoardTest {
 
-import de.hsmw.algDatDamen.Klassen;
-
-public final class AlgDatDamen extends JavaPlugin {
-
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-        System.out.println("Moin!");
-
+    public static void main(String[] args) {
         // Create a chessboard with size n x n
         int boardSize = 8; // You can change this to any size
         ChessBoard board = new ChessBoard(boardSize);
@@ -29,10 +20,5 @@ public final class AlgDatDamen extends JavaPlugin {
 
         // Print the final layout of the chessboard
         board.printBoard();
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
     }
 }

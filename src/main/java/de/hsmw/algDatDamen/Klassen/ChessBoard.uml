@@ -1,0 +1,43 @@
+﻿[Files]
+File0=C:\Users\morit\OneDrive\Desktop\ChessBoard.java
+File1=C:\Users\morit\OneDrive\Desktop\Queen.java
+
+[Box:  - ChessBoard]
+X=867
+Y=90
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=12
+FontName=Segoe UI
+
+[Box:  - Queen]
+X=339
+Y=97
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=12
+FontName=Segoe UI
+
+[Diagram]
+comments=0
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+ShowConnections=0
+Fontname=Segoe UI
+Fontsize=12
+ShowObjectDiagram=0
+
+[Connections]
+V0=ChessBoard#Queen#Aggregation####0#0#0###0#0
+
+[Interactive]
+I0=
+
