@@ -1,5 +1,8 @@
 package de.hsmw.algDatDamen;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+
 import java.util.ArrayList;
 
 /**
@@ -15,6 +18,7 @@ public class ChessBoard {
     private ArrayList<Queen> queens; // List of queens placed on the board
     private int size; // Size of the chessboard (n x n)
     private boolean console; // Controls console messages for debugging
+    private Block leftCorner;
 
     /**
      * Default constructor that initializes an empty chessboard.
@@ -34,18 +38,31 @@ public class ChessBoard {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = true;
+        this.leftCorner = null;
+    }
+
+
+    //Hier Doku einfügen
+    public ChessBoard(Block leftCorner,int size) {
+        this.size = size;
+        this.queens = new ArrayList<>();
+        this.console = false;
+        this.leftCorner = leftCorner;
+        spawnCB();
     }
 
     /**
      * Constructor to create a chessboard of a specific size and Console messages.
      *
      * @param size     The size of the chessboard (size x size).
-     * @param Controls console messages for debugging
+     * @param console console messages for debugging
      */
     public ChessBoard(int size, boolean console) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = console;
+        this.leftCorner = null;
+
     }
 
     // Getters and Setters
@@ -296,5 +313,26 @@ public class ChessBoard {
     @Override
     public String toString() {
         return "Chessboard size: " + size + "x" + size + ", Queens placed: " + numberOfQueens();
+    }
+
+    public boolean spawnCB(){
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                // Bestimme das aktuelle Blockmaterial basierend auf der Position
+                Material material = ((x + z) % 2 == 0) ? Material.BLACK_WOOL : Material.WHITE_WOOL;
+
+                // Berechne die aktuelle Position des Blocks
+                Block currentBlock = leftCorner.getWorld().getBlockAt(
+                        leftCorner.getX() + x,
+                        leftCorner.getY(),
+                        leftCorner.getZ() + z
+                );
+
+                // Setze den Block auf das bestimmte Material
+                currentBlock.setType(material);
+            }
+        }
+
+        return true;
     }
 }
