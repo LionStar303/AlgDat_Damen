@@ -1,6 +1,8 @@
 package de.hsmw.algDatDamen;
 
 
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -57,17 +59,27 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
     public void onBlockInteract(PlayerInteractEvent event) {
         // Prüfen, ob der Spieler ein Item in der Hand hat und ob es ein Stick ist
         ItemStack itemInHand = event.getItem();
-        if (itemInHand != null && itemInHand.getType() == Material.STICK) {
+        if (itemInHand != null && ( ( itemInHand.getType() == Material.WHITE_CONCRETE) ||  (itemInHand.getType() ==  Material.GRAY_CONCRETE) )) {
             // Den Block, mit dem interagiert wurde, abrufen
             Block clickedBlock = event.getClickedBlock();
-
             // Sicherstellen, dass der Block nicht null ist und vom Typ GRASS_BLOCK ist
-            if (clickedBlock != null && clickedBlock.getType() == Material.GRASS_BLOCK) {
-                // Blocktyp in GOLD_BLOCK ändern
-                clickedBlock.setType(Material.GOLD_BLOCK);
-                ChessBoard cb = new ChessBoard(clickedBlock, 8);
-                cbList.add(cb);
+            if (clickedBlock != null && clickedBlock.getType() == Material.GOLD_BLOCK) {
+                Player player = event.getPlayer();
+                Inventory inventory = player.getInventory();
+                int stackCount = 0;
 
+                for (ItemStack item : inventory.getContents()) {
+                    if (item != null && item.getType() == itemInHand.getType()) {
+                        stackCount += item.getAmount();
+                    }
+                }
+
+                if(stackCount > 12){
+                    stackCount = 12;
+                }
+                clickedBlock.setType(itemInHand.getType());
+                ChessBoard cb = new ChessBoard(clickedBlock, stackCount);
+                cbList.add(cb);
             }
         }
     }

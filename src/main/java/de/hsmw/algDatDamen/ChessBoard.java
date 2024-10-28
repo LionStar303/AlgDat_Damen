@@ -1,7 +1,11 @@
 package de.hsmw.algDatDamen;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
 
 import java.util.ArrayList;
 
@@ -48,7 +52,11 @@ public class ChessBoard {
         this.queens = new ArrayList<>();
         this.console = false;
         this.leftCorner = leftCorner;
-        spawnCB();
+        spawnCB((leftCorner.getType() == Material.WHITE_CONCRETE));
+        playBacktrk();
+        for(Queen q : getQueens()){
+            spawnQueen(q);
+        }
     }
 
     /**
@@ -315,11 +323,12 @@ public class ChessBoard {
         return "Chessboard size: " + size + "x" + size + ", Queens placed: " + numberOfQueens();
     }
 
-    public boolean spawnCB(){
+    public boolean spawnCB(boolean white) {
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-                // Bestimme das aktuelle Blockmaterial basierend auf der Position
-                Material material = ((x + z) % 2 == 0) ? Material.BLACK_WOOL : Material.WHITE_WOOL;
+                // Bestimme das aktuelle Blockmaterial basierend auf der Position und dem Parameter 'white'
+                boolean isWhite = ((x + z) % 2 == 0) == white;
+                Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
                 // Berechne die aktuelle Position des Blocks
                 Block currentBlock = leftCorner.getWorld().getBlockAt(
@@ -335,4 +344,37 @@ public class ChessBoard {
 
         return true;
     }
+
+    public boolean spawnQueen(Queen q) {
+        // Koordinaten der Dame abrufen
+        int x = q.getX();
+        int y = q.getY();
+
+        // Berechne die Position der Dame auf dem Schachfeld
+        Location queenLocation = leftCorner.getLocation().add(x+0.5, 1, y+0.5); // y bleibt 0, da wir die Dame auf die gleiche Höhe wie das Schachbrett setzen
+
+        // Armor Stand erstellen
+        ArmorStand armorStand = queenLocation.getWorld().spawn(queenLocation, ArmorStand.class);
+
+        // Armor Stand anpassen
+        armorStand.setArms(true);
+        armorStand.setBasePlate(false);
+        armorStand.setCustomName("Schach-Dame");
+        armorStand.setCustomNameVisible(true);
+        armorStand.setGravity(false);
+        armorStand.setInvisible(false);
+
+        // Rüstung hinzufügen, um die Schach-Dame darzustellen
+        armorStand.setHelmet(new ItemStack(Material.BLACK_WOOL)); // Krone
+        armorStand.setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+        armorStand.setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+        armorStand.setBoots(new ItemStack(Material.IRON_BOOTS));
+
+        // Pose anpassen, um wie eine Schach-Dame auszusehen
+        armorStand.setRightArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(-10)));
+        armorStand.setLeftArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(10)));
+
+        return true; // Gibt zurück, dass die Dame erfolgreich gespawnt wurde
+    }
+
 }
