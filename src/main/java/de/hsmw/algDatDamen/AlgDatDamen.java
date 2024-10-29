@@ -25,25 +25,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
         // Initialisiere Die Schachfelder
         this.cbList = new ArrayList<>();
 
-        // Create a chessboard with size n x n
-        int boardSize = 8; // You can change this to any size
-        ChessBoard board = new ChessBoard(boardSize);
-
-        // default true but --> activates the Console Messages
-        board.setConsole(true);
-
-        // Place queens on all fields of the board
-        board.placeAllQueens();
-
-        // Print the final layout of the chessboard
-        board.printBoard();
-
-        // Test the Backtracking
-        board.playBacktrk();
-
-        // Print the final layout of the chessboard
-        board.printBoard();
-
         getServer().getPluginManager().registerEvents(this, this);
         getLogger().info("BlockChangePlugin aktiviert!");
     }
@@ -80,7 +61,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
                     stackCount = 12;
                 }
                 clickedBlock.setType(itemInHand.getType());
-                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount);
+                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
                 cbList.add(cb);
             }
         }
