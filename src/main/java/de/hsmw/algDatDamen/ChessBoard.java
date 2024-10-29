@@ -22,7 +22,7 @@ public class ChessBoard {
     private ArrayList<Queen> queens; // List of queens placed on the board
     private int size; // Size of the chessboard (n x n)
     private boolean console; // Controls console messages for debugging
-    private Block leftCorner;
+    private Location leftCorner;
 
     /**
      * Default constructor that initializes an empty chessboard.
@@ -47,12 +47,12 @@ public class ChessBoard {
 
 
     //Hier Doku einfügen
-    public ChessBoard(Block leftCorner,int size) {
+    public ChessBoard(Location leftCorner,int size) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = false;
         this.leftCorner = leftCorner;
-        spawnCB((leftCorner.getType() == Material.WHITE_CONCRETE));
+        spawnCB((leftCorner.getBlock().getType() == Material.WHITE_CONCRETE));
         playBacktrk();
         for(Queen q : getQueens()){
             spawnQueen(q);
@@ -331,10 +331,10 @@ public class ChessBoard {
                 Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
                 // Berechne die aktuelle Position des Blocks
-                Block currentBlock = leftCorner.getWorld().getBlockAt(
-                        leftCorner.getX() + x,
-                        leftCorner.getY(),
-                        leftCorner.getZ() + z
+                Block currentBlock = leftCorner.getBlock().getWorld().getBlockAt(
+                        leftCorner.getBlockX() + x,
+                        leftCorner.getBlockY(),
+                        leftCorner.getBlockZ() + z
                 );
 
                 // Setze den Block auf das bestimmte Material
@@ -351,7 +351,7 @@ public class ChessBoard {
         int y = q.getY();
 
         // Berechne die Position der Dame auf dem Schachfeld
-        Location queenLocation = leftCorner.getLocation().add(x+0.5, 1, y+0.5); // y bleibt 0, da wir die Dame auf die gleiche Höhe wie das Schachbrett setzen
+        Location queenLocation = leftCorner.getBlock().getLocation().add(x+0.5, 1, y+0.5); // y bleibt 0, da wir die Dame auf die gleiche Höhe wie das Schachbrett setzen
 
         // Armor Stand erstellen
         ArmorStand armorStand = queenLocation.getWorld().spawn(queenLocation, ArmorStand.class);

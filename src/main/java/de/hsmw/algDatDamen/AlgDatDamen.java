@@ -10,8 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.ArrayList;
 
 
@@ -57,6 +55,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
+
         // Prüfen, ob der Spieler ein Item in der Hand hat und ob es ein Stick ist
         ItemStack itemInHand = event.getItem();
         if (itemInHand != null && ( ( itemInHand.getType() == Material.WHITE_CONCRETE) ||  (itemInHand.getType() ==  Material.GRAY_CONCRETE) )) {
@@ -68,6 +67,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
                 Inventory inventory = player.getInventory();
                 int stackCount = 0;
 
+                // cancel envent to prevent block placing
+                event.setCancelled(true);
+
                 for (ItemStack item : inventory.getContents()) {
                     if (item != null && item.getType() == itemInHand.getType()) {
                         stackCount += item.getAmount();
@@ -78,7 +80,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener{
                     stackCount = 12;
                 }
                 clickedBlock.setType(itemInHand.getType());
-                ChessBoard cb = new ChessBoard(clickedBlock, stackCount);
+                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount);
                 cbList.add(cb);
             }
         }
