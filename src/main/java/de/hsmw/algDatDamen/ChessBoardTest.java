@@ -17,7 +17,7 @@ public class ChessBoardTest {
         board.printBoard();
 
         // Test the Backtracking
-        board.playBacktrk();
+        board.playBacktrack();
 
         // Print the final layout of the chessboard
         board.printBoard();

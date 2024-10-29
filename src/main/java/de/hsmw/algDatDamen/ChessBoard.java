@@ -5,8 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,28 @@ public class ChessBoard {
     private ArrayList<Queen> queens; // List of queens placed on the board
     private int size; // Size of the chessboard (n x n)
     private boolean console; // Controls console messages for debugging
-    private Location leftCorner;
+    private Location originCorner;
+    private Vector direction;
+
+    public boolean isConsole() {
+        return console;
+    }
+
+    public Location getOriginCorner() {
+        return originCorner;
+    }
+
+    public void setOriginCorner(Location originCorner) {
+        this.originCorner = originCorner;
+    }
+
+    public Vector getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Vector direction) {
+        this.direction = direction;
+    }
 
     /**
      * Default constructor that initializes an empty chessboard.
@@ -31,6 +54,8 @@ public class ChessBoard {
     public ChessBoard() {
         this.size = 0;
         this.queens = new ArrayList<>();
+        this.originCorner = new Location(null, 0, 0, 0);
+        this.direction = new Vector(1, 0, 0);
         this.console = true; // Enable console messages by default
     }
 
@@ -43,30 +68,32 @@ public class ChessBoard {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = true;
-        this.leftCorner = null;
+        this.originCorner = null;
+        this.direction = null;
     }
 
-
-    //Hier Doku einfügen
-    public ChessBoard(Location leftCorner,int size) {
+    // Hier Doku einfügen
+    public ChessBoard(Location originCorner, int size, Player player) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = false;
-        this.leftCorner = leftCorner;
-        spawnCB((leftCorner.getBlock().getType() == Material.WHITE_CONCRETE));
+        this.originCorner = originCorner;
+        this.direction = this.getBoardDirection(player); // get player direction
+        updateOriginCorner();
+        spawnCB((originCorner.getBlock().getType() == Material.WHITE_CONCRETE));
     }
 
     /**
      * Constructor to create a chessboard of a specific size and Console messages.
      *
-     * @param size     The size of the chessboard (size x size).
+     * @param size    The size of the chessboard (size x size).
      * @param console console messages for debugging
      */
     public ChessBoard(int size, boolean console) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = console;
-        this.leftCorner = null;
+        this.originCorner = null;
 
     }
 
@@ -285,7 +312,7 @@ public class ChessBoard {
      * @return boolean True if the algorithm successfully places all queens, false
      *         otherwise.
      */
-    public boolean playBacktrk() {
+    public boolean playBacktrack() {
         if (console) {
             System.out.println("Start Backtracking Algorithm");
         }
@@ -373,11 +400,10 @@ public class ChessBoard {
                 Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
                 // Calculate the exact position of the block within the world
-                Block currentBlock = leftCorner.getBlock().getWorld().getBlockAt(
-                        leftCorner.getBlockX() + x,
-                        leftCorner.getBlockY(),
-                        leftCorner.getBlockZ() + z
-                );
+                Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
+                        originCorner.getBlockX() + x,
+                        originCorner.getBlockY(),
+                        originCorner.getBlockZ() + z);
 
                 // Set the block's type to either white or gray concrete
                 currentBlock.setType(material);
@@ -397,7 +423,7 @@ public class ChessBoard {
         int y = q.getY();
 
         // Calculate the queen's exact position on the chessboard, offset slightly to center within the block
-        Location queenLocation = leftCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
+        Location queenLocation = originCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
 
         // Check if an armor stand already occupies the target block (indicating a queen is already present)
         if (queenLocation.getBlock().getType() == Material.ARMOR_STAND) {
@@ -440,13 +466,13 @@ public class ChessBoard {
     }
 
     public boolean isPartOfBoard(Location location) {
-        if (leftCorner == null) {
+        if (originCorner == null) {
             return false;
         }
 
         // Calculate boundaries based on origin location and board size
-        int minX = leftCorner.getBlockX();
-        int minZ = leftCorner.getBlockZ();
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
         int maxX = minX + size - 1;
         int maxZ = minZ + size - 1;
 
@@ -454,7 +480,7 @@ public class ChessBoard {
         int x = location.getBlockX();
         int z = location.getBlockZ();
 
-        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && location.getWorld().equals(leftCorner.getWorld());
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && location.getWorld().equals(originCorner.getWorld());
     }
 
     public boolean addQueen(Location l){
@@ -462,8 +488,8 @@ public class ChessBoard {
             return false;
         }
 
-        int minX = leftCorner.getBlockX();
-        int minZ = leftCorner.getBlockZ();
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
 
         int x = l.getBlockX();
         int z = l.getBlockZ();
@@ -480,8 +506,8 @@ public class ChessBoard {
             return false;
         }
 
-        int minX = leftCorner.getBlockX();
-        int minZ = leftCorner.getBlockZ();
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
 
         int x = l.getBlockX();
         int z = l.getBlockZ();
@@ -497,8 +523,8 @@ public class ChessBoard {
     }
 
     public Queen getQueenAt(Location l){
-        int minX = leftCorner.getBlockX();
-        int minZ = leftCorner.getBlockZ();
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
 
         for(Queen q : this.queens){
             System.out.println(q.getX() + " == " +(l.getBlockX()-minX)+" && "+q.getY() + " == " + (l.getBlockZ()-minZ) );
@@ -553,21 +579,74 @@ public class ChessBoard {
      * @return The Location object representing the queen's position.
      */
     private Location getLocationofQueen(Queen q) {
-        double x = q.getX() + leftCorner.getBlockX()+0.5;
-        double z = q.getY() + leftCorner.getBlockZ()+0.5;
+        double x = q.getX() + originCorner.getBlockX()+0.5;
+        double z = q.getY() + originCorner.getBlockZ()+0.5;
 
-        return new Location(leftCorner.getWorld(),  x, leftCorner.getY() + 1,z);
+        return new Location(originCorner.getWorld(),  x, originCorner.getY() + 1,z);
     }
 
     public void spawnCollisionCarpets() {
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
                 if(collision(x, y)){
-                    Location location = new Location(leftCorner.getWorld(), leftCorner.getX()+x, leftCorner.getY()+1, leftCorner.getBlockZ()+y); // Y-coordinate can be adjusted as needed
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getBlockZ()+y); // Y-coordinate can be adjusted as needed
                     Block block = location.getBlock();
                     block.setType(Material.RED_CARPET);
                 }
             }
+        }
+    }
+
+    /**
+     * Determines the cardinal direction of the player based on their location.
+     * 
+     * @param player
+     * @return
+     */
+    private Vector getBoardDirection(Player player) {
+        // Get the player's direction as a 2D vector
+        Vector playerDirection = player.getLocation().getDirection();
+        playerDirection.setY(0); // Ignore vertical component
+        playerDirection = playerDirection.normalize();
+
+        double x = playerDirection.getX();
+        double z = playerDirection.getZ();
+
+        if (x > 0 && z > 0) {
+            return new Vector(1, 0, 1); // East
+        } else if (x < 0 && z > 0) {
+            return new Vector(-1, 0, 1); // South
+        } else if (x < 0 && z < 0) {
+            return new Vector(-1, 0, -1); // West
+        } else {
+            return new Vector(1, 0, -1); // North
+        }
+    }
+
+    private void updateOriginCorner() {
+        // Determine direction modifiers based on boardDirection
+        int xMod = (int) direction.getX(); // Will be either -1 or 1 for East/West orientation
+        int zMod = (int) direction.getZ(); // Will be either -1 or 1 for North/South orientation
+
+        // Current origin corner coordinates
+        int x = originCorner.getBlockX();
+        int z = originCorner.getBlockZ();
+
+        // Calculate new origin corner based on the player's direction and board size
+        if (xMod > 0 && zMod > 0) {
+            // Facing East and South: Set origin at the bottom-left corner
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod > 0) {
+            // Facing West and South: Set origin at the bottom-left corner and shift to the
+            // right
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod < 0) {
+            // Facing West and North: Set origin at the bottom-left corner and shift to both
+            // right and up
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z - (size - 1));
+        } else if (xMod > 0 && zMod < 0) {
+            // Facing East and North: Set origin at the bottom-left corner and shift up
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
     }
 

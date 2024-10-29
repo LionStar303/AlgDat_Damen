@@ -69,7 +69,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 clickedBlock.setType(itemInHand.getType());
 
                 // Create a new ChessBoard at the clicked block's location with the stack count
-                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount);
+                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
                 cbList.add(cb);
             }
         }
@@ -118,7 +118,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         if (itemInHand != null && itemInHand.getType() == Material.IRON_SWORD) {
             for (ChessBoard chessBoard : cbList) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    chessBoard.playBacktrk();
+                    chessBoard.playBacktrack();
                     for(Queen q : chessBoard.getQueens()){
                         chessBoard.spawnQueen(q);
                     }
