@@ -27,26 +27,18 @@ public class ChessBoard {
     private boolean console; // Controls console messages for debugging
     private Location originCorner;
     private Vector direction;
+    private boolean oCWhite;
+    private boolean collisionCarpets;
 
-    public boolean isConsole() {
-        return console;
+    public boolean getCollisionCarpets(){
+        return collisionCarpets;
     }
 
-    public Location getOriginCorner() {
-        return originCorner;
+    public void setCollisionCarpets(boolean collisionCarpets){
+        this.collisionCarpets = collisionCarpets;
     }
 
-    public void setOriginCorner(Location originCorner) {
-        this.originCorner = originCorner;
-    }
 
-    public Vector getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Vector direction) {
-        this.direction = direction;
-    }
 
     /**
      * Default constructor that initializes an empty chessboard.
@@ -80,7 +72,8 @@ public class ChessBoard {
         this.originCorner = originCorner;
         this.direction = this.getBoardDirection(player); // get player direction
         updateOriginCorner();
-        spawnCB((originCorner.getBlock().getType() == Material.WHITE_CONCRETE));
+        this.oCWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
+        spawnCB();
     }
 
     /**
@@ -94,10 +87,29 @@ public class ChessBoard {
         this.queens = new ArrayList<>();
         this.console = console;
         this.originCorner = null;
-
     }
 
     // Getters and Setters
+    public boolean isConsole() {
+        return console;
+    }
+
+    public Location getOriginCorner() {
+        return originCorner;
+    }
+
+    public void setOriginCorner(Location originCorner) {
+        this.originCorner = originCorner;
+    }
+
+    public Vector getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Vector direction) {
+        this.direction = direction;
+    }
+
 
     /**
      * Returns the list of queens placed on the chessboard.
@@ -391,12 +403,13 @@ public class ChessBoard {
      *
      * @param white If true, the left corner of the chessboard will be white; otherwise, it will be gray.
      */
-    public void spawnCB(boolean white) {
+    public void spawnCB() {
         // Iterate over each coordinate pair within the board's size
+
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
                 // Determine if the current block should be white or gray based on position and initial corner color
-                boolean isWhite = ((x + z) % 2 == 0) == white;
+                boolean isWhite = ((x + z) % 2 == 0) == this.oCWhite;
                 Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
                 // Calculate the exact position of the block within the world
@@ -585,13 +598,41 @@ public class ChessBoard {
         return new Location(originCorner.getWorld(),  x, originCorner.getY() + 1,z);
     }
 
+
     public void spawnCollisionCarpets() {
+        this.collisionCarpets = true;
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
                 if(collision(x, y)){
                     Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getBlockZ()+y); // Y-coordinate can be adjusted as needed
                     Block block = location.getBlock();
-                    block.setType(Material.RED_CARPET);
+                    if((x+y) % 2 == 0){
+                        if (oCWhite){
+                            block.setType(Material.ORANGE_CARPET);
+                        }else {
+                            block.setType(Material.RED_CARPET);
+                        }
+
+                    } else {
+                        if (oCWhite == false){
+                            block.setType(Material.ORANGE_CARPET);
+                        }else {
+                            block.setType(Material.RED_CARPET);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void cleanCollisionCarpets() {
+        this.collisionCarpets = false;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (collision(x, y)) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x, originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as needed
+                    Block block = location.getBlock();
+                    block.setType(Material.AIR);
                 }
             }
         }
@@ -648,6 +689,96 @@ public class ChessBoard {
             // Facing East and North: Set origin at the bottom-left corner and shift up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
+    }
+
+    /**
+     * Solves the Queen's problem using a backtracking algorithm.
+     * It tries to place all queens on the board without any conflicts.
+     *
+     * @return boolean True if the algorithm successfully places all queens, false
+     *         otherwise.
+     */
+    public boolean MCBacktrackStep(int x) {
+        cleanCollisionCarpets();
+        cleanBoard();
+        if (console) {
+            System.out.println("Start Backtracking Algorithm");
+        }
+
+        int row = 0;
+
+        ArrayList<Queen> newQ = new ArrayList<Queen>();
+        for(Queen q : queens){
+            if(q.getY() == 1){
+                break;
+            }
+            queens.remove(q);
+            if(collision(q) == false){
+                newQ.add(q);
+            }
+            row++;
+        }
+
+        setQueens(newQ);
+        spawnAllQueens();
+        while (numberOfQueens() != size) {
+            for (int i = x; i < size; i++) {
+                Location l = new Location(originCorner.getWorld(), originCorner.getX()+row, originCorner.getY()+1, originCorner.getZ()+i);
+                Block block = l.getBlock();
+                block.setType(Material.BLUE_CARPET);
+                if (addTestedQueen(row, i)) {
+                    spawnQueen(queens.getLast());
+                    row++;
+                    break;
+                } else if (i == size - 1) {
+                    row = MCbackStep(row) + 1;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Performs a backstep in the backtracking algorithm.
+     * Removes the last placed queen and tries the next position in the same row.
+     *
+     * @param row The current row where backtracking is performed.
+     * @return int The updated row after backtracking.
+     */
+    public int MCbackStep(int row) {
+        row--;
+        int oldY = queens.get(numberOfQueens() - 1).getY();
+
+        //queens.remove(numberOfQueens() - 1);
+        // --- Achtung Hier Minecraft Befehl
+        removeQueen();
+
+        if (console) {
+            System.out.println("Start Backstep -> row: " + row);
+        }
+        int newY = oldY + 1;
+
+        while (!addTestedQueen(row, newY)) {
+            newY++;
+            if (console) {
+                System.out.println("Back-Place -> row: " + row + "  Y = " + newY);
+            }
+
+            if (newY >= size) {
+                if (console) {
+                    printBoard();
+                }
+                backStep(row);
+                newY = 0;
+            }
+        }
+
+        if (console) {
+            System.out.println("End Backstep -> row: " + row + "  Y = " + newY);
+            printBoard();
+        }
+        return row;
     }
 
 }

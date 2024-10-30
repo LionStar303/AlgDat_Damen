@@ -15,6 +15,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     // List to store all created ChessBoard instances
     public ArrayList<ChessBoard> cbList;
+    public int x;
 
     @Override
     public void onEnable() {
@@ -128,17 +129,35 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             }
         }
 
-        if (itemInHand != null && itemInHand.getType() == Material.WOODEN_SWORD) {
+        if (itemInHand != null && itemInHand.getType() == Material.GOLD_BLOCK) {
             for (ChessBoard chessBoard : cbList) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    chessBoard.spawnCollisionCarpets();
+                    chessBoard.MCBacktrackStep(x);
+                    x++;
+                    if(x >= chessBoard.getSize()){
+                        x = 0;
+                    }
                     event.setCancelled(true); // Cancel the default action to avoid conflicts
                     break;
                 }
             }
         }
 
-
+        if (itemInHand != null && itemInHand.getType() == Material.WOODEN_SWORD) {
+            for (ChessBoard chessBoard : cbList) {
+                if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
+                    if(chessBoard.getCollisionCarpets()){
+                        chessBoard.spawnCollisionCarpets();
+                        chessBoard.setCollisionCarpets(false);
+                    }else {
+                        chessBoard.cleanCollisionCarpets();
+                        chessBoard.setCollisionCarpets(true);
+                    }
+                    event.setCancelled(true); // Cancel the default action to avoid conflicts
+                    break;
+                }
+            }
+        }
     }
 }
 
