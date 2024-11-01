@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 
 /**
@@ -23,8 +25,10 @@ public class ChessBoard {
 
     // Attributes
     private ArrayList<Queen> queens; // List of queens placed on the board
-    private int size; // Size of the chessboard (n x n)
     private boolean console; // Controls console messages for debugging
+    @Expose
+    private int size; // Size of the chessboard (n x n)
+    @Expose
     private Location originCorner;
 
     /**
@@ -42,11 +46,11 @@ public class ChessBoard {
      *
      * @param size The size of the chessboard (size x size).
      */
-    public ChessBoard(int size) {
+    public ChessBoard(int size, Location originCorner) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = true;
-        this.originCorner = null;
+        this.originCorner = originCorner;
     }
 
     /**
@@ -71,7 +75,7 @@ public class ChessBoard {
         this.console = false;
         this.originCorner = originCorner;
         updateOriginCorner(getBoardDirection(player)); // get player direction
-        spawnCB((originCorner.getBlock().getType() == Material.WHITE_CONCRETE));
+        spawnCB();
     }
 
     /**
@@ -386,7 +390,8 @@ public class ChessBoard {
      * @param white If true, the left corner of the chessboard will be white;
      *              otherwise, it will be gray.
      */
-    public void spawnCB(boolean white) {
+    public void spawnCB() {
+        boolean white = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         // Iterate over each coordinate pair within the board's size
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {

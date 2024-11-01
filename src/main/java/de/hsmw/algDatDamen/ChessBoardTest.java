@@ -1,11 +1,13 @@
 package de.hsmw.algDatDamen;
 
+import org.bukkit.Location;
+
 public class ChessBoardTest {
 
     public static void main(String[] args) {
         // Create a chessboard with size n x n
         int boardSize = 8; // You can change this to any size
-        ChessBoard board = new ChessBoard(boardSize);
+        ChessBoard board = new ChessBoard(boardSize, new Location(null, 0, 0, 0));
 
         // default true but --> activates the Console Messages
         board.setConsole(true);

@@ -15,6 +15,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     // List to store all created ChessBoard instances
     public ArrayList<ChessBoard> cbList;
+    private ChessBoardSaveManager saveManager;
 
     @Override
     public void onEnable() {
@@ -22,7 +23,15 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         System.out.println("Plugin Started!");
 
         // Initialize the list of chess boards
-        this.cbList = new ArrayList<>();
+        this.saveManager = new ChessBoardSaveManager();
+
+        // Load saved chess boards
+        this.cbList = saveManager.getChessBoards();
+        getLogger().info("Loaded " + cbList.size() + " chess boards from file!");
+        for (ChessBoard chessBoard : cbList) {
+            chessBoard.spawnCB();
+            getLogger().info("Chess board has been spawned!");
+        }
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
@@ -71,6 +80,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 // Create a new ChessBoard at the clicked block's location with the stack count
                 ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
                 cbList.add(cb);
+                saveManager.saveChessBoard(cb);
             }
         }
 
