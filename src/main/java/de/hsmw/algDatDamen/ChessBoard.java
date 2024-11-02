@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -385,27 +386,29 @@ public class ChessBoard {
 
 
     // ------------------------------- Minecraft Methoden ----------------------------------------
-
     /**
-     * Spawns a chessboard on the ground with alternating white and gray blocks.
+     * Spawns a chessboard pattern of alternating white and gray blocks on the ground, starting from `originCorner`
+     * The board's size is determined by the `size` variable
+     * The first corner block is either white or gray
      *
      * @param white If true, the left corner of the chessboard will be white; otherwise, it will be gray.
      */
     public void spawnCB(boolean white) {
-        // Iterate over each coordinate pair within the board's size
+        // Iterate over each x and z coordinate within the specified board size.
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-                // Determine if the current block should be white or gray based on position and initial corner color
+
+                // determine the block color at the current relative coordinate
                 boolean isWhite = ((x + z) % 2 == 0) == white;
                 Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
-                // Calculate the exact position of the block within the world
+                // calculate global coordinates of the block to place
                 Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
                         originCorner.getBlockX() + x,
                         originCorner.getBlockY(),
                         originCorner.getBlockZ() + z);
 
-                // Set the block's type to either white or gray concrete
+                // Set the type of the block to the determined material, either white or gray concrete.
                 currentBlock.setType(material);
             }
         }
@@ -414,7 +417,7 @@ public class ChessBoard {
     /**
      * Spawns a queen on the chessboard at the specified position.
      *
-     * @param q The Queen object that contains the (x, y) position where the queen should be placed.
+     * @param q The Queen object that contains the relative coordinates where the queen should be placed.
      * @return boolean True if the queen was successfully spawned, or false if a queen already occupies that spot.
      */
     public boolean spawnQueen(Queen q) {
@@ -422,7 +425,7 @@ public class ChessBoard {
         int x = q.getX();
         int y = q.getY();
 
-        // Calculate the queen's exact position on the chessboard, offset slightly to center within the block
+        // Calculate the queen's global coordinates, offset slightly to center within the block
         Location queenLocation = originCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
 
         // Check if an armor stand already occupies the target block (indicating a queen is already present)
@@ -440,19 +443,20 @@ public class ChessBoard {
         armorStand.setCustomNameVisible(true);
         armorStand.setGravity(false);
         armorStand.setInvisible(true);
+        armorStand.setSmall(true); // Smaller size to fit the chess piece style
 
         // Equip the Armor Stand with items to give the appearance of a chess queen
-        armorStand.setSmall(true); // Smaller size to fit the chess piece style
-        armorStand.setHelmet(new ItemStack(Material.IRON_HELMET)); // Crown-like helmet
-        armorStand.setChestplate(new ItemStack(Material.IRON_CHESTPLATE)); // Body armor
-        armorStand.setLeggings(new ItemStack(Material.IRON_LEGGINGS)); // Leg armor
-        armorStand.setBoots(new ItemStack(Material.IRON_BOOTS)); // Boot armor
+        EntityEquipment equipment = armorStand.getEquipment();
+        equipment.setHelmet(new ItemStack(Material.GOLDEN_HELMET)); // Crown-like helmet
+        equipment.setChestplate(new ItemStack(Material.IRON_CHESTPLATE)); // Body armor
+        equipment.setLeggings(new ItemStack(Material.IRON_LEGGINGS)); // Leg armor
+        equipment.setBoots(new ItemStack(Material.IRON_BOOTS)); // Boot armor
 
         // Adjust arm poses to provide a distinctive look for the queen piece
         armorStand.setRightArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(-10)));
         armorStand.setLeftArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(10)));
 
-        return true; // Indicates the queen was successfully spawned
+        return true; // Indicates whether the queen was successfully spawned
     }
 
     /**
