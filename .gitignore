@@ -7,9 +7,16 @@
 *.~ava
 
 ##Server Ordner
-/Server
-/Server/*.log        # Ignoriert alle Log-Dateien im Server-Ordner
-/Server/plugins/*.jar  # Ignoriert alle .jar-Dateien im plugins-Ordner unter server
+Server/*.log        # Ignoriert alle Log-Dateien im Server-Ordner
+Server/plugins/*.jar  # Ignoriert alle .jar-Dateien im plugins-Ordner unter server
+Server/logs/
+Server/world_design/
+Server/world_design_nether/
+Server/world_design_the_end/
+Server/spigot.yml
+Server/config/paper-global.yml
+Server/config/paper-world-defaults.yml
+Server/bukkit.yml
 
 
 ### Intellij ###
@@ -172,13 +179,3 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,intellij,gradle
-
-### Server
-Server/logs/
-Server/world_design/
-Server/world_design_nether/
-Server/world_design_the_end/
-Server/spigot.yml
-Server/config/paper-global.yml
-Server/config/paper-world-defaults.yml
-Server/bukkit.yml
