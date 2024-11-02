@@ -68,7 +68,7 @@ public class ChessBoard {
     public ChessBoard(Location originCorner, int size, Player player) {
         this.size = size;
         this.queens = new ArrayList<>();
-        this.console = false;
+        this.console = true;
         this.originCorner = originCorner;
         this.direction = this.getBoardDirection(player); // get player direction
         updateOriginCorner();
@@ -93,6 +93,19 @@ public class ChessBoard {
     public boolean isConsole() {
         return console;
     }
+
+    public boolean isOCWhite(){
+        return oCWhite;
+    }
+
+    public void setOCWhite(boolean oCWhite ){
+        this.oCWhite = oCWhite;
+    }
+
+    public boolean isCollisionCarpets(){
+        return collisionCarpets;
+    }
+
 
     public Location getOriginCorner() {
         return originCorner;
@@ -158,6 +171,24 @@ public class ChessBoard {
 
     // Functional Methods
 
+
+    public void sortQueensY(){
+        ArrayList<Queen> newQueens = new ArrayList<>();
+
+        Queen qHigt;
+        for(Queen q1 : queens){
+            qHigt = q1;
+            for(Queen q2 : queens){
+                if(q2.getY() > qHigt.getY()){
+                    qHigt = q2;
+                }
+            }
+            queens.remove(qHigt);
+            newQueens.addFirst(qHigt);
+        }
+        queens = newQueens;
+
+    }
 
     /**
      * Adds a queen to the chessboard at the specified coordinates.
@@ -449,7 +480,7 @@ public class ChessBoard {
         // Configure the Armor Stand's properties to resemble a queen piece
         armorStand.setArms(true);
         armorStand.setBasePlate(false);
-        armorStand.setCustomName(q.getX() + ". Queen");
+        armorStand.setCustomName(q.getY() + ". Queen");
         armorStand.setCustomNameVisible(true);
         armorStand.setGravity(false);
         armorStand.setInvisible(true);
@@ -703,41 +734,67 @@ public class ChessBoard {
         cleanBoard();
         if (console) {
             System.out.println("Start Backtracking Algorithm");
+            printBoard();
         }
 
         int row = 0;
 
+        sortQueensY();
+        if (console) {
+            System.out.println("Damen Sortiert");
+            printBoard();
+        }
+
+        if (console) {
+            System.out.println("Alte Damen");
+            printBoard();
+        }
         ArrayList<Queen> newQ = new ArrayList<Queen>();
         for(Queen q : queens){
-            if(q.getY() == 1){
+            if(q.getY() != row){
+                if (console) {
+                    System.out.println("Übertrag Abbruch");
+                    System.out.println(row + " == ROW  != "+ q.getY() );
+                }
                 break;
             }
             queens.remove(q);
+            if (console) {
+                System.out.println("Vor Collisions Prüfung");
+                System.out.println(row + " == ROW  != "+ q.getY() );
+            }
             if(collision(q) == false){
                 newQ.add(q);
             }
             row++;
         }
 
+
         setQueens(newQ);
+        if (console) {
+            System.out.println("Neue Damen");
+            printBoard();
+        }
         spawnAllQueens();
         while (numberOfQueens() != size) {
-            for (int i = x; i < size; i++) {
+            for (int i = 0; i < size; i++) {
                 Location l = new Location(originCorner.getWorld(), originCorner.getX()+row, originCorner.getY()+1, originCorner.getZ()+i);
                 Block block = l.getBlock();
                 block.setType(Material.BLUE_CARPET);
-                if (addTestedQueen(row, i)) {
+                if (addTestedQueen(i, row)) {
                     spawnQueen(queens.getLast());
                     row++;
                     break;
                 } else if (i == size - 1) {
-                    row = MCbackStep(row) + 1;
+                    return false;
+                    //row = MCbackStep(row) + 1;
                 }
-                return false;
+                //return false;
             }
         }
         return true;
     }
+
 
     /**
      * Performs a backstep in the backtracking algorithm.
@@ -748,7 +805,7 @@ public class ChessBoard {
      */
     public int MCbackStep(int row) {
         row--;
-        int oldY = queens.get(numberOfQueens() - 1).getY();
+        int oldX = queens.get(numberOfQueens() - 1).getY();
 
         //queens.remove(numberOfQueens() - 1);
         // --- Achtung Hier Minecraft Befehl
@@ -757,25 +814,25 @@ public class ChessBoard {
         if (console) {
             System.out.println("Start Backstep -> row: " + row);
         }
-        int newY = oldY + 1;
+        int newX = oldX + 1;
 
-        while (!addTestedQueen(row, newY)) {
-            newY++;
+        while (!addTestedQueen(newX, row)) {
+            newX++;
             if (console) {
-                System.out.println("Back-Place -> row: " + row + "  Y = " + newY);
+                System.out.println("Back-Place -> row(Y): " + row + "  X = " + newX);
             }
 
-            if (newY >= size) {
+            if (newX >= size) {
                 if (console) {
                     printBoard();
                 }
                 backStep(row);
-                newY = 0;
+                newX = 0;
             }
         }
 
         if (console) {
-            System.out.println("End Backstep -> row: " + row + "  Y = " + newY);
+            System.out.println("Back-Place -> row(Y): " + row + "  X = " + newX);
             printBoard();
         }
         return row;
