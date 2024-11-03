@@ -4,45 +4,53 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 public class ChessBoardSaveManager {
+
+    private final ArrayList<ChessBoard> cbList;
     private static final String FILE_PATH = "chessboards.json";
     private Gson gson;
 
     public ChessBoardSaveManager() {
-        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+        this.cbList = new ArrayList<ChessBoard>();
+        gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
-    public void saveChessBoard(ChessBoard chessBoard) {
+    public void saveChessBoards() {
+        //save chessboards to file
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            gson.toJson(chessBoard, writer);
-            System.out.println("ChessBoard " + chessBoard.getSize() + "saved to file!");
+            gson.toJson(cbList, writer);
+            System.out.println(cbList.size() + " ChessBoards saved to file!");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<ChessBoard> getChessBoards() {
+    public void loadChessBoards() {
 
         File file = new File(FILE_PATH);
         if (!file.exists()) {
             System.out.println("File not found, returning empty list.");
-            return new ArrayList<ChessBoard>();
+            return;
         }
 
         //load chessboards out of file
-        try (FileReader reader = new FileReader(FILE_PATH)) {
-            Type chessBoardListType = new TypeToken<ArrayList<ChessBoard>>() {}.getType();
-            return gson.fromJson(reader, chessBoardListType);
-        } catch (IOException e) {
-            e.printStackTrace();
+        try (FileReader fileReader = new FileReader(FILE_PATH)) {
+            ChessBoard[] cbArray = gson.fromJson(fileReader, ChessBoard[].class);
+            cbList.clear();
+            for (ChessBoard cb : cbArray) {
+                cbList.add(cb);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
         }
-
-        return new ArrayList<ChessBoard>();
     }
+
+    public ArrayList<ChessBoard> getCbList() {
+        return cbList;
+    }
+
 }

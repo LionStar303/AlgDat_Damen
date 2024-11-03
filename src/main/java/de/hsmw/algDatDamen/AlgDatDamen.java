@@ -9,12 +9,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     // List to store all created ChessBoard instances
-    public ArrayList<ChessBoard> cbList;
     private ChessBoardSaveManager saveManager;
 
     @Override
@@ -26,9 +24,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         this.saveManager = new ChessBoardSaveManager();
 
         // Load saved chess boards
-        this.cbList = saveManager.getChessBoards();
-        getLogger().info("Loaded " + cbList.size() + " chess boards from file!");
-        for (ChessBoard chessBoard : cbList) {
+        getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
+        for (ChessBoard chessBoard : saveManager.getCbList()) {
             chessBoard.spawnCB();
             getLogger().info("Chess board has been spawned!");
         }
@@ -41,6 +38,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Logic to execute when the plugin is disabled
+        saveManager.saveChessBoards();
     }
 
     @EventHandler
@@ -79,8 +77,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
                 // Create a new ChessBoard at the clicked block's location with the stack count
                 ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
-                cbList.add(cb);
-                saveManager.saveChessBoard(cb);
+                saveManager.getCbList().add(cb);
             }
         }
 
@@ -89,7 +86,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 "Queen".equals(itemInHand.getItemMeta().getDisplayName())) {
 
             // Loop through all chessboards to find if the clicked block is part of any board
-            for (ChessBoard chessBoard : cbList) {
+            for (ChessBoard chessBoard : saveManager.getCbList()) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
                     // Remove existing queen if there is one on the clicked location
                     Queen existingQueen = chessBoard.getQueenAt(event.getClickedBlock().getLocation());
@@ -115,7 +112,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 "TestedQueen".equals(itemInHand.getItemMeta().getDisplayName())) {
 
             // Loop through all chessboards to find if clicked block is part of any board
-            for (ChessBoard chessBoard : cbList) {
+            for (ChessBoard chessBoard : saveManager.getCbList()) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
                     chessBoard.addTestedQueen(event.getClickedBlock().getLocation());
                     getLogger().info("Queen has been successfully placed and spawned on the board!");
@@ -126,7 +123,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         }
 
         if (itemInHand != null && itemInHand.getType() == Material.IRON_SWORD) {
-            for (ChessBoard chessBoard : cbList) {
+            for (ChessBoard chessBoard : saveManager.getCbList()) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
                     chessBoard.playBacktrack();
                     for(Queen q : chessBoard.getQueens()){
@@ -139,7 +136,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         }
 
         if (itemInHand != null && itemInHand.getType() == Material.WOODEN_SWORD) {
-            for (ChessBoard chessBoard : cbList) {
+            for (ChessBoard chessBoard : saveManager.getCbList()) {
                 if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
                     chessBoard.spawnCollisionCarpets();
                     event.setCancelled(true); // Cancel the default action to avoid conflicts

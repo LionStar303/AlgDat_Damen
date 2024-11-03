@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
-import com.google.gson.annotations.Expose;
-
 import java.util.ArrayList;
 
 /**
@@ -26,9 +24,7 @@ public class ChessBoard {
     // Attributes
     private ArrayList<Queen> queens; // List of queens placed on the board
     private boolean console; // Controls console messages for debugging
-    @Expose
     private int size; // Size of the chessboard (n x n)
-    @Expose
     private Location originCorner;
 
     /**
@@ -140,6 +136,15 @@ public class ChessBoard {
      */
     public void setConsole(boolean consoleEnabled) {
         this.console = consoleEnabled;
+    }
+
+    /**
+     * Returns the origin corner of the chessboard.
+     *
+     * @return Location The origin corner of the chessboard.
+     */
+    public Location getOriginCorner() {
+        return originCorner;
     }
 
     // Functional Methods
