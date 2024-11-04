@@ -1,0 +1,4 @@
+name: AlgDat_Damen
+version: '1.0-SNAPSHOT'
+main: de.hsmw.algDatDamen.AlgDatDamen
+api-version: '1.21'
