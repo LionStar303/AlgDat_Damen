@@ -28,8 +28,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     // List to store all created ChessBoard instances
     public ArrayList<ChessBoard> cbList;
     public int x;
-    private static final String SAVE_FILE_PATH = "plugins/AlgDatDamen/chessboards.json";
-    private Gson gson = new Gson();
 
 
     @Override
@@ -37,7 +35,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // Initial startup logic for the plugin
         System.out.println("Plugin Started!");
 
-       // loadChessBoards(); // Lade Schachbretter beim Start
 
         cbList = new ArrayList<>();
 
@@ -47,56 +44,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     }
 
     public void onDisable() {
-        saveChessBoards(); // Speichere Schachbretter beim Stoppen
-        getLogger().info("Plugin stopped and chessboards saved!");
+        getLogger().info("onDisable()");
     }
 
-    private void saveChessBoards() {
-        try {
-            // Erstellen des Verzeichnisses, falls es nicht existiert
-            File saveDirectory = new File("plugins/AlgDatDamen");
-            if (!saveDirectory.exists()) {
-                saveDirectory.mkdirs();
-            }
-
-            // Erstellen der JSON-Datei und Schreiben der Daten
-            File saveFile = new File(SAVE_FILE_PATH);
-            if (!saveFile.exists()) {
-                saveFile.createNewFile();
-            }
-
-            try (FileWriter writer = new FileWriter(saveFile)) {
-                JsonWriter jsonWriter = new JsonWriter(writer);
-                ChessBoardAdapter cba  = new ChessBoardAdapter();
-                for(ChessBoard cb : cbList) {
-                    cba.write(jsonWriter, cb);
-                }
-            }
-
-            getLogger().info("Chessboards successfully saved!");
-        } catch (IOException e) {
-            getLogger().severe("Error saving chessboards: " + e.getMessage());
-        }
-    }
-
-
-    private void loadChessBoards() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(ChessBoard.class, new ChessBoardAdapter())
-                .create();
-
-        try (FileReader reader = new FileReader(SAVE_FILE_PATH)) {
-            Type chessBoardListType = new TypeToken<List<ChessBoard>>(){}.getType();
-            cbList = gson.fromJson(reader, chessBoardListType);
-        } catch (IOException e) {
-            getLogger().info("No saved chessboards found, starting with an empty list.");
-            cbList = new ArrayList<>();
-        }
-
-        if (cbList == null) {
-            cbList = new ArrayList<>();
-        }
-    }
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
@@ -135,7 +85,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 // Create a new ChessBoard at the clicked block's location with the stack count
                 ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
                 cbList.add(cb);
-                saveChessBoards();
             }
         }
 
