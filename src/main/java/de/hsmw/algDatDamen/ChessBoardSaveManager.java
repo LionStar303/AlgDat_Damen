@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+
+import org.bukkit.Location;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,7 +20,8 @@ public class ChessBoardSaveManager {
 
     public ChessBoardSaveManager() {
         this.cbList = new ArrayList<ChessBoard>();
-        gson = new GsonBuilder().setPrettyPrinting().create();
+        gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.STATIC).registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
+        loadChessBoards();
     }
 
     public void saveChessBoards() {

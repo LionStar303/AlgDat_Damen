@@ -27,6 +27,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
         for (ChessBoard chessBoard : saveManager.getCbList()) {
             chessBoard.spawnCB();
+            chessBoard.spawnAllQueens();
             getLogger().info("Chess board has been spawned!");
         }
 

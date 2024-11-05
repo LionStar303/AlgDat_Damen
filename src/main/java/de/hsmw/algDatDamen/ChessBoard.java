@@ -28,28 +28,6 @@ public class ChessBoard {
     private Location originCorner;
 
     /**
-     * Default constructor that initializes an empty chessboard.
-     */
-    public ChessBoard() {
-        this.size = 0;
-        this.queens = new ArrayList<>();
-        this.originCorner = new Location(null, 0, 0, 0);
-        this.console = true; // Enable console messages by default
-    }
-
-    /**
-     * Constructor to create a chessboard of a specific size.
-     *
-     * @param size The size of the chessboard (size x size).
-     */
-    public ChessBoard(int size, Location originCorner) {
-        this.size = size;
-        this.queens = new ArrayList<>();
-        this.console = true;
-        this.originCorner = originCorner;
-    }
-
-    /**
      * Constructs a ChessBoard with the specified origin corner, size, and player.
      *
      * @param originCorner The starting location of the chessboard, defining its
@@ -72,19 +50,6 @@ public class ChessBoard {
         this.originCorner = originCorner;
         updateOriginCorner(getBoardDirection(player)); // get player direction
         spawnCB();
-    }
-
-    /**
-     * Constructor to create a chessboard of a specific size and Console messages.
-     *
-     * @param size    The size of the chessboard (size x size).
-     * @param console console messages for debugging
-     */
-    public ChessBoard(int size, boolean console) {
-        this.size = size;
-        this.queens = new ArrayList<>();
-        this.console = console;
-        this.originCorner = null;
     }
 
     // Getters and Setters
