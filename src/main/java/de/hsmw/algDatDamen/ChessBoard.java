@@ -24,81 +24,40 @@ public class ChessBoard {
 
     // Attributes
     private ArrayList<Queen> queens; // List of queens placed on the board
-    private int size; // Size of the chessboard (n x n)
     private boolean console; // Controls console messages for debugging
+    private int size; // Size of the chessboard (n x n)
     private Location originCorner;
-    private Vector direction;
-
-    public boolean isConsole() {
-        return console;
-    }
-
-    public Location getOriginCorner() {
-        return originCorner;
-    }
-
-    public void setOriginCorner(Location originCorner) {
-        this.originCorner = originCorner;
-    }
-
-    public Vector getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Vector direction) {
-        this.direction = direction;
-    }
 
     /**
-     * Default constructor that initializes an empty chessboard.
-     */
-    public ChessBoard() {
-        this.size = 0;
-        this.queens = new ArrayList<>();
-        this.originCorner = new Location(null, 0, 0, 0);
-        this.direction = new Vector(1, 0, 0);
-        this.console = true; // Enable console messages by default
-    }
-
-    /**
-     * Constructor to create a chessboard of a specific size.
+     * Constructs a ChessBoard with the specified origin corner, size, and player.
      *
-     * @param size The size of the chessboard (size x size).
+     * @param originCorner The starting location of the chessboard, defining its
+     *                     origin corner.
+     * @param size         The size of the chessboard, typically representing the
+     *                     number of squares along one side.
+     * @param player       The player associated with this chessboard, which may
+     *                     influence the board's orientation.
+     *
+     *                     This constructor initializes the chessboard by setting
+     *                     its size, creating a list to hold queens,
+     *                     and determining the board's orientation based on the
+     *                     player's direction. It also spawns the chessboard
+     *                     based on the type of block at the origin corner.
      */
-    public ChessBoard(int size) {
-        this.size = size;
-        this.queens = new ArrayList<>();
-        this.console = true;
-        this.originCorner = null;
-        this.direction = null;
-    }
-
-    // Hier Doku einfügen
     public ChessBoard(Location originCorner, int size, Player player) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = false;
         this.originCorner = originCorner;
-        this.direction = this.getBoardDirection(player); // get player direction
-        updateOriginCorner();
-        spawnCB((originCorner.getBlock().getType() == Material.WHITE_CONCRETE));
-    }
-
-    /**
-     * Constructor to create a chessboard of a specific size and Console messages.
-     *
-     * @param size    The size of the chessboard (size x size).
-     * @param console console messages for debugging
-     */
-    public ChessBoard(int size, boolean console) {
-        this.size = size;
-        this.queens = new ArrayList<>();
-        this.console = console;
-        this.originCorner = null;
-
+        updateOriginCorner(getBoardDirection(player)); // get player direction
+        spawnCB();
     }
 
     // Getters and Setters
+
+    public boolean isConsole() {
+        return console;
+    }
 
     /**
      * Returns the list of queens placed on the chessboard.
@@ -145,8 +104,16 @@ public class ChessBoard {
         this.console = consoleEnabled;
     }
 
-    // Functional Methods
+    /**
+     * Returns the origin corner of the chessboard.
+     *
+     * @return Location The origin corner of the chessboard.
+     */
+    public Location getOriginCorner() {
+        return originCorner;
+    }
 
+    // Functional Methods
 
     /**
      * Adds a queen to the chessboard at the specified coordinates.
@@ -183,7 +150,7 @@ public class ChessBoard {
      *
      * @param q The queen to adding the ArrayList queens
      */
-    public void addQueen(Queen q){
+    public void addQueen(Queen q) {
         queens.add(q);
     }
 
@@ -205,8 +172,10 @@ public class ChessBoard {
     }
 
     /**
-     * Checks if placing a queen at the specified coordinates (x, y) would cause a collision
-     * with any existing queens on the chessboard. A collision occurs if the new queen
+     * Checks if placing a queen at the specified coordinates (x, y) would cause a
+     * collision
+     * with any existing queens on the chessboard. A collision occurs if the new
+     * queen
      * would be in the same row, column, or diagonal as any already-placed queen.
      *
      * @param x The x-coordinate (column) where the new queen is to be placed.
@@ -224,7 +193,6 @@ public class ChessBoard {
         }
         return false; // No collision found
     }
-
 
     /**
      * Clears all queens from the chessboard.
@@ -348,8 +316,8 @@ public class ChessBoard {
         row--;
         int oldY = queens.get(numberOfQueens() - 1).getY();
 
-            //queens.remove(numberOfQueens() - 1);
-            // --- Achtung Hier Minecraft Befehl
+        // queens.remove(numberOfQueens() - 1);
+        // --- Achtung Hier Minecraft Befehl
         removeQueen();
 
         if (console) {
@@ -391,14 +359,16 @@ public class ChessBoard {
      * The board's size is determined by the `size` variable
      * The first corner block is either white or gray
      *
-     * @param white If true, the left corner of the chessboard will be white; otherwise, it will be gray.
+     * @param white If true, the left corner of the chessboard will be white;
+     *              otherwise, it will be gray.
      */
-    public void spawnCB(boolean white) {
-        // Iterate over each x and z coordinate within the specified board size.
+    public void spawnCB() {
+        boolean white = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
+        // Iterate over each coordinate pair within the board's size
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-
-                // determine the block color at the current relative coordinate
+                // Determine if the current block should be white or gray based on position and
+                // initial corner color
                 boolean isWhite = ((x + z) % 2 == 0) == white;
                 Material material = isWhite ? Material.WHITE_CONCRETE : Material.GRAY_CONCRETE;
 
@@ -428,7 +398,8 @@ public class ChessBoard {
         // Calculate the queen's global coordinates, offset slightly to center within the block
         Location queenLocation = originCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
 
-        // Check if an armor stand already occupies the target block (indicating a queen is already present)
+        // Check if an armor stand already occupies the target block (indicating a queen
+        // is already present)
         if (queenLocation.getBlock().getType() == Material.ARMOR_STAND) {
             return false; // Exit early if another queen is already in this position
         }
@@ -463,12 +434,19 @@ public class ChessBoard {
      * This Methode Spawn all Queens in the ArrayList<Queen> queens
      *
      */
-    public void spawnAllQueens(){
-        for(Queen q : this.queens){
+    public void spawnAllQueens() {
+        for (Queen q : this.queens) {
             spawnQueen(q);
         }
     }
 
+    /**
+     * Checks if a given location is part of the chessboard.
+     *
+     * @param location The Location object to be checked.
+     * @return true if the location is within the boundaries of the chessboard;
+     *         false otherwise.
+     */
     public boolean isPartOfBoard(Location location) {
         if (originCorner == null) {
             return false;
@@ -487,8 +465,15 @@ public class ChessBoard {
         return x >= minX && x <= maxX && z >= minZ && z <= maxZ && location.getWorld().equals(originCorner.getWorld());
     }
 
-    public boolean addQueen(Location l){
-        if(!isPartOfBoard(l)){
+    /**
+     * Adds a queen to the chessboard at the specified location.
+     *
+     * @param l The location where the queen should be added.
+     * @return true if the queen was successfully added; false if the location is
+     *         not part of the board.
+     */
+    public boolean addQueen(Location l) {
+        if (!isPartOfBoard(l)) {
             return false;
         }
 
@@ -505,8 +490,15 @@ public class ChessBoard {
         return true;
     }
 
-    public boolean addTestedQueen(Location l){
-        if(!isPartOfBoard(l)){
+    /**
+     * Attempts to add a queen to the chessboard at the specified location.
+     *
+     * @param l The location where the queen is to be added.
+     * @return true if the queen was successfully added; false if the location is
+     *         not part of the board or if there is a collision with another queen.
+     */
+    public boolean addTestedQueen(Location l) {
+        if (!isPartOfBoard(l)) {
             return false;
         }
 
@@ -517,7 +509,7 @@ public class ChessBoard {
         int z = l.getBlockZ();
 
         Queen q = new Queen(x - minX, z - minZ);
-        if(collision(q)){
+        if (collision(q)) {
             return false;
         }
         addQueen(q);
@@ -526,13 +518,21 @@ public class ChessBoard {
         return true;
     }
 
-    public Queen getQueenAt(Location l){
+    /**
+     * Retrieves the Queen located at the specified location on the chessboard.
+     *
+     * @param l The Location object representing the coordinates on the chessboard.
+     * @return The Queen object at the specified location, or null if no Queen is
+     *         found.
+     */
+    public Queen getQueenAt(Location l) {
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
 
-        for(Queen q : this.queens){
-            System.out.println(q.getX() + " == " +(l.getBlockX()-minX)+" && "+q.getY() + " == " + (l.getBlockZ()-minZ) );
-            if((q.getX() == (l.getBlockX()-minX)) && (q.getY() == (l.getBlockZ()-minZ))){
+        for (Queen q : this.queens) {
+            System.out.println(
+                    q.getX() + " == " + (l.getBlockX() - minX) + " && " + q.getY() + " == " + (l.getBlockZ() - minZ));
+            if ((q.getX() == (l.getBlockX() - minX)) && (q.getY() == (l.getBlockZ() - minZ))) {
                 return q;
             }
         }
@@ -556,7 +556,8 @@ public class ChessBoard {
     }
 
     /**
-     * Helper method to visually remove a queen (armor stand) from the Minecraft board.
+     * Helper method to visually remove a queen (armor stand) from the Minecraft
+     * board.
      *
      * @param queen The queen to remove from the board.
      */
@@ -583,17 +584,22 @@ public class ChessBoard {
      * @return The Location object representing the queen's position.
      */
     private Location getLocationofQueen(Queen q) {
-        double x = q.getX() + originCorner.getBlockX()+0.5;
-        double z = q.getY() + originCorner.getBlockZ()+0.5;
+        double x = q.getX() + originCorner.getBlockX() + 0.5;
+        double z = q.getY() + originCorner.getBlockZ() + 0.5;
 
-        return new Location(originCorner.getWorld(),  x, originCorner.getY() + 1,z);
+        return new Location(originCorner.getWorld(), x, originCorner.getY() + 1, z);
     }
 
+    /**
+     * Spawns red carpets on the chessboard at collision locations.
+     */
     public void spawnCollisionCarpets() {
-        for(int x = 0; x < size; x++){
-            for(int y = 0; y < size; y++){
-                if(collision(x, y)){
-                    Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getBlockZ()+y); // Y-coordinate can be adjusted as needed
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (collision(x, y)) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
+                                                                                    // needed
                     Block block = location.getBlock();
                     block.setType(Material.RED_CARPET);
                 }
@@ -602,10 +608,10 @@ public class ChessBoard {
     }
 
     /**
-     * Determines the cardinal direction of the player based on their location.
+     * Retrieves the player's direction on the chessboard as a 2D vector.
      * 
-     * @param player
-     * @return
+     * @param player The player whose direction is to be determined.
+     * @return A Vector representing the direction on the chessboard.
      */
     private Vector getBoardDirection(Player player) {
         // Get the player's direction as a 2D vector
@@ -627,7 +633,14 @@ public class ChessBoard {
         }
     }
 
-    private void updateOriginCorner() {
+    /**
+     * Updates the origin corner of the chessboard based on the player's direction.
+     * 
+     * Adjusts the origin corner coordinates based on the direction vector.
+     * 
+     * @param direction A Vector representing the player's direction.
+     */
+    private void updateOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
         int xMod = (int) direction.getX(); // Will be either -1 or 1 for East/West orientation
         int zMod = (int) direction.getZ(); // Will be either -1 or 1 for North/South orientation
@@ -647,7 +660,8 @@ public class ChessBoard {
         } else if (xMod < 0 && zMod < 0) {
             // Facing West and North: Set origin at the bottom-left corner and shift to both
             // right and up
-            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z - (size - 1));
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(),
+                    z - (size - 1));
         } else if (xMod > 0 && zMod < 0) {
             // Facing East and North: Set origin at the bottom-left corner and shift up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
