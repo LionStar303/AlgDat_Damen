@@ -461,6 +461,15 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    public void removeChessBoardFromGame() {
+        this.blackFieldMaterial = Material.AIR;
+        this.whiteFieldMaterial = Material.AIR;
+
+        spawnChessBoard();
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+    }
+
     /*
      * Solves the Queen's problem using a backtracking algorithm.
      * It tries to place all queens on the chessboard without conflicts, placing queens row by row,

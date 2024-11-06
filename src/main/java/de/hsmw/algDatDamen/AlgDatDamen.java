@@ -45,6 +45,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            return;
+        }
+
         ItemStack itemInHand = event.getItem();
         if (itemInHand == null) return;
 
@@ -59,6 +63,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             handleBacktrackStep(event);
         } else if (itemInHand.getType() == Material.WOODEN_SWORD) {
             handleCollisionCarpets(event);
+        } else if (itemInHand.getType() == Material.ACACIA_LOG) {
+            removeChessBoardFromGame(event);
         }
     }
 
@@ -150,6 +156,13 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             mcB.cleanCollisionCarpets();
             mcB.setCollisionCarpets(true);
         }
+        event.setCancelled(true);
+    }
+
+    private void removeChessBoardFromGame(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.removeChessBoardFromGame();
+        saveManager.getCbList().remove(mcB);
         event.setCancelled(true);
     }
 
