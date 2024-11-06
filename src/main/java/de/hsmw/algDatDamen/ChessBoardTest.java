@@ -3,7 +3,8 @@ package de.hsmw.algDatDamen;
 public class ChessBoardTest {
 
     public static void main(String[] args) {
-        // Create a chessboard with size n x n
+        // aCreate a chessboard with size n x n
+        /*
         int boardSize = 8; // You can change this to any size
         ChessBoard board = new ChessBoard(boardSize);
 
@@ -21,5 +22,6 @@ public class ChessBoardTest {
 
         // Print the final layout of the chessboard
         board.printBoard();
+        */
     }
 }
