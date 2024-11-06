@@ -31,6 +31,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new Menu(this), this);
+
+        // Register commands
+        getCommand("schachmenu").setExecutor(new MenuCommand(this));
 
         // Log plugin startup
         getLogger().info("AlgDatDamen Plugin is now active!");
