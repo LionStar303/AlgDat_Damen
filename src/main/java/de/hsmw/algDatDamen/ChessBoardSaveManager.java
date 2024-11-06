@@ -20,7 +20,7 @@ public class ChessBoardSaveManager {
 
     public ChessBoardSaveManager() {
         this.cbList = new ArrayList<MChessBoard>();
-        gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.STATIC).registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
+        gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
         loadChessBoards();
     }
 
