@@ -12,144 +12,155 @@ import org.bukkit.inventory.ItemStack;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
-    // List to store all created ChessBoard instances
+    // List to store all created MChessBoard instances
     private ChessBoardSaveManager saveManager;
 
     @Override
     public void onEnable() {
-        // Initial startup logic for the plugin
-        System.out.println("Plugin Started!");
 
         // Initialize the list of chess boards
         this.saveManager = new ChessBoardSaveManager();
 
         // Load saved chess boards
         getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
-        for (ChessBoard chessBoard : saveManager.getCbList()) {
-            chessBoard.spawnCB();
+        for (MChessBoard chessBoard : saveManager.getCbList()) {
+            chessBoard.spawnChessBoard();
             chessBoard.spawnAllQueens();
             getLogger().info("Chess board has been spawned!");
         }
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
-        getLogger().info("BlockChangePlugin is now active!");
+
+        // Log plugin startup
+        getLogger().info("AlgDatDamen Plugin is now active!");
     }
 
     @Override
     public void onDisable() {
-        // Logic to execute when the plugin is disabled
+        // Log plugin shutdown
         saveManager.saveChessBoards();
+        getLogger().info("AlgDatDamen Plugin is now inactive.");
     }
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
-
-        // Handle spawning of a ChessBoard instance
         ItemStack itemInHand = event.getItem();
-        if (itemInHand != null &&
-                ((itemInHand.getType() == Material.WHITE_CONCRETE) || (itemInHand.getType() == Material.GRAY_CONCRETE))) {
+        if (itemInHand == null) return;
 
-            // Retrieve the block the player interacted with
-            Block clickedBlock = event.getClickedBlock();
-            // Check that the block is not null and is a GOLD_BLOCK
-            if (clickedBlock != null && clickedBlock.getType() == Material.GOLD_BLOCK) {
-                Player player = event.getPlayer();
-                Inventory inventory = player.getInventory();
-                int stackCount = 0;
+        // Handle interaction based on item type
+        if (itemInHand.getType() == Material.WHITE_CONCRETE || itemInHand.getType() == Material.GRAY_CONCRETE) {
+            handleBoardCreation(event, itemInHand);
+        } else if (itemInHand.getType() == Material.STICK) {
+            handleQueenPlacement(event, itemInHand);
+        } else if (itemInHand.getType() == Material.IRON_SWORD) {
+            handleBacktrack(event);
+        } else if (itemInHand.getType() == Material.GOLD_BLOCK) {
+            handleBacktrackStep(event);
+        } else if (itemInHand.getType() == Material.WOODEN_SWORD) {
+            handleCollisionCarpets(event);
+        }
+    }
 
-                // Prevent the block placement action
-                event.setCancelled(true);
+    private void handleBoardCreation(PlayerInteractEvent event, ItemStack itemInHand) {
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock != null && clickedBlock.getType() == Material.GOLD_BLOCK) {
+            Player player = event.getPlayer();
+            Inventory inventory = player.getInventory();
+            int stackCount = countItemsInInventory(inventory, itemInHand);
 
-                // Calculate the total number of items in the player's hand
-                for (ItemStack item : inventory.getContents()) {
-                    if (item != null && item.getType() == itemInHand.getType()) {
-                        stackCount += item.getAmount();
-                    }
-                }
+            // Prevent placement of more than 12 items
+            stackCount = Math.min(stackCount, 12);
+            clickedBlock.setType(itemInHand.getType());
 
-                // Limit the stack count to a maximum of 12
-                if (stackCount > 12) {
-                    stackCount = 12;
-                }
+            // Create and add new ChessBoard
+            MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), stackCount, player);
+            saveManager.getCbList().add(cb);
 
-                // Set the clicked block to the type held in hand
-                clickedBlock.setType(itemInHand.getType());
+            event.setCancelled(true);
+        }
+    }
 
-                // Create a new ChessBoard at the clicked block's location with the stack count
-                ChessBoard cb = new ChessBoard(clickedBlock.getLocation(), stackCount, player);
-                saveManager.getCbList().add(cb);
+    private int countItemsInInventory(Inventory inventory, ItemStack itemInHand) {
+        int stackCount = 0;
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.getType() == itemInHand.getType()) {
+                stackCount += item.getAmount();
             }
         }
+        return stackCount;
+    }
 
-        if (itemInHand != null && itemInHand.getType() == Material.STICK &&
-                itemInHand.getItemMeta() != null &&
-                "Queen".equals(itemInHand.getItemMeta().getDisplayName())) {
+    private void handleQueenPlacement(PlayerInteractEvent event, ItemStack itemInHand) {
+        if (itemInHand.getItemMeta() != null && "Queen".equals(itemInHand.getItemMeta().getDisplayName())) {
+            placeQueen(event);
+        } else if (itemInHand.getItemMeta() != null && "TestedQueen".equals(itemInHand.getItemMeta().getDisplayName())) {
+            placeTestedQueen(event);
+        }
+    }
 
-            // Loop through all chessboards to find if the clicked block is part of any board
-            for (ChessBoard chessBoard : saveManager.getCbList()) {
-                if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    // Remove existing queen if there is one on the clicked location
-                    Queen existingQueen = chessBoard.getQueenAt(event.getClickedBlock().getLocation());
-                    if (existingQueen != null) {
-                        chessBoard.removeQueen(existingQueen); // Remove the existing queen
-                        getLogger().info("Existing queen has been removed from the board!");
-                        event.setCancelled(true); // Cancel the default action to avoid conflicts
-                        break;
-                    }
+    private void placeQueen(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        System.out.println(mcB.toString());
 
-                    // Add the new queen to the clicked location
-                    chessBoard.addQueen(event.getClickedBlock().getLocation());
-                    getLogger().info("Queen has been successfully placed and spawned on the board!");
-                    event.setCancelled(true); // Cancel the default action to avoid conflicts
-                    break;
-                }
-            }
+        Queen existingQueen = mcB.getQueenAt(event.getClickedBlock().getLocation());
+        if (existingQueen != null) {
+            mcB.removeQueen(existingQueen); // Remove the existing queen
+            getLogger().info("Existing queen has been removed from the board!");
+            event.setCancelled(true);
         }
 
-
-        if (itemInHand != null && itemInHand.getType() == Material.STICK &&
-                itemInHand.getItemMeta() != null &&
-                "TestedQueen".equals(itemInHand.getItemMeta().getDisplayName())) {
-
-            // Loop through all chessboards to find if clicked block is part of any board
-            for (ChessBoard chessBoard : saveManager.getCbList()) {
-                if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    chessBoard.addTestedQueen(event.getClickedBlock().getLocation());
-                    getLogger().info("Queen has been successfully placed and spawned on the board!");
-                    event.setCancelled(true); // Cancel the default action to avoid conflicts
-                    break;
-                }
-            }
-        }
-
-        if (itemInHand != null && itemInHand.getType() == Material.IRON_SWORD) {
-            for (ChessBoard chessBoard : saveManager.getCbList()) {
-                if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    chessBoard.playBacktrack();
-                    for(Queen q : chessBoard.getQueens()){
-                        chessBoard.spawnQueen(q);
-                    }
-                    event.setCancelled(true); // Cancel the default action to avoid conflicts
-                    break;
-                }
-            }
-        }
-
-        if (itemInHand != null && itemInHand.getType() == Material.WOODEN_SWORD) {
-            for (ChessBoard chessBoard : saveManager.getCbList()) {
-                if (chessBoard.isPartOfBoard(event.getClickedBlock().getLocation())) {
-                    chessBoard.spawnCollisionCarpets();
-                    event.setCancelled(true); // Cancel the default action to avoid conflicts
-                    break;
-                }
-            }
-        }
-
+        mcB.addQueen(event.getClickedBlock().getLocation());
+        getLogger().info("Queen has been successfully placed and spawned on the board!");
+        event.setCancelled(true);
 
     }
+
+    private void placeTestedQueen(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.addTestedQueen(event.getClickedBlock().getLocation());
+        getLogger().info("TestedQueen has been successfully placed on the board!");
+        event.setCancelled(true);
+
+    }
+
+    private void handleBacktrack(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        System.out.println(mcB.toString());
+        mcB.playBacktrack();
+        mcB.spawnAllQueens();
+        event.setCancelled(true);
+
+    }
+
+    private void handleBacktrackStep(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        System.out.println(mcB.toString());
+       // mcB.MCBacktrackStep();
+        event.setCancelled(true);
+    }
+
+    private void handleCollisionCarpets(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+
+        if (mcB.isCollisionCarpets()) {
+            mcB.spawnCollisionCarpets();
+            mcB.setCollisionCarpets(false);
+        } else {
+            mcB.cleanCollisionCarpets();
+            mcB.setCollisionCarpets(true);
+        }
+        event.setCancelled(true);
+    }
+
+    private MChessBoard getClickedMCB(PlayerInteractEvent event){
+        for (MChessBoard mcB : saveManager.getCbList()) {
+            if (mcB.isPartOfBoard(event.getClickedBlock().getLocation())) {
+              return mcB;
+            }
+        }
+        return null;
+    }
 }
-
-
 
 

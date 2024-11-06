@@ -1,0 +1,62 @@
+[
+  {
+    "originCorner": {
+      "x": 19.0,
+      "y": -60.0,
+      "z": -19.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE"
+  },
+  {
+    "originCorner": {
+      "x": 28.0,
+      "y": -58.0,
+      "z": -18.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE"
+  },
+  {
+    "originCorner": {
+      "x": 28.0,
+      "y": -59.0,
+      "z": -18.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE"
+  },
+  {
+    "originCorner": {
+      "x": 31.0,
+      "y": -57.0,
+      "z": -19.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": true,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE"
+  },
+  {
+    "originCorner": {
+      "x": 131.0,
+      "y": -53.0,
+      "z": -32.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE"
+  }
+]
