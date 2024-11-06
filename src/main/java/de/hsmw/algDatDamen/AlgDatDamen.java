@@ -137,7 +137,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     private void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-       // mcB.MCBacktrackStep();
+        mcB.mstep();
         event.setCancelled(true);
     }
 

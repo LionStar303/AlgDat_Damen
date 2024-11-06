@@ -226,7 +226,7 @@ public class MChessBoard extends ChessBoard {
 
         // Equip the Armor Stand with items to give the appearance of a chess queen
         armorStand.setSmall(true); // Smaller size to fit the chess piece style
-        armorStand.setHelmet(new ItemStack(Material.IRON_HELMET)); // Crown-like helmet
+        //armorStand.setHelmet(new ItemStack(Material.GOLD)); // Crown-like helmet
         armorStand.setChestplate(new ItemStack(Material.IRON_CHESTPLATE)); // Body armor
         armorStand.setLeggings(new ItemStack(Material.IRON_LEGGINGS)); // Leg armor
         armorStand.setBoots(new ItemStack(Material.IRON_BOOTS)); // Boot armor
@@ -479,6 +479,19 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    public void mstep(){
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+        Location location = new Location(originCorner.getWorld(), stateX, originCorner.getY() + 1, stateY); // Y-coordinate can be adjusted as needed
+        Block block = location.getBlock();
+        block.setType(Material.BLUE_CARPET);
+        stepBacktrack();
+        spawnAllQueens();
+    }
+
+}
+
+
     /*
      * Solves the Queen's problem using a backtracking algorithm.
      * It tries to place all queens on the chessboard without conflicts, placing queens row by row,
@@ -598,6 +611,5 @@ public class MChessBoard extends ChessBoard {
     }*/
 
 
-}
 
 

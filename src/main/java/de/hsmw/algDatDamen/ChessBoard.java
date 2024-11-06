@@ -23,7 +23,7 @@ public class ChessBoard {
      */
     public ChessBoard() {
         this.size = 0;
-        this.queens = new ArrayList<>();
+        this.queens = new ArrayList<Queen>();
         this.console = true; // Enable console messages by default
         this.stateX = 0;
         this.stateY = 0;
@@ -310,33 +310,14 @@ public class ChessBoard {
      * otherwise.
      */
     public boolean playBacktrack() {
-        sortQueensByX();
-       // int row = 0;
-       /* for (Queen q : queens) {
-            if (q.getY() != row) {
-                if (console) {
-                    System.out.println("Übertrag Abbruch");
-                    System.out.println(row + " == ROW  != " + q.getY());
-                }
-                break;
-            }
-            queens.remove(q);
-            if (console) {
-                System.out.println("Vor Collisions Prüfung");
-                System.out.println(row + " == ROW  != " + q.getY());
-            }
-            if (checkCollision(q) == false) {
-
-                newQ.add(q);
-            }
-            row++;
-        }*/
-
+       queens.clear();
+       sortQueensByX();
+       int row = 0;
+    
         if (console) {
             System.out.println("Start Backtracking Algorithm");
         }
 
-        int row = 0;
 
         while (queens.size() != size) {
             for (int i = 0; i < size; i++) {
@@ -394,6 +375,75 @@ public class ChessBoard {
             printBoard();
         }
         return row;
+    }
+  
+  public boolean stepBacktrack() {
+       sortQueensByX();
+    
+        if (console) {
+            System.out.println("Start Backtracking Algorithm");
+        }
+
+        while (queens.size() != size) {
+            for (int i = 0; i < size; i++) {
+                stateY = i;
+                if (addTestedQueen(stateX, i)) {
+                    if (console) {
+                        System.out.println("Step -> row: " + stateX);
+                        printBoard();
+                    }
+                    stateX++;
+                    return false;
+                    //break;
+                } else if (i == size - 1) {
+                    stateX = backStep(stateX) + 1;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Performs a backstep in the backtracking algorithm.
+     * Removes the last placed queen and tries the next position in the same row.
+     *
+     * @param row The current row where backtracking is performed.
+     * @return int The updated row after backtracking.
+     */
+    public int stepbackStep(int stateX) {
+        stateX--;
+        int oldY = queens.get(numberOfQueens() - 1).getY();
+
+        queens.remove(numberOfQueens() - 1);
+
+
+        if (console) {
+            System.out.println("Start Backstep -> row: " + stateX);
+        }
+        stateY = oldY + 1;
+
+        while (!addTestedQueen(stateX, stateY)) {
+            stateY++;
+            if (console) {
+                System.out.println("Back-Place -> row: " + stateX + "  Y = " + stateY);
+            }
+
+            if (stateY >= size) {
+                if (console) {
+                    printBoard();
+                }
+                backStep(stateX);
+                stateY = 0;
+            }
+            return stateX;
+        }
+
+        if (console) {
+            System.out.println("End Backstep -> row: " + stateX + "  Y = " + stateY);
+            printBoard();
+        }
+        return stateX;
     }
 
     @Override
