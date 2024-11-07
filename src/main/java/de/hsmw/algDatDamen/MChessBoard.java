@@ -23,13 +23,14 @@ public class MChessBoard extends ChessBoard {
     /**
      * Constructor to create a chessboard with specific parameters.
      *
-     * @param originCorner        Starting location for the chessboard.
-     * @param size                The size of the chessboard.
-     * @param player              The player for determining the board direction.
-     * @param whiteFieldMaterial  Material used for the white fields.
-     * @param blackFieldMaterial  Material used for the black fields.
+     * @param originCorner       Starting location for the chessboard.
+     * @param size               The size of the chessboard.
+     * @param player             The player for determining the board direction.
+     * @param whiteFieldMaterial Material used for the white fields.
+     * @param blackFieldMaterial Material used for the black fields.
      */
-    public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial, Material blackFieldMaterial) {
+    public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
+            Material blackFieldMaterial) {
         this.size = size;
         this.queens = new ArrayList<>();
         this.console = true;
@@ -44,7 +45,8 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * Constructor to create a chessboard with specific parameters and default field materials.
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
      *
      * @param originCorner Starting location for the chessboard.
      * @param size         The size of the chessboard.
@@ -73,7 +75,7 @@ public class MChessBoard extends ChessBoard {
     public void setOriginCorner(Location originCorner) {
         this.originCorner = originCorner;
     }
-      
+
     /**
      * Retrieves whether the origin corner of the chessboard is white.
      *
@@ -86,7 +88,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Sets whether the origin corner of the chessboard is white.
      *
-     * @param isOriginCornerWhite true if the origin corner should be white, false otherwise.
+     * @param isOriginCornerWhite true if the origin corner should be white, false
+     *                            otherwise.
      */
     public void setOriginCornerWhite(boolean isOriginCornerWhite) {
         this.isOriginCornerWhite = isOriginCornerWhite;
@@ -104,7 +107,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Sets whether carpets cause collision issues on the chessboard.
      *
-     * @param collisionCarpets true if carpets should cause collision issues, false otherwise.
+     * @param collisionCarpets true if carpets should cause collision issues, false
+     *                         otherwise.
      */
     public void setCollisionCarpets(boolean collisionCarpets) {
         this.collisionCarpets = collisionCarpets;
@@ -146,18 +150,18 @@ public class MChessBoard extends ChessBoard {
         this.blackFieldMaterial = blackFieldMaterial;
     }
 
-
-
     /**
      * Spawns a chessboard on the ground with alternating white and gray blocks.
      *
-     * @param white If true, the left corner of the chessboard will be white; otherwise, it will be gray.
+     * @param white If true, the left corner of the chessboard will be white;
+     *              otherwise, it will be gray.
      */
     public void spawnChessBoard() {
         // Iterate over each coordinate pair within the board's size
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-                // Determine if the current block should be white or gray based on position and initial corner color
+                // Determine if the current block should be white or gray based on position and
+                // initial corner color
                 boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
                 Material material = isWhite ? whiteFieldMaterial : blackFieldMaterial;
 
@@ -177,14 +181,17 @@ public class MChessBoard extends ChessBoard {
     /**
      * Spawns a queen on the chessboard at the specified position.
      *
-     * @param q The Queen object that contains the (x, y) position where the queen should be placed.
-     * @return boolean True if the queen was successfully spawned, or false if a queen already occupies that spot.
+     * @param q The Queen object that contains the (x, y) position where the queen
+     *          should be placed.
+     * @return boolean True if the queen was successfully spawned, or false if a
+     *         queen already occupies that spot.
      */
     public boolean spawnQueen(Queen q) {
         int x = q.getX();
         int y = q.getY();
 
-        // Calculate the queen's exact position on the chessboard, offset slightly to center within the block
+        // Calculate the queen's exact position on the chessboard, offset slightly to
+        // center within the block
         Location queenLocation = originCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
 
         // Check if an armor stand already occupies the target block
@@ -230,9 +237,8 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-
-    public void updateCollisionCarpets(){
-        if(this.collisionCarpets){
+    public void updateCollisionCarpets() {
+        if (this.collisionCarpets) {
             cleanCollisionCarpets();
             spawnCollisionCarpets();
         }
@@ -257,8 +263,8 @@ public class MChessBoard extends ChessBoard {
         return x >= minX && x <= maxX && z >= minZ && z <= maxZ && location.getWorld().equals(originCorner.getWorld());
     }
 
-    public boolean addQueen(Location l){
-        if(!isPartOfBoard(l)){
+    public boolean addQueen(Location l) {
+        if (!isPartOfBoard(l)) {
             return false;
         }
 
@@ -275,8 +281,8 @@ public class MChessBoard extends ChessBoard {
         return true;
     }
 
-    public boolean addTestedQueen(Location l){
-        if(!isPartOfBoard(l)){
+    public boolean addTestedQueen(Location l) {
+        if (!isPartOfBoard(l)) {
             return false;
         }
 
@@ -287,7 +293,7 @@ public class MChessBoard extends ChessBoard {
         int z = l.getBlockZ();
 
         Queen q = new Queen(x - minX, z - minZ);
-        if(checkCollision(q)){
+        if (checkCollision(q)) {
             return false;
         }
         addQueen(q);
@@ -296,13 +302,14 @@ public class MChessBoard extends ChessBoard {
         return true;
     }
 
-    public Queen getQueenAt(Location l){
+    public Queen getQueenAt(Location l) {
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
 
-        for(Queen q : this.queens){
-            System.out.println(q.getX() + " == " +(l.getBlockX()-minX)+" && "+q.getY() + " == " + (l.getBlockZ()-minZ) );
-            if((q.getX() == (l.getBlockX()-minX)) && (q.getY() == (l.getBlockZ()-minZ))){
+        for (Queen q : this.queens) {
+            System.out.println(
+                    q.getX() + " == " + (l.getBlockX() - minX) + " && " + q.getY() + " == " + (l.getBlockZ() - minZ));
+            if ((q.getX() == (l.getBlockX() - minX)) && (q.getY() == (l.getBlockZ() - minZ))) {
                 return q;
             }
         }
@@ -326,7 +333,8 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * Helper method to visually remove a queen (armor stand) from the Minecraft board.
+     * Helper method to visually remove a queen (armor stand) from the Minecraft
+     * board.
      *
      * @param queen The queen to remove from the board.
      */
@@ -346,8 +354,8 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-    private void removeALLQueensFromBoard(){
-        for(Queen q : queens){
+    private void removeALLQueensFromBoard() {
+        for (Queen q : queens) {
             removeQueenFromBoard(q);
         }
     }
@@ -359,30 +367,30 @@ public class MChessBoard extends ChessBoard {
      * @return The Location object representing the queen's position.
      */
     private Location getLocationofQueen(Queen q) {
-        double x = q.getX() + originCorner.getBlockX()+0.5;
-        double z = q.getY() + originCorner.getBlockZ()+0.5;
+        double x = q.getX() + originCorner.getBlockX() + 0.5;
+        double z = q.getY() + originCorner.getBlockZ() + 0.5;
 
-        return new Location(originCorner.getWorld(),  x, originCorner.getY() + 1,z);
+        return new Location(originCorner.getWorld(), x, originCorner.getY() + 1, z);
     }
 
-
     public void spawnCollisionCarpets() {
-        for(int x = 0; x < size; x++){
-            for(int y = 0; y < size; y++){
-                if(checkCollision(x, y)){
-                    Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getZ()+y); // Y-coordinate can be adjusted as needed
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (checkCollision(x, y)) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + 1, originCorner.getZ() + y); // Y-coordinate can be adjusted as needed
                     Block block = location.getBlock();
-                    if((x+y) % 2 == 0){
-                        if (isOriginCornerWhite){
+                    if ((x + y) % 2 == 0) {
+                        if (isOriginCornerWhite) {
                             block.setType(Material.ORANGE_CARPET);
-                        }else {
+                        } else {
                             block.setType(Material.RED_CARPET);
                         }
 
                     } else {
-                        if (isOriginCornerWhite == false){
+                        if (isOriginCornerWhite == false) {
                             block.setType(Material.ORANGE_CARPET);
-                        }else {
+                        } else {
                             block.setType(Material.RED_CARPET);
                         }
                     }
@@ -394,7 +402,9 @@ public class MChessBoard extends ChessBoard {
     public void cleanCollisionCarpets() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x, originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as needed
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
+                                                                                // needed
                 Block block = location.getBlock();
                 block.setType(Material.AIR);
             }
@@ -403,11 +413,15 @@ public class MChessBoard extends ChessBoard {
 
     /**
      * Determines the cardinal direction of the player based on their location.
-     * This method converts the player's direction into one of the cardinal directions (East, South, West, North)
-     * by analyzing the player's facing direction and ignoring the vertical component.
+     * This method converts the player's direction into one of the cardinal
+     * directions (East, South, West, North)
+     * by analyzing the player's facing direction and ignoring the vertical
+     * component.
      *
-     * @param player The player whose facing direction determines the board's orientation.
-     * @return The direction vector representing one of the four cardinal directions (East, South, West, North).
+     * @param player The player whose facing direction determines the board's
+     *               orientation.
+     * @return The direction vector representing one of the four cardinal directions
+     *         (East, South, West, North).
      */
     private Vector getBoardDirection(Player player) {
         // Get the player's direction as a 2D vector
@@ -431,8 +445,10 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * Updates the origin corner of the chessboard based on the player's facing direction.
-     * The origin corner is adjusted to ensure the chessboard's orientation aligns with the player's view
+     * Updates the origin corner of the chessboard based on the player's facing
+     * direction.
+     * The origin corner is adjusted to ensure the chessboard's orientation aligns
+     * with the player's view
      * and also takes the size of the board into account.
      */
     private void updateOriginCorner(Vector direction) {
@@ -453,7 +469,8 @@ public class MChessBoard extends ChessBoard {
             originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
         } else if (xMod < 0 && zMod < 0) {
             // Facing West and North: Shift origin both right and up
-            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z - (size - 1));
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(),
+                    z - (size - 1));
         } else if (xMod > 0 && zMod < 0) {
             // Facing East and North: Shift origin up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
@@ -469,18 +486,19 @@ public class MChessBoard extends ChessBoard {
         cleanCollisionCarpets();
     }
 
-    public void mstep(){
+    public void mstep() {
         removeALLQueensFromBoard();
         cleanCollisionCarpets();
-        if(stepBacktrack()){
-            if(console){
+        if (stepBacktrack()) {
+            if (console) {
                 System.out.println("ChessBoard is Solved!");
             }
         }
         spawnAllQueens();
 
-        if(stateX+1 <= size && stateY+1 <= size){
-            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX, originCorner.getY() + 1, originCorner.getZ() +stateY); // Y-coordinate can be adjusted as needed
+        if (stateX + 1 <= size && stateY + 1 <= size) {
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
             block.setType(Material.BLUE_CARPET);
         }
@@ -488,9 +506,3 @@ public class MChessBoard extends ChessBoard {
     }
 
 }
-
-
-
-
-
-

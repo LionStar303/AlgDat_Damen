@@ -11,7 +11,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * Custom GSON TypeAdapter for serializing and deserializing Bukkit.Location objects.
+ * Custom GSON TypeAdapter for serializing and deserializing Bukkit.Location
+ * objects.
  */
 public class LocationAdapter extends TypeAdapter<Location> {
 

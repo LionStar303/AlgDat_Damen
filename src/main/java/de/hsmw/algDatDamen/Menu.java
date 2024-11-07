@@ -37,22 +37,26 @@ public class Menu implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!event.getView().title().equals(Component.text("Schach Menü"))) return;
+        if (!event.getView().title().equals(Component.text("Schach Menü")))
+            return;
 
-        event.setCancelled(true);  // Verhindert das Bewegen der Items im Menü
+        event.setCancelled(true); // Verhindert das Bewegen der Items im Menü
 
         Player player = (Player) event.getWhoClicked();
         ItemStack clickedItem = event.getCurrentItem();
 
-        if (clickedItem == null || !clickedItem.hasItemMeta()) return;
+        if (clickedItem == null || !clickedItem.hasItemMeta())
+            return;
 
         // Überprüfe das Item und führe entsprechende Funktion aus
-        /*if (clickedItem.getType() == Material.DIAMOND) {
-            player.sendMessage("Funktion: Schachbrett spawnen");
-        }
-        if (clickedItem.getType() == Material.BARRIER) {
-            player.sendMessage("Funktion: Entferne Schachbrett");
-        }*/
+        /*
+         * if (clickedItem.getType() == Material.DIAMOND) {
+         * player.sendMessage("Funktion: Schachbrett spawnen");
+         * }
+         * if (clickedItem.getType() == Material.BARRIER) {
+         * player.sendMessage("Funktion: Entferne Schachbrett");
+         * }
+         */
 
         switch (clickedItem.getType()) {
             case DIAMOND: {

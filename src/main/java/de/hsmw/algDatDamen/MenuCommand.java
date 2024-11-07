@@ -15,6 +15,7 @@ public class MenuCommand implements CommandExecutor {
 
     /**
      * Constructor to initialize the command once.
+     * 
      * @param plugin The executing plugin object
      */
     public MenuCommand(AlgDatDamen plugin) {
@@ -26,7 +27,8 @@ public class MenuCommand implements CommandExecutor {
      * Gets called automatically when triggering the command.
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s,
+            @NotNull String[] strings) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Dieser Befehl kann nur von Spielern ausgeführt werden.");
             return true;
