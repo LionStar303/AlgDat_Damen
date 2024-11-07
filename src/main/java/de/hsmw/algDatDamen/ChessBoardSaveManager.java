@@ -14,13 +14,13 @@ import com.google.gson.GsonBuilder;
 
 public class ChessBoardSaveManager {
 
-    private final ArrayList<ChessBoard> cbList;
+    private final ArrayList<MChessBoard> cbList;
     private static final String FILE_PATH = "chessboards.json";
     private Gson gson;
 
     public ChessBoardSaveManager() {
-        this.cbList = new ArrayList<ChessBoard>();
-        gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.STATIC).registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
+        this.cbList = new ArrayList<MChessBoard>();
+        gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
         loadChessBoards();
     }
 
@@ -44,9 +44,9 @@ public class ChessBoardSaveManager {
 
         //load chessboards out of file
         try (FileReader fileReader = new FileReader(FILE_PATH)) {
-            ChessBoard[] cbArray = gson.fromJson(fileReader, ChessBoard[].class);
+            MChessBoard[] cbArray = gson.fromJson(fileReader, MChessBoard[].class);
             cbList.clear();
-            for (ChessBoard cb : cbArray) {
+            for (MChessBoard cb : cbArray) {
                 cbList.add(cb);
             }
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class ChessBoardSaveManager {
         }
     }
 
-    public ArrayList<ChessBoard> getCbList() {
+    public ArrayList<MChessBoard> getCbList() {
         return cbList;
     }
 

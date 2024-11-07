@@ -18,11 +18,10 @@
 
 ## Links
 
+- [Google Drive Ordner](https://drive.google.com/drive/u/2/folders/1iFkhfj-n0NXlC7PCiuOdhN4oxlZpLrAY)
 - [Aufgaben](Aufgaben%20Übersicht.pdf)
 - [Konzept Dokument](https://docs.google.com/document/d/13CYumO2Ctvhs1VfjUhYJ1NVMbv2mjmXSdiNyZm6ToJY/edit)
 - [Abgabe Nextcloud](https://micloud.hs-mittweida.de/index.php/s/aJtmY5M6AbCNoCS)
-
-> In [dieser Tabelle](https://docs.google.com/spreadsheets/d/1tJ5OvrSQYsdzblW9wPGsDAvN1usJ43vCg_zMSZNEfME) bitte immer Arbeitszeiten und Tätigkeit nachtragen.
 
 ## Das Damenproblem
 
