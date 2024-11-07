@@ -383,8 +383,10 @@ public class ChessBoard {
     }
   
   public boolean stepBacktrack() {
-       sortQueensByX();
-       
+      if ((queens.size() == size)) {
+          return true;
+      } // end of if
+        sortQueensByX();
        if (stateY == size-1 && stateX == numberOfQueens() - 1) {
         stateY = 0;
         stateX++;
@@ -404,10 +406,6 @@ public class ChessBoard {
         }
 
         stateY++;
-  
-        if ((queens.size() == size)) {
-           return true; 
-        } // end of if
       return false;
     }
 

@@ -109,10 +109,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             mcB.removeQueen(existingQueen); // Remove the existing queen
             getLogger().info("Existing queen has been removed from the board!");
             event.setCancelled(true);
+        }else{
+            mcB.addQueen(event.getClickedBlock().getLocation());
+            getLogger().info("Queen has been successfully placed and spawned on the board!");
         }
-
-        mcB.addQueen(event.getClickedBlock().getLocation());
-        getLogger().info("Queen has been successfully placed and spawned on the board!");
         event.setCancelled(true);
 
     }
@@ -146,10 +146,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         MChessBoard mcB = getClickedMCB(event);
 
         if (mcB.isCollisionCarpets()) {
-            mcB.spawnCollisionCarpets();
+            mcB.cleanCollisionCarpets();
             mcB.setCollisionCarpets(false);
         } else {
-            mcB.cleanCollisionCarpets();
+            mcB.spawnCollisionCarpets();
             mcB.setCollisionCarpets(true);
         }
         event.setCancelled(true);
