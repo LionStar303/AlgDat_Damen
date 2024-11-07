@@ -20,13 +20,21 @@ public class ChessBoard {
 
     // Getters and Setters
 
-    // public ChessBoard(int boardSize) {
-    //     this.size = boardSize;
-    //     this.queens = new ArrayList<>();
-    //     this.console = true;
-    //     this.stateX = 0;
-    //     this.stateY = 0;
-    // }
+    public ChessBoard(int boardSize) {
+        this.size = boardSize;
+        this.queens = new ArrayList<>();
+        this.console = true;
+        this.stateX = 0;
+        this.stateY = 0;
+    }
+
+    public ChessBoard() {
+        this.size = 1;
+        this.queens = new ArrayList<>();
+        this.console = true;
+        this.stateX = 0;
+        this.stateY = 0;    
+    }
 
     public boolean isConsole() {
         return console;
