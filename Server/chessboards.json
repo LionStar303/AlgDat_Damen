@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "originCorner": {
+      "x": 82.0,
+      "y": 161.0,
+      "z": 209.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE",
+    "queens": [],
+    "size": 5,
+    "console": true,
+    "stateX": 0,
+    "stateY": 0
+  }
+]
