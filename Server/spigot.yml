@@ -166,6 +166,8 @@ world-settings:
     wither-spawn-sound-radius: 0
     end-portal-sound-radius: 0
     verbose: false
+  worldeditregentempworld:
+    verbose: false
 players:
   disable-saving: false
 messages:

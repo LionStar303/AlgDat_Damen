@@ -10,7 +10,6 @@
 Server/*.log          # Ignoriert alle Log-Dateien im Server-Ordner
 Server/plugins/*.jar  # Ignoriert alle .jar-Dateien im plugins-Ordner unter server
 Server/logs/
-Server/world_design/
 Server/world_design_nether/
 Server/world_design_the_end/
 Server/spigot.yml
