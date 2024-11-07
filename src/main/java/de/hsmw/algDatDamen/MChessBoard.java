@@ -198,14 +198,14 @@ public class MChessBoard extends ChessBoard {
         // Configure the Armor Stand properties to resemble a queen piece
         armorStand.setArms(true);
         armorStand.setBasePlate(false);
-        armorStand.setCustomName(q.getY() + ". Queen");
+        armorStand.setCustomName(q.getX() + 1 + ". Queen");
         armorStand.setCustomNameVisible(true);
         armorStand.setGravity(false);
         armorStand.setInvisible(true);
 
         // Equip the Armor Stand with items to give the appearance of a chess queen
         armorStand.setSmall(true); // Smaller size to fit the chess piece style
-        armorStand.setHelmet(new ItemStack(Material.IRON_HELMET)); // Crown-like helmet
+        armorStand.setHelmet(new ItemStack(Material.GOLDEN_HELMET)); // Crown-like helmet
         armorStand.setChestplate(new ItemStack(Material.IRON_CHESTPLATE)); // Body armor
         armorStand.setLeggings(new ItemStack(Material.IRON_LEGGINGS)); // Leg armor
         armorStand.setBoots(new ItemStack(Material.IRON_BOOTS)); // Boot armor
@@ -367,11 +367,10 @@ public class MChessBoard extends ChessBoard {
 
 
     public void spawnCollisionCarpets() {
-        this.collisionCarpets = true;
         for(int x = 0; x < size; x++){
             for(int y = 0; y < size; y++){
                 if(checkCollision(x, y)){
-                    Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getBlockZ()+y); // Y-coordinate can be adjusted as needed
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX()+x, originCorner.getY()+1, originCorner.getZ()+y); // Y-coordinate can be adjusted as needed
                     Block block = location.getBlock();
                     if((x+y) % 2 == 0){
                         if (isOriginCornerWhite){
@@ -470,125 +469,28 @@ public class MChessBoard extends ChessBoard {
         cleanCollisionCarpets();
     }
 
-    /*
-     * Solves the Queen's problem using a backtracking algorithm.
-     * It tries to place all queens on the chessboard without conflicts, placing queens row by row,
-     * and backtracking when a conflict occurs. It also handles visual updates of queen positions and board state.
-     *
-     * @return boolean True if the algorithm successfully places all queens, false otherwise.
-
-    public boolean MCBacktrackStep() {
-        if (console) {
-            System.out.println("Start Backtracking Algorithm");
-            printBoard();
-        }
-
-        // Clean and reset the board state before starting
-        cleanCollisionCarpets();
+    public void mstep(){
         removeALLQueensFromBoard();
-
-       // so();
-
-        if (console) {
-            System.out.println("Queens Sorted");
-            printBoard();
-        }
-
-        int row = 0;
-        ArrayList<Queen> newQ = new ArrayList<Queen>();
-
-        // Check and add queens that are in the same row, excluding collisions
-        for (Queen q : queens) {
-            if (q.getY() != row) {
-                if (console) {
-                    System.out.println("Transfer Abort");
-                    System.out.println(row + " != " + q.getY());
-                }
-                break;
+        cleanCollisionCarpets();
+        if(stepBacktrack()){
+            if(console){
+                System.out.println("ChessBoard is Solved!");
             }
-
-            queens.remove(q);
-            if (checkCollision(q) == false) {
-                newQ.add(q);
-            }
-            row++;
         }
-
-        setQueens(newQ);
-
-        if (console) {
-            System.out.println("New Queens Placed");
-            printBoard();
-        }
-
         spawnAllQueens();
 
-        statex = 0;
-        statey = queens.size();
-
-        // Try placing queens on the board row by row
-        while (numberOfQueens() != size) {
-            for (int i = 0; i < size; i++) {
-                statex = i;
-                Location l = new Location(originCorner.getWorld(), originCorner.getX() + statex, originCorner.getY() + 1, originCorner.getZ() + statey);
-                Block block = l.getBlock();
-                block.setType(Material.BLUE_CARPET);
-
-                // Attempt to place the queen, backtracking if necessary
-                if (addTestedQueen(i, row)) {
-                    spawnQueen(queens.getLast());
-                    row++;
-                    block.setType(Material.AIR);
-                    break;
-                } else if (i == size - 1) {
-                    block.setType(Material.AIR);
-                    row = MCbackStep(row) + 1;
-                }
-            }
+        if(stateX+1 <= size && stateY+1 <= size){
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX, originCorner.getY() + 1, originCorner.getZ() +stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
         }
-        return true;
+
     }
 
-    /**
-     * Performs a backstep in the backtracking algorithm.
-     * This method removes the last placed queen and attempts to place it in the next possible position in the same row.
-     *
-     * @param row The current row where backtracking is performed.
-     * @return int The updated row after backtracking.
-
-    public int MCbackStep(int row) {
-        int oldX = queens.get(numberOfQueens() - 1).getX();
-
-        // Remove last queen placed
-        removeQueen();
-
-        if (console) {
-            System.out.println("Start Backstep -> row: " + row);
-        }
-
-        int newX = oldX + 1;
-
-        // Try placing the queen in the next position until a valid spot is found
-        while (!addTestedQueen(newX, row)) {
-            newX++;
-            if (console) {
-                System.out.println("Back-Place -> row(Y): " + row + "  X = " + newX);
-            }
-
-            if (newX >= size) {
-                backStep(row);
-                newX = 0;
-            }
-        }
-
-        if (console) {
-            System.out.println("Back-Place -> row(Y): " + row + "  X = " + newX);
-            printBoard();
-        }
-        return row;
-    }*/
-
-
 }
+
+
+
+
 
 

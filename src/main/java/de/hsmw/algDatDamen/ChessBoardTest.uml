@@ -1,52 +1,19 @@
 ﻿[Files]
-File0=C:\Users\morit\OneDrive\Dokumente\GitHub\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\AlgDatDamen.java
-File1=C:\Users\morit\OneDrive\Dokumente\GitHub\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard.java
-File2=C:\Users\morit\OneDrive\Dokumente\GitHub\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoardTest.java
-File3=C:\Users\morit\OneDrive\Dokumente\GitHub\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\Queen.java
+File0=C:\Users\morit\OneDrive\Dokumente\GitHub\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\MChessBoard.java
 
-[Box:  - de.hsmw.algDatDamen.AlgDatDamen]
-X=1428
-Y=319
+[Box:  - de.hsmw.algDatDamen.MChessBoard]
+X=20
+Y=756
 MinVis=0
 ShowParameter=4
 SortOrder=0
 ShowIcons=1
-FontSize=12
-FontName=Segoe UI
-
-[Box:  - de.hsmw.algDatDamen.ChessBoard]
-X=826
-Y=0
-MinVis=0
-ShowParameter=4
-SortOrder=0
-ShowIcons=1
-FontSize=12
-FontName=Segoe UI
-
-[Box:  - de.hsmw.algDatDamen.ChessBoardTest]
-X=1430
-Y=60
-MinVis=0
-ShowParameter=4
-SortOrder=0
-ShowIcons=1
-FontSize=12
-FontName=Segoe UI
-
-[Box:  - de.hsmw.algDatDamen.Queen]
-X=290
-Y=239
-MinVis=0
-ShowParameter=4
-SortOrder=0
-ShowIcons=1
-FontSize=12
+FontSize=6
 FontName=Segoe UI
 
 [Diagram]
 comments=0
-OffsetX=141
+OffsetX=0
 OffsetY=0
 Visibility=0
 ShowParameter=4
@@ -54,11 +21,8 @@ SortOrder=0
 ShowIcons=1
 ShowConnections=0
 Fontname=Segoe UI
-Fontsize=12
+Fontsize=6
 ShowObjectDiagram=0
-
-[Connections]
-V0=de.hsmw.algDatDamen.ChessBoard#de.hsmw.algDatDamen.Queen#Aggregation####0#0#-1###0#0
 
 [Interactive]
 I0=

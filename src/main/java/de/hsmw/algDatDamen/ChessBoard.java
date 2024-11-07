@@ -20,6 +20,14 @@ public class ChessBoard {
 
     // Getters and Setters
 
+    // public ChessBoard(int boardSize) {
+    //     this.size = boardSize;
+    //     this.queens = new ArrayList<>();
+    //     this.console = true;
+    //     this.stateX = 0;
+    //     this.stateY = 0;
+    // }
+
     public boolean isConsole() {
         return console;
     }
@@ -241,9 +249,14 @@ public class ChessBoard {
     public void printBoard() {
         System.out.println("------------------------------------------------------------");
 
-        System.out.print("   ");
+        System.out.print("\t");
         for (int x = 0; x < size; x++) {
-            System.out.print(x + " ");
+            if (x > 9){
+              System.out.printf(x + " ");
+              }else {
+                        System.out.printf(x + "  ");   
+               } // end of if-else
+  
         }
         System.out.print(" x\n");
 
@@ -259,12 +272,12 @@ public class ChessBoard {
         }
 
         for (int i = 0; i < size; i++) {
-            System.out.print(i + "  ");
+            System.out.print(i + "\t");
             for (int j = 0; j < size; j++) {
-                System.out.print(board[i][j] + " ");
+                System.out.print(board[i][j] + "  ");
             }
-            System.out.println();
-        }
+            System.out.println("\n");
+        }                                    
         System.out.println("\ny");
         System.out.println("------------------------------------------------------------");
     }
@@ -277,33 +290,14 @@ public class ChessBoard {
      * otherwise.
      */
     public boolean playBacktrack() {
-        sortQueensByX();
-       // int row = 0;
-       /* for (Queen q : queens) {
-            if (q.getY() != row) {
-                if (console) {
-                    System.out.println("Übertrag Abbruch");
-                    System.out.println(row + " == ROW  != " + q.getY());
-                }
-                break;
-            }
-            queens.remove(q);
-            if (console) {
-                System.out.println("Vor Collisions Prüfung");
-                System.out.println(row + " == ROW  != " + q.getY());
-            }
-            if (checkCollision(q) == false) {
-
-                newQ.add(q);
-            }
-            row++;
-        }*/
-
+       queens.clear();
+       sortQueensByX();
+       int row = 0;
+    
         if (console) {
             System.out.println("Start Backtracking Algorithm");
         }
 
-        int row = 0;
 
         while (queens.size() != size) {
             for (int i = 0; i < size; i++) {
@@ -362,6 +356,34 @@ public class ChessBoard {
         }
         return row;
     }
+  
+  public boolean stepBacktrack() {
+      if ((queens.size() == size)) {
+          return true;
+      } // end of if
+        sortQueensByX();
+       if (stateY == size-1 && stateX == numberOfQueens() - 1) {
+        stateY = 0;
+        stateX++;
+       } 
+       
+       if (addTestedQueen(stateX, stateY)) {
+        stateX++;
+        stateY = -1;
+          if (console) {
+             System.out.println("Step -> row: " + stateX);
+             printBoard();
+             }
+       }else if (stateY >= size - 1) {
+               stateX--;
+               stateY = queens.get(numberOfQueens() - 1).getY();
+               queens.remove(numberOfQueens() - 1);
+        }
+
+        stateY++;
+      return false;
+    }
+
 
     @Override
     public String toString() {
