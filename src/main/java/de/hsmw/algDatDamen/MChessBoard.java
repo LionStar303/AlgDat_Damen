@@ -347,8 +347,10 @@ public class MChessBoard extends ChessBoard {
     }
 
     private void removeALLQueensFromBoard(){
-        for(Queen q : queens){
-            removeQueenFromBoard(q);
+        for (Entity entity : originCorner.getWorld().getEntities()) {
+            if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
+                entity.remove();
+            }
         }
     }
 
