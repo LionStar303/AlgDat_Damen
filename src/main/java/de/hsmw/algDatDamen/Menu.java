@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Menu implements Listener {
     private final Inventory inventory;
 
-    public Menu(AlgDatDamen plugin) {
+    public Menu() {
         this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
 
         ItemStack item1 = new ItemStack(Material.DIAMOND);
@@ -47,13 +47,6 @@ public class Menu implements Listener {
         if (clickedItem == null || !clickedItem.hasItemMeta()) return;
 
         // Überprüfe das Item und führe entsprechende Funktion aus
-        /*if (clickedItem.getType() == Material.DIAMOND) {
-            player.sendMessage("Funktion: Schachbrett spawnen");
-        }
-        if (clickedItem.getType() == Material.BARRIER) {
-            player.sendMessage("Funktion: Entferne Schachbrett");
-        }*/
-
         switch (clickedItem.getType()) {
             case DIAMOND: {
                 player.sendMessage("Funktion: Spawne Schachbrett");
@@ -64,5 +57,9 @@ public class Menu implements Listener {
                 break;
             }
         }
+    }
+
+    public void addMenuItem(String name, Material item, int position, String functionName, String[] args) {
+
     }
 }

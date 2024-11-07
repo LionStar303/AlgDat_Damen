@@ -11,14 +11,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MenuCommand implements CommandExecutor {
 
-    private final AlgDatDamen plugin;
+    final Menu menu;
 
     /**
      * Constructor to initialize the command once.
-     * @param plugin The executing plugin object
+     * @param menu The executing plugin object
      */
-    public MenuCommand(AlgDatDamen plugin) {
-        this.plugin = plugin;
+    public MenuCommand(Menu menu) {
+        this.menu = menu;
     }
 
     /**
@@ -27,12 +27,12 @@ public class MenuCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        // Check, that command is executed by a Player
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Dieser Befehl kann nur von Spielern ausgeführt werden.");
             return true;
         }
 
-        Menu menu = new Menu(plugin);
         menu.openInventory(player);
 
         return true;

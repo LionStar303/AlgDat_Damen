@@ -14,6 +14,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     // List to store all created MChessBoard instances
     private ChessBoardSaveManager saveManager;
+    private Menu menu = new Menu();
 
     @Override
     public void onEnable() {
@@ -31,10 +32,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new Menu(this), this);
+        getServer().getPluginManager().registerEvents(new Menu(), this);
 
         // Register commands
-        getCommand("schachmenu").setExecutor(new MenuCommand(this));
+        getCommand("schachmenu").setExecutor(new MenuCommand(menu));
 
         // Log plugin startup
         getLogger().info("AlgDatDamen Plugin is now active!");
