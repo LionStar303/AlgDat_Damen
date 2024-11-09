@@ -9,6 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
@@ -69,6 +72,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             handleCollisionCarpets(event);
         } else if (itemInHand.getType() == Material.ACACIA_LOG) {
             removeChessBoardFromGame(event);
+        } else if (itemInHand.getType() == Material.GOLDEN_SWORD){
+            handleBacktrackAnimation(event);
+        } else if (itemInHand.getType() == Material.DIAMOND_SWORD){
+            handleBacktrackAnimationQueenStep(event);
         }
     }
 
@@ -146,9 +153,23 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     private void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.mstep();
+        mcB.animationStep();
         event.setCancelled(true);
 
+    }
+
+    private void handleBacktrackAnimation(PlayerInteractEvent event){
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.verfyQueens();
+        BacktrackAnimationStep(mcB, 5);
+        event.setCancelled(true);
+    }
+
+    private void handleBacktrackAnimationQueenStep(PlayerInteractEvent event){
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.verfyQueens();
+        BacktrackAnimationQueenStep(mcB, 20);
+        event.setCancelled(true);
     }
 
     private void handleCollisionCarpets(PlayerInteractEvent event) {
@@ -179,6 +200,36 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         }
         return null;
     }
+
+
+    public void BacktrackAnimationStep(MChessBoard board, long ticks) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Die Methode wird sekündlich aufgerufen
+                if (board.animationStep()) {
+                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(this, 0L, ticks); // 20 Ticks entsprechen 1 Sekunde
+    }
+
+    public void BacktrackAnimationQueenStep(MChessBoard board, long ticks) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Die Methode wird sekündlich aufgerufen
+                if (board.animationQueenStep()) {
+                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(this, 0L, ticks); // 20 Ticks entsprechen 1 Sekunde
+    }
+
 }
 
 

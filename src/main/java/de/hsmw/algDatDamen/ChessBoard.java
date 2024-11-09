@@ -136,16 +136,46 @@ public class ChessBoard {
      *
      */
 
+    public boolean isSolved(){
+        if(numberOfQueens() == size){
+            for (Queen q : queens){
+                if(checkCollision(q)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+
+    }
+
 
     /**
      * Adds a new Queen to the ArrayList queens
      *
      * @param q The queen to adding the ArrayList queens
      */
-    public void addQueen(Queen q) {
-        queens.add(q);
+    public boolean addQueen(Queen q) {
+     for(Queen qold : queens){
+      if((qold.getX() == q.getX()) && (qold.getY() == q.getY())){
+        return false;
+        }
+       }
+      queens.add(q);
+      return true;
     }
-
+  
+    public void removeQueen(Queen q){
+    for(Queen qarray : queens){
+      if (q.equals(qarray)) {
+        queens.remove(qarray);
+      } // end of if        
+      }
+    }
+  
+  public void removeLastQueen(){
+    queens.remove(queens.size()-1);
+    }
 
     /**
      * Sorts queens based on their Y coordinates.
@@ -209,13 +239,18 @@ public class ChessBoard {
      * @return True if a collision is detected, false otherwise.
      */
     public boolean checkCollision(Queen queen) {
+           int x = queen.getX();
+           int y = queen.getY();
         for (Queen q : queens) {
-            if (q.getX() == queen.getX() || q.getY() == queen.getY() ||
-                    Math.abs(q.getX() - queen.getX()) == Math.abs(q.getY() - queen.getY())) {
-                return true;
+            // Check for row, column, or diagonal conflicts
+            if(!q.equals(queen)){   
+            if (q.getX() == x || q.getY() == y ||
+                    Math.abs(q.getX() - x) == Math.abs(q.getY() - y)) {
+                return true; // Collision detected
+            }
             }
         }
-        return false;
+        return false; // No collision found
     }
 
     /**
@@ -240,6 +275,7 @@ public class ChessBoard {
         }
         return false; // No collision found
     }
+
 
     /**
      * Clears all queens from the chessboard.
@@ -369,7 +405,11 @@ public class ChessBoard {
       if ((queens.size() == size)) {
           return true;
       } // end of if
-        sortQueensByX();
+
+      //sortQueensByX();
+      //verfyQueens();
+      //stateX = numberOfQueens();
+    
        if (stateY == size-1 && stateX == numberOfQueens() - 1) {
         stateY = 0;
         stateX++;
@@ -391,7 +431,48 @@ public class ChessBoard {
         stateY++;
       return false;
     }
+  
+  public boolean playBacktrackToRow(int x){
+    if (x > this.size) {
+      return false;
+    } // end of if
+    while (getStateX() != x) { 
+      stepBacktrack();
+    } // end of while
+    return true;
+  }
 
+  public boolean playBacktrackToNextQueen(){
+    int numQ = queens.size();
+    while (numQ == queens.size()) { 
+      stepBacktrack();
+    } // end of while
+      return isSolved();
+  }
+
+    public void verfyQueens(){
+      sortQueensByX();
+        for (int i = queens.size()-1; i > 0; i--) {
+    
+        if (console) {
+          System.out.println("Check Collision = "+checkCollision(queens.get(i)) );
+          System.out.println("("+queens.get(i).getX() +" == "+ i +")");
+          } // end of if
+      
+            //Check for Collision
+            if(!(checkCollision(queens.get(i))) &&
+            //Check for right line in X direction
+            (queens.get(i).getX() == i)) {
+                 
+            }else {
+            queens.remove(queens.get(i));
+             } // end of if-else
+
+        }
+    
+      setStateX(numberOfQueens());
+    }
+  
 
     @Override
     public String toString() {

@@ -471,13 +471,15 @@ public class MChessBoard extends ChessBoard {
         cleanCollisionCarpets();
     }
 
-    public void mstep(){
+    public boolean animationStep(){
         removeALLQueensFromBoard();
         cleanCollisionCarpets();
         if(stepBacktrack()){
             if(console){
                 System.out.println("ChessBoard is Solved!");
             }
+            spawnAllQueens();
+            return true;
         }
         spawnAllQueens();
 
@@ -487,7 +489,33 @@ public class MChessBoard extends ChessBoard {
             block.setType(Material.BLUE_CARPET);
         }
 
+        return false;
+
     }
+
+    public boolean animationQueenStep(){
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+        if(playBacktrackToNextQueen()){
+            if(console){
+                System.out.println("ChessBoard is Solved!");
+            }
+            spawnAllQueens();
+            return true;
+        }
+        spawnAllQueens();
+
+        if(stateX+1 <= size && stateY+1 <= size){
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX, originCorner.getY() + 1, originCorner.getZ() +stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
+        }
+
+        return false;
+
+    }
+
+
 
 }
 

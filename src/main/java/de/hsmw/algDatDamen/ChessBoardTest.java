@@ -1,39 +1,61 @@
 package de.hsmw.algDatDamen;
 
-//import ..ChessBoard;
-
-
 public class ChessBoardTest {
 
     public static void main(String[] args) {
         // aCreate a chessboard with size n x n
         
-        int boardSize = 16; // You can change this to any size
+        int boardSize = 5; // You can change this to any size
+        int queens = 3;
         ChessBoard board = new ChessBoard(boardSize);
 
         // default true but --> activates the Console Messages
-        board.setConsoleEnabled(false);
+        board.setConsoleEnabled(true);
 
         // Print the final layout of the chessboard
         board.printBoard();
-        long i = 0;
-        // Test the Backtracking
-        while (board.stepBacktrack() == false) { 
-        i++;
-        //long l = 50;
-        try {
-               // Thread.sleep(l);  
-        } catch(Exception e) {
-          
-        } finally {
-          
-        } // end of try
-
-        } // end of while
+    
         
-        System.out.println("Hier Junge -> "+i);
+        
+        for (int i = 0; i < boardSize; i++) {
+        for (int j = 0; j < boardSize; j++) {
+        board.addQueen(new Queen(i, j));  
+        }
+        i++;
+        } // end of for
+        // Test the Backtracking
+        
+        
+        board.addQueen(new Queen(boardSize-2, boardSize-1));
+    
+        board.playBacktrack();
+        board.removeLastQueen();
+        board.removeLastQueen();
+        board.removeLastQueen();
+    
+        board.addQueen(new Queen(boardSize-1, boardSize-1));
+         
+        board.verfyQueens();
+        System.out.println(board.numberOfQueens());
+        board.printBoard();
+    
+
+        
         // Print the final layout of the chessboard
         board.printBoard();
         
     }
+  
+  
+    private static void delay(long l) {
+      try {
+         Thread.sleep(l);  
+      } catch(Exception e) {
+          
+      } finally {
+          
+      } // end of try
+  
+    }
+  
 }

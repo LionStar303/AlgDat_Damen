@@ -102,4 +102,11 @@ public class Queen {
         return "Queen is at (" + x + ", " + y + ") "
                 + (isSuperQueen ? "and is a Super Queen." : "and is a regular Queen.");
     }
+  
+    public boolean equals(Queen q){
+    if ((q.getX() == this.x) && (q.getY() == this.y) && (q.isSuperQueen == this.isSuperQueen)) {
+      return true;
+    } // end of if
+    return false;
+    }
 }
