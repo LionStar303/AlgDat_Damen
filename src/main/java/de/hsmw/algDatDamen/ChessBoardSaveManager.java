@@ -19,12 +19,13 @@ public class ChessBoardSaveManager {
 
     public ChessBoardSaveManager() {
         this.cbList = new ArrayList<MChessBoard>();
-        gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting().create();
+        gson = new GsonBuilder().registerTypeAdapter(Location.class, new LocationAdapter()).setPrettyPrinting()
+                .create();
         loadChessBoards();
     }
 
     public void saveChessBoards() {
-        //save chessboards to file
+        // save chessboards to file
         try (FileWriter writer = new FileWriter(FILE_PATH)) {
             gson.toJson(cbList, writer);
             System.out.println(cbList.size() + " ChessBoards saved to file!");
@@ -41,7 +42,7 @@ public class ChessBoardSaveManager {
             return;
         }
 
-        //load chessboards out of file
+        // load chessboards out of file
         try (FileReader fileReader = new FileReader(FILE_PATH)) {
             MChessBoard[] cbArray = gson.fromJson(fileReader, MChessBoard[].class);
             cbList.clear();
@@ -49,7 +50,7 @@ public class ChessBoardSaveManager {
                 cbList.add(cb);
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
     }
 

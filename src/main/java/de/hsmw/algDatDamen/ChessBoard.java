@@ -33,7 +33,7 @@ public class ChessBoard {
         this.queens = new ArrayList<>();
         this.console = true;
         this.stateX = 0;
-        this.stateY = 0;    
+        this.stateY = 0;
     }
 
     public boolean isConsole() {
@@ -132,10 +132,9 @@ public class ChessBoard {
 
     /**
      *
-     --------------Functional Methods-----------------
+     * --------------Functional Methods-----------------
      *
      */
-
 
     /**
      * Adds a new Queen to the ArrayList queens
@@ -145,7 +144,6 @@ public class ChessBoard {
     public void addQueen(Queen q) {
         queens.add(q);
     }
-
 
     /**
      * Sorts queens based on their Y coordinates.
@@ -259,12 +257,12 @@ public class ChessBoard {
 
         System.out.print("\t");
         for (int x = 0; x < size; x++) {
-            if (x > 9){
-              System.out.printf(x + " ");
-              }else {
-                        System.out.printf(x + "  ");   
-               } // end of if-else
-  
+            if (x > 9) {
+                System.out.printf(x + " ");
+            } else {
+                System.out.printf(x + "  ");
+            } // end of if-else
+
         }
         System.out.print(" x\n");
 
@@ -285,7 +283,7 @@ public class ChessBoard {
                 System.out.print(board[i][j] + "  ");
             }
             System.out.println("\n");
-        }                                    
+        }
         System.out.println("\ny");
         System.out.println("------------------------------------------------------------");
     }
@@ -295,17 +293,16 @@ public class ChessBoard {
      * It tries to place all queens on the board without any conflicts.
      *
      * @return boolean True if the algorithm successfully places all queens, false
-     * otherwise.
+     *         otherwise.
      */
     public boolean playBacktrack() {
-       queens.clear();
-       sortQueensByX();
-       int row = 0;
-    
+        queens.clear();
+        sortQueensByX();
+        int row = 0;
+
         if (console) {
             System.out.println("Start Backtracking Algorithm");
         }
-
 
         while (queens.size() != size) {
             for (int i = 0; i < size; i++) {
@@ -337,7 +334,6 @@ public class ChessBoard {
 
         queens.remove(numberOfQueens() - 1);
 
-
         if (console) {
             System.out.println("Start Backstep -> row: " + row);
         }
@@ -364,41 +360,40 @@ public class ChessBoard {
         }
         return row;
     }
-  
-  public boolean stepBacktrack() {
-      if ((queens.size() == size)) {
-          return true;
-      } // end of if
+
+    public boolean stepBacktrack() {
+        if ((queens.size() == size)) {
+            return true;
+        } // end of if
         sortQueensByX();
-       if (stateY == size-1 && stateX == numberOfQueens() - 1) {
-        stateY = 0;
-        stateX++;
-       } 
-       
-       if (addTestedQueen(stateX, stateY)) {
-        stateX++;
-        stateY = -1;
-          if (console) {
-             System.out.println("Step -> row: " + stateX);
-             printBoard();
-             }
-       }else if (stateY >= size - 1) {
-               stateX--;
-               stateY = queens.get(numberOfQueens() - 1).getY();
-               queens.remove(numberOfQueens() - 1);
+        if (stateY == size - 1 && stateX == numberOfQueens() - 1) {
+            stateY = 0;
+            stateX++;
+        }
+
+        if (addTestedQueen(stateX, stateY)) {
+            stateX++;
+            stateY = -1;
+            if (console) {
+                System.out.println("Step -> row: " + stateX);
+                printBoard();
+            }
+        } else if (stateY >= size - 1) {
+            stateX--;
+            stateY = queens.get(numberOfQueens() - 1).getY();
+            queens.remove(numberOfQueens() - 1);
         }
 
         stateY++;
-      return false;
+        return false;
     }
-
 
     @Override
     public String toString() {
         return "Chessboard size: " + size + "x" + size + ", Queens placed: " + numberOfQueens();
     }
 
-    public int numberOfQueens(){
+    public int numberOfQueens() {
         return queens.size();
     }
 }

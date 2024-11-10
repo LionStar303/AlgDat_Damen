@@ -55,7 +55,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         }
 
         ItemStack itemInHand = event.getItem();
-        if (itemInHand == null) return;
+        if (itemInHand == null)
+            return;
 
         // Handle interaction based on item type
         if (itemInHand.getType() == Material.WHITE_CONCRETE || itemInHand.getType() == Material.GRAY_CONCRETE) {
@@ -105,7 +106,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     private void handleQueenPlacement(PlayerInteractEvent event, ItemStack itemInHand) {
         if (itemInHand.getItemMeta() != null && "Queen".equals(itemInHand.getItemMeta().getDisplayName())) {
             placeQueen(event);
-        } else if (itemInHand.getItemMeta() != null && "TestedQueen".equals(itemInHand.getItemMeta().getDisplayName())) {
+        } else if (itemInHand.getItemMeta() != null
+                && "TestedQueen".equals(itemInHand.getItemMeta().getDisplayName())) {
             placeTestedQueen(event);
         }
     }
@@ -119,7 +121,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             mcB.removeQueen(existingQueen); // Remove the existing queen
             getLogger().info("Existing queen has been removed from the board!");
             event.setCancelled(true);
-        }else{
+        } else {
             mcB.addQueen(event.getClickedBlock().getLocation());
             getLogger().info("Queen has been successfully placed and spawned on the board!");
         }
@@ -172,14 +174,12 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         event.setCancelled(true);
     }
 
-    private MChessBoard getClickedMCB(PlayerInteractEvent event){
+    private MChessBoard getClickedMCB(PlayerInteractEvent event) {
         for (MChessBoard mcB : saveManager.getCbList()) {
             if (mcB.isPartOfBoard(event.getClickedBlock().getLocation())) {
-              return mcB;
+                return mcB;
             }
         }
         return null;
     }
 }
-
-
