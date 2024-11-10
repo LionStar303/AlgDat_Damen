@@ -253,14 +253,17 @@ public class MChessBoard extends ChessBoard {
         // Calculate boundaries based on origin location and board size
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
+        int minY = originCorner.getBlockY();
         int maxX = minX + size - 1;
         int maxZ = minZ + size - 1;
+        int maxY = minY + 2;
 
         // Check if the given location is within the boundaries
         int x = location.getBlockX();
         int z = location.getBlockZ();
+        int y = location.getBlockY();
 
-        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && location.getWorld().equals(originCorner.getWorld());
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && y >= minY && y <= maxY && location.getWorld().equals(originCorner.getWorld());
     }
 
     public boolean addQueen(Location l) {
