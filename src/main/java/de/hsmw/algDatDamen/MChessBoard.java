@@ -481,9 +481,9 @@ public class MChessBoard extends ChessBoard {
         this.blackFieldMaterial = Material.AIR;
         this.whiteFieldMaterial = Material.AIR;
 
-        spawnChessBoard();
-        removeALLQueensFromBoard();
         cleanCollisionCarpets();
+        removeALLQueensFromBoard();
+        spawnChessBoard();
     }
 
     public void mstep() {
