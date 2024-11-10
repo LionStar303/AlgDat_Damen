@@ -29,6 +29,9 @@ public class Menu implements Listener {
         player.openInventory(inventory);
     }
 
+    private record CommandData(String command, String[] arguments) {
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü"))) return;
@@ -79,6 +82,4 @@ public class Menu implements Listener {
         commandsMap.put(slot, new CommandData(command, arguments));
     }
 
-    private record CommandData(String command, String[] arguments) {
-    }
 }

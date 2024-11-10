@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     // List to store all created MChessBoard instances
@@ -34,7 +36,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new Menu(), this);
+        getServer().getPluginManager().registerEvents(menu, this);
 
         // Register commands
         getCommand("schachmenu").setExecutor(new MenuCommand(menu));
@@ -52,13 +54,18 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        ItemStack itemInHand = event.getItem();
+
+        if (itemInHand == null) return;
+
+        if (itemInHand.getType() == Material.EMERALD && itemInHand.getItemMeta().hasDisplayName() && Objects.equals(itemInHand.getItemMeta().displayName(), Component.text("Developer Menü"))) {
+            menu.openInventory(player);
+        }
+
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
             return;
         }
-
-        ItemStack itemInHand = event.getItem();
-        if (itemInHand == null)
-            return;
 
         // Handle interaction based on item type
         if (itemInHand.getType() == Material.WHITE_CONCRETE || itemInHand.getType() == Material.GRAY_CONCRETE) {
