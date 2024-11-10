@@ -1,5 +1,7 @@
 package de.hsmw.algDatDamen;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -181,5 +183,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             }
         }
         return null;
+    }
+
+    public static void testMenuCommand(String message) {
+        Bukkit.broadcast(Component.text(message));
     }
 }

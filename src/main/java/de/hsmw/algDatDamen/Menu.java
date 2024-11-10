@@ -11,24 +11,18 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Menu implements Listener {
     private final Inventory inventory;
+    private final Map<Integer, CommandData> commandsMap = new HashMap<>();
 
     public Menu() {
         this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
-
-        ItemStack item1 = new ItemStack(Material.DIAMOND);
-        ItemMeta item1Meta = item1.getItemMeta();
-        item1Meta.displayName(Component.text("Spawne Schachbrett"));
-        item1.setItemMeta(item1Meta);
-
-        ItemStack item2 = new ItemStack(Material.BARRIER);
-        ItemMeta item2Meta = item2.getItemMeta();
-        item2Meta.displayName(Component.text("Entferne Schachbrett"));
-        item2.setItemMeta(item2Meta);
-
-        inventory.setItem(11, item1);
-        inventory.setItem(12, item2);
+        this.addMenuItem(Material.DIAMOND, "Schachbrett hinzufügen", 13, "testMenuCommand", "Francis der Weihnachtsmann");
     }
 
     public void openInventory(Player player) {
@@ -37,40 +31,54 @@ public class Menu implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!event.getView().title().equals(Component.text("Schach Menü")))
-            return;
+        if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü"))) return;
 
-        event.setCancelled(true); // Verhindert das Bewegen der Items im Menü
+        event.setCancelled(true);
 
-        Player player = (Player) event.getWhoClicked();
-        ItemStack clickedItem = event.getCurrentItem();
+        int slot = event.getSlot();
+        System.out.println("Slot: " + slot);
 
-        if (clickedItem == null || !clickedItem.hasItemMeta())
-            return;
+        if (commandsMap.containsKey(slot)) {
+            CommandData commandData = commandsMap.get(slot);
+            try {
+                // Get class
+                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.AlgDatDamen");
+                Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
 
-        // Überprüfe das Item und führe entsprechende Funktion aus
-        /*
-         * if (clickedItem.getType() == Material.DIAMOND) {
-         * player.sendMessage("Funktion: Schachbrett spawnen");
-         * }
-         * if (clickedItem.getType() == Material.BARRIER) {
-         * player.sendMessage("Funktion: Entferne Schachbrett");
-         * }
-         */
+                System.out.println(commandData.command());
+                System.out.println(Arrays.toString(commandData.arguments()));
 
-        switch (clickedItem.getType()) {
-            case DIAMOND: {
-                player.sendMessage("Funktion: Spawne Schachbrett");
-                break;
-            }
-            case BARRIER: {
-                player.sendMessage("Funktion: Entferne Schachbrett");
-                break;
+                // Get method and invoke it with given arguments
+                if (commandData.arguments.length == 0) {
+                    Method method = externalClass.getDeclaredMethod(commandData.command);
+                    method.invoke(instance);
+                } else if (commandData.arguments.length == 1) {
+                    Method method = externalClass.getDeclaredMethod(commandData.command, String.class);
+                    method.invoke(instance, commandData.arguments[0]);
+                } else {
+                    Method method = externalClass.getDeclaredMethod(commandData.command, String[].class);
+                    method.invoke(instance, (Object) commandData.arguments);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public void addMenuItem(String name, Material item, int position, String functionName, String[] args) {
+    public void addMenuItem(Material material, String displayName, int slot, String command, String... arguments) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.text(displayName));
+        item.setItemMeta(meta);
 
+        // Füge das Item ins Inventar ein
+        inventory.setItem(slot, item);
+
+        // Speichere den Befehl und die Argumente in der Map
+        commandsMap.put(slot, new CommandData(command, arguments));
+    }
+
+    private record CommandData(String command, String[] arguments) {
     }
 }
