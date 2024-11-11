@@ -14,6 +14,11 @@ import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
  */
 public class DevelopmentHandles {
 
+    /**
+     * Generates a new board.
+     * @param event Triggering event.
+     * @param size Size of the board.
+     */
     public static void handleBoardCreation(PlayerInteractEvent event, int size) {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
@@ -28,15 +33,11 @@ public class DevelopmentHandles {
         saveManager.getCbList().add(cb);
     }
 
-    public static void handleQueenPlacement(PlayerInteractEvent event) {
-        placeQueen(event);
-    }
-
-    public static void handleTestedQueenPlacement(PlayerInteractEvent event) {
-        placeTestedQueen(event);
-    }
-
-    private static void placeQueen(PlayerInteractEvent event) {
+    /**
+     * Places a queen on the clicked block. No check for allowed placement. Use <code>placeTestedQueen()</code> instead.
+     * @param event Triggering event.
+     */
+    public static void placeQueen(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
 
@@ -53,13 +54,21 @@ public class DevelopmentHandles {
 
     }
 
-    private static void placeTestedQueen(PlayerInteractEvent event) {
+    /**
+     * Like <code>placeQueen</code> but with a check, if the queen is allowed on this field of the board.
+     * @param event Triggering event.
+     */
+    public static void placeTestedQueen(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.addTestedQueen(event.getClickedBlock().getLocation());
-        //getLogger().info("TestedQueen has been successfully placed on the board!");
         event.setCancelled(true);
     }
 
+    /**
+     * Gets the clicked chess board if possible.
+     * @param event Triggering event.
+     * @return Clicked chess board or null.
+     */
     public static MChessBoard getClickedMCB(PlayerInteractEvent event) {
         for (MChessBoard mcB : saveManager.getCbList()) {
             if (mcB.isPartOfBoard(event.getClickedBlock().getLocation())) {
@@ -69,6 +78,10 @@ public class DevelopmentHandles {
         return null;
     }
 
+    /**
+     * Removes the clicked chess board if there is one.
+     * @param event Triggering event.
+     */
     public static void removeChessBoardFromGame(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
             event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +

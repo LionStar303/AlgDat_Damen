@@ -199,7 +199,4 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         return null;
     }*/
 
-    public static void testMenuCommand(String message) {
-        Bukkit.broadcast(Component.text(message));
-    }
 }

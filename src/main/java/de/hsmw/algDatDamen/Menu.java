@@ -26,6 +26,11 @@ public class Menu implements Listener {
         this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
     }
 
+    /**
+     * Opens the menu inventory and stores the event.
+     * @param player Player which has to see the menu.
+     * @param event Triggering event.
+     */
     public void openInventory(Player player, PlayerInteractEvent event) {
         player.openInventory(inventory);
         this.event = event;
@@ -36,8 +41,8 @@ public class Menu implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        // For Development Menu
         if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü"))) return;
-
         event.setCancelled(true);
 
         int slot = event.getSlot();
@@ -53,7 +58,8 @@ public class Menu implements Listener {
                 System.out.println(commandData.command());
                 System.out.println(Arrays.toString(commandData.arguments()));
 
-                // Get method and invoke it with given arguments
+                // Get method and invoke it with given arguments.
+                // It automatically adds the event as the first argument.
                 if (commandData.arguments.length == 0) {
                     Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class);
                     method.invoke(instance, this.event);
