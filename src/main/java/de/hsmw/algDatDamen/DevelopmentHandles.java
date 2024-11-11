@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
 
 /**
@@ -14,12 +15,14 @@ import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
  */
 public class DevelopmentHandles {
 
+    public static int boardSize = 3;
+
     /**
      * Generates a new board.
      * @param event Triggering event.
      * @param size Size of the board.
      */
-    public static void handleBoardCreation(PlayerInteractEvent event, int size) {
+    public static void handleBoardCreation(PlayerInteractEvent event, Integer size) {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
 
@@ -29,7 +32,7 @@ public class DevelopmentHandles {
             return;
         };
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), size, player);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player);
         saveManager.getCbList().add(cb);
     }
 
@@ -91,6 +94,53 @@ public class DevelopmentHandles {
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeChessBoardFromGame();
         saveManager.getCbList().remove(mcB);
+        event.setCancelled(true);
+    }
+
+    /**
+     * Increases the board size between 3 and 12.
+     * @param event Not used but needed by <code>addMenuItem()</code>
+     */
+    public static void increaseBoardSize(PlayerInteractEvent event) {
+        if (boardSize < 12) {
+            boardSize++;
+        } else {
+            boardSize = 3;
+        }
+        devMenu.updateItemName(MenuSlots.BOARD_SIZE, "Größe: " + boardSize);
+    }
+
+    public static void handleCollisionCarpets(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+
+        if (mcB.isCollisionCarpets()) {
+            mcB.cleanCollisionCarpets();
+            mcB.setCollisionCarpets(false);
+        } else {
+            mcB.spawnCollisionCarpets();
+            mcB.setCollisionCarpets(true);
+        }
+        event.setCancelled(true);
+    }
+
+    public static void handleBacktrack(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        System.out.println(mcB.toString());
+        mcB.playBacktrack();
+        mcB.spawnAllQueens();
+        event.setCancelled(true);
+    }
+
+    public static void handleBacktrackStep(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        System.out.println(mcB.toString());
+        mcB.mstep();
+        event.setCancelled(true);
+    }
+
+    public static void removeAllQueens(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.removeALLQueensFromBoard();
         event.setCancelled(true);
     }
 
