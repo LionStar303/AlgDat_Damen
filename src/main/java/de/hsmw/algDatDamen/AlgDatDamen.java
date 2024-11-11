@@ -81,13 +81,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             event.setCancelled(true);
         }
 
-        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
-            return;
-        }
     }
-
-
-
-
 
 }

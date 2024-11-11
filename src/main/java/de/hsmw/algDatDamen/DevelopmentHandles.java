@@ -110,6 +110,10 @@ public class DevelopmentHandles {
         devMenu.updateItemName(MenuSlots.BOARD_SIZE, "Größe: " + boardSize);
     }
 
+    /**
+     * Enables or disables the collision carpets on the given chess board.
+     * @param event Triggering event.
+     */
     public static void handleCollisionCarpets(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
 
@@ -123,6 +127,10 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    /**
+     * A full run of the algorithm on the given chess board.
+     * @param event The triggering event.
+     */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
@@ -131,6 +139,10 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    /**
+     * Performs the next step of the algorithm.
+     * @param event The triggering event.
+     */
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
@@ -138,6 +150,10 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    /**
+     * Removes all queens from the chess board.
+     * @param event The triggering event.
+     */
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeALLQueensFromBoard();
