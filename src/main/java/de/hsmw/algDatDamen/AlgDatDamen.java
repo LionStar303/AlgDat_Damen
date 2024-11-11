@@ -73,6 +73,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             handleCollisionCarpets(event);
         } else if (itemInHand.getType() == Material.ACACIA_LOG) {
             removeChessBoardFromGame(event);
+        } else if (itemInHand.getType() == Material.ACACIA_BOAT) {
+            rotateQueens(event);
         }
     }
 
@@ -173,6 +175,12 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeChessBoardFromGame();
         saveManager.getCbList().remove(mcB);
+        event.setCancelled(true);
+    }
+
+    private void rotateQueens(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.rotateMQueens(1);
         event.setCancelled(true);
     }
 
