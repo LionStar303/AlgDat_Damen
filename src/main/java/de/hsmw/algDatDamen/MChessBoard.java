@@ -241,8 +241,9 @@ public class MChessBoard extends ChessBoard {
         if (this.collisionCarpets) {
             cleanCollisionCarpets();
             spawnCollisionCarpets();
+        } else {
+            cleanCollisionCarpets();
         }
-
     }
 
     public boolean isPartOfBoard(Location location) {
@@ -485,6 +486,7 @@ public class MChessBoard extends ChessBoard {
     public void removeChessBoardFromGame() {
         this.blackFieldMaterial = Material.AIR;
         this.whiteFieldMaterial = Material.AIR;
+        this.collisionCarpets = false;
 
         cleanCollisionCarpets();
         removeALLQueensFromBoard();
