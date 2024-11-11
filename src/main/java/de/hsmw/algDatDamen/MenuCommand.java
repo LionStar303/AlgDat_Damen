@@ -45,7 +45,7 @@ public class MenuCommand implements CommandExecutor {
 
             if (meta != null) {
                 // Setzen des Namens und der Verzauberung
-                meta.displayName(Component.text(NamedTextColor.BLUE + "Developer Menü"));
+                meta.displayName(Component.text("Developer Menü", NamedTextColor.BLUE));
                 meta.addEnchant(Enchantment.FORTUNE, 1, true);  // Verzauberung hinzufügen
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);   // Versteckt das Verzauberungs-Glitzern
 

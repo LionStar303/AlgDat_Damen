@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,17 +20,18 @@ import java.util.Map;
 public class Menu implements Listener {
     private final Inventory inventory;
     private final Map<Integer, CommandData> commandsMap = new HashMap<>();
+    private PlayerInteractEvent event;
 
     public Menu() {
         this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
-        this.addMenuItem(Material.DIAMOND, "Schachbrett hinzufügen", 13, "testMenuCommand", "Francis der Weihnachtsmann");
     }
 
-    public void openInventory(Player player) {
+    public void openInventory(Player player, PlayerInteractEvent event) {
         player.openInventory(inventory);
+        this.event = event;
     }
 
-    private record CommandData(String command, String[] arguments) {
+    private record CommandData(String command, int[] arguments) {
     }
 
     @EventHandler
@@ -45,7 +47,7 @@ public class Menu implements Listener {
             CommandData commandData = commandsMap.get(slot);
             try {
                 // Get class
-                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.AlgDatDamen");
+                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.DevelopmentHandles");
                 Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
 
                 System.out.println(commandData.command());
@@ -53,13 +55,13 @@ public class Menu implements Listener {
 
                 // Get method and invoke it with given arguments
                 if (commandData.arguments.length == 0) {
-                    Method method = externalClass.getDeclaredMethod(commandData.command);
-                    method.invoke(instance);
+                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class);
+                    method.invoke(instance, this.event);
                 } else if (commandData.arguments.length == 1) {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, String.class);
-                    method.invoke(instance, commandData.arguments[0]);
+                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class, int.class);
+                    method.invoke(instance, this.event, commandData.arguments[0]);
                 } else {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, String[].class);
+                    Method method = externalClass.getDeclaredMethod(commandData.command, int[].class);
                     method.invoke(instance, (Object) commandData.arguments);
                 }
 
@@ -69,7 +71,16 @@ public class Menu implements Listener {
         }
     }
 
-    public void addMenuItem(Material material, String displayName, int slot, String command, String... arguments) {
+    /**
+     * Adds a new Item to the menu.
+     * @param material The item to be shown.
+     * @param displayName The display name of the item.
+     * @param slot The slot number.
+     * @param command The name of the function to be executed. The function has to be in DevelopmentHandles class.
+     * @param arguments Arguments for the given function. It automatically adds the PlayerInteractEvent as first argument.
+     *                  The other arguments need to be integers.
+     */
+    public void addMenuItem(Material material, String displayName, int slot, String command, int... arguments) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(Component.text(displayName));
