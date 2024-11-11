@@ -491,6 +491,13 @@ public class MChessBoard extends ChessBoard {
         spawnChessBoard();
     }
 
+    public void rotateMQueens(int rotation) {
+        this.rotateQueens(rotation);
+        removeALLQueensFromBoard();
+        spawnAllQueens();
+        updateCollisionCarpets();
+    }
+
     public void mstep() {
         removeALLQueensFromBoard();
         cleanCollisionCarpets();

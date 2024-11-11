@@ -388,6 +388,22 @@ public class ChessBoard {
         return false;
     }
 
+    public void rotateQueens(int rotations) {
+        // Reduce rotations to within [0-3] (4 rotations would result in the same
+        // original board)
+        rotations = rotations % 4;
+
+        for (int i = 0; i < rotations; i++) {
+            for (Queen queen : queens) {
+                // Apply 90-degree rotation on each queen's position
+                int originalX = queen.getX();
+                int originalY = queen.getY();
+                queen.setX(originalY);
+                queen.setY(size - 1 - originalX);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "Chessboard size: " + size + "x" + size + ", Queens placed: " + numberOfQueens();
