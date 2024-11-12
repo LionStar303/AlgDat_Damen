@@ -6,3 +6,4 @@ commands:
   schachmenu:
     description: 'Öffnet das Schachmenü'
     usage: '/schachmenu'
+    aliases: [sm, cb]
