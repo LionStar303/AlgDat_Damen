@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
 
@@ -157,6 +156,12 @@ public class DevelopmentHandles {
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeALLQueensFromBoard();
+        event.setCancelled(true);
+    }
+
+    public static void rotateQueens(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.rotateMQueens(1);
         event.setCancelled(true);
     }
 

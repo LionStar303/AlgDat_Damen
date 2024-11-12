@@ -11,6 +11,7 @@ public enum MenuSlots {
     QUEEN(5),
     TESTED_QUEEN(14),
     REMOVE_ALL_QUEENS(23),
+    ROTATE_QUEENS(24),
     BACKTRACK_FULL(7),
     BACKTRACK_STEP(16),
     BACKTRACK_UNTIL(25);

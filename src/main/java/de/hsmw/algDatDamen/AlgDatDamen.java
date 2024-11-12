@@ -3,7 +3,6 @@ package de.hsmw.algDatDamen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -12,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static de.hsmw.algDatDamen.DevelopmentHandles.boardSize;
-import static de.hsmw.algDatDamen.DevelopmentHandles.getClickedMCB;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
@@ -52,6 +50,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         devMenu.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.QUEEN, "placeQueen");
         devMenu.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN, "placeTestedQueen");
         devMenu.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS, "removeAllQueens");
+        devMenu.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS, "rotateQueens");
         // - Backtrack Functions
         devMenu.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
         devMenu.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP, "handleBacktrackStep");
