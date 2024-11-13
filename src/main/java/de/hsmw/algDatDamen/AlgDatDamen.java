@@ -4,12 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import static de.hsmw.algDatDamen.DevelopmentHandles.boardSize;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
@@ -18,9 +19,12 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static ChessBoardSaveManager saveManager;
     // Generate development menu
     public static final Menu devMenu = new Menu(27);
+    public static AlgDatDamen instance;
 
     @Override
     public void onEnable() {
+
+        instance = this;
 
         // Initialize the list of chess boards
         saveManager = new ChessBoardSaveManager();
@@ -42,18 +46,24 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Configure Menus
         // - Chess Board Functions
-        devMenu.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD, "handleBoardCreation", boardSize);
-        devMenu.addMenuItem(Material.BARRIER, "Entferne Schachbrett", MenuSlots.REMOVE_BOARD,"removeChessBoardFromGame");
+        devMenu.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD, "handleBoardCreation",
+                boardSize);
+        devMenu.addMenuItem(Material.BARRIER, "Entferne Schachbrett", MenuSlots.REMOVE_BOARD,
+                "removeChessBoardFromGame");
         devMenu.addMenuItem(Material.REDSTONE_TORCH, "Größe: " + boardSize, MenuSlots.BOARD_SIZE, "increaseBoardSize");
         devMenu.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS, "handleCollisionCarpets");
         // - Queen Functions
         devMenu.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.QUEEN, "placeQueen");
-        devMenu.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN, "placeTestedQueen");
+        devMenu.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
+                "placeTestedQueen");
         devMenu.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS, "removeAllQueens");
         devMenu.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS, "rotateQueens");
         // - Backtrack Functions
         devMenu.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
-        devMenu.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP, "handleBacktrackStep");
+        devMenu.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
+                "handleBacktrackStep");
+        devMenu.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
+        devMenu.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
 
         devMenu.fillEmptySlots();
         // Log plugin startup
@@ -72,14 +82,41 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         ItemStack itemInHand = event.getItem();
 
-        if (itemInHand == null) return;
+        if (itemInHand == null)
+            return;
 
         // Check for Development menu item
-        if (itemInHand.getType() == Material.EMERALD && itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
+        if (itemInHand.getType() == Material.EMERALD && itemInHand.getItemMeta().displayName()
+                .equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
         }
 
     }
 
+    public void BacktrackAnimationStep(MChessBoard board, long ticks) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (board.animationStep()) {
+                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(this, 0L, ticks);
+    }
+
+    public void BacktrackAnimationQueenStep(MChessBoard board, long ticks) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (board.animationQueenStep()) {
+                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(this, 0L, ticks);
+    }
 }

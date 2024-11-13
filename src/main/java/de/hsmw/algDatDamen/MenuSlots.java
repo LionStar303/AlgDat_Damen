@@ -14,7 +14,10 @@ public enum MenuSlots {
     ROTATE_QUEENS(24),
     BACKTRACK_FULL(7),
     BACKTRACK_STEP(16),
-    BACKTRACK_UNTIL(25);
+    BACKTRACK_UNTIL(25),
+    BACKTRACK_ANIMATION(26),
+    BACKTRACK_ANIMATION_FAST(17);
+
 
     public final int slot;
 

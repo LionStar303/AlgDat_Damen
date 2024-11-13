@@ -264,7 +264,8 @@ public class MChessBoard extends ChessBoard {
         int z = location.getBlockZ();
         int y = location.getBlockY();
 
-        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && y >= minY && y <= maxY && location.getWorld().equals(originCorner.getWorld());
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && y >= minY && y <= maxY
+                && location.getWorld().equals(originCorner.getWorld());
     }
 
     public boolean addQueen(Location l) {
@@ -359,7 +360,7 @@ public class MChessBoard extends ChessBoard {
     }
 
     public void removeALLQueensFromBoard() {
-        for  (Entity entity : originCorner.getWorld().getEntities())  {
+        for (Entity entity : originCorner.getWorld().getEntities()) {
             if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
                 entity.remove();
             }
@@ -500,13 +501,15 @@ public class MChessBoard extends ChessBoard {
         updateCollisionCarpets();
     }
 
-    public void mstep() {
+    public boolean animationStep() {
         removeALLQueensFromBoard();
         cleanCollisionCarpets();
         if (stepBacktrack()) {
             if (console) {
                 System.out.println("ChessBoard is Solved!");
             }
+            spawnAllQueens();
+            return true;
         }
         spawnAllQueens();
 
@@ -516,6 +519,24 @@ public class MChessBoard extends ChessBoard {
             Block block = location.getBlock();
             block.setType(Material.BLUE_CARPET);
         }
+
+        return false;
+    }
+
+    public boolean animationQueenStep(){
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+        if(playBacktrackToNextQueen()){
+            if(console){
+                System.out.println("ChessBoard is Solved!");
+            }
+            spawnAllQueens();
+            return true;
+        }
+        spawnAllQueens();
+
+
+        return false;
 
     }
 

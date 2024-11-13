@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,6 +16,11 @@ import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
 public class DevelopmentHandles {
 
     public static int boardSize = 3;
+    private final AlgDatDamen plugin;
+
+    public DevelopmentHandles(AlgDatDamen plugin) {
+        this.plugin = plugin;
+    }
 
     /**
      * Generates a new board.
@@ -145,7 +151,7 @@ public class DevelopmentHandles {
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.mstep();
+        mcB.animationStep();
         event.setCancelled(true);
     }
 
@@ -162,6 +168,20 @@ public class DevelopmentHandles {
     public static void rotateQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.rotateMQueens(1);
+        event.setCancelled(true);
+    }
+
+    private void handleBacktrackAnimation(PlayerInteractEvent event){
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.verfyQueens();
+        plugin.BacktrackAnimationStep(mcB, 5);
+        event.setCancelled(true);
+    }
+
+    private void handleBacktrackAnimationQueenStep(PlayerInteractEvent event){
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.verfyQueens();
+        plugin.BacktrackAnimationQueenStep(mcB, 20);
         event.setCancelled(true);
     }
 
