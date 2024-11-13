@@ -206,28 +206,26 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                // Die Methode wird sekündlich aufgerufen
                 if (board.animationStep()) {
                     Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
                     cancel();
                 }
 
             }
-        }.runTaskTimer(this, 0L, ticks); // 20 Ticks entsprechen 1 Sekunde
+        }.runTaskTimer(this, 0L, ticks);
     }
 
     public void BacktrackAnimationQueenStep(MChessBoard board, long ticks) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                // Die Methode wird sekündlich aufgerufen
                 if (board.animationQueenStep()) {
                     Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
                     cancel();
                 }
 
             }
-        }.runTaskTimer(this, 0L, ticks); // 20 Ticks entsprechen 1 Sekunde
+        }.runTaskTimer(this, 0L, ticks);
     }
 
 }
