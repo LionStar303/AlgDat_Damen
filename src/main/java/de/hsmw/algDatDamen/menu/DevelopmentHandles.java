@@ -65,6 +65,22 @@ public class DevelopmentHandles {
 
     }
 
+    public static void placeUserCarpet(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.placeUserCarpet(event.getClickedBlock().getLocation());
+        event.setCancelled(true);
+    }
+
+    public static void checkUserCarpets(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        if (mcB.checkUserCarpets()) {
+            event.getPlayer().sendMessage(Component.text("Die Teppiche sind korrekt!", NamedTextColor.GREEN));
+        } else {
+            event.getPlayer().sendMessage(Component.text("Die Teppiche sind nicht korrekt!", NamedTextColor.RED));
+        }
+        event.setCancelled(true);
+    }
+
     /**
      * Like <code>placeQueen</code> but with a check, if the queen is allowed on this field of the board.
      * @param event Triggering event.
