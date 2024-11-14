@@ -11,6 +11,8 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MChessBoard extends ChessBoard {
 
@@ -443,7 +445,7 @@ public class MChessBoard extends ChessBoard {
         Location location = new Location(originCorner.getWorld(), x, originCorner.getBlockY() + 1, z);
 
         Block block = location.getBlock();
-        block.setType(Material.PURPLE_CARPET);
+        block.setType(Material.LIME_CARPET);
     }
 
     /**
@@ -454,19 +456,74 @@ public class MChessBoard extends ChessBoard {
      * @return
      */
     public boolean checkUserCarpets() {
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
-                        originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
-                                                                                // needed
-                Block block = location.getBlock();
-                if (block.getType() == Material.PURPLE_CARPET) {
-                    if (checkCollision(x, y)) {
-                        return false;
-                    }
+        Set<String> correctPositions = new HashSet<>();
+        Set<String> queenPositions = new HashSet<>();
+
+        // Step 1: Calculate all correct positions where carpets should be placed,
+        // ignoring queen positions
+        for (Queen queen : queens) {
+            int queenX = queen.getX();
+            int queenY = queen.getY();
+
+            // Track queen positions to ignore them in the check
+            queenPositions.add(queenX + "," + queenY);
+
+            // Add row and column positions
+            for (int i = 0; i < size; i++) {
+                if (i != queenY)
+                    correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
+                if (i != queenX)
+                    correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
+            }
+
+            // Add diagonal positions
+            for (int i = -size; i < size; i++) {
+                int diagX1 = queenX + i;
+                int diagY1 = queenY + i;
+                int diagX2 = queenX + i;
+                int diagY2 = queenY - i;
+
+                if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
+                        && !(diagX1 == queenX && diagY1 == queenY)) {
+                    correctPositions.add(diagX1 + "," + diagY1);
+                }
+                if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
+                        && !(diagX2 == queenX && diagY2 == queenY)) {
+                    correctPositions.add(diagX2 + "," + diagY2);
                 }
             }
         }
+
+        // Step 2: Check each position on the board
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y);
+                Block block = location.getBlock();
+                String positionKey = x + "," + y;
+
+                // Ignore positions where queens are located
+                if (queenPositions.contains(positionKey)) {
+                    continue;
+                }
+
+                // Case 1: Position should have a carpet but doesn't
+                if (correctPositions.contains(positionKey)
+                        && block.getType() != Material.LIME_CARPET) {
+                    System.out.println("Missing carpet at correct position: " + x + "," + y);
+                    return false;
+                }
+
+                // Case 2: Position shouldn't have a carpet but does
+                if (!correctPositions.contains(positionKey)
+                        && block.getType() == Material.LIME_CARPET) {
+                    System.out.println("Incorrect carpet at position: " + x + "," + y);
+                    block.setType(Material.RED_CARPET);
+                    return false;
+                }
+            }
+        }
+
         System.out.println("Solution is correct!");
         return true;
     }
