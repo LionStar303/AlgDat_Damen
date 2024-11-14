@@ -352,6 +352,7 @@ public class MChessBoard extends ChessBoard {
                     // Check if the entity is an armor stand and at the same location
                     if (entity instanceof ArmorStand && entity.getLocation().equals(queenLocation)) {
                         entity.remove(); // Remove the armor stand
+                        this.removeQueen(queen);
                         break; // Exit the loop once the queen is found and removed
                     }
                 }
@@ -363,6 +364,7 @@ public class MChessBoard extends ChessBoard {
         for (Entity entity : originCorner.getWorld().getEntities()) {
             if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
                 entity.remove();
+                this.queens.clear();
             }
         }
     }
@@ -416,6 +418,57 @@ public class MChessBoard extends ChessBoard {
                 block.setType(Material.AIR);
             }
         }
+    }
+
+    /**
+     * Places a purple carpet at the specified location to represent a block a queen
+     * can move to.
+     * 
+     * @param l
+     */
+    public void placeUserCarpet(Location l) {
+        if (!isPartOfBoard(l)) {
+            return;
+        }
+
+        if (l.getY() == originCorner.getY() + 1) {
+            l.getBlock().setType(Material.AIR);
+            return;
+
+        }
+
+        int x = l.getBlockX();
+        int z = l.getBlockZ();
+
+        Location location = new Location(originCorner.getWorld(), x, originCorner.getBlockY() + 1, z);
+
+        Block block = location.getBlock();
+        block.setType(Material.PURPLE_CARPET);
+    }
+
+    /**
+     * checks if all the purple carpets represent a valid solution.
+     * the location of a queen is ignored by the check, only the paths of the queens
+     * are compared to the carpets.
+     * 
+     * @return
+     */
+    public boolean checkUserCarpets() {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
+                                                                                // needed
+                Block block = location.getBlock();
+                if (block.getType() == Material.PURPLE_CARPET) {
+                    if (checkCollision(x, y)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("Solution is correct!");
+        return true;
     }
 
     /**
@@ -523,18 +576,17 @@ public class MChessBoard extends ChessBoard {
         return false;
     }
 
-    public boolean animationQueenStep(){
+    public boolean animationQueenStep() {
         removeALLQueensFromBoard();
         cleanCollisionCarpets();
-        if(playBacktrackToNextQueen()){
-            if(console){
+        if (playBacktrackToNextQueen()) {
+            if (console) {
                 System.out.println("ChessBoard is Solved!");
             }
             spawnAllQueens();
             return true;
         }
         spawnAllQueens();
-
 
         return false;
 

@@ -64,6 +64,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 "handleBacktrackStep");
         devMenu.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
         devMenu.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
+        devMenu.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
+        devMenu.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
 
         devMenu.fillEmptySlots();
         // Log plugin startup
