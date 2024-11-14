@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.menu;
 
 /**
  * Contains the slot numbers of the menu. Only works with Inventories with >= 27 slots

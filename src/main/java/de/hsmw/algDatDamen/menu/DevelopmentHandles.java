@@ -1,5 +1,8 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.menu;
 
+import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.MChessBoard;
+import de.hsmw.algDatDamen.Queen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

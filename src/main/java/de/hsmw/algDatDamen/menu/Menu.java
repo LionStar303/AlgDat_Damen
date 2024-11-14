@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.menu;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -67,7 +67,7 @@ public class Menu implements Listener {
             CommandData commandData = commandsMap.get(slot);
             try {
                 // Get class
-                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.DevelopmentHandles");
+                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.menu.DevelopmentHandles");
                 Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
 
                 System.out.println(commandData.command());

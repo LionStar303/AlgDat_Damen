@@ -1,5 +1,8 @@
 package de.hsmw.algDatDamen;
 
+import de.hsmw.algDatDamen.menu.Menu;
+import de.hsmw.algDatDamen.menu.MenuCommand;
+import de.hsmw.algDatDamen.menu.MenuSlots;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -11,7 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import static de.hsmw.algDatDamen.DevelopmentHandles.boardSize;
+import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 

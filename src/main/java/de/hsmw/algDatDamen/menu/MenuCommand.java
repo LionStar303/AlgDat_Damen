@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.menu;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
