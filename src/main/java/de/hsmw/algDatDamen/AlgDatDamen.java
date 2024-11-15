@@ -2,7 +2,6 @@ package de.hsmw.algDatDamen;
 
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.menu.MenuCommand;
-import de.hsmw.algDatDamen.menu.MenuSlots;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -47,32 +46,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // Register commands
         getCommand("schachmenu").setExecutor(new MenuCommand(devMenu));
 
-        // Configure Menus
-        // - Chess Board Functions
-        devMenu.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD, "handleBoardCreation",
-                boardSize);
-        devMenu.addMenuItem(Material.BARRIER, "Entferne Schachbrett", MenuSlots.REMOVE_BOARD,
-                "removeChessBoardFromGame");
-        devMenu.addMenuItem(Material.REDSTONE_TORCH, "Größe: " + boardSize, MenuSlots.BOARD_SIZE, "increaseBoardSize");
-        devMenu.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS, "handleCollisionCarpets");
-        // - Queen Functions
-        devMenu.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.QUEEN, "placeQueen");
-        devMenu.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
-                "placeTestedQueen");
-        devMenu.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS, "removeAllQueens");
-        devMenu.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS, "rotateQueens");
-        // - Backtrack Functions
-        devMenu.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
-        devMenu.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
-                "handleBacktrackStep");
-        devMenu.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
-        devMenu.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
-        devMenu.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
-        devMenu.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
-
-        devMenu.fillEmptySlots();
-        // Log plugin startup
-        getLogger().info("AlgDatDamen Plugin is now active!");
+        devMenu.init(boardSize); // Configure Menus
+        
+        getLogger().info("AlgDatDamen Plugin is now active!"); // Log plugin startup
     }
 
     @Override

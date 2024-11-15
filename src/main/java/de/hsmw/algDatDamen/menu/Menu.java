@@ -92,6 +92,31 @@ public class Menu implements Listener {
         }
     }
 
+    public void init(Integer boardSize) {
+        // - Chess Board Functions
+        this.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD, "handleBoardCreation", boardSize);
+        this.addMenuItem(Material.BARRIER, "Entferne Schachbrett", MenuSlots.REMOVE_BOARD,
+                "removeChessBoardFromGame");
+        this.addMenuItem(Material.REDSTONE_TORCH, "Größe: " + boardSize, MenuSlots.BOARD_SIZE, "increaseBoardSize");
+        this.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS, "handleCollisionCarpets");
+        // - Queen Functions
+        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.QUEEN, "placeQueen");
+        this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
+                "placeTestedQueen");
+        this.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS, "removeAllQueens");
+        this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS, "rotateQueens");
+        // - Backtrack Functions
+        this.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
+        this.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
+                "handleBacktrackStep");
+        this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
+        this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
+        this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
+        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
+
+        this.fillEmptySlots();
+    }
+
     /**
      * Adds a new Item to the menu.
      * @param material The item to be shown.
