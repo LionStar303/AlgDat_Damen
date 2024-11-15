@@ -366,7 +366,6 @@ public class MChessBoard extends ChessBoard {
         for (Entity entity : originCorner.getWorld().getEntities()) {
             if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
                 entity.remove();
-                this.queens.clear();
             }
         }
     }

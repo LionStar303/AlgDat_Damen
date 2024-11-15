@@ -181,6 +181,7 @@ public class DevelopmentHandles {
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeALLQueensFromBoard();
+        mcB.clearBoard();
         event.setCancelled(true);
     }
 
