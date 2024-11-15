@@ -86,6 +86,9 @@ public class Menu implements Listener {
                     method.invoke(instance, (Object) commandData.arguments);
                 }
 
+                if (slot != MenuSlots.BOARD_SIZE.slot && inventory.getItem(slot).getType() != Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
+                    inventory.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
