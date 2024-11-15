@@ -1,18 +1,20 @@
 # AlgDat_Damen
 
 ## Inhaltsverzeichnis
-1. [Links](#links)
-1. [Das Damenproblem](#das-damenproblem)
-   - [Einführung](#einführung)
-   - [Wie man es löst](#wie-man-es-löst)
-   - [Backtracking-Algorithmus](#backtracking-algorithmus)
-1. [Git-Richtlinien](#git-richtlinien)
-1. [Minecraft Server Setup](#minecraft-server-setup)
-1. [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
-   - [Schachfelder und Level](#schachfelder-und-level)
-   - [Simulation des Algorithmus](#simulation-des-algorithmus)
-   - [Interaktive Button-Steuerung](#interaktive-button-steuerung)
-   - [Manuelles Lösen des Problems](#manuelles-lösen-des-problems)
+- [AlgDat\_Damen](#algdat_damen)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
+  - [Links](#links)
+  - [Das Damenproblem](#das-damenproblem)
+    - [Einführung](#einführung)
+    - [Wie man es löst](#wie-man-es-löst)
+  - [Git-Richtlinien](#git-richtlinien)
+  - [Minecraft Server Setup](#minecraft-server-setup)
+  - [Übersicht Funktionen:](#übersicht-funktionen)
+  - [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
+    - [Schachfelder und Level](#schachfelder-und-level)
+    - [Simulation des Algorithmus](#simulation-des-algorithmus)
+    - [Interaktive Button-Steuerung](#interaktive-button-steuerung)
+    - [Manuelles Lösen des Problems](#manuelles-lösen-des-problems)
 
 ---
 
@@ -51,20 +53,40 @@ Weitere Informationen findest du auf der [Wikipedia-Seite zum Damenproblem](http
 
 ## Git-Richtlinien
 
-Das gesamte Projekt wird gemeinsam auf GitHub entwickelt. Jeder Mitwirkende muss Paul (Git-Name: LionStar303) seinen eigenen GitHub-Benutzernamen zusenden. Beim Arbeiten am Projekt sollten folgende Git-Richtlinien beachtet werden:
+Beim Arbeiten am Projekt sollten folgende Git-Richtlinien beachtet werden:
 
 - **Regelmäßiges Pushen**: Nach jedem kleinen Meilenstein sollte der Fortschritt mit einem Git-Commit gepusht werden.
 - **Aussagekräftige Commit-Nachrichten**: Die Kommentare sollten kurz, aber präzise sein, sodass sie den Fortschritt klar beschreiben.
+- **Code aussagekräftig kommentieren**: Um den Programmier Prozess zu vereinfachen, sollte Code verständlich dokumentiert werden (JavaDoc).
 
 ---
 
 ## Minecraft Server Setup
 
-Um das Damenproblem spielerisch zu verstehen, haben wir einen **Minecraft-Server** eingerichtet. Die IP-Adresse lautet:
+Um das Damenproblem spielerisch zu verstehen, haben wir einen **Minecraft-Server** eingerichtet.
+Dieser wird lokal gehostet, was durch entsprechende Skripte vereinfacht wird.
 
-```
-217.227.191.26
-```
+---
+
+## Übersicht Funktionen:
+
+Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
+
+| Name                                  | Funktion                       | Item                   | in Menü |
+| :------------------------------------ | :----------------------------- | :--------------------- | :-----: |
+| `handleBoardCreation()`               | Spawne Schachbrett             | Material.GREY_CONCRETE |   ja    |
+| `removeChessBoardFromGame()`          | Entferne Schachbrett           |                        |   ja    |
+| `handleCollisionCarpets()`            | Zeige Teppiche                 |                        |   ja    |
+| `placeQueen()`                        | Spawne/Entferne Königin        |                        |   ja    |
+| `removeAllQueens()`                   | Entferne alle Königinnen       |                        |   ja    |
+| `placeTestedQueen()`                  | Spawne getestete Königin       |                        |   ja    |
+| `rotateQueens()`                      | Rotiere Königinnen             |                        |   ja    |
+| `handleBacktrack()`                   | Löse Schachbrett               |                        |   ja    |
+| `handleBacktrackStep()`               | Backtracking nächster Schritt  |                        |   ja    |
+| `handleBacktrackAnimation()`          | Backtracking Animation         |                        |   ja    |
+| `handleBacktrackAnimationQueenStep()` | Backtracking Animation schnell |                        |   ja    |
+| `checkUserCarpets()`                  | Damen Movement Carpets checken |                        |   ja    |
+| `placeUserCarpet()`                   | Damen Movement Carpet setzen   |                        |   ja    |
 
 ---
 
