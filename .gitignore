@@ -7,17 +7,7 @@
 *.~ava
 
 ##Server Ordner
-Server/*.log          # Ignoriert alle Log-Dateien im Server-Ordner
-Server/plugins/*.jar  # Ignoriert alle .jar-Dateien im plugins-Ordner unter server
-Server/logs/
-Server/world_design/
-Server/world_design_nether/
-Server/world_design_the_end/
-Server/spigot.yml
-Server/config/paper-global.yml
-Server/config/paper-world-defaults.yml
-Server/bukkit.yml
-
+Server/
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
