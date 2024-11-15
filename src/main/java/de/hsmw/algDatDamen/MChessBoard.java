@@ -11,6 +11,8 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MChessBoard extends ChessBoard {
 
@@ -352,6 +354,7 @@ public class MChessBoard extends ChessBoard {
                     // Check if the entity is an armor stand and at the same location
                     if (entity instanceof ArmorStand && entity.getLocation().equals(queenLocation)) {
                         entity.remove(); // Remove the armor stand
+                        this.removeQueen(queen);
                         break; // Exit the loop once the queen is found and removed
                     }
                 }
@@ -363,6 +366,7 @@ public class MChessBoard extends ChessBoard {
         for (Entity entity : originCorner.getWorld().getEntities()) {
             if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
                 entity.remove();
+                this.queens.clear();
             }
         }
     }
@@ -416,6 +420,112 @@ public class MChessBoard extends ChessBoard {
                 block.setType(Material.AIR);
             }
         }
+    }
+
+    /**
+     * Places a purple carpet at the specified location to represent a block a queen
+     * can move to.
+     * 
+     * @param l
+     */
+    public void placeUserCarpet(Location l) {
+        if (!isPartOfBoard(l)) {
+            return;
+        }
+
+        if (l.getY() == originCorner.getY() + 1) {
+            l.getBlock().setType(Material.AIR);
+            return;
+
+        }
+
+        int x = l.getBlockX();
+        int z = l.getBlockZ();
+
+        Location location = new Location(originCorner.getWorld(), x, originCorner.getBlockY() + 1, z);
+
+        Block block = location.getBlock();
+        block.setType(Material.LIME_CARPET);
+    }
+
+    /**
+     * checks if all the purple carpets represent a valid solution.
+     * the location of a queen is ignored by the check, only the paths of the queens
+     * are compared to the carpets.
+     * 
+     * @return
+     */
+    public boolean checkUserCarpets() {
+        Set<String> correctPositions = new HashSet<>();
+        Set<String> queenPositions = new HashSet<>();
+
+        // Step 1: Calculate all correct positions where carpets should be placed,
+        // ignoring queen positions
+        for (Queen queen : queens) {
+            int queenX = queen.getX();
+            int queenY = queen.getY();
+
+            // Track queen positions to ignore them in the check
+            queenPositions.add(queenX + "," + queenY);
+
+            // Add row and column positions
+            for (int i = 0; i < size; i++) {
+                if (i != queenY)
+                    correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
+                if (i != queenX)
+                    correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
+            }
+
+            // Add diagonal positions
+            for (int i = -size; i < size; i++) {
+                int diagX1 = queenX + i;
+                int diagY1 = queenY + i;
+                int diagX2 = queenX + i;
+                int diagY2 = queenY - i;
+
+                if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
+                        && !(diagX1 == queenX && diagY1 == queenY)) {
+                    correctPositions.add(diagX1 + "," + diagY1);
+                }
+                if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
+                        && !(diagX2 == queenX && diagY2 == queenY)) {
+                    correctPositions.add(diagX2 + "," + diagY2);
+                }
+            }
+        }
+
+        // Step 2: Check each position on the board
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y);
+                Block block = location.getBlock();
+                String positionKey = x + "," + y;
+
+                // Ignore positions where queens are located
+                if (queenPositions.contains(positionKey)) {
+                    continue;
+                }
+
+                // Case 1: Position should have a carpet but doesn't
+                if (correctPositions.contains(positionKey)
+                        && block.getType() != Material.LIME_CARPET) {
+                    System.out.println("Missing carpet at correct position: " + x + "," + y);
+                    return false;
+                }
+
+                // Case 2: Position shouldn't have a carpet but does
+                if (!correctPositions.contains(positionKey)
+                        && block.getType() == Material.LIME_CARPET) {
+                    System.out.println("Incorrect carpet at position: " + x + "," + y);
+                    block.setType(Material.RED_CARPET);
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("Solution is correct!");
+        return true;
     }
 
     /**
@@ -523,18 +633,17 @@ public class MChessBoard extends ChessBoard {
         return false;
     }
 
-    public boolean animationQueenStep(){
+    public boolean animationQueenStep() {
         removeALLQueensFromBoard();
         cleanCollisionCarpets();
-        if(playBacktrackToNextQueen()){
-            if(console){
+        if (playBacktrackToNextQueen()) {
+            if (console) {
                 System.out.println("ChessBoard is Solved!");
             }
             spawnAllQueens();
             return true;
         }
         spawnAllQueens();
-
 
         return false;
 
