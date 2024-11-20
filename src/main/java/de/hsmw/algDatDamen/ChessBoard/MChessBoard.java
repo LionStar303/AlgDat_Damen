@@ -24,6 +24,9 @@ public class MChessBoard extends ChessBoard {
     private boolean collisionCarpets; // Checks if carpets cause collision issues
     private Material whiteFieldMaterial; // Material used for white fields on the board
     private Material blackFieldMaterial; // Material used for black fields on the board
+    private boolean isAnimationRunning;
+    private BukkitRunnable currentAnimationTask = null;
+
 
     /**
      * Constructor to create a chessboard with specific parameters.
@@ -46,6 +49,7 @@ public class MChessBoard extends ChessBoard {
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
         this.stateY = 0;
+        this.isAnimationRunning = false;
         spawnChessBoard();
     }
 
@@ -89,6 +93,8 @@ public class MChessBoard extends ChessBoard {
     public boolean isOriginCornerWhite() {
         return isOriginCornerWhite;
     }
+
+    public boolean isAnimationRunning(){return isAnimationRunning;}
 
     /**
      * Sets whether the origin corner of the chessboard is white.
@@ -201,7 +207,7 @@ public class MChessBoard extends ChessBoard {
 
         // Check if an armor stand already occupies the target block
         if (queenLocation.getBlock().getType() == Material.ARMOR_STAND) {
-            return false; // Return false if another queen is already at this location
+            return false; // R^eturn false if another queen is already at this location
         }
 
         // Spawn an Armor Stand at the calculated location to represent the queen
@@ -371,6 +377,13 @@ public class MChessBoard extends ChessBoard {
                 entity.remove();
             }
         }
+
+    }
+
+    public void deletAllQueensFromBoard() {
+        removeALLQueensFromBoard();
+        queens.clear();
+        updateCollisionCarpets();
     }
 
     /**
@@ -650,35 +663,84 @@ public class MChessBoard extends ChessBoard {
         return false;
 
     }
-    public void BacktrackAnimationStep(JavaPlugin plugin, long ticks) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (animationStep()) {
-                    if(console){
-                        System.out.println ("Backtracking abgeschlossen, Scheduler wird beendet.");
-                    }
-                    cancel();
-                }
 
-            }
-        }.runTaskTimer(plugin, 0L, ticks);
+    public void solveBacktrackToRowMC(int x){
+        removeALLQueensFromBoard();
+        solveBacktrackToRow(x);
+        spawnAllQueens();
+        updateCollisionCarpets();
     }
 
-    public void BacktrackAnimationQueenStep(JavaPlugin plugin, long ticks) {
-        // Startet einen Scheduler und speichert die Task-Referenz
-        new BukkitRunnable() {
+    public void BacktrackAnimationStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return;  // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true;  // Setze das Flag, dass eine Animation läuft
+
+        // Starte eine neue Animation
+        currentAnimationTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (animationQueenStep()) { // Wenn Backtracking abgeschlossen ist
+                verfyQueens();
+                if (animationStep()) {
                     if (console) {
                         System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
                     }
-
-                    cancel();
+                    cancel();  // Stoppe den Task
+                    isAnimationRunning = false;  // Setze das Flag zurück
                 }
-
             }
-        }.runTaskTimer(plugin, 0L, ticks);
+        };
+
+        // Aufgabe wird alle `ticks` wiederholt ausgeführt
+        currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+    }
+
+    public void BacktrackAnimationQueenStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return;  // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true;  // Setze das Flag, dass eine Animation läuft
+
+        // Starte eine neue Animation
+        currentAnimationTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                verfyQueens();
+                if (animationQueenStep()) {
+                    if (console) {
+                        System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    }
+                    cancel();  // Stoppe den Task
+                    isAnimationRunning = false;  // Setze das Flag zurück
+                }
+            }
+        };
+
+        // Aufgabe wird alle `ticks` wiederholt ausgeführt
+        currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+    }
+
+    // Methode, um eine laufende Animation zu stoppen
+    public void stopCurrentAnimation() {
+        if (currentAnimationTask != null) {
+            currentAnimationTask.cancel();  // Stoppe den aktuellen Task
+            isAnimationRunning = false;  // Setze das Flag zurück
+            System.out.println("Aktuelle Animation wurde abgebrochen.");
+        }
+    }
+
+
+    public void showSolution(){
+        removeALLQueensFromBoard();
+        playBacktrack();
+        spawnAllQueens();
+        updateCollisionCarpets();
     }
 }

@@ -38,6 +38,22 @@ public class DevelopmentHandles {
     }
 
     /**
+     * Removes the clicked chess board if there is one.
+     * @param event Triggering event.
+     */
+    public static void removeChessBoardFromGame(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
+                    "welches gelöscht werden soll!", NamedTextColor.RED));
+            return;
+        };
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.removeChessBoardFromGame();
+        saveManager.getCbList().remove(mcB);
+        event.setCancelled(true);
+    }
+
+    /**
      * Places a queen on the clicked block. Removes the existing queen if already present.
      * @param event Triggering event.
      */
@@ -63,7 +79,16 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-    // Weitere Funktionen für Benutzeraktionen auf dem Schachbrett
+    /**
+     * Like <code>placeQueen</code> but with a check, if the queen is allowed on this field of the board.
+     * @param event Triggering event.
+     */
+    public static void placeTestedQueen(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.addTestedQueen(event.getClickedBlock().getLocation());
+        event.setCancelled(true);
+    }
+
     public static void placeUserCarpet(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB == null) return;
@@ -88,9 +113,7 @@ public class DevelopmentHandles {
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB == null) return;
-
-        mcB.removeALLQueensFromBoard();
-        mcB.clearBoard();
+        mcB.deletAllQueensFromBoard();
         event.setCancelled(true);
     }
 
@@ -106,8 +129,11 @@ public class DevelopmentHandles {
             return;
         }
 
-        // Zugriff auf das Plugin-Objekt für den Scheduler
-        mcB.BacktrackAnimationStep(AlgDatDamen.getInstance(), 5);
+        if(mcB.isAnimationRunning()){
+            mcB.stopCurrentAnimation();
+        }else{
+            mcB.BacktrackAnimationStep(AlgDatDamen.getInstance(), 5);
+        }
         event.setCancelled(true);
     }
 
@@ -119,8 +145,12 @@ public class DevelopmentHandles {
             return;
         }
 
-        // Zugriff auf das Plugin-Objekt für den Scheduler
-        mcB.BacktrackAnimationQueenStep(AlgDatDamen.getInstance(), 20);
+        if(mcB.isAnimationRunning()){
+            mcB.stopCurrentAnimation();
+        }else{
+            mcB.BacktrackAnimationQueenStep(AlgDatDamen.getInstance(), 5);
+        }
+
         event.setCancelled(true);
     }
 
@@ -178,9 +208,7 @@ public class DevelopmentHandles {
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        System.out.println(mcB.toString());
-        mcB.playBacktrack();
-        mcB.spawnAllQueens();
+        mcB.showSolution();
         event.setCancelled(true);
     }
 

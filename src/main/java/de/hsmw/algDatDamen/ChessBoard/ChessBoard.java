@@ -334,7 +334,6 @@ public class ChessBoard {
      */
     public boolean playBacktrack() {
         queens.clear();
-        sortQueensByX();
         int row = 0;
 
         if (console) {
@@ -436,6 +435,18 @@ public class ChessBoard {
         while (getStateX() != x) {
             stepBacktrack();
         } // end of while
+        return true;
+    }
+
+    public boolean solveBacktrackToRow(int x){
+        if (x > this.size) {
+            return false;
+        } // end of if
+        playBacktrack();
+        sortQueensByX();
+        for(int i = 0; i < x; i++){
+            queens.remove(numberOfQueens() - 1);
+        }
         return true;
     }
 
