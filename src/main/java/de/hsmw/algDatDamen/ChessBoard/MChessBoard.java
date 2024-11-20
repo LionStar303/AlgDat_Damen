@@ -1,5 +1,6 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.ChessBoard;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -647,5 +650,35 @@ public class MChessBoard extends ChessBoard {
         return false;
 
     }
+    public void BacktrackAnimationStep(JavaPlugin plugin, long ticks) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (animationStep()) {
+                    if(console){
+                        System.out.println ("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    }
+                    cancel();
+                }
 
+            }
+        }.runTaskTimer(plugin, 0L, ticks);
+    }
+
+    public void BacktrackAnimationQueenStep(JavaPlugin plugin, long ticks) {
+        // Startet einen Scheduler und speichert die Task-Referenz
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (animationQueenStep()) { // Wenn Backtracking abgeschlossen ist
+                    if (console) {
+                        System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    }
+
+                    cancel();
+                }
+
+            }
+        }.runTaskTimer(plugin, 0L, ticks);
+    }
 }

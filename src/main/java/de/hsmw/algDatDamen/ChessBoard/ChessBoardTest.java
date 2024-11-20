@@ -1,4 +1,5 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.ChessBoard;
+
 
 public class ChessBoardTest {
 
