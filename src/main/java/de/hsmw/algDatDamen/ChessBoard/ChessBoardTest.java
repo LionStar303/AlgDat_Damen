@@ -9,7 +9,8 @@ public class ChessBoardTest {
     int boardSize = 5; // You can change this to any size
     int queens = 3;
     ChessBoard board = new ChessBoard(boardSize);
-
+    
+    /*
     // default true but --> activates the Console Messages
     board.setConsoleEnabled(true);
 
@@ -39,7 +40,21 @@ public class ChessBoardTest {
 
     // Print the final layout of the chessboard
     board.printBoard();
-
+    */
+    
+    //board.bongoSolve();
+    board.stateX = 0;
+        while(board.bongoStep() == false){
+            if(board.console){
+                board.printBoard();
+                
+            }
+      delay(5);
+            if (board.stateX == (board.size)) {
+                board.removeAllQueens();
+                board.stateX = 0;
+            }
+        }
   }
 
   private static void delay(long l) {

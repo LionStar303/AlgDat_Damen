@@ -154,6 +154,23 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    public static void handleBongoSolve(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+
+        if (mcB == null) {
+            event.getPlayer().sendMessage(Component.text("Kein gültiges Schachbrett gefunden!", NamedTextColor.RED));
+            return;
+        }
+
+        if(mcB.isAnimationRunning()){
+            mcB.stopCurrentAnimation();
+        }else{
+            mcB.BongoSolveAnimationStep(AlgDatDamen.getInstance(), 5);
+        }
+
+        event.setCancelled(true);
+    }
+
     /**
      * Retrieves the chess board associated with the clicked block, if any.
      * @param event Triggering event.
@@ -222,6 +239,8 @@ public class DevelopmentHandles {
         mcB.animationStep();
         event.setCancelled(true);
     }
+
+
 
 
 

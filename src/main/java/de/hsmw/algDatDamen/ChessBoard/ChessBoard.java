@@ -1,6 +1,6 @@
 package de.hsmw.algDatDamen.ChessBoard;
 
-
+import java.util.ArrayList;
 import java.util.ArrayList;
 
 /**
@@ -171,6 +171,10 @@ public class ChessBoard {
                 queens.remove(qarray);
             } // end of if
         }
+    }
+  
+  public void removeAllQueens(){
+         this.queens = new ArrayList<>();
     }
 
     public void removeLastQueen() {
@@ -495,6 +499,26 @@ public class ChessBoard {
                 queen.setY(size - 1 - originalX);
             }
         }
+    }
+
+    public void bongoSolve(){
+        verfyQueens();
+        while(bongoStep() == false){
+            if(console){
+                printBoard();
+            }
+            if (stateX == (size)) {
+                removeAllQueens();
+                stateX = 0;
+            }
+        }
+
+    }
+
+    public boolean bongoStep(){
+        addQueen(new Queen(stateX, (int)(Math.random()*(size)) ));
+        stateX++;
+        return isSolved();
     }
 
     @Override

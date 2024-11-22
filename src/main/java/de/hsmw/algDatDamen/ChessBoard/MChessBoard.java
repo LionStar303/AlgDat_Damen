@@ -679,24 +679,29 @@ public class MChessBoard extends ChessBoard {
         }
 
         this.isAnimationRunning = true;  // Setze das Flag, dass eine Animation läuft
-
+        verfyQueens();
+        try{
         // Starte eine neue Animation
         currentAnimationTask = new BukkitRunnable() {
             @Override
             public void run() {
-                verfyQueens();
+
                 if (animationStep()) {
                     if (console) {
                         System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
                     }
-                    cancel();  // Stoppe den Task
                     isAnimationRunning = false;  // Setze das Flag zurück
+                    cancel();  // Stoppe den Task
                 }
             }
         };
 
         // Aufgabe wird alle `ticks` wiederholt ausgeführt
         currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void BacktrackAnimationQueenStep(JavaPlugin plugin, long ticks) {
@@ -707,24 +712,76 @@ public class MChessBoard extends ChessBoard {
         }
 
         this.isAnimationRunning = true;  // Setze das Flag, dass eine Animation läuft
-
+        verfyQueens();
+        try{
         // Starte eine neue Animation
         currentAnimationTask = new BukkitRunnable() {
             @Override
             public void run() {
-                verfyQueens();
+
                 if (animationQueenStep()) {
                     if (console) {
                         System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
                     }
-                    cancel();  // Stoppe den Task
                     isAnimationRunning = false;  // Setze das Flag zurück
+                    cancel();  // Stoppe den Task
                 }
             }
         };
 
         // Aufgabe wird alle `ticks` wiederholt ausgeführt
         currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean bongoStepMC(){
+        removeALLQueensFromBoard();
+        bongoStep();
+        printBoard();
+        spawnAllQueens();
+        updateCollisionCarpets();
+        return isSolved();
+    }
+
+    public void BongoSolveAnimationStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return;  // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true;  // Setze das Flag, dass eine Animation läuft
+
+        // Starte eine neue Animation
+        verfyQueens();
+        try{
+        currentAnimationTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                if (bongoStepMC()) {
+                    if (console) {
+                        System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                    }
+                    cancel();  // Stoppe den Task
+                    isAnimationRunning = false;  // Setze das Flag zurück
+                }
+                if (stateX == (size)) {
+                    removeAllQueens();
+                    stateX = 0;
+                }
+            }
+        };
+
+        // Aufgabe wird alle `ticks` wiederholt ausgeführt
+        currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     // Methode, um eine laufende Animation zu stoppen
