@@ -3,11 +3,8 @@ package de.hsmw.algDatDamen;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -194,34 +191,16 @@ public class MChessBoard extends ChessBoard {
 
         // Calculate the queen's exact position on the chessboard, offset slightly to
         // center within the block
-        Location queenLocation = originCorner.getBlock().getLocation().add(x + 0.5, 1, y + 0.5);
+        Location queenLocation = originCorner.getBlock().getLocation().add(x, 2, y);
 
         // Check if an armor stand already occupies the target block
-        if (queenLocation.getBlock().getType() == Material.ARMOR_STAND) {
+        if (queenLocation.getBlock().getType() == AlgDatDamen.QUEEN_BLOCK_TOP) {
             return false; // Return false if another queen is already at this location
         }
 
-        // Spawn an Armor Stand at the calculated location to represent the queen
-        ArmorStand armorStand = queenLocation.getWorld().spawn(queenLocation, ArmorStand.class);
-
-        // Configure the Armor Stand properties to resemble a queen piece
-        armorStand.setArms(true);
-        armorStand.setBasePlate(false);
-        armorStand.setCustomName(q.getX() + 1 + ". Queen");
-        armorStand.setCustomNameVisible(true);
-        armorStand.setGravity(false);
-        armorStand.setInvisible(true);
-
-        // Equip the Armor Stand with items to give the appearance of a chess queen
-        armorStand.setSmall(true); // Smaller size to fit the chess piece style
-        armorStand.setHelmet(new ItemStack(Material.GOLDEN_HELMET)); // Crown-like helmet
-        armorStand.setChestplate(new ItemStack(Material.IRON_CHESTPLATE)); // Body armor
-        armorStand.setLeggings(new ItemStack(Material.IRON_LEGGINGS)); // Leg armor
-        armorStand.setBoots(new ItemStack(Material.IRON_BOOTS)); // Boot armor
-
-        // Adjust arm poses for a distinctive queen look
-        armorStand.setRightArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(-10)));
-        armorStand.setLeftArmPose(new EulerAngle(Math.toRadians(0), Math.toRadians(0), Math.toRadians(10)));
+        // set Block to queenBlock at desired Location
+        queenLocation.getBlock().setType(AlgDatDamen.QUEEN_BLOCK_TOP);
+        queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(AlgDatDamen.QUEEN_BLOCK_BOTTOM);
 
         updateCollisionCarpets();
         return true; // Indicates the queen was successfully spawned
@@ -349,23 +328,26 @@ public class MChessBoard extends ChessBoard {
         if (queen != null) {
             Location queenLocation = getLocationofQueen(queen);
             if (queenLocation != null) {
-                // Iterate through entities at the queen's location
-                for (Entity entity : queenLocation.getWorld().getEntities()) {
-                    // Check if the entity is an armor stand and at the same location
-                    if (entity instanceof ArmorStand && entity.getLocation().equals(queenLocation)) {
-                        entity.remove(); // Remove the armor stand
-                        this.removeQueen(queen);
-                        break; // Exit the loop once the queen is found and removed
-                    }
-                }
+                queenLocation.getBlock().setType(Material.AIR); // Remove top block
+                queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
+                this.removeQueen(queen);
             }
         }
     }
 
+    /**
+     * Removes all queens from the chessboard.
+     * (just in minecraft, not from the queens list)
+     */
     public void removeALLQueensFromBoard() {
-        for (Entity entity : originCorner.getWorld().getEntities()) {
-            if (entity instanceof ArmorStand && isPartOfBoard(entity.getLocation())) {
-                entity.remove();
+        // clear all blocks above the board
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                for (int y = 1; y <= 2; y++) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + y, originCorner.getZ() + z);
+                    location.getBlock().setType(Material.AIR);
+                }
             }
         }
     }
@@ -377,32 +359,32 @@ public class MChessBoard extends ChessBoard {
      * @return The Location object representing the queen's position.
      */
     private Location getLocationofQueen(Queen q) {
-        double x = q.getX() + originCorner.getBlockX() + 0.5;
-        double z = q.getY() + originCorner.getBlockZ() + 0.5;
+        double x = q.getX() + originCorner.getBlockX();
+        double z = q.getY() + originCorner.getBlockZ();
 
-        return new Location(originCorner.getWorld(), x, originCorner.getY() + 1, z);
+        return new Location(originCorner.getWorld(), x, originCorner.getY() + 2, z);
     }
 
     public void spawnCollisionCarpets() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                if (checkCollision(x, y)) {
-                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
-                            originCorner.getY() + 1, originCorner.getZ() + y); // Y-coordinate can be adjusted as needed
-                    Block block = location.getBlock();
-                    if ((x + y) % 2 == 0) {
-                        if (isOriginCornerWhite) {
-                            block.setType(Material.ORANGE_CARPET);
-                        } else {
-                            block.setType(Material.RED_CARPET);
-                        }
-
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getZ() + y); // Y-coordinate can be adjusted as needed
+                Block block = location.getBlock();
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                    continue;
+                }
+                if ((x + y) % 2 == 0) {
+                    if (isOriginCornerWhite) {
+                        block.setType(Material.ORANGE_CARPET);
                     } else {
-                        if (isOriginCornerWhite == false) {
-                            block.setType(Material.ORANGE_CARPET);
-                        } else {
-                            block.setType(Material.RED_CARPET);
-                        }
+                        block.setType(Material.RED_CARPET);
+                    }
+                } else {
+                    if (isOriginCornerWhite == false) {
+                        block.setType(Material.ORANGE_CARPET);
+                    } else {
+                        block.setType(Material.RED_CARPET);
                     }
                 }
             }
@@ -416,6 +398,9 @@ public class MChessBoard extends ChessBoard {
                         originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
                                                                                 // needed
                 Block block = location.getBlock();
+                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                    continue;
+                }
                 block.setType(Material.AIR);
             }
         }
@@ -428,14 +413,20 @@ public class MChessBoard extends ChessBoard {
      * @param l
      */
     public void placeUserCarpet(Location l) {
+        Material carpMaterial = Material.LIME_CARPET;
         if (!isPartOfBoard(l)) {
             return;
         }
 
-        if (l.getY() == originCorner.getY() + 1) {
+        // Remove existing carpet if it's a valid move
+        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
             l.getBlock().setType(Material.AIR);
             return;
+        }
 
+        // return if top queen block got clicked
+        if (l.getY() > originCorner.getY()) {
+            return;
         }
 
         int x = l.getBlockX();
@@ -443,6 +434,7 @@ public class MChessBoard extends ChessBoard {
 
         Location location = new Location(originCorner.getWorld(), x, originCorner.getBlockY() + 1, z);
 
+        // set Carpet at desired Location
         Block block = location.getBlock();
         block.setType(Material.LIME_CARPET);
     }
@@ -455,6 +447,11 @@ public class MChessBoard extends ChessBoard {
      * @return
      */
     public boolean checkUserCarpets() {
+        // return false if there are no queens on the board
+        if (queens.size() == 0) {
+            return false;
+        }
+
         Set<String> correctPositions = new HashSet<>();
         Set<String> queenPositions = new HashSet<>();
 
