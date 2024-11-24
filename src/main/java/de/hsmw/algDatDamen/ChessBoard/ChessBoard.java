@@ -1,6 +1,5 @@
-package de.hsmw.algDatDamen.ChessBoard;
+//package de.hsmw.algDatDamen.ChessBoard;
 
-import java.util.ArrayList;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 public class ChessBoard {
 
     // Attributes
-    protected ArrayList<Queen> queens; // List of queens placed on the board
+    protected ArrayList<Piece> pieces; // List of queens placed on the board
     protected int size; // Size of the chessboard (n x n)
     protected boolean console; // Controls console messages for debugging
     protected int stateX; // Tracking the state along X-axis
@@ -23,7 +22,7 @@ public class ChessBoard {
 
     public ChessBoard(int boardSize) {
         this.size = boardSize;
-        this.queens = new ArrayList<>();
+        this.pieces = new ArrayList<>();
         this.console = true;
         this.stateX = 0;
         this.stateY = 0;
@@ -31,7 +30,7 @@ public class ChessBoard {
 
     public ChessBoard() {
         this.size = 1;
-        this.queens = new ArrayList<>();
+        this.pieces = new ArrayList<>();
         this.console = true;
         this.stateX = 0;
         this.stateY = 0;
@@ -46,8 +45,8 @@ public class ChessBoard {
      *
      * @return The list of queens placed on the board.
      */
-    public ArrayList<Queen> getQueens() {
-        return queens;
+    public ArrayList<Piece> getPieces() {
+        return pieces;
     }
 
     /**
@@ -55,8 +54,8 @@ public class ChessBoard {
      *
      * @param queens The list of queens to be placed on the chessboard.
      */
-    public void setQueens(ArrayList<Queen> queens) {
-        this.queens = queens;
+    public void setPieces(ArrayList<Piece> pieces) {
+        this.pieces = pieces;
     }
 
     /**
@@ -139,8 +138,8 @@ public class ChessBoard {
 
     public boolean isSolved() {
         if (numberOfQueens() == size) {
-            for (Queen q : queens) {
-                if (checkCollision(q)) {
+            for (Piece p : pieces) {
+                if (p.checkCollision()) {
                     return false;
                 }
             }
@@ -156,30 +155,46 @@ public class ChessBoard {
      * @param q The queen to adding the ArrayList queens
      */
     public boolean addQueen(Queen q) {
-        for (Queen qold : queens) {
-            if ((qold.getX() == q.getX()) && (qold.getY() == q.getY())) {
+        for (Piece p : pieces) {
+            if ((p.getX() == q.getX()) && (p.getY() == q.getY())) {
                 return false;
             }
         }
-        queens.add(q);
+        pieces.add(q);
         return true;
     }
 
     public void removeQueen(Queen q) {
-        for (Queen qarray : queens) {
-            if (q.equals(qarray)) {
-                queens.remove(qarray);
+        for (Piece p : pieces) {
+            if (p.equals(q)) {
+                pieces.remove(p);
             } // end of if
         }
     }
   
-  public void removeAllQueens(){
-         this.queens = new ArrayList<>();
+  public void removeAllPieces(){
+         this.pieces = new ArrayList<>();
     }
 
+    public void removeLastPiece() {
+        pieces.remove(pieces.size() - 1);
+    }
+  
+    public void removeAllQueens(){
+    for(Piece p : pieces){
+      if (p.getLetter() == 'Q') {
+        pieces.remove(p);
+      } // end of if
+      
+      }
+    }
+  
+  
+  //Hier Weiterprogrammieren
     public void removeLastQueen() {
         queens.remove(queens.size() - 1);
     }
+
 
     /**
      * Sorts queens based on their Y coordinates.
@@ -314,8 +329,8 @@ public class ChessBoard {
             }
         }
 
-        for (Queen queen : queens) {
-            board[queen.getX()][queen.getY()] = 'Q';
+        for (Piece p : pieces) {
+            board[p.getX()][p.getY()] = p.getLetter();
         }
 
         for (int i = 0; i < size; i++) {

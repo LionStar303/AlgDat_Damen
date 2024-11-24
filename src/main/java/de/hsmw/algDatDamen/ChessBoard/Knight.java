@@ -1,28 +1,33 @@
-//package de.hsmw.algDatDamen.ChessBoard;
-
 /**
- * This class represents a Queen on the chessboard.
- * It stores the position of the queen and whether it is a "super queen."
  *
- * @version 1.1, 24.10.2024
+ * Beschreibung
+ *
+ * @version 1.0 vom 24.11.2024
+ * @author 
  */
-public class Queen extends Piece {
+
+public class Knight extends Piece {
+  
+  // Anfang Attribute
+  // Ende Attribute
+  
+  // Anfang Methoden
    /**
      * Returns a string representation of the queen, including position and type.
      *
      * @return String A description of the queen and its status.
      */
- @Override
- public String toString() {
-        return "Queen is at (" + getX() + ", " + getY() + ") ";
- }
-  
-  public boolean equals(Queen q) {
+    @Override
+    public String toString() {
+        return "Knight is at (" + getX() + ", " + getY() + ") ";
+    }
+
+    public boolean equals(Knight q) {
         if ((q.getX() == getX()) && (q.getY() == getY())) {
             return true;
         } // end of if
         return false;
-  }
+    }
 
     /**
      * Checks if placing a queen at the specified coordinates (x, y) would cause a
@@ -39,15 +44,19 @@ public class Queen extends Piece {
     @Override
     public boolean checkCollision(int checkX, int checkY) {
             // Check for row, column, or diagonal conflicts
-            if (getX() == checkX || getY() == checkY ||
-                    Math.abs(getX() - checkX) == Math.abs(getY() - checkY)) {
+    if (
+       ( (checkX == getX()+1) || (checkY == getY()+2) ) ||  
+       ( (checkX == getX()+2) || (checkY == getY()+1) ) ||  
+       ( (checkX == getX()-1) || (checkY == getY()-2) ) ||  
+       ( (checkX == getX()-2) || (checkY == getY()-1) )   
+    ) {
                 return true; // Collision detected
-            }
+    }
       return false; // No collision found
     }
   
   @Override
   public char getLetter(){
-    return 'Q';
+    return 'K';
     }
-}
+} // end of Knight
