@@ -109,4 +109,11 @@ public class Piece {
   public char getLetter() {
       return 'P';
   }
+  
+  @Override
+  public Piece clone() {
+    Piece newP = new Piece(this.x , this.y);
+    return newP;
+  }
+ 
 } // End of the Piece class

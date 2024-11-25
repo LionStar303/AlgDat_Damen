@@ -3,18 +3,19 @@ public class ChessBoardTest {
     public static void main(String[] args) {
      System.out.println("Starting ChessBoard tests...");
     
-     testPiece(new Queen(0,0));
+     testPiece(new Queen(0,0), 4);
      
-     testPiece(new Knight(0,0));
+     testPiece(new Knight(0,0),10);
     
-     testPiece(new Superqueen(0,0));
+     testPiece(new Superqueen(0,0),10);
     }
   
-    private static void testPiece(Piece p){
+    private static void testPiece(Piece p, int size){
 
         // Test 1: Initialize a ChessBoard
-        ChessBoard board = new ChessBoard(8); // Assume a constructor with dimensions
+        ChessBoard board = new ChessBoard(size); // Assume a constructor with dimensions
         System.out.println("\nChessBoard initialized (8x8):");
+        board.console = false;
         board.printBoard(true); // Assuming a method to display the board
     
         int position = board.getSize() / 2;    
@@ -43,11 +44,63 @@ public class ChessBoardTest {
         board.printBoard(true);
         
         // Test 6: Play Backtrack
+        try {
         System.out.println("\nPlay Backtrack Algorythem:");
         board.playBacktrack(p);
         board.printBoard(true);
+        System.out.println("isSolved:"+ board.isSolved()); 
+        } catch(Exception e) {
+           System.out.println(e.getMessage());
+           if(e.getMessage().equals("-1")){
+           System.out.println("Dosent Work with " + p.getLetter());
+           }
+        } 
         
-      }
+        /* Test 7: Play Backtrack Steps
+        try {
+        System.out.println("\nPlay Backtrack Algorythem:");
+        board.clearBoard();
+        while (!board.stepBacktrack(p)) { 
+        } // end of while
+        System.out.println("Abgeschlossen");
+        board.printBoard(true); 
+        } catch(Exception e) {
+           System.out.println(e.getMessage());
+           if(e.getMessage().equals("-1")){
+           System.out.println("Dosent Work with " + p.getLetter());
+           }
+        } 
+    
+        // Test 8: Play Backtrack To Row
+        try {
+        int row = board.size/2;
+        System.out.println("\nPlay Backtrack To Row " + row + ":");
+        board.clearBoard();
+        board.verfyPieces();
+        board.playBacktrackToRow(p, row);
+        board.printBoard(true); 
+        } catch(Exception e) {
+           System.out.println(e.getMessage());
+           if(e.getMessage().equals("-1")){
+           System.out.println("Dosent Work with " + p.getLetter());
+           }
+        } 
+    
+        // Test 8: Play Backtrack To Next
+        try {
+        System.out.println("\nPlay Backtrack To Next:");
+        board.verfyPieces();
+        board.playBacktrackToNextPiece(p);
+        board.printBoard(true); 
+        } catch(Exception e) {
+           System.out.println(e.getMessage());
+           if(e.getMessage().equals("-1")){
+           System.out.println("Dosent Work with " + p.getLetter());
+           }
+        } 
+    */
+    
+      } 
 
     private static void delay(long l) {
         try {

@@ -90,4 +90,10 @@ public class Knight extends Piece {
     public char getLetter() {
         return 'K';
     }
+  
+  @Override
+  public Knight clone() {
+    Knight newP = new Knight(this.x , this.y);
+    return newP;
+  }
 } // End of Knight class

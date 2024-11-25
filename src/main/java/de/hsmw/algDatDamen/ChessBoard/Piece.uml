@@ -1,0 +1,91 @@
+﻿[Files]
+File0=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\ChessBoard.java
+File1=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\ChessBoardTest.java
+File2=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Knight.java
+File3=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Piece.java
+File4=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Queen.java
+File5=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Superqueen.java
+
+[Box:  - ChessBoard]
+X=239
+Y=232
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Box:  - ChessBoardTest]
+X=49
+Y=283
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Box:  - Knight]
+X=710
+Y=81
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Box:  - Piece]
+X=470
+Y=241
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Box:  - Queen]
+X=233
+Y=76
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Box:  - Superqueen]
+X=467
+Y=81
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Diagram]
+comments=0
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+ShowConnections=0
+Fontname=Segoe UI
+Fontsize=6
+ShowObjectDiagram=0
+
+[Connections]
+V0=ChessBoard#Piece#Aggregation####0#0#0###0#0
+V1=Knight#Piece#Inheritends####0#0#0###0#0
+V2=Queen#Piece#Inheritends####0#0#0###0#0
+V3=Superqueen#Piece#Inheritends####0#0#0###0#0
+
+[Interactive]
+I0=
+I1=ChessBoard chessboard1 = new ChessBoard(4);
+

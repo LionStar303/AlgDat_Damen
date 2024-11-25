@@ -60,6 +60,7 @@ public class Superqueen extends Piece {
     public boolean checkCollision(int checkX, int checkY) {
         // Check for row, column, or diagonal conflicts using Queen's logic
         Queen q = new Queen(getX(), getY());
+    
         // Check for Knight-specific conflicts
         Knight k = new Knight(getX(), getY());
 
@@ -76,4 +77,10 @@ public class Superqueen extends Piece {
     public char getLetter() {
         return 'S';
     }
+  
+  @Override
+  public Superqueen clone() {
+    Superqueen newP = new Superqueen(this.x , this.y);
+    return newP;
+  }
 } // End of Superqueen class

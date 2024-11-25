@@ -70,4 +70,12 @@ public class Queen extends Piece {
     public char getLetter() {
         return 'Q';
     }
+  
+    @Override
+  public Queen clone() {
+    Queen newP = new Queen(this.x , this.y);
+    return newP;
+  }
+  
+  
 }
