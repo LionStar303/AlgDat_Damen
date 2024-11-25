@@ -1,25 +1,24 @@
-//package de.hsmw.algDatDamen.ChessBoard;
+// package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 
 /**
  * Represents a chessboard for solving the Queen's problem.
- * Allows placing queens, checking for conflicts, and solving using
+ * Allows placing pieces, checking for conflicts, and solving using
  * a backtracking algorithm.
  *
  * @version 1.2, 24.10.2024
  */
 public class ChessBoard {
 
-    // Attributes
-    protected ArrayList<Piece> pieces; // List of queens placed on the board
+    // ----------- Attributes -----------
+    protected ArrayList<Piece> pieces; // List of pieces placed on the board
     protected int size; // Size of the chessboard (n x n)
     protected boolean console; // Controls console messages for debugging
-    protected int stateX; // Tracking the state along X-axis
-    protected int stateY; // Tracking the state along Y-axis
+    protected int stateX; // Tracks the current X-axis state
+    protected int stateY; // Tracks the current Y-axis state
 
-    // Getters and Setters
-
+    // ----------- Constructors -----------
     public ChessBoard(int boardSize) {
         this.size = boardSize;
         this.pieces = new ArrayList<>();
@@ -29,303 +28,161 @@ public class ChessBoard {
     }
 
     public ChessBoard() {
-        this.size = 1;
-        this.pieces = new ArrayList<>();
-        this.console = true;
-        this.stateX = 0;
-        this.stateY = 0;
+        this(1); // Default to a 1x1 board
     }
 
-    public boolean isConsole() {
-        return console;
-    }
-
-    /**
-     * Retrieves the list of queens currently placed on the chessboard.
-     *
-     * @return The list of queens placed on the board.
-     */
-    public ArrayList<Piece> getPieces() {
-        return pieces;
-    }
-
-    /**
-     * Sets the list of queens for the chessboard.
-     *
-     * @param queens The list of queens to be placed on the chessboard.
-     */
-    public void setPieces(ArrayList<Piece> pieces) {
-        this.pieces = pieces;
-    }
-
-    /**
-     * Retrieves the size of the chessboard (n x n).
-     *
-     * @return The size of the chessboard.
-     */
+    // ----------- Getters and Setters -----------
     public int getSize() {
         return size;
     }
 
-    /**
-     * Sets the size of the chessboard (n x n).
-     *
-     * @param size The new size of the chessboard.
-     */
     public void setSize(int size) {
         this.size = size;
     }
 
-    /**
-     * Checks if console messages are enabled for debugging purposes.
-     *
-     * @return true if console messages are enabled, false otherwise.
-     */
+    public ArrayList<Piece> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(ArrayList<Piece> pieces) {
+        this.pieces = pieces;
+    }
+
     public boolean isConsoleEnabled() {
         return console;
     }
 
-    /**
-     * Sets whether console messages are enabled for debugging purposes.
-     *
-     * @param consoleEnabled true to enable console messages, false to disable.
-     */
     public void setConsoleEnabled(boolean consoleEnabled) {
         this.console = consoleEnabled;
     }
 
-    /**
-     * Retrieves the current state along the X-axis on the chessboard.
-     *
-     * @return The current state along the X-axis.
-     */
     public int getStateX() {
         return stateX;
     }
 
-    /**
-     * Sets the current state along the X-axis on the chessboard.
-     *
-     * @param stateX The new state along the X-axis.
-     */
     public void setStateX(int stateX) {
         this.stateX = stateX;
     }
 
-    /**
-     * Retrieves the current state along the Y-axis on the chessboard.
-     *
-     * @return The current state along the Y-axis.
-     */
     public int getStateY() {
         return stateY;
     }
 
-    /**
-     * Sets the current state along the Y-axis on the chessboard.
-     *
-     * @param stateY The new state along the Y-axis.
-     */
     public void setStateY(int stateY) {
         this.stateY = stateY;
     }
 
-    /**
-     *
-     * --------------Functional Methods-----------------
-     *
-     */
-
-    public boolean isSolved() {
-        if (numberOfQueens() == size) {
-            for (Piece p : pieces) {
-                if (p.checkCollision()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-
-    }
-
-    /**
-     * Adds a new Queen to the ArrayList queens
-     *
-     * @param q The queen to adding the ArrayList queens
-     */
-    public boolean addQueen(Queen q) {
+    // ----------- Functional Methods -----------
+    // --- Adding/Removing Pieces ---
+    public boolean addPiece(Piece pnew) {
         for (Piece p : pieces) {
-            if ((p.getX() == q.getX()) && (p.getY() == q.getY())) {
-                return false;
+            if (p.getX() == pnew.getX() && p.getY() == pnew.getY()) {
+                return false; // Duplicate position
             }
         }
-        pieces.add(q);
+        pieces.add(pnew);
+        return true;
+    }
+  
+   public boolean addTestedPiece(Piece pnew) {
+        for (Piece p : pieces) {
+            if (p.checkCollision(pnew.getX(), pnew.getY())) {
+                return false; // Collision
+            }
+        }
+        pieces.add(pnew);
         return true;
     }
 
-    public void removeQueen(Queen q) {
-        for (Piece p : pieces) {
-            if (p.equals(q)) {
-                pieces.remove(p);
-            } // end of if
-        }
+    public void removePiece(Piece p) {
+        pieces.remove(p);
     }
   
-  public void removeAllPieces(){
-         this.pieces = new ArrayList<>();
+    public boolean removePiece(int x, int y) {
+        for(Piece p : pieces){
+          if (p.getX() == x && p.getY() == y) {
+             pieces.remove(p);
+             return true;
+          } 
+        }
+        return false;
+    }
+
+    public void removeAllPieces() {
+        pieces.clear();
     }
 
     public void removeLastPiece() {
-        pieces.remove(pieces.size() - 1);
+        if (!pieces.isEmpty()) {
+            pieces.remove(pieces.size() - 1);
+        }
     }
-  
-    public void removeAllQueens(){
-    for(Piece p : pieces){
-      if (p.getLetter() == 'Q') {
-        pieces.remove(p);
-      } // end of if
-      
-      }
-    }
-  
-  
-  //Hier Weiterprogrammieren
+
     public void removeLastQueen() {
-        queens.remove(queens.size() - 1);
-    }
-
-
-    /**
-     * Sorts queens based on their Y coordinates.
-     */
-    public void sortQueensByY() {
-        if (console) {
-            printBoard();
-        }
-        queens.sort((q1, q2) -> Integer.compare(q1.getY(), q2.getY()));
-        if (console) {
-            printBoard();
-        }
-    }
-
-    /**
-     * Sorts queens based on their X coordinates.
-     */
-    public void sortQueensByX() {
-        if (console) {
-            printBoard();
-        }
-        queens.sort((q1, q2) -> Integer.compare(q1.getX(), q2.getX()));
-        if (console) {
-            printBoard();
-        }
-    }
-
-    /**
-     * Adds a queen to the chessboard at the specified coordinates.
-     * Checks for conflicts before placing.
-     *
-     * @param x The x-coordinate for the queen.
-     * @param y The y-coordinate for the queen.
-     * @return True if the queen was added successfully, false otherwise.
-     */
-    public boolean addTestedQueen(int x, int y) {
-        if (x >= this.size || y >= this.size) {
-            if (console) {
-                System.out.println("Position (" + x + ", " + y + ") is out of bounds.");
-            }
-            return false;
-        }
-        if (checkCollision(new Queen(x, y))) {
-            if (console) {
-                System.out.println("Cannot place queen at (" + x + ", " + y + ") due to a conflict.");
-            }
-            return false;
-        }
-        queens.add(new Queen(x, y));
-        if (console) {
-            System.out.println("Queen added at (" + x + ", " + y + ").");
-        }
-        return true;
-    }
-
-    /**
-     * Checks whether the given queen collides with any existing queens
-     * on the chessboard (in the same row, column, or diagonal).
-     *
-     * @param queen The queen to check for collisions.
-     * @return True if a collision is detected, false otherwise.
-     */
-    public boolean checkCollision(Queen queen) {
-        int x = queen.getX();
-        int y = queen.getY();
-        for (Queen q : queens) {
-            // Check for row, column, or diagonal conflicts
-            if (!q.equals(queen)) {
-                if (q.getX() == x || q.getY() == y ||
-                        Math.abs(q.getX() - x) == Math.abs(q.getY() - y)) {
-                    return true; // Collision detected
-                }
+        for (int i = pieces.size() - 1; i >= 0; i--) {
+            if (pieces.get(i).getLetter() == 'Q') {
+                pieces.remove(i);
+                break;
             }
         }
-        return false; // No collision found
     }
 
-    /**
-     * Checks if placing a queen at the specified coordinates (x, y) would cause a
-     * collision
-     * with any existing queens on the chessboard. A collision occurs if the new
-     * queen
-     * would be in the same row, column, or diagonal as any already-placed queen.
-     *
-     * @param x The x-coordinate (column) where the new queen is to be placed.
-     * @param y The y-coordinate (row) where the new queen is to be placed.
-     * @return true if a collision is detected with any existing queens;
-     *         false if there are no conflicts.
-     */
+    public void removeLastKnight() {
+        for (int i = pieces.size() - 1; i >= 0; i--) {
+            if (pieces.get(i).getLetter() == 'K') {
+                pieces.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void removeLastSuperQ() {
+        for (int i = pieces.size() - 1; i >= 0; i--) {
+            if (pieces.get(i).getLetter() == 'S') {
+                pieces.remove(i);
+                break;
+            }
+        }
+    }
+
+    // --- Sorting Pieces ---
+    public void sortPiecesByX() {
+        pieces.sort((p1, p2) -> Integer.compare(p1.getX(), p2.getX()));
+    }
+
+    public void sortPiecesByY() {
+        pieces.sort((p1, p2) -> Integer.compare(p1.getY(), p2.getY()));
+    }
+
+    // --- Collision Checks ---
+    public boolean checkCollision(Piece p) {
+        for (Piece existingPiece : pieces) {
+            if (existingPiece.checkCollision(p.getX(), p.getY())) {
+                return true;
+            }
+        }
+        return false; // No collision
+    }
+
     public boolean checkCollision(int x, int y) {
-        for (Queen queen : queens) {
-            // Check for row, column, or diagonal conflicts
-            if (queen.getX() == x || queen.getY() == y ||
-                    Math.abs(queen.getX() - x) == Math.abs(queen.getY() - y)) {
-                return true; // Collision detected
+        for (Piece existingPiece : pieces) {
+            if (existingPiece.checkCollision(x, y)) {
+                return true;
             }
         }
-        return false; // No collision found
+        return false; // No collision
     }
 
-    /**
-     * Clears all queens from the chessboard.
-     */
-    public void clearBoard() {
-        queens.clear();
-        if (console) {
-            System.out.println("Board cleaned.");
-        }
-    }
-
-    /**
-     * Prints the chessboard to the console, showing the positions of queens.
-     */
-    public void printBoard() {
+    // ----------- Debugging and Visualization -----------
+    public void printBoard(boolean collision) {
         System.out.println("------------------------------------------------------------");
-
-        System.out.print("\t");
-        for (int x = 0; x < size; x++) {
-            if (x > 9) {
-                System.out.printf(x + " ");
-            } else {
-                System.out.printf(x + "  ");
-            } // end of if-else
-
-        }
-        System.out.print(" x\n");
-
         char[][] board = new char[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 board[i][j] = '.';
+                if (collision && checkCollision(i, j)) {
+                board[i][j] = '*';
+                } // end of if
             }
         }
 
@@ -334,42 +191,65 @@ public class ChessBoard {
         }
 
         for (int i = 0; i < size; i++) {
-            System.out.print(i + "\t");
             for (int j = 0; j < size; j++) {
-                System.out.print(board[i][j] + "  ");
+                System.out.print(board[i][j] + " ");
             }
-            System.out.println("\n");
+            System.out.println();
         }
-        System.out.println("\ny");
-        System.out.println("------------------------------------------------------------");
     }
 
-    /**
+    public void clearBoard() {
+        pieces.clear();
+        if (console) {
+            System.out.println("Board cleared.");
+        }
+    }
+  
+
+    // ----------- Backtracking Algorithm -----------
+  
+     public boolean isSolved() {
+        if (pieces.size() == size) {
+            for (Piece p : pieces) {
+                if (checkCollision(p)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+
+    }
+  
+      /**
      * Solves the Queen's problem using a backtracking algorithm.
      * It tries to place all queens on the board without any conflicts.
      *
      * @return boolean True if the algorithm successfully places all queens, false
      *         otherwise.
      */
-    public boolean playBacktrack() {
-        queens.clear();
+    public boolean playBacktrack(Piece p) {
+        clearBoard();
         int row = 0;
 
         if (console) {
             System.out.println("Start Backtracking Algorithm");
+            printBoard(true);
         }
 
-        while (queens.size() != size) {
-            for (int i = 0; i < size; i++) {
-                if (addTestedQueen(row, i)) {
+        while (pieces.size() != size) {
+            for (int i = 0; i < size; i++) { 
+            p.setX(row);
+            p.setY(i);
+                if (addTestedPiece(p)) {
                     if (console) {
                         System.out.println("Step -> row: " + row);
-                        printBoard();
+                        printBoard(true);
                     }
                     row++;
                     break;
                 } else if (i == size - 1) {
-                    row = backStep(row) + 1;
+                    row = backStep(p,row) + 1;
                 }
             }
         }
@@ -383,18 +263,20 @@ public class ChessBoard {
      * @param row The current row where backtracking is performed.
      * @return int The updated row after backtracking.
      */
-    public int backStep(int row) {
-        row--;
-        int oldY = queens.get(numberOfQueens() - 1).getY();
+    public int backStep(Piece p, int row) {
+    row--;
+    int oldY = pieces.get(pieces.size() - 1).getY();
+    pieces.remove(pieces.size() - 1);
 
-        queens.remove(numberOfQueens() - 1);
-
-        if (console) {
-            System.out.println("Start Backstep -> row: " + row);
-        }
-        int newY = oldY + 1;
-
-        while (!addTestedQueen(row, newY)) {
+    if (console) {
+       System.out.println("Start Backstep -> row: " + row);
+    }
+    int newY = oldY + 1;
+    
+    p.setX(row);
+    p.setY(newY);
+    
+    while (!addTestedPiece(p)) {
             newY++;
             if (console) {
                 System.out.println("Back-Place -> row: " + row + "  Y = " + newY);
@@ -402,22 +284,24 @@ public class ChessBoard {
 
             if (newY >= size) {
                 if (console) {
-                    printBoard();
+                    printBoard(true);
                 }
-                backStep(row);
+                backStep(p, row);
                 newY = 0;
             }
+          p.setX(row);
+          p.setY(newY);
         }
 
         if (console) {
             System.out.println("End Backstep -> row: " + row + "  Y = " + newY);
-            printBoard();
+            printBoard(true);
         }
         return row;
     }
 
-    public boolean stepBacktrack() {
-        if ((queens.size() == size)) {
+    public boolean stepBacktrack(Piece p) {
+        if ((pieces.size() == size)) {
             return true;
         } // end of if
 
@@ -425,105 +309,107 @@ public class ChessBoard {
         // verfyQueens();
         // stateX = numberOfQueens();
 
-        if (stateY == size - 1 && stateX == numberOfQueens() - 1) {
+        if (stateY == size - 1 && stateX == pieces.size() - 1) {
             stateY = 0;
             stateX++;
         }
-
-        if (addTestedQueen(stateX, stateY)) {
+    
+    p.setX(stateX);
+    p.setY(stateY);
+        if (addTestedPiece(p)) {
             stateX++;
             stateY = -1;
             if (console) {
                 System.out.println("Step -> row: " + stateX);
-                printBoard();
+                printBoard(true);
             }
         } else if (stateY >= size - 1) {
             stateX--;
-            stateY = queens.get(numberOfQueens() - 1).getY();
-            queens.remove(numberOfQueens() - 1);
+            stateY = pieces.get(pieces.size() - 1).getY();
+            pieces.remove(pieces.size() - 1);
         }
 
         stateY++;
         return false;
     }
 
-    public boolean playBacktrackToRow(int x) {
+    public boolean playBacktrackToRow(Piece p,int x) {
         if (x > this.size) {
             return false;
         } // end of if
         while (getStateX() != x) {
-            stepBacktrack();
+            stepBacktrack(p);
         } // end of while
         return true;
     }
 
-    public boolean solveBacktrackToRow(int x){
+    public boolean solveBacktrackToRow(Piece p, int x){
         if (x > this.size) {
             return false;
         } // end of if
-        playBacktrack();
-        sortQueensByX();
+        playBacktrack(p);
+        sortPiecesByX();
         for(int i = 0; i < x; i++){
-            queens.remove(numberOfQueens() - 1);
+            pieces.remove(pieces.size() - 1);
         }
         return true;
     }
 
-    public boolean playBacktrackToNextQueen() {
-        int numQ = queens.size();
-        while (numQ == queens.size()) {
-            stepBacktrack();
+    public boolean playBacktrackToNextPiece(Piece p) {
+        int numQ = pieces.size();
+        while (numQ == pieces.size()) {
+            stepBacktrack(p);
         } // end of while
         return isSolved();
     }
 
-    public void verfyQueens() {
-        sortQueensByX();
-        for (int i = queens.size() - 1; i > 0; i--) {
+    public void verfyPieces() {
+        sortPiecesByX();
+        for (int i = pieces.size() - 1; i > 0; i--) {
 
             if (console) {
-                System.out.println("Check Collision = " + checkCollision(queens.get(i)));
-                System.out.println("(" + queens.get(i).getX() + " == " + i + ")");
+                System.out.println("Check Collision = " + checkCollision(pieces.get(i)));
+                System.out.println("(" + pieces.get(i).getX() + " == " + i + ")");
             } // end of if
 
             // Check for Collision
-            if (!(checkCollision(queens.get(i))) &&
+            if (!(checkCollision(pieces.get(i))) &&
             // Check for right line in X direction
-                    (queens.get(i).getX() == i)) {
+                    (pieces.get(i).getX() == i)) {
 
             } else {
-                queens.remove(queens.get(i));
+                pieces.remove(pieces.get(i));
             } // end of if-else
 
         }
 
-        setStateX(numberOfQueens());
+        setStateX(pieces.size());
     }
 
-    public void rotateQueens(int rotations) {
+    public void rotatePieces(int rotations) {
         // Reduce rotations to within [0-3] (4 rotations would result in the same
         // original board)
         rotations = rotations % 4;
 
         for (int i = 0; i < rotations; i++) {
-            for (Queen queen : queens) {
+            for (Piece p : pieces) {
                 // Apply 90-degree rotation on each queen's position
-                int originalX = queen.getX();
-                int originalY = queen.getY();
-                queen.setX(originalY);
-                queen.setY(size - 1 - originalX);
+                int originalX = p.getX();
+                int originalY = p.getY();
+                p.setX(originalY);
+                p.setY(size - 1 - originalX);
             }
         }
     }
 
     public void bongoSolve(){
-        verfyQueens();
+        verfyPieces();
         while(bongoStep() == false){
             if(console){
-                printBoard();
+                printBoard(true);
             }
             if (stateX == (size)) {
-                removeAllQueens();
+                removeAllPieces();
                 stateX = 0;
             }
         }
@@ -531,17 +417,9 @@ public class ChessBoard {
     }
 
     public boolean bongoStep(){
-        addQueen(new Queen(stateX, (int)(Math.random()*(size)) ));
+        addPiece((new Queen(stateX, (int)(Math.random()*(size)) )));
         stateX++;
         return isSolved();
     }
 
-    @Override
-    public String toString() {
-        return "Chessboard size: " + size + "x" + size + ", Queens placed: " + numberOfQueens();
-    }
-
-    public int numberOfQueens() {
-        return queens.size();
-    }
 }

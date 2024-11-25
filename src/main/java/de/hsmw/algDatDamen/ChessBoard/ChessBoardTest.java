@@ -1,71 +1,59 @@
-package de.hsmw.algDatDamen.ChessBoard;
-
-
 public class ChessBoardTest {
 
-  public static void main(String[] args) {
-    // aCreate a chessboard with size n x n
-
-    int boardSize = 5; // You can change this to any size
-    int queens = 3;
-    ChessBoard board = new ChessBoard(boardSize);
+    public static void main(String[] args) {
+     System.out.println("Starting ChessBoard tests...");
     
-    /*
-    // default true but --> activates the Console Messages
-    board.setConsoleEnabled(true);
+     testPiece(new Queen(0,0));
+     
+     testPiece(new Knight(0,0));
+    
+     testPiece(new Superqueen(0,0));
+    }
+  
+    private static void testPiece(Piece p){
 
-    // Print the final layout of the chessboard
-    board.printBoard();
+        // Test 1: Initialize a ChessBoard
+        ChessBoard board = new ChessBoard(8); // Assume a constructor with dimensions
+        System.out.println("\nChessBoard initialized (8x8):");
+        board.printBoard(true); // Assuming a method to display the board
+    
+        int position = board.getSize() / 2;    
+        p.setX(position);    
+        p.setY(position);
+    
+        // Test 2: Add a Queen to the board
+        System.out.println("\nAdding a Queen at position ("+position+","+position+"):");
+        boolean queenAdded = board.addPiece(p);
+        System.out.println("Queen added: " + queenAdded);
+        board.printBoard(false);
 
-    for (int i = 0; i < boardSize; i++) {
-      for (int j = 0; j < boardSize; j++) {
-        board.addQueen(new Queen(i, j));
+        // Test 3: Attempt to add a Queen in an invalid position
+        System.out.println("\nTrying to add a Queen at position ("+position+","+position+") again:");
+        boolean queenAddedInvalid = board.addPiece(p);
+        System.out.println("Queen added (expected false): " + queenAddedInvalid);
+
+        // Test 4: Check for threatened positions
+        System.out.println("\nDisplaying threatened positions for all Queens:");
+        board.printBoard(true);
+
+        // Test 5: Remove a Queen
+        System.out.println("\nRemoving a Queen at position ("+position+","+position+"):");
+        boolean queenRemoved = board.removePiece(p.getX(), p.getY());
+        System.out.println("Queen removed: " + queenRemoved);
+        board.printBoard(true);
+        
+        // Test 6: Play Backtrack
+        System.out.println("\nPlay Backtrack Algorythem:");
+        board.playBacktrack(p);
+        board.printBoard(true);
+        
       }
-      i++;
-    } // end of for
-    // Test the Backtracking
 
-    board.addQueen(new Queen(boardSize - 2, boardSize - 1));
-
-    board.playBacktrack();
-    board.removeLastQueen();
-    board.removeLastQueen();
-    board.removeLastQueen();
-
-    board.addQueen(new Queen(boardSize - 1, boardSize - 1));
-
-    board.verfyQueens();
-    System.out.println(board.numberOfQueens());
-    board.printBoard();
-
-    // Print the final layout of the chessboard
-    board.printBoard();
-    */
-    
-    //board.bongoSolve();
-    board.stateX = 0;
-        while(board.bongoStep() == false){
-            if(board.console){
-                board.printBoard();
-                
-            }
-      delay(5);
-            if (board.stateX == (board.size)) {
-                board.removeAllQueens();
-                board.stateX = 0;
-            }
+    private static void delay(long l) {
+        try {
+            Thread.sleep(l);
+        } catch (Exception e) {
+            System.err.println("Delay interrupted: " + e.getMessage());
         }
-  }
-
-  private static void delay(long l) {
-    try {
-      Thread.sleep(l);
-    } catch (Exception e) {
-
-    } finally {
-
-    } // end of try
-
-  }
-
+    }
 }
