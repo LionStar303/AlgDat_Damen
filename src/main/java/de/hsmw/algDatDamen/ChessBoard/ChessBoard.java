@@ -91,8 +91,10 @@ public class ChessBoard {
   
    public boolean addTestedPiece(Piece pnew) {
         if (pnew.getX() >= size || pnew.getY() >= size) {
+           if (console) {
            System.out.println("Not on Field "+size+"x"+size+" on X: "+pnew.getX()+"  Y: "+ pnew.getY());
-           printBoard(true);
+           printBoard(true);  
+           } 
            return false; 
         } // end of if
         
@@ -172,7 +174,7 @@ public class ChessBoard {
     // --- Collision Checks ---
     public boolean checkCollision(Piece p) {
         for (Piece existingPiece : pieces) {
-            if (existingPiece.checkCollision(p.getX(), p.getY())) {
+            if (existingPiece.checkCollision(p.getX(), p.getY()) && !existingPiece.equals(p)) {
                 return true;
             }
         }
@@ -222,7 +224,6 @@ public class ChessBoard {
   
 
     // ----------- Backtracking Algorithm -----------
-    // Funktion ist noch Falsch!!! <-- Jede Figur hat mit sich selber eine Collision
     public boolean isSolved() {
     if (console) {
         System.out.println("Checking if the chessboard is solved...");
@@ -396,21 +397,26 @@ public class ChessBoard {
         } // end of if
         playBacktrack(p);
         sortPiecesByX();
-        for(int i = 0; i < x; i++){
-            pieces.remove(pieces.size() - 1);
+        for(int i = 0; i <= x; i++){
+            removeLastPiece();
         }
         return true;
     }
 
     public boolean playBacktrackToNextPiece(Piece p) {
-        int numQ = pieces.size();
-        while (numQ == pieces.size()) {
+        int numQ = pieces.size()+1;
+        while (!(numQ == pieces.size())) {
             stepBacktrack(p);
         } // end of while
         return isSolved();
     }
 
-    public void verfyPieces() {
+    public void verfyPieces(Piece p) {
+        for (Piece plist : pieces) {
+          if (!(plist.getLetter() == p.getLetter())) {
+             pieces.remove(p);
+          } // end of if  
+        } // end of for
         sortPiecesByX();
         for (int i = pieces.size() - 1; i > 0; i--) {
 
@@ -450,7 +456,7 @@ public class ChessBoard {
     }
 
     public void bongoSolve(Piece p){
-        verfyPieces();
+        verfyPieces(p);
         while(bongoStep(p) == false){
             if(console){
                 printBoard(true);

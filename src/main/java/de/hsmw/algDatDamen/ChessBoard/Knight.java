@@ -1,3 +1,5 @@
+//package de.hsmw.algDatDamen.ChessBoard;
+
 /**
  * Represents a Knight chess piece with its unique movement and attributes.
  *

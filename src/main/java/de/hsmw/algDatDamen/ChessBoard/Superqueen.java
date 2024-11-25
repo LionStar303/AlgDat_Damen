@@ -1,3 +1,5 @@
+//package de.hsmw.algDatDamen.ChessBoard;
+
 /**
  * Represents a SuperQueen chess piece with combined movement capabilities
  * of a Queen and a Knight.

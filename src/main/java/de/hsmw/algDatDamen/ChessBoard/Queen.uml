@@ -1,20 +1,9 @@
 ﻿[Files]
 File0=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Piece.java
-File1=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Queen.java
 
 [Box:  - Piece]
 X=680
 Y=90
-MinVis=0
-ShowParameter=4
-SortOrder=0
-ShowIcons=1
-FontSize=6
-FontName=Segoe UI
-
-[Box:  - Queen]
-X=284
-Y=136
 MinVis=0
 ShowParameter=4
 SortOrder=0
@@ -34,9 +23,6 @@ ShowConnections=0
 Fontname=Segoe UI
 Fontsize=6
 ShowObjectDiagram=0
-
-[Connections]
-V0=Queen#Piece#Inheritends####0#0#0###0#0
 
 [Interactive]
 I0=

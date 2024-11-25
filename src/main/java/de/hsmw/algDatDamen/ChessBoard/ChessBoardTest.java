@@ -1,111 +1,99 @@
 public class ChessBoardTest {
 
     public static void main(String[] args) {
-     System.out.println("Starting ChessBoard tests...");
-    
-     testPiece(new Queen(0,0), 4);
-     
-     testPiece(new Knight(0,0),10);
-    
-     testPiece(new Superqueen(0,0),10);
+        System.out.println("Starting ChessBoard tests...");
+
+        // Test each piece with varying board sizes
+        for (int size = 4; size < 16; size++) {
+            runTestsForPiece(new Queen(0, 0), size, "Queen");
+        }
+        for (int size = 4; size < 16; size++) {
+            runTestsForPiece(new Knight(0, 0), size, "Knight");
+        }
+        for (int size = 10; size < 16; size++) {
+            runTestsForPiece(new Superqueen(0, 0), size, "Superqueen");
+        }
+
+        System.out.println("All tests completed.");
     }
-  
-    private static void testPiece(Piece p, int size){
 
-        // Test 1: Initialize a ChessBoard
-        ChessBoard board = new ChessBoard(size); // Assume a constructor with dimensions
-        System.out.println("\nChessBoard initialized (8x8):");
+    private static void runTestsForPiece(Piece piece, int size, String pieceName) {
+        System.out.println("\n========== Running tests for " + pieceName + " on " + size + "x" + size + " board ==========");
+        
+        ChessBoard board = new ChessBoard(size);
         board.console = false;
-        board.printBoard(true); // Assuming a method to display the board
-    
-        int position = board.getSize() / 2;    
-        p.setX(position);    
-        p.setY(position);
-    
-        // Test 2: Add a Queen to the board
-        System.out.println("\nAdding a Queen at position ("+position+","+position+"):");
-        boolean queenAdded = board.addPiece(p);
-        System.out.println("Queen added: " + queenAdded);
-        board.printBoard(false);
 
-        // Test 3: Attempt to add a Queen in an invalid position
-        System.out.println("\nTrying to add a Queen at position ("+position+","+position+") again:");
-        boolean queenAddedInvalid = board.addPiece(p);
-        System.out.println("Queen added (expected false): " + queenAddedInvalid);
-
-        // Test 4: Check for threatened positions
-        System.out.println("\nDisplaying threatened positions for all Queens:");
+        System.out.println("\n[Test 1] Initializing ChessBoard:");
         board.printBoard(true);
 
-        // Test 5: Remove a Queen
-        System.out.println("\nRemoving a Queen at position ("+position+","+position+"):");
-        boolean queenRemoved = board.removePiece(p.getX(), p.getY());
-        System.out.println("Queen removed: " + queenRemoved);
+        int center = board.getSize() / 2;
+        piece.setX(center);
+        piece.setY(center);
+
+        System.out.println("\n[Test 2] Adding a " + pieceName + " at (" + center + ", " + center + "):");
+        boolean added = board.addPiece(piece);
+        System.out.println("Expected: true, Actual: " + added);
+
+        System.out.println("\n[Test 3] Attempting to add the same " + pieceName + " again:");
+        boolean addedAgain = board.addPiece(piece);
+        System.out.println("Expected: false, Actual: " + addedAgain);
+
+        System.out.println("\n[Test 4] Displaying threatened positions:");
         board.printBoard(true);
-        
-        // Test 6: Play Backtrack
-        try {
-        System.out.println("\nPlay Backtrack Algorythem:");
-        board.playBacktrack(p);
+
+        System.out.println("\n[Test 5] Removing the " + pieceName + " from (" + center + ", " + center + "):");
+        boolean removed = board.removePiece(piece.getX(), piece.getY());
+        System.out.println("Expected: true, Actual: " + removed);
+
+        System.out.println("\n[Test 6] Running Backtrack algorithm:");
+        board.playBacktrack(piece);
         board.printBoard(true);
-        System.out.println("isSolved:"+ board.isSolved()); 
-        } catch(Exception e) {
-           System.out.println(e.getMessage());
-           if(e.getMessage().equals("-1")){
-           System.out.println("Dosent Work with " + p.getLetter());
-           }
-        } 
-        
-        /* Test 7: Play Backtrack Steps
-        try {
-        System.out.println("\nPlay Backtrack Algorythem:");
+        System.out.println("Board solved: " + board.isSolved());
+
+        System.out.println("\n[Test 7] Step-by-step Backtrack:");
         board.clearBoard();
-        while (!board.stepBacktrack(p)) { 
-        } // end of while
-        System.out.println("Abgeschlossen");
-        board.printBoard(true); 
-        } catch(Exception e) {
-           System.out.println(e.getMessage());
-           if(e.getMessage().equals("-1")){
-           System.out.println("Dosent Work with " + p.getLetter());
-           }
-        } 
-    
-        // Test 8: Play Backtrack To Row
-        try {
-        int row = board.size/2;
-        System.out.println("\nPlay Backtrack To Row " + row + ":");
-        board.clearBoard();
-        board.verfyPieces();
-        board.playBacktrackToRow(p, row);
-        board.printBoard(true); 
-        } catch(Exception e) {
-           System.out.println(e.getMessage());
-           if(e.getMessage().equals("-1")){
-           System.out.println("Dosent Work with " + p.getLetter());
-           }
-        } 
-    
-        // Test 8: Play Backtrack To Next
-        try {
-        System.out.println("\nPlay Backtrack To Next:");
-        board.verfyPieces();
-        board.playBacktrackToNextPiece(p);
-        board.printBoard(true); 
-        } catch(Exception e) {
-           System.out.println(e.getMessage());
-           if(e.getMessage().equals("-1")){
-           System.out.println("Dosent Work with " + p.getLetter());
-           }
-        } 
-    */
-    
-      } 
+        while (!board.stepBacktrack(piece)) {
+            // Delay to simulate animation
+            //delay(500);
+        }
+        System.out.println("Step-by-step Backtrack completed. Board solved: " + board.isSolved());
+        board.printBoard(true);
 
-    private static void delay(long l) {
+        System.out.println("\n[Test 8] Backtrack to specific row:");
+        int row = board.getSize() / 2;
+        board.clearBoard();
+        board.verfyPieces(piece);
+        board.playBacktrackToRow(piece, row);
+        System.out.println("Expected pieces: " + row + ", Actual: " + board.getPieces().size());
+
+        System.out.println("\n[Test 9] Backtrack to next piece:");
+        board.playBacktrackToNextPiece(piece);
+        System.out.println("Expected pieces: " + (row + 1) + ", Actual: " + board.getPieces().size());
+
+        System.out.println("\n[Test 10] Verifying sorted pieces:");
+        board.sortPiecesByY();
+        boolean isSorted = verifySortedPieces(board);
+        System.out.println("Pieces sorted correctly: " + isSorted);
+
+        System.out.println("\n========== Tests for " + pieceName + " on " + size + "x" + size + " board completed ==========\n");
+    }
+
+    private static boolean verifySortedPieces(ChessBoard board) {
+        int lastY = -1;
+        for (Piece piece : board.getPieces()) {
+            if (piece.getY() < lastY) {
+                System.err.println("Error: Pieces are not sorted by Y coordinate.");
+                return false;
+            }
+            lastY = piece.getY();
+        }
+        return true;
+    }
+
+    private static void delay(long milliseconds) {
         try {
-            Thread.sleep(l);
-        } catch (Exception e) {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
             System.err.println("Delay interrupted: " + e.getMessage());
         }
     }
