@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.hsmw.algDatDamen.AlgDatDamen;
+
 public class MChessBoard extends ChessBoard {
 
     private Location originCorner; // Starting corner for the chessboard
