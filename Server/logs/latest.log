@@ -1,0 +1,8 @@
+[17:45:39] [ServerMain/INFO]: [bootstrap] Running Java 21 (Java HotSpot(TM) 64-Bit Server VM 21.0.5+9-LTS-239; Oracle Corporation null) on Windows 11 10.0 (amd64)
+[17:45:39] [ServerMain/INFO]: [bootstrap] Loading Paper 1.21-130-master@b1b5d4c (2024-08-10T10:02:42Z) for Minecraft 1.21
+[17:45:39] [ServerMain/INFO]: [PluginInitializerManager] Initializing plugins...
+[17:45:39] [Paper Plugin Remapper Thread - 2/INFO]: [PluginRemapper] Remapping plugin 'plugins\AlgDat_Damen-1.0-SNAPSHOT.jar'...
+[17:45:40] [Paper Plugin Remapper Thread - 2/INFO]: [PluginRemapper] Done remapping plugin 'plugins\AlgDat_Damen-1.0-SNAPSHOT.jar' in 341ms.
+[17:45:40] [ServerMain/INFO]: [PluginInitializerManager] Initialized 3 plugins
+[17:45:40] [ServerMain/INFO]: [PluginInitializerManager] Bukkit plugins (3):
+ - AlgDat_Damen (1.0-SNAPSHOT), ViaVersion (5.1.0), WorldEdit (7.3.4-beta-01+0452ca2)

@@ -6,12 +6,8 @@
 *.class
 *.~ava
 
-##Server Ordner
-Server/logs/
-Server/plugins/
-Server/world_design/
-Server/world_design_nether/
-Server/world_design_the_end/
+# Server Ordner
+# wir suchen noch ne Lösung
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
