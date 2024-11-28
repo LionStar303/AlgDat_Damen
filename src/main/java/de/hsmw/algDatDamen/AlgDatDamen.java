@@ -1,12 +1,12 @@
 package de.hsmw.algDatDamen;
 
 import de.hsmw.algDatDamen.menu.Menu;
+import de.hsmw.algDatDamen.ChessBoard.*;
 import de.hsmw.algDatDamen.menu.MenuCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -22,10 +22,11 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     // Generate development menu
     public static final Menu devMenu = new Menu(27);
     public static AlgDatDamen instance;
+    public static Material QUEEN_BLOCK_TOP = Material.EMERALD_BLOCK;
+    public static Material QUEEN_BLOCK_BOTTOM = Material.SEA_LANTERN;
 
     @Override
     public void onEnable() {
-
         instance = this;
 
         // Initialize the list of chess boards
@@ -63,41 +64,17 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         ItemStack itemInHand = event.getItem();
 
-        if (itemInHand == null)
-            return;
+        if (itemInHand == null) return;
 
         // Check for Development menu item
-        if (itemInHand.getType() == Material.EMERALD && itemInHand.getItemMeta().displayName()
-                .equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
+        if (itemInHand.getType() == Material.EMERALD && itemInHand.hasItemMeta() &&
+                itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
         }
-
     }
 
-    public void BacktrackAnimationStep(MChessBoard board, long ticks) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (board.animationStep()) {
-                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
-                    cancel();
-                }
-
-            }
-        }.runTaskTimer(this, 0L, ticks);
-    }
-
-    public void BacktrackAnimationQueenStep(MChessBoard board, long ticks) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (board.animationQueenStep()) {
-                    Bukkit.getLogger().info("Backtracking abgeschlossen, Scheduler wird beendet.");
-                    cancel();
-                }
-
-            }
-        }.runTaskTimer(this, 0L, ticks);
+    public static AlgDatDamen getInstance() {
+        return instance;
     }
 }

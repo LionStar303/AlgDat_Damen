@@ -1,0 +1,20 @@
+[
+  {
+    "uuid": "f473040c-3d92-4407-8570-87f79441e555",
+    "name": "FInDenChat",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "d16fa083-efc2-4926-bc05-4292a7a1c820",
+    "name": "LionStar303",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "470d55df-26d5-4a9a-8662-3b241c52a9c0",
+    "name": "boettgi",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

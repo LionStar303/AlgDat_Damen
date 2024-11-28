@@ -1,0 +1,798 @@
+package de.hsmw.algDatDamen.ChessBoard;
+
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import de.hsmw.algDatDamen.AlgDatDamen;
+
+public class MChessBoard extends ChessBoard {
+
+    private Location originCorner; // Starting corner for the chessboard
+    private boolean isOriginCornerWhite; // Indicates if the origin corner is white
+    private boolean collisionCarpets; // Checks if carpets cause collision issues
+    private Material whiteFieldMaterial; // Material used for white fields on the board
+    private Material blackFieldMaterial; // Material used for black fields on the board
+    private boolean isAnimationRunning;
+    private BukkitRunnable currentAnimationTask = null;
+
+    /**
+     * Constructor to create a chessboard with specific parameters.
+     *
+     * @param originCorner       Starting location for the chessboard.
+     * @param size               The size of the chessboard.
+     * @param player             The player for determining the board direction.
+     * @param whiteFieldMaterial Material used for the white fields.
+     * @param blackFieldMaterial Material used for the black fields.
+     */
+    public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
+            Material blackFieldMaterial) {
+        this.size = size;
+        this.queens = new ArrayList<>();
+        this.console = true;
+        this.originCorner = originCorner;
+        updateOriginCorner(this.getBoardDirection(player));
+        this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
+        this.whiteFieldMaterial = whiteFieldMaterial;
+        this.blackFieldMaterial = blackFieldMaterial;
+        this.stateX = 0;
+        this.stateY = 0;
+        this.isAnimationRunning = false;
+        spawnChessBoard();
+    }
+
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     *
+     * @param originCorner Starting location for the chessboard.
+     * @param size         The size of the chessboard.
+     * @param player       The player for determining the board direction.
+     */
+    public MChessBoard(Location originCorner, int size, Player player) {
+        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE); // Default materials: wool
+    }
+
+    // Getter and Setter Methods
+
+    /**
+     * Retrieves the starting corner location of the chessboard.
+     *
+     * @return The starting location of the chessboard.
+     */
+    public Location getOriginCorner() {
+        return originCorner;
+    }
+
+    /**
+     * Sets the starting corner location of the chessboard.
+     *
+     * @param originCorner The new starting location for the chessboard.
+     */
+    public void setOriginCorner(Location originCorner) {
+        this.originCorner = originCorner;
+    }
+
+    /**
+     * Retrieves whether the origin corner of the chessboard is white.
+     *
+     * @return true if the origin corner is white, false otherwise.
+     */
+    public boolean isOriginCornerWhite() {
+        return isOriginCornerWhite;
+    }
+
+    public boolean isAnimationRunning() {
+        return isAnimationRunning;
+    }
+
+    /**
+     * Sets whether the origin corner of the chessboard is white.
+     *
+     * @param isOriginCornerWhite true if the origin corner should be white, false
+     *                            otherwise.
+     */
+    public void setOriginCornerWhite(boolean isOriginCornerWhite) {
+        this.isOriginCornerWhite = isOriginCornerWhite;
+    }
+
+    /**
+     * Retrieves whether carpets cause collision issues on the chessboard.
+     *
+     * @return true if carpets cause collision issues, false otherwise.
+     */
+    public boolean isCollisionCarpets() {
+        return collisionCarpets;
+    }
+
+    /**
+     * Sets whether carpets cause collision issues on the chessboard.
+     *
+     * @param collisionCarpets true if carpets should cause collision issues, false
+     *                         otherwise.
+     */
+    public void setCollisionCarpets(boolean collisionCarpets) {
+        this.collisionCarpets = collisionCarpets;
+    }
+
+    /**
+     * Retrieves the material used for the white fields on the chessboard.
+     *
+     * @return The material for white fields.
+     */
+    public Material getWhiteFieldMaterial() {
+        return whiteFieldMaterial;
+    }
+
+    /**
+     * Sets the material used for the white fields on the chessboard.
+     *
+     * @param whiteFieldMaterial The material to set for white fields.
+     */
+    public void setWhiteFieldMaterial(Material whiteFieldMaterial) {
+        this.whiteFieldMaterial = whiteFieldMaterial;
+    }
+
+    /**
+     * Retrieves the material used for the black fields on the chessboard.
+     *
+     * @return The material for black fields.
+     */
+    public Material getBlackFieldMaterial() {
+        return blackFieldMaterial;
+    }
+
+    /**
+     * Sets the material used for the black fields on the chessboard.
+     *
+     * @param blackFieldMaterial The material to set for black fields.
+     */
+    public void setBlackFieldMaterial(Material blackFieldMaterial) {
+        this.blackFieldMaterial = blackFieldMaterial;
+    }
+
+    /**
+     * Spawns a chessboard on the ground with alternating white and gray blocks.
+     *
+     * @param white If true, the left corner of the chessboard will be white;
+     *              otherwise, it will be gray.
+     */
+    public void spawnChessBoard() {
+        // Iterate over each coordinate pair within the board's size
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                // Determine if the current block should be white or gray based on position and
+                // initial corner color
+                boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
+                Material material = isWhite ? whiteFieldMaterial : blackFieldMaterial;
+
+                // Calculate the exact position of the block within the world
+                Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
+                        originCorner.getBlockX() + x,
+                        originCorner.getBlockY(),
+                        originCorner.getBlockZ() + z);
+
+                // Set the block's type to either white or gray material
+                currentBlock.setType(material);
+            }
+        }
+        updateCollisionCarpets();
+    }
+
+    /**
+     * Spawns a queen on the chessboard at the specified position.
+     *
+     * @param q The Queen object that contains the (x, y) position where the queen
+     *          should be placed.
+     * @return boolean True if the queen was successfully spawned, or false if a
+     *         queen already occupies that spot.
+     */
+    public boolean spawnQueen(Queen q) {
+        int x = q.getX();
+        int y = q.getY();
+
+        // Calculate the queen's exact position on the chessboard, offset slightly to
+        // center within the block
+        Location queenLocation = originCorner.getBlock().getLocation().add(x, 2, y);
+
+        // Check if an armor stand already occupies the target block
+        if (queenLocation.getBlock().getType() == Material.ARMOR_STAND) {
+            return false; // Return false if another queen is already at this location
+        }
+
+        // set Block to queenBlock at desired Location
+        queenLocation.getBlock().setType(AlgDatDamen.QUEEN_BLOCK_TOP);
+        queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(AlgDatDamen.QUEEN_BLOCK_BOTTOM);
+
+        updateCollisionCarpets();
+        return true; // Indicates the queen was successfully spawned
+    }
+
+    /**
+     * Spawns all queens from the ArrayList<Queen> onto the chessboard.
+     */
+    public void spawnAllQueens() {
+        if (queens == null || queens.size() == 0) {
+            return;
+        }
+        for (Queen queen : queens) {
+            spawnQueen(queen); // Spawn each queen
+        }
+    }
+
+    public void updateCollisionCarpets() {
+        if (this.collisionCarpets) {
+            cleanCollisionCarpets();
+            spawnCollisionCarpets();
+        } else {
+            cleanCollisionCarpets();
+        }
+    }
+
+    public boolean isPartOfBoard(Location location) {
+        if (originCorner == null) {
+            return false;
+        }
+
+        // Calculate boundaries based on origin location and board size
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+        int minY = originCorner.getBlockY();
+        int maxX = minX + size - 1;
+        int maxZ = minZ + size - 1;
+        int maxY = minY + 2;
+
+        // Check if the given location is within the boundaries
+        int x = location.getBlockX();
+        int z = location.getBlockZ();
+        int y = location.getBlockY();
+
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ && y >= minY && y <= maxY
+                && location.getWorld().equals(originCorner.getWorld());
+    }
+
+    public boolean addQueen(Location l) {
+        if (!isPartOfBoard(l)) {
+            return false;
+        }
+
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+
+        int x = l.getBlockX();
+        int z = l.getBlockZ();
+
+        Queen q = new Queen(x - minX, z - minZ);
+        addQueen(q);
+        spawnQueen(q);
+
+        return true;
+    }
+
+    public boolean addTestedQueen(Location l) {
+        if (!isPartOfBoard(l)) {
+            return false;
+        }
+
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+
+        int x = l.getBlockX();
+        int z = l.getBlockZ();
+
+        Queen q = new Queen(x - minX, z - minZ);
+        if (checkCollision(q)) {
+            return false;
+        }
+        addQueen(q);
+        spawnQueen(q);
+
+        return true;
+    }
+
+    public Queen getQueenAt(Location l) {
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+
+        for (Queen q : this.queens) {
+            System.out.println(
+                    q.getX() + " == " + (l.getBlockX() - minX) + " && " + q.getY() + " == " + (l.getBlockZ() - minZ));
+            if ((q.getX() == (l.getBlockX() - minX)) && (q.getY() == (l.getBlockZ() - minZ))) {
+                return q;
+            }
+        }
+        return null;
+    }
+
+    // Method to remove the most recently added queen
+    public void removeQueen() {
+        // Check if there are any queens to remove
+        if (!queens.isEmpty()) {
+            Queen lastQueen = queens.remove(queens.size() - 1); // Remove last queen in list
+            removeQueenFromBoard(lastQueen); // Remove queen from Minecraft board
+        }
+    }
+
+    // Method to remove a specific queen
+    public void removeQueen(Queen q) {
+        if (queens.remove(q)) { // If queen is found and removed from list
+            removeQueenFromBoard(q); // Remove queen from Minecraft board
+        }
+    }
+
+    /**
+     * Helper method to visually remove a queen (armor stand) from the Minecraft
+     * board.
+     *
+     * @param queen The queen to remove from the board.
+     */
+    private void removeQueenFromBoard(Queen queen) {
+        if (queen != null) {
+            Location queenLocation = getLocationofQueen(queen);
+            if (queenLocation != null) {
+                queenLocation.getBlock().setType(Material.AIR); // Remove top block
+                queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
+                this.removeQueen(queen);
+            }
+        }
+    }
+
+    /**
+     * Removes all queens from the chessboard.
+     * (just in minecraft, not from the queens list)
+     */
+    public void removeALLQueensFromBoard() {
+        // clear all blocks above the board
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                for (int y = 1; y <= 2; y++) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + y, originCorner.getZ() + z);
+                    location.getBlock().setType(Material.AIR);
+                }
+            }
+        }
+    }
+
+    public void deletAllQueensFromBoard() {
+        removeALLQueensFromBoard();
+        queens.clear();
+        updateCollisionCarpets();
+    }
+
+    /**
+     * Get the location of the queen on the board.
+     *
+     * @param q The queen whose location is to be determined.
+     * @return The Location object representing the queen's position.
+     */
+    private Location getLocationofQueen(Queen q) {
+        double x = q.getX() + originCorner.getBlockX();
+        double z = q.getY() + originCorner.getBlockZ();
+
+        return new Location(originCorner.getWorld(), x, originCorner.getY() + 2, z);
+    }
+
+    public void spawnCollisionCarpets() {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getZ() + y); // Y-coordinate can be adjusted as needed
+                Block block = location.getBlock();
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                    continue;
+                }
+                if ((x + y) % 2 == 0) {
+                    if (isOriginCornerWhite) {
+                        block.setType(Material.ORANGE_CARPET);
+                    } else {
+                        block.setType(Material.RED_CARPET);
+                    }
+                } else {
+                    if (isOriginCornerWhite == false) {
+                        block.setType(Material.ORANGE_CARPET);
+                    } else {
+                        block.setType(Material.RED_CARPET);
+                    }
+                }
+            }
+        }
+    }
+
+    public void cleanCollisionCarpets() {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y); // Y-coordinate can be adjusted as
+                                                                                // needed
+                Block block = location.getBlock();
+                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                    continue;
+                }
+                block.setType(Material.AIR);
+            }
+        }
+    }
+
+    /**
+     * Places a purple carpet at the specified location to represent a block a queen
+     * can move to.
+     * 
+     * @param l
+     */
+    public void placeUserCarpet(Location l) {
+        Material carpMaterial = Material.LIME_CARPET;
+        if (!isPartOfBoard(l)) {
+            return;
+        }
+
+        // Remove existing carpet if it's a valid move
+        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
+            l.getBlock().setType(Material.AIR);
+            return;
+        }
+
+        // return if top queen block got clicked
+        if (l.getY() > originCorner.getY()) {
+            return;
+        }
+
+        int x = l.getBlockX();
+        int z = l.getBlockZ();
+
+        Location location = new Location(originCorner.getWorld(), x, originCorner.getBlockY() + 1, z);
+
+        // set Carpet at desired Location
+        Block block = location.getBlock();
+        block.setType(Material.LIME_CARPET);
+    }
+
+    /**
+     * checks if all the purple carpets represent a valid solution.
+     * the location of a queen is ignored by the check, only the paths of the queens
+     * are compared to the carpets.
+     * 
+     * @return
+     */
+    public boolean checkUserCarpets() {
+        // return false if there are no queens on the board
+        if (queens.size() == 0) {
+            return false;
+        }
+
+        Set<String> correctPositions = new HashSet<>();
+        Set<String> queenPositions = new HashSet<>();
+
+        // Step 1: Calculate all correct positions where carpets should be placed,
+        // ignoring queen positions
+        for (Queen queen : queens) {
+            int queenX = queen.getX();
+            int queenY = queen.getY();
+
+            // Track queen positions to ignore them in the check
+            queenPositions.add(queenX + "," + queenY);
+
+            // Add row and column positions
+            for (int i = 0; i < size; i++) {
+                if (i != queenY)
+                    correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
+                if (i != queenX)
+                    correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
+            }
+
+            // Add diagonal positions
+            for (int i = -size; i < size; i++) {
+                int diagX1 = queenX + i;
+                int diagY1 = queenY + i;
+                int diagX2 = queenX + i;
+                int diagY2 = queenY - i;
+
+                if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
+                        && !(diagX1 == queenX && diagY1 == queenY)) {
+                    correctPositions.add(diagX1 + "," + diagY1);
+                }
+                if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
+                        && !(diagX2 == queenX && diagY2 == queenY)) {
+                    correctPositions.add(diagX2 + "," + diagY2);
+                }
+            }
+        }
+
+        // Step 2: Check each position on the board
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getBlockZ() + y);
+                Block block = location.getBlock();
+                String positionKey = x + "," + y;
+
+                // Ignore positions where queens are located
+                if (queenPositions.contains(positionKey)) {
+                    continue;
+                }
+
+                // Case 1: Position should have a carpet but doesn't
+                if (correctPositions.contains(positionKey)
+                        && block.getType() != Material.LIME_CARPET) {
+                    System.out.println("Missing carpet at correct position: " + x + "," + y);
+                    return false;
+                }
+
+                // Case 2: Position shouldn't have a carpet but does
+                if (!correctPositions.contains(positionKey)
+                        && block.getType() == Material.LIME_CARPET) {
+                    System.out.println("Incorrect carpet at position: " + x + "," + y);
+                    block.setType(Material.RED_CARPET);
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("Solution is correct!");
+        return true;
+    }
+
+    /**
+     * Determines the cardinal direction of the player based on their location.
+     * This method converts the player's direction into one of the cardinal
+     * directions (East, South, West, North)
+     * by analyzing the player's facing direction and ignoring the vertical
+     * component.
+     *
+     * @param player The player whose facing direction determines the board's
+     *               orientation.
+     * @return The direction vector representing one of the four cardinal directions
+     *         (East, South, West, North).
+     */
+    private Vector getBoardDirection(Player player) {
+        // Get the player's direction as a 2D vector
+        Vector playerDirection = player.getLocation().getDirection();
+        playerDirection.setY(0); // Ignore vertical component
+        playerDirection = playerDirection.normalize();
+
+        double x = playerDirection.getX();
+        double z = playerDirection.getZ();
+
+        // Determine cardinal direction based on player's facing direction
+        if (x > 0 && z > 0) {
+            return new Vector(1, 0, 1); // East
+        } else if (x < 0 && z > 0) {
+            return new Vector(-1, 0, 1); // South
+        } else if (x < 0 && z < 0) {
+            return new Vector(-1, 0, -1); // West
+        } else {
+            return new Vector(1, 0, -1); // North
+        }
+    }
+
+    /**
+     * Updates the origin corner of the chessboard based on the player's facing
+     * direction.
+     * The origin corner is adjusted to ensure the chessboard's orientation aligns
+     * with the player's view
+     * and also takes the size of the board into account.
+     */
+    private void updateOriginCorner(Vector direction) {
+        // Determine direction modifiers based on boardDirection
+        int xMod = (int) direction.getX(); // East/West orientation modifier
+        int zMod = (int) direction.getZ(); // North/South orientation modifier
+
+        // Current origin corner coordinates
+        int x = originCorner.getBlockX();
+        int z = originCorner.getBlockZ();
+
+        // Adjust origin corner based on player's facing direction
+        if (xMod > 0 && zMod > 0) {
+            // Facing East and South: Set origin at the bottom-left corner
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod > 0) {
+            // Facing West and South: Shift origin to the right
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod < 0) {
+            // Facing West and North: Shift origin both right and up
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(),
+                    z - (size - 1));
+        } else if (xMod > 0 && zMod < 0) {
+            // Facing East and North: Shift origin up
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
+        }
+    }
+
+    public void removeChessBoardFromGame() {
+        this.blackFieldMaterial = Material.AIR;
+        this.whiteFieldMaterial = Material.AIR;
+        this.collisionCarpets = false;
+
+        cleanCollisionCarpets();
+        removeALLQueensFromBoard();
+        spawnChessBoard();
+    }
+
+    public void rotateMQueens(int rotation) {
+        this.rotateQueens(rotation);
+        removeALLQueensFromBoard();
+        spawnAllQueens();
+        updateCollisionCarpets();
+    }
+
+    public boolean animationStep() {
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+        if (stepBacktrack()) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            spawnAllQueens();
+            return true;
+        }
+        spawnAllQueens();
+
+        if (stateX + 1 <= size && stateY + 1 <= size) {
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
+        }
+
+        return false;
+    }
+
+    public boolean animationQueenStep() {
+        removeALLQueensFromBoard();
+        cleanCollisionCarpets();
+        if (playBacktrackToNextQueen()) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            spawnAllQueens();
+            return true;
+        }
+        spawnAllQueens();
+
+        return false;
+
+    }
+
+    public void solveBacktrackToRowMC(int x) {
+        removeALLQueensFromBoard();
+        solveBacktrackToRow(x);
+        spawnAllQueens();
+        updateCollisionCarpets();
+    }
+
+    public void BacktrackAnimationStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyQueens();
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationStep()) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void BacktrackAnimationQueenStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyQueens();
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationQueenStep()) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean bongoStepMC() {
+        removeALLQueensFromBoard();
+        bongoStep();
+        printBoard();
+        spawnAllQueens();
+        updateCollisionCarpets();
+        return isSolved();
+    }
+
+    public void BongoSolveAnimationStep(JavaPlugin plugin, long ticks) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning && console) {
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+
+        // Starte eine neue Animation
+        verfyQueens();
+        try {
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (bongoStepMC()) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        cancel(); // Stoppe den Task
+                        isAnimationRunning = false; // Setze das Flag zurück
+                    }
+                    if (stateX == (size)) {
+                        removeAllQueens();
+                        stateX = 0;
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Methode, um eine laufende Animation zu stoppen
+    public void stopCurrentAnimation() {
+        if (currentAnimationTask != null) {
+            currentAnimationTask.cancel(); // Stoppe den aktuellen Task
+            isAnimationRunning = false; // Setze das Flag zurück
+            System.out.println("Aktuelle Animation wurde abgebrochen.");
+        }
+    }
+
+    public void showSolution() {
+        removeALLQueensFromBoard();
+        playBacktrack();
+        spawnAllQueens();
+        updateCollisionCarpets();
+    }
+}
