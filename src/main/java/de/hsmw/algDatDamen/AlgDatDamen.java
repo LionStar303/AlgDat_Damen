@@ -24,6 +24,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static AlgDatDamen instance;
     public static Material QUEEN_BLOCK_TOP = Material.EMERALD_BLOCK;
     public static Material QUEEN_BLOCK_BOTTOM = Material.SEA_LANTERN;
+    public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
+    public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
+    public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
 
     @Override
     public void onEnable() {
