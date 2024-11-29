@@ -3,11 +3,11 @@ package de.hsmw.algDatDamen;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.ChessBoard.*;
 import de.hsmw.algDatDamen.menu.MenuCommand;
+import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +46,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Register commands
         getCommand("schachmenu").setExecutor(new MenuCommand(devMenu));
+        getCommand("startTutorial").setExecutor(new TutorialCommand(instance));
 
         devMenu.init(boardSize); // Configure Menus
         
