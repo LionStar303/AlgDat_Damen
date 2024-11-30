@@ -18,6 +18,7 @@ import static de.hsmw.algDatDamen.AlgDatDamen.instance;
 public class DevelopmentHandles {
 
     public static int boardSize = 4;
+    public static int backtrackRow = 1;
 
     /**
      * Generates a new chess board at the clicked block location.
@@ -217,7 +218,10 @@ public class DevelopmentHandles {
         devMenu.updateItemName(MenuSlots.BOARD_SIZE, "Größe: " + boardSize);
     }
 
-
+    public static void increaseBacktrackRow(PlayerInteractEvent event) {
+        backtrackRow = (backtrackRow < 16) ? backtrackRow + 1 : 1;
+        devMenu.updateItemName(MenuSlots.BACKTRACK_ROW, "Backtrack Zeile: " + backtrackRow);
+    }
 
     /**
      * A full run of the algorithm on the given chess board.
@@ -226,6 +230,12 @@ public class DevelopmentHandles {
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.showSolution();
+        event.setCancelled(true);
+    }
+
+    public static void handleBacktrackToRow(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.solveBacktrackToRowMC(backtrackRow);
         event.setCancelled(true);
     }
 
@@ -240,15 +250,12 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-
-
-
-
     public static void rotateQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.rotateMQueens(1);
         event.setCancelled(true);
     }
+
 
 
 }
