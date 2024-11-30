@@ -5,32 +5,28 @@ import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 
-public class Level {
+public abstract class Level {
 
-    private String name;
-    private Step firstStep;
-    private MChessBoard chessBoard;
-    private Player player;
+    private String name; // vielleicht als Bossbar anzeigen
+    private String description;
     private Location startLocation;
+    protected MChessBoard chessBoard;
+    protected Player player;
+    protected boolean completed;
 
-    public Level(String name, MChessBoard chessBoard, Player player) {
+    public Level(String name, String description, MChessBoard chessBoard, Player player, Location startLocation, boolean completed) {
         this.name = name;
+        this.description = description;
         this.chessBoard = chessBoard;
         this.player = player;
+        this.startLocation = startLocation;
+        this.completed = completed;
     }
 
-    public void initialize() {
-        readSteps();
-    }
+    public abstract void start();
 
-    public void start() {
-        
-        // Inventar des Spielers leeren
-        player.getInventory().clear();
+    public void teleportToStart() {
         player.teleport(startLocation);
-    }
-
-    private void readSteps() {
-
+        player.setFlying(false);
     }
 }

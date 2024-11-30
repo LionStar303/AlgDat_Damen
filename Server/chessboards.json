@@ -1,40 +1,6 @@
 [
   {
     "originCorner": {
-      "x": -102.0,
-      "y": 40.0,
-      "z": 161.0,
-      "world": "world_design"
-    },
-    "isOriginCornerWhite": false,
-    "collisionCarpets": false,
-    "whiteFieldMaterial": "WHITE_CONCRETE",
-    "blackFieldMaterial": "GRAY_CONCRETE",
-    "queens": [],
-    "size": 8,
-    "console": true,
-    "stateX": 0,
-    "stateY": 0
-  },
-  {
-    "originCorner": {
-      "x": -11.0,
-      "y": 45.0,
-      "z": 153.0,
-      "world": "world_design"
-    },
-    "isOriginCornerWhite": true,
-    "collisionCarpets": false,
-    "whiteFieldMaterial": "WHITE_CONCRETE",
-    "blackFieldMaterial": "GRAY_CONCRETE",
-    "queens": [],
-    "size": 8,
-    "console": true,
-    "stateX": 0,
-    "stateY": 0
-  },
-  {
-    "originCorner": {
       "x": -46.0,
       "y": 36.0,
       "z": 235.0,
@@ -44,6 +10,7 @@
     "collisionCarpets": false,
     "whiteFieldMaterial": "WHITE_CONCRETE",
     "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
     "queens": [],
     "size": 8,
     "console": true,
@@ -61,6 +28,7 @@
     "collisionCarpets": false,
     "whiteFieldMaterial": "WHITE_CONCRETE",
     "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
     "queens": [],
     "size": 12,
     "console": true,
@@ -78,6 +46,7 @@
     "collisionCarpets": false,
     "whiteFieldMaterial": "WHITE_CONCRETE",
     "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
     "queens": [],
     "size": 12,
     "console": true,
@@ -95,6 +64,7 @@
     "collisionCarpets": true,
     "whiteFieldMaterial": "WHITE_CONCRETE",
     "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
     "queens": [
       {
         "x": 1,
@@ -118,6 +88,7 @@
     "collisionCarpets": true,
     "whiteFieldMaterial": "WHITE_CONCRETE",
     "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
     "queens": [
       {
         "x": 0,
@@ -141,6 +112,83 @@
       }
     ],
     "size": 4,
+    "console": true,
+    "stateX": 0,
+    "stateY": 0
+  },
+  {
+    "originCorner": {
+      "x": -102.0,
+      "y": 40.0,
+      "z": 161.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": true,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
+    "queens": [
+      {
+        "x": 0,
+        "y": 0,
+        "isSuperQueen": false
+      },
+      {
+        "x": 1,
+        "y": 4,
+        "isSuperQueen": false
+      },
+      {
+        "x": 2,
+        "y": 7,
+        "isSuperQueen": false
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "isSuperQueen": false
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "isSuperQueen": false
+      },
+      {
+        "x": 5,
+        "y": 6,
+        "isSuperQueen": false
+      },
+      {
+        "x": 6,
+        "y": 1,
+        "isSuperQueen": false
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "isSuperQueen": false
+      }
+    ],
+    "size": 8,
+    "console": true,
+    "stateX": 8,
+    "stateY": 0
+  },
+  {
+    "originCorner": {
+      "x": -11.0,
+      "y": 45.0,
+      "z": 153.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": false,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
+    "queens": [],
+    "size": 8,
     "console": true,
     "stateX": 0,
     "stateY": 0

@@ -13,22 +13,28 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 
 public class TutorialCommand implements CommandExecutor{
 
-    ArrayList<Tutorial> tutorials;
-    MChessBoard chessBoard;
+    ArrayList<Tutorial> allTutorials;
+    Tutorial tutorial;
 
-    public TutorialCommand(AlgDatDamen algDatDamen) {
-        this.tutorials = algDatDamen.getTutorials();
-        this.chessBoard = algDatDamen.getCBSa();
+    public TutorialCommand(ArrayList<Tutorial> tutorials) {
+        this.allTutorials = tutorials;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         
         if(sender instanceof Player) {
-            // neues Tutorial hinzufügen und starten
-            tutorials.add(new Tutorial((Player) sender));
-            tutorials.getLast().initialize(null);();
-            return true;
+            for(Tutorial t : allTutorials) {
+                if(t.getPlayer().equals((Player) sender)) {
+                    t.start();
+                    sender.sendMessage("Tutorial erfolgreich gestartet.");
+                    return true;
+                }
+                sender.sendMessage("Tutorial existiert nicht.");
+                return false;
+            }
+            sender.sendMessage("keine Tutorials vorhanden.");
+            return false;
         } else {
             // Fehlermeldung, falls der Sender kein Spieler ist
             sender.sendMessage("Dieser Befehl kann nur von einem Spieler ausgeführt werden.");

@@ -3,6 +3,7 @@ package de.hsmw.algDatDamen;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.ChessBoard.*;
 import de.hsmw.algDatDamen.menu.MenuCommand;
+import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,11 +13,17 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
+import java.util.ArrayList;
+
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
+
+    private ArrayList<Tutorial> tutorials;
+    private ArrayList<MChessBoard> chessBoards;
     // List to store all created MChessBoard instances
     public static ChessBoardSaveManager saveManager;
     // Generate development menu
@@ -31,13 +38,16 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Initialize the list of chess boards
         saveManager = new ChessBoardSaveManager();
+        tutorials = new ArrayList<Tutorial>();
+        chessBoards = new ArrayList<MChessBoard>();
 
         // Load saved chess boards
         getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
         for (MChessBoard chessBoard : saveManager.getCbList()) {
-            chessBoard.spawnChessBoard();
-            chessBoard.spawnAllQueens();
-            getLogger().info("Chess board has been spawned!");
+            chessBoards.add(chessBoard);
+            // chessBoard.spawnChessBoard();
+            // chessBoard.spawnAllQueens();
+            getLogger().info("chessBoards wurde initialisiert");
         }
 
         // Register event listeners for player interactions
@@ -46,7 +56,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Register commands
         getCommand("schachmenu").setExecutor(new MenuCommand(devMenu));
-        getCommand("startTutorial").setExecutor(new TutorialCommand(instance));
+        getCommand("startTutorial").setExecutor(new TutorialCommand(tutorials));
 
         devMenu.init(boardSize); // Configure Menus
         
@@ -58,6 +68,12 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // Log plugin shutdown
         saveManager.saveChessBoards();
         getLogger().info("AlgDatDamen Plugin is now inactive.");
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        tutorials.add(new Tutorial(event.getPlayer()));
+        tutorials.getLast().initialize(chessBoards.getFirst());
     }
 
     @EventHandler

@@ -3,6 +3,7 @@ package de.hsmw.algDatDamen.tutorialHandler;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.tutorialHandler.Levels.Level1;
 
 public class Tutorial {
 
@@ -14,11 +15,15 @@ public class Tutorial {
     }
 
     public void initialize(MChessBoard chessBoard) {
-        firstLevel = new Level("Testlevel", chessBoard, player);
-        firstLevel.start();
+        firstLevel = new Level1(chessBoard, player);
+        
     }
 
     public void start() {
         firstLevel.start();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

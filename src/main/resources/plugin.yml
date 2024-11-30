@@ -7,3 +7,7 @@ commands:
     description: 'Öffnet das Schachmenü'
     usage: '/schachmenu'
     aliases: [sm, cb]
+  startTutorial:
+    description: 'startet das Tutorial für den Spieler'
+    usage: '/startTutorial'
+    aliases: []
