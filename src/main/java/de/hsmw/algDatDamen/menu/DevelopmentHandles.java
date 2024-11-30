@@ -4,16 +4,22 @@ import de.hsmw.algDatDamen.ChessBoard.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.NPC;
+
 import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
 import static de.hsmw.algDatDamen.AlgDatDamen.instance;
 
 /**
- * Class that contains development handles for managing chess boards and related interactions.
+ * Class that contains development handles for managing chess boards and related
+ * interactions.
  */
 public class DevelopmentHandles {
 
@@ -21,15 +27,18 @@ public class DevelopmentHandles {
 
     /**
      * Generates a new chess board at the clicked block location.
+     * 
      * @param event Triggering event.
-     * @param size Size of the board.
+     * @param size  Size of the board.
      */
     public static void handleBoardCreation(PlayerInteractEvent event, Integer size) {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
 
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
-            player.sendMessage(Component.text("Du musst einen Block anklicken, an dem das Schachbrett gespawnt werden soll!", NamedTextColor.RED));
+            player.sendMessage(
+                    Component.text("Du musst einen Block anklicken, an dem das Schachbrett gespawnt werden soll!",
+                            NamedTextColor.RED));
             return;
         }
 
@@ -39,6 +48,7 @@ public class DevelopmentHandles {
 
     /**
      * Removes the clicked chess board if there is one.
+     * 
      * @param event Triggering event.
      */
     public static void removeChessBoardFromGame(PlayerInteractEvent event) {
@@ -46,7 +56,8 @@ public class DevelopmentHandles {
             event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
                     "welches gelöscht werden soll!", NamedTextColor.RED));
             return;
-        };
+        }
+        ;
         MChessBoard mcB = getClickedMCB(event);
         mcB.removeChessBoardFromGame();
         saveManager.getCbList().remove(mcB);
@@ -54,7 +65,9 @@ public class DevelopmentHandles {
     }
 
     /**
-     * Places a queen on the clicked block. Removes the existing queen if already present.
+     * Places a queen on the clicked block. Removes the existing queen if already
+     * present.
+     * 
      * @param event Triggering event.
      */
     public static void placeQueen(PlayerInteractEvent event) {
@@ -66,7 +79,8 @@ public class DevelopmentHandles {
 
         Block clickedBlock = event.getClickedBlock();
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
-            event.getPlayer().sendMessage(Component.text("Bitte klicke auf ein gültiges Schachfeld!", NamedTextColor.RED));
+            event.getPlayer()
+                    .sendMessage(Component.text("Bitte klicke auf ein gültiges Schachfeld!", NamedTextColor.RED));
             return;
         }
 
@@ -80,7 +94,9 @@ public class DevelopmentHandles {
     }
 
     /**
-     * Like <code>placeQueen</code> but with a check, if the queen is allowed on this field of the board.
+     * Like <code>placeQueen</code> but with a check, if the queen is allowed on
+     * this field of the board.
+     * 
      * @param event Triggering event.
      */
     public static void placeTestedQueen(PlayerInteractEvent event) {
@@ -91,7 +107,8 @@ public class DevelopmentHandles {
 
     public static void placeUserCarpet(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        if (mcB == null) return;
+        if (mcB == null)
+            return;
 
         mcB.placeUserCarpet(event.getClickedBlock().getLocation());
         event.setCancelled(true);
@@ -99,7 +116,8 @@ public class DevelopmentHandles {
 
     public static void checkUserCarpets(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        if (mcB == null) return;
+        if (mcB == null)
+            return;
 
         Player player = event.getPlayer();
         if (mcB.checkUserCarpets()) {
@@ -112,13 +130,15 @@ public class DevelopmentHandles {
 
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        if (mcB == null) return;
+        if (mcB == null)
+            return;
         mcB.deletAllQueensFromBoard();
         event.setCancelled(true);
     }
 
     /**
      * Initiates the animation for the backtracking algorithm.
+     * 
      * @param event The triggering event.
      */
     public static void handleBacktrackAnimation(PlayerInteractEvent event) {
@@ -129,9 +149,9 @@ public class DevelopmentHandles {
             return;
         }
 
-        if(mcB.isAnimationRunning()){
+        if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
-        }else{
+        } else {
             mcB.BacktrackAnimationStep(AlgDatDamen.getInstance(), 5);
         }
         event.setCancelled(true);
@@ -145,9 +165,9 @@ public class DevelopmentHandles {
             return;
         }
 
-        if(mcB.isAnimationRunning()){
+        if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
-        }else{
+        } else {
             mcB.BacktrackAnimationQueenStep(AlgDatDamen.getInstance(), 5);
         }
 
@@ -162,9 +182,9 @@ public class DevelopmentHandles {
             return;
         }
 
-        if(mcB.isAnimationRunning()){
+        if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
-        }else{
+        } else {
             mcB.BongoSolveAnimationStep(AlgDatDamen.getInstance(), 5);
         }
 
@@ -173,6 +193,7 @@ public class DevelopmentHandles {
 
     /**
      * Retrieves the chess board associated with the clicked block, if any.
+     * 
      * @param event Triggering event.
      * @return Corresponding chess board or null if not found.
      */
@@ -192,11 +213,13 @@ public class DevelopmentHandles {
 
     /**
      * Toggles collision carpets for the chess board.
+     * 
      * @param event Triggering event.
      */
     public static void handleCollisionCarpets(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        if (mcB == null) return;
+        if (mcB == null)
+            return;
 
         if (mcB.isCollisionCarpets()) {
             mcB.cleanCollisionCarpets();
@@ -210,6 +233,7 @@ public class DevelopmentHandles {
 
     /**
      * Adjusts the size of the chess board cyclically between 4 and 16.
+     * 
      * @param event Not used but needed by <code>addMenuItem()</code>
      */
     public static void increaseBoardSize(PlayerInteractEvent event) {
@@ -217,10 +241,9 @@ public class DevelopmentHandles {
         devMenu.updateItemName(MenuSlots.BOARD_SIZE, "Größe: " + boardSize);
     }
 
-
-
     /**
      * A full run of the algorithm on the given chess board.
+     * 
      * @param event The triggering event.
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
@@ -231,6 +254,7 @@ public class DevelopmentHandles {
 
     /**
      * Performs the next step of the algorithm.
+     * 
      * @param event The triggering event.
      */
     public static void handleBacktrackStep(PlayerInteractEvent event) {
@@ -240,15 +264,17 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-
-
-
+    public static void playVillagerText(PlayerInteractEvent event) {
+        NPC npc = getClickedMCB(event).getNpc();
+        npc.addText("Hallo", Sound.ENTITY_VILLAGER_TRADE);
+        npc.playNext();
+        event.setCancelled(true);
+    }
 
     public static void rotateQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.rotateMQueens(1);
         event.setCancelled(true);
     }
-
 
 }

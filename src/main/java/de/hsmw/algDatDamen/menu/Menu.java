@@ -116,6 +116,7 @@ public class Menu implements Listener {
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
         this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
         this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
+        this.addMenuItem(Material.VILLAGER_SPAWN_EGG, "spiele nächsten NPC text", MenuSlots.PLAY_VILLAGER, "playVillagerText");
 
         this.fillEmptySlots();
     }

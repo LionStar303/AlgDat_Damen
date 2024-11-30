@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.NPC;
 
 public class MChessBoard extends ChessBoard {
 
@@ -25,6 +25,7 @@ public class MChessBoard extends ChessBoard {
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
     private BukkitRunnable currentAnimationTask = null;
+    private NPC npc;
 
     /**
      * Constructor to create a chessboard with specific parameters.
@@ -41,13 +42,14 @@ public class MChessBoard extends ChessBoard {
         this.queens = new ArrayList<>();
         this.console = true;
         this.originCorner = originCorner;
-        updateOriginCorner(this.getBoardDirection(player));
+        Location npcLoc = updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
+        this.npc = new NPC(npcLoc);
         spawnChessBoard();
     }
 
@@ -187,6 +189,10 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
+        if (npc == null) {
+            return;
+        }
+        npc.spawn();
     }
 
     /**
@@ -582,7 +588,7 @@ public class MChessBoard extends ChessBoard {
      * with the player's view
      * and also takes the size of the board into account.
      */
-    private void updateOriginCorner(Vector direction) {
+    private Location updateOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
         int xMod = (int) direction.getX(); // East/West orientation modifier
         int zMod = (int) direction.getZ(); // North/South orientation modifier
@@ -606,6 +612,18 @@ public class MChessBoard extends ChessBoard {
             // Facing East and North: Shift origin up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
+
+        // Location for npc to spawn, based on player's facing direction, boardsize is irrelevant
+        Location npcLocation = new Location(originCorner.getWorld(), x + 2, originCorner.getBlockY() + 1, z + 2);
+
+        if (xMod > 0 && zMod > 0) {
+            // Facing West and South: Shift origin to the right
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
+            npcLocation = new Location(originCorner.getWorld(), x - 2, originCorner.getBlockY() + 1,
+                    z - 2);
+        }
+
+        return npcLocation;
     }
 
     public void removeChessBoardFromGame() {
@@ -616,6 +634,7 @@ public class MChessBoard extends ChessBoard {
         cleanCollisionCarpets();
         removeALLQueensFromBoard();
         spawnChessBoard();
+        npc.remove();
     }
 
     public void rotateMQueens(int rotation) {
@@ -794,5 +813,9 @@ public class MChessBoard extends ChessBoard {
         playBacktrack();
         spawnAllQueens();
         updateCollisionCarpets();
+    }
+
+    public NPC getNpc() {
+        return npc;
     }
 }

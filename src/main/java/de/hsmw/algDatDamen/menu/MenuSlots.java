@@ -19,7 +19,8 @@ public enum MenuSlots {
     BACKTRACK_ANIMATION_FAST(17),
     BONGO_SOLVE(24),
     PLACE_USER_CARPET(10),
-    CHECK_USER_CARPETS(19);
+    CHECK_USER_CARPETS(19),
+    PLAY_VILLAGER(21);
 
 
     public final int slot;
