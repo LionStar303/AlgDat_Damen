@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static de.hsmw.algDatDamen.menu.DevelopmentHandles.*;
+
 public class Menu implements Listener {
     private final Inventory inventory;
     private final Map<Integer, CommandData> commandsMap = new HashMap<>();
@@ -86,9 +88,12 @@ public class Menu implements Listener {
                     method.invoke(instance, (Object) commandData.arguments);
                 }
 
-                if (slot != MenuSlots.BOARD_SIZE.slot && inventory.getItem(slot).getType() != Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
+                if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
+                    return;
+                } else {
                     inventory.close();
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -112,10 +117,14 @@ public class Menu implements Listener {
         this.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
         this.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
                 "handleBacktrackStep");
+        this.addMenuItem(Material.IRON_AXE, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL, "handleBacktrackToRow");
+        this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW, "increaseBacktrackRow");
         this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
         this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
         this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
+        this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL, "changeWhiteFieldMaterial");
+        this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL, "changeBlackFieldMaterial");
 
         this.fillEmptySlots();
     }
@@ -155,6 +164,10 @@ public class Menu implements Listener {
 
         itemMeta.displayName(Component.text(displayName));
         item.setItemMeta(itemMeta);
+    }
+
+    public void updateItemMaterial(MenuSlots slot, Material material) {
+        inventory.setItem(slot.getSlot(), new ItemStack(material));
     }
 
     public void fillEmptySlots() {
