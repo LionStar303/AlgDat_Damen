@@ -4,6 +4,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 
 public class NPC {
@@ -63,6 +64,14 @@ public class NPC {
         location.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(e -> {
             if (e instanceof Villager) {
                 e.remove();
+            }
+        });
+    }
+
+    public void lookAtPlayer(Player player) {
+        location.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(e -> {
+            if (e instanceof Villager) {
+                ((Villager)e).lookAt(player);
             }
         });
     }

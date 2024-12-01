@@ -266,8 +266,9 @@ public class DevelopmentHandles {
 
     public static void playVillagerText(PlayerInteractEvent event) {
         NPC npc = getClickedMCB(event).getNpc();
-        npc.addText("Hallo", Sound.ENTITY_VILLAGER_TRADE);
+        npc.addText("Hallo", Sound.BLOCK_BARREL_CLOSE);
         npc.playNext();
+        npc.resetProgress(); // JUST FOR TESTING, REMOVE IN FINAL VERSION
         event.setCancelled(true);
     }
 

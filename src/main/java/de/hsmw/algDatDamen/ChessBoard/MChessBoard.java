@@ -587,6 +587,7 @@ public class MChessBoard extends ChessBoard {
      * The origin corner is adjusted to ensure the chessboard's orientation aligns
      * with the player's view
      * and also takes the size of the board into account.
+     * @return The location where the NPC should spawn.
      */
     private Location updateOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
