@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.hsmw.algDatDamen.menu.DevelopmentHandles.backtrackRow;
+import static de.hsmw.algDatDamen.menu.DevelopmentHandles.*;
 
 public class Menu implements Listener {
     private final Inventory inventory;
@@ -123,6 +123,8 @@ public class Menu implements Listener {
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
         this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
         this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
+        this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL, "changeWhiteFieldMaterial");
+        this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL, "changeBlackFieldMaterial");
 
         this.fillEmptySlots();
     }
@@ -162,6 +164,10 @@ public class Menu implements Listener {
 
         itemMeta.displayName(Component.text(displayName));
         item.setItemMeta(itemMeta);
+    }
+
+    public void updateItemMaterial(MenuSlots slot, Material material) {
+        inventory.setItem(slot.getSlot(), new ItemStack(material));
     }
 
     public void fillEmptySlots() {

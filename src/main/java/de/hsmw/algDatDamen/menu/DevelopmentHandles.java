@@ -19,6 +19,8 @@ public class DevelopmentHandles {
 
     public static int boardSize = 4;
     public static int backtrackRow = 1;
+    public static Material customWhiteFieldMaterial = Material.WHITE_CONCRETE;
+    public static Material customBlackFieldMaterial = Material.GRAY_CONCRETE;
 
     /**
      * Generates a new chess board at the clicked block location.
@@ -34,7 +36,7 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, customWhiteFieldMaterial, customBlackFieldMaterial);
         saveManager.getCbList().add(cb);
     }
 
@@ -256,6 +258,24 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    public static void changeWhiteFieldMaterial(PlayerInteractEvent event) {
+        Material clickedBlock = event.getClickedBlock().getType();
+        if (!clickedBlock.isAir()) {
+            customWhiteFieldMaterial = clickedBlock;
+        } else {
+            customWhiteFieldMaterial = Material.WHITE_CONCRETE;
+        }
+        devMenu.updateItemMaterial(MenuSlots.WHITE_FIELD_MATERIAL, customWhiteFieldMaterial);
+    }
 
+    public static void changeBlackFieldMaterial(PlayerInteractEvent event) {
+        Material clickedBlock = event.getClickedBlock().getType();
+        if (!clickedBlock.isAir()) {
+            customBlackFieldMaterial = clickedBlock;
+        } else {
+            customBlackFieldMaterial = Material.BLACK_CONCRETE;
+        }
+        devMenu.updateItemMaterial(MenuSlots.BLACK_FIELD_MATERIAL, customBlackFieldMaterial);
+    }
 
 }
