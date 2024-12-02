@@ -1,4 +1,4 @@
-//package de.hsmw.algDatDamen.ChessBoard;
+package de.hsmw.algDatDamen.ChessBoard;
 /**
  * Represents a generic chess piece with a position on a board.
  *

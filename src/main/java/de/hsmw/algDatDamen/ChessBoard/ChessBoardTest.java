@@ -1,16 +1,18 @@
+package de.hsmw.algDatDamen.ChessBoard;
+
 public class ChessBoardTest {
 
     public static void main(String[] args) {
         System.out.println("Starting ChessBoard tests...");
 
         // Test each piece with varying board sizes
-        for (int size = 4; size < 16; size++) {
+        for (int size = 4; size < 17; size++) {
             runTestsForPiece(new Queen(0, 0), size, "Queen");
         }
-        for (int size = 4; size < 16; size++) {
+        for (int size = 4; size < 17; size++) {
             runTestsForPiece(new Knight(0, 0), size, "Knight");
         }
-        for (int size = 10; size < 16; size++) {
+        for (int size = 10; size < 17; size++) {
             runTestsForPiece(new Superqueen(0, 0), size, "Superqueen");
         }
 
@@ -62,6 +64,7 @@ public class ChessBoardTest {
         System.out.println("\n[Test 8] Backtrack to specific row:");
         int row = board.getSize() / 2;
         board.clearBoard();
+        board.addPiece(new Knight(1,2));
         board.verfyPieces(piece);
         board.playBacktrackToRow(piece, row);
         System.out.println("Expected pieces: " + row + ", Actual: " + board.getPieces().size());
@@ -74,6 +77,18 @@ public class ChessBoardTest {
         board.sortPiecesByY();
         boolean isSorted = verifySortedPieces(board);
         System.out.println("Pieces sorted correctly: " + isSorted);
+    
+        System.out.println("\n[Test 11] Verifying rotate ChessBoard:");
+        board.playBacktrack(piece);
+        ChessBoard cb = board;
+        board.printBoard(true);
+        board.rotatePieces(1);
+        board.printBoard(true);
+        System.out.println("Pieces rotaited correctly(Expected: false): " + cb.equals(board));
+        board.rotatePieces(1);
+        board.rotatePieces(1);
+        board.rotatePieces(1);
+        System.out.println("Pieces rotaited correctly(Expected: true): " + (board.isSolved() && cb.equals(board)) );
 
         System.out.println("\n========== Tests for " + pieceName + " on " + size + "x" + size + " board completed ==========\n");
     }

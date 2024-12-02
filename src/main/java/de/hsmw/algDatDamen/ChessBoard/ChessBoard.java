@@ -1,4 +1,4 @@
-// package de.hsmw.algDatDamen.ChessBoard;
+package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 
@@ -74,6 +74,26 @@ public class ChessBoard {
     }
 
     // ----------- Functional Methods -----------
+  
+    //--- Override ---
+    public boolean equals(ChessBoard cb) {
+    if (getSize() != cb.getSize()) {
+      return false;
+      } // end of if
+    
+    if (pieces.size() != cb.getPieces().size()) {
+      return false;
+      } // end of if
+    sortPiecesByX();
+    cb.sortPiecesByX();
+    
+    for (int i = 0; i < pieces.size(); i++) {
+      if ( !(pieces.get(i).equals(cb.getPieces().get(i))) ) {
+        return false;
+      } // end of if
+    }   
+    return true;
+    }
     // --- Adding/Removing Pieces ---
     public boolean addPiece(Piece pnew) {
       if (pnew.getX() >= size || pnew.getY() >= size) {
@@ -348,12 +368,12 @@ public class ChessBoard {
         if ((pieces.size() == size)) {
            if (isSolved()) {
              if (console) {
-               System.out.println("Gelöst!");
+               System.out.println("Step Backtrack Solved! ");
                printBoard(true);
              } // end of if
              return true;
            } else {
-             System.out.println("FEHLER!!!!");
+             System.out.println("Step Backtrack failed");
              return true;
            } // end of if-else
       } // end of if
@@ -476,5 +496,6 @@ public class ChessBoard {
         stateX++;
         return isSolved();
     }
+  
 
 }
