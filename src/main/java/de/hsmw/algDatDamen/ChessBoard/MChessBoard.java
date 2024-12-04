@@ -561,13 +561,13 @@ public class MChessBoard extends ChessBoard {
 
         switch (p.getLetter()) {
             case 'Q': // Queen
-                //placePieceBlocks(pieceLocation, AlgDatDamen.QUEEN_BLOCK_TOP, AlgDatDamen.QUEEN_BLOCK_BOTTOM);
+                placePieceBlocks(pieceLocation, AlgDatDamen.QUEEN_BLOCK_TOP, AlgDatDamen.QUEEN_BLOCK_BOTTOM);
                 break;
             case 'S': // Superqueen
-                //placePieceBlocks(pieceLocation, AlgDatDamen.SUPERQUEEN_BLOCK_TOP, AlgDatDamen.SUPERQUEEN_BLOCK_BOTTOM);
+                placePieceBlocks(pieceLocation, AlgDatDamen.SUPERQUEEN_BLOCK_TOP, AlgDatDamen.QUEEN_BLOCK_BOTTOM);
                 break;
             case 'K': // Knight
-                //placePieceBlocks(pieceLocation, AlgDatDamen.KNIGHT_BLOCK_TOP, AlgDatDamen.KNIGHT_BLOCK_BOTTOM);
+                placePieceBlocks(pieceLocation, AlgDatDamen.KNIGHT_BLOCK_TOP, AlgDatDamen.KNIGHT_BLOCK_BOTTOM);
                 break;
             default:
                 if(console){
@@ -624,7 +624,7 @@ public class MChessBoard extends ChessBoard {
                 Block block = location.getBlock();
 
                 // Skip blocks where there is no collision or where a queen's bottom part is present
-                if (!checkCollision(x, y) )//|| block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
                     {
                     continue;
                 }
@@ -656,7 +656,7 @@ public class MChessBoard extends ChessBoard {
                 Block block = location.getBlock();
 
                 // Skip blocks occupied by the bottom part of a queen
-                if (block.getType()!= null){// ==AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                if (block.getType()==AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
                     continue;
                 }
 

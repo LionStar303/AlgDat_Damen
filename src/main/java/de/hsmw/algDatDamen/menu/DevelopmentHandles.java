@@ -240,7 +240,7 @@ public class DevelopmentHandles {
 
     public static void handleBacktrackToRow(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.solveBacktrackToRowMC(backtrackRow);
+        mcB.animationSolveToRow(new Queen(), backtrackRow);
         event.setCancelled(true);
     }
 
