@@ -1,30 +1,22 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
-import org.bukkit.event.Listener;
+public abstract class Step {
 
-public class Step implements Listener{
+    private Step prev;
+    private Step next;
+    protected boolean completed;
 
-    Step prev;
-    Step next;
-    String description;
-    boolean completed;
-
-    public Step(Step prev, Step next, String description, boolean completed) {
+    public Step(Step prev, Step next) {
+        this(next, prev, false);
+    }
+    public Step(Step prev, Step next, boolean completed) {
         this.prev = prev;
         this.next = next;
-    }
-    public Step(Step prev, Step next, String description) {
-        this(prev, next, description, false);
-    }
-    public Step(Step prev, Step next) {
-        this(prev, next, null, false);
+        this.completed = completed;
     }
 
-    public void play() {
-        
-    }
-
-    public boolean getCompleted() {
-        return completed;
-    }
+    public void setPrev(Step prev) { this.prev = prev; }
+    public void setNext(Step next) { this.next = next; }
+    public Step getPrev() { return prev; }
+    public Step getNext() { return next; }
 }

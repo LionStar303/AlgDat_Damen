@@ -48,7 +48,7 @@ public class MChessBoard extends ChessBoard {
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
-        spawnChessBoard();
+        // spawnChessBoard();
     }
 
     /**

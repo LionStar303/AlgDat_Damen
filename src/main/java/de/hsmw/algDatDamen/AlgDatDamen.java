@@ -23,7 +23,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
 
     private ArrayList<Tutorial> tutorials;
-    private ArrayList<MChessBoard> chessBoards;
+    // private ArrayList<MChessBoard> chessBoards;
     // List to store all created MChessBoard instances
     public static ChessBoardSaveManager saveManager;
     // Generate development menu
@@ -37,18 +37,18 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         instance = this;
 
         // Initialize the list of chess boards
-        saveManager = new ChessBoardSaveManager();
+        // saveManager = new ChessBoardSaveManager();
         tutorials = new ArrayList<Tutorial>();
-        chessBoards = new ArrayList<MChessBoard>();
+        // chessBoards = new ArrayList<MChessBoard>();
 
         // Load saved chess boards
-        getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
+        /*getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
         for (MChessBoard chessBoard : saveManager.getCbList()) {
             chessBoards.add(chessBoard);
             // chessBoard.spawnChessBoard();
             // chessBoard.spawnAllQueens();
             getLogger().info("chessBoards wurde initialisiert");
-        }
+        }*/
 
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
@@ -66,14 +66,15 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Log plugin shutdown
-        saveManager.saveChessBoards();
+        // saveManager.saveChessBoards();
         getLogger().info("AlgDatDamen Plugin is now inactive.");
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        tutorials.forEach((tutorial) -> { if(tutorial.getPlayer().equals(event.getPlayer())) return; });
         tutorials.add(new Tutorial(event.getPlayer()));
-        tutorials.getLast().initialize(chessBoards.getFirst());
+        tutorials.getLast().initialize();
     }
 
     @EventHandler
