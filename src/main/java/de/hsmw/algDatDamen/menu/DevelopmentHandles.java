@@ -111,7 +111,7 @@ public class DevelopmentHandles {
         if (mcB == null)
             return;
 
-        // mcB.spawnUserCarpet(event.getClickedBlock().getLocation());
+        mcB.spawnUserCarpet(event.getClickedBlock().getLocation());
         event.setCancelled(true);
     }
 
@@ -126,6 +126,15 @@ public class DevelopmentHandles {
         } else {
             player.sendMessage(Component.text("Die Teppiche sind nicht korrekt!", NamedTextColor.RED));
         }
+        event.setCancelled(true);
+    }
+
+    public static void showMovementSolution(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        if (mcB == null)
+            return;
+
+        mcB.spawnUserCarpetSolution();
         event.setCancelled(true);
     }
 

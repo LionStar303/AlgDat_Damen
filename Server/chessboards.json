@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "originCorner": {
+      "x": -40.0,
+      "y": -44.0,
+      "z": 128.0,
+      "world": "world_design"
+    },
+    "isOriginCornerWhite": true,
+    "collisionCarpets": false,
+    "whiteFieldMaterial": "WHITE_CONCRETE",
+    "blackFieldMaterial": "GRAY_CONCRETE",
+    "isAnimationRunning": false,
+    "pieces": [
+      {
+        "x": 7,
+        "y": 7
+      }
+    ],
+    "size": 8,
+    "console": true,
+    "stateX": 0,
+    "stateY": 0
+  }
+]

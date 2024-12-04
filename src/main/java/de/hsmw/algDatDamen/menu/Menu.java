@@ -129,8 +129,9 @@ public class Menu implements Listener {
                 "handleBacktrackAnimation");
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
                 "handleBacktrackAnimationQueenStep");
-        this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
+        this.addMenuItem(Material.CYAN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
                 "checkUserCarpets");
+        this.addMenuItem(Material.GREEN_CARPET, "Movement Lösung anzeigen", MenuSlots.MOVEMENT_SOLUTION, "showMovementSolution");
         this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
                 "placeUserCarpet");
         this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL,

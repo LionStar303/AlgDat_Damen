@@ -23,7 +23,8 @@ public enum MenuSlots {
     PLACE_USER_CARPET(10),
     CHECK_USER_CARPETS(19),
     WHITE_FIELD_MATERIAL(20),
-    BLACK_FIELD_MATERIAL(21);
+    BLACK_FIELD_MATERIAL(21),
+    MOVEMENT_SOLUTION(22);
 
     public final int slot;
 

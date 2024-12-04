@@ -7,13 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 import de.hsmw.algDatDamen.AlgDatDamen;
 
 public class MChessBoard extends ChessBoard {
@@ -369,93 +365,93 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * checks if all the purple carpets represent a valid solution.
-     * the location of a queen is ignored by the check, only the paths of the queens
-     * are compared to the carpets.
+     * checks if all the user carpets represent a valid solution.
      *
-     * @return
+     * @return boolean True if the solution is correct, false otherwise.
      */
     public boolean checkUserCarpets() {
-        /*
-         * // return false if there are no queens on the board
-         * if (this.pieces.size() == 0) {
-         * return false;
-         * }
-         * 
-         * Set<String> correctPositions = new HashSet<>();
-         * Set<String> queenPositions = new HashSet<>();
-         * 
-         * // Step 1: Calculate all correct positions where carpets should be placed,
-         * // ignoring queen positions
-         * for (Queen queen : queens) {
-         * int queenX = queen.getX();
-         * int queenY = queen.getY();
-         * 
-         * // Track queen positions to ignore them in the check
-         * queenPositions.add(queenX + "," + queenY);
-         * 
-         * // Add row and column positions
-         * for (int i = 0; i < size; i++) {
-         * if (i != queenY)
-         * correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
-         * if (i != queenX)
-         * correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
-         * }
-         * 
-         * // Add diagonal positions
-         * for (int i = -size; i < size; i++) {
-         * int diagX1 = queenX + i;
-         * int diagY1 = queenY + i;
-         * int diagX2 = queenX + i;
-         * int diagY2 = queenY - i;
-         * 
-         * if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
-         * && !(diagX1 == queenX && diagY1 == queenY)) {
-         * correctPositions.add(diagX1 + "," + diagY1);
-         * }
-         * if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
-         * && !(diagX2 == queenX && diagY2 == queenY)) {
-         * correctPositions.add(diagX2 + "," + diagY2);
-         * }
-         * }
-         * }
-         * 
-         * // Step 2: Check each position on the board
-         * for (int x = 0; x < size; x++) {
-         * for (int y = 0; y < size; y++) {
-         * Location location = new Location(originCorner.getWorld(), originCorner.getX()
-         * + x,
-         * originCorner.getY() + 1, originCorner.getBlockZ() + y);
-         * Block block = location.getBlock();
-         * String positionKey = x + "," + y;
-         * 
-         * // Ignore positions where queens are located
-         * if (queenPositions.contains(positionKey)) {
-         * continue;
-         * }
-         * 
-         * // Case 1: Position should have a carpet but doesn't
-         * if (correctPositions.contains(positionKey)
-         * && block.getType() != Material.LIME_CARPET) {
-         * System.out.println("Missing carpet at correct position: " + x + "," + y);
-         * return false;
-         * }
-         * 
-         * // Case 2: Position shouldn't have a carpet but does
-         * if (!correctPositions.contains(positionKey)
-         * && block.getType() == Material.LIME_CARPET) {
-         * System.out.println("Incorrect carpet at position: " + x + "," + y);
-         * block.setType(Material.RED_CARPET);
-         * return false;
-         * }
-         * }
-         * }
-         * 
-         * System.out.println("Solution is correct!");
-         * return true;
-         * 
-         */
-        return false;
+
+        // return false if there are no pieces on the board
+        if (this.pieces.size() == 0) {
+            return false;
+        }
+
+        // return false and skip checking if no carpets are placed
+        boolean carpetPlaced = false;
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY() + 1, originCorner.getZ() + z);
+                if (location.getBlock().getType() == Material.LIME_CARPET) {
+                    carpetPlaced = true;
+                    break;
+                }
+            }
+        }
+        if (!carpetPlaced) {
+            return false;
+        }
+
+        boolean correct = true;
+        for (int i = 0; i < size; i++) {
+            outerloop: for (int j = 0; j < size; j++) {
+                boolean collision = false;
+                for (Piece piece : pieces) {
+                    if (piece.getX() == i && piece.getY() == j) {
+                        continue outerloop;
+                    }
+                    if (piece.checkCollision(i, j)) {
+                        collision = true;
+                        break;
+                    }
+                }
+
+                if (collision) {
+                    Location carpetLocation = new Location(originCorner.getWorld(), originCorner.getBlockX() + i,
+                            originCorner.getBlockY() + 1, originCorner.getBlockZ() + j);
+
+                    if (carpetLocation.getBlock().getType() != Material.LIME_CARPET) {
+                        correct = false;
+                    }
+                }
+            }
+        }
+
+        return correct ? true : false;
+    }
+
+    /**
+     * checks if the placed movement carpets are a valid solution.
+     */
+    public void spawnUserCarpetSolution() {
+        if (checkUserCarpets() || this.pieces.size() == 0) {
+            return;
+        }
+
+        despawnCollisionCarpets();
+        for (int i = 0; i < size; i++) {
+            outerloop: for (int j = 0; j < size; j++) {
+                boolean collision = false;
+                for (Piece piece : pieces) {
+                    if (piece.getX() == i && piece.getY() == j) {
+                        continue outerloop;
+                    }
+                    if (piece.checkCollision(i, j)) {
+                        collision = true;
+                        break;
+                    }
+                }
+
+                if (collision) {
+                    Location carpetLocation = new Location(originCorner.getWorld(), originCorner.getBlockX() + i,
+                            originCorner.getBlockY() + 1, originCorner.getBlockZ() + j);
+
+                    if (carpetLocation.getBlock().getType() != Material.LIME_CARPET) {
+                        carpetLocation.getBlock().setType(Material.LIME_CARPET);
+                    }
+                }
+            }
+        }
     }
 
     // --- add and remove ---
@@ -684,14 +680,14 @@ public class MChessBoard extends ChessBoard {
      *
      * @param l
      */
-    public void spawnUserCarpets(Location l) {
+    public void spawnUserCarpet(Location l) {
         Material carpMaterial = Material.LIME_CARPET;
         if (!isPartOfBoard(l)) {
             return;
         }
 
         // Remove existing carpet if it's a valid move
-        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
+        if (l.getY() == originCorner.getY() + 1) {
             l.getBlock().setType(Material.AIR);
             return;
         }
@@ -708,7 +704,7 @@ public class MChessBoard extends ChessBoard {
 
         // set Carpet at desired Location
         Block block = location.getBlock();
-        block.setType(Material.LIME_CARPET);
+        block.setType(carpMaterial);
     }
 
     /**
