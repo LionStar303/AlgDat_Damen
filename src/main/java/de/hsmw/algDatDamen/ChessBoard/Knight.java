@@ -3,7 +3,8 @@ package de.hsmw.algDatDamen.ChessBoard;
 /**
  * Represents a Knight chess piece with its unique movement and attributes.
  *
- * This class extends the generic Piece class and implements the specific behaviors
+ * This class extends the generic Piece class and implements the specific
+ * behaviors
  * and characteristics of a Knight in chess. Knights can "jump" to specific
  * positions following an L-shaped pattern.
  *
@@ -34,7 +35,8 @@ public class Knight extends Piece {
     // Methods specific to the Knight class
 
     /**
-     * Provides a string representation of the Knight, including its current position.
+     * Provides a string representation of the Knight, including its current
+     * position.
      *
      * @return A string indicating the Knight's position on the board.
      */
@@ -75,16 +77,14 @@ public class Knight extends Piece {
         }
 
         // Check for Knight-specific movement pattern conflicts
-        if (
-            (checkX == (getX() + 1) && checkY == (getY() + 2)) ||
-            (checkX == (getX() + 2) && checkY == (getY() + 1)) ||
-            (checkX == (getX() - 1) && checkY == (getY() - 2)) ||
-            (checkX == (getX() - 2) && checkY == (getY() - 1)) ||
-            (checkX == (getX() + 2) && checkY == (getY() - 1)) ||
-            (checkX == (getX() + 1) && checkY == (getY() - 2)) ||
-            (checkX == (getX() - 2) && checkY == (getY() + 1)) ||
-            (checkX == (getX() - 1) && checkY == (getY() + 2))
-        ) {
+        if ((checkX == (getX() + 1) && checkY == (getY() + 2)) ||
+                (checkX == (getX() + 2) && checkY == (getY() + 1)) ||
+                (checkX == (getX() - 1) && checkY == (getY() - 2)) ||
+                (checkX == (getX() - 2) && checkY == (getY() - 1)) ||
+                (checkX == (getX() + 2) && checkY == (getY() - 1)) ||
+                (checkX == (getX() + 1) && checkY == (getY() - 2)) ||
+                (checkX == (getX() - 2) && checkY == (getY() + 1)) ||
+                (checkX == (getX() - 1) && checkY == (getY() + 2))) {
             return true; // Collision detected
         }
 
@@ -100,10 +100,10 @@ public class Knight extends Piece {
     public char getLetter() {
         return 'K';
     }
-  
-  @Override
-  public Knight clone() {
-    Knight newP = new Knight(this.x , this.y);
-    return newP;
-  }
+
+    @Override
+    public Knight clone() {
+        Knight newP = new Knight(this.x, this.y);
+        return newP;
+    }
 } // End of Knight class

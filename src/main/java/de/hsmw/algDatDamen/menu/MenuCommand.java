@@ -34,7 +34,8 @@ public class MenuCommand implements CommandExecutor {
      * Gets called automatically when triggering the command.
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s,
+            @NotNull String[] strings) {
         // Prüfen, ob der CommandSender ein Spieler ist
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -46,8 +47,8 @@ public class MenuCommand implements CommandExecutor {
             if (meta != null) {
                 // Setzen des Namens und der Verzauberung
                 meta.displayName(Component.text("Developer Menü", NamedTextColor.BLUE));
-                meta.addEnchant(Enchantment.FORTUNE, 1, true);  // Verzauberung hinzufügen
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);   // Versteckt das Verzauberungs-Glitzern
+                meta.addEnchant(Enchantment.FORTUNE, 1, true); // Verzauberung hinzufügen
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS); // Versteckt das Verzauberungs-Glitzern
 
                 emerald.setItemMeta(meta);
             }

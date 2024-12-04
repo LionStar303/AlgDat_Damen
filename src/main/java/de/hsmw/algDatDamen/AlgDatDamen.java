@@ -39,7 +39,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
         for (MChessBoard chessBoard : saveManager.getCbList()) {
             chessBoard.spawnChessBoard();
-            //chessBoard.spawnAllQueens();
+            // chessBoard.spawnAllQueens();
             getLogger().info("Chess board has been spawned!");
         }
 
@@ -51,7 +51,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         getCommand("schachmenu").setExecutor(new MenuCommand(devMenu));
 
         devMenu.init(boardSize); // Configure Menus
-        
+
         getLogger().info("AlgDatDamen Plugin is now active!"); // Log plugin startup
     }
 
@@ -67,7 +67,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         ItemStack itemInHand = event.getItem();
 
-        if (itemInHand == null) return;
+        if (itemInHand == null)
+            return;
 
         // Check for Development menu item
         if (itemInHand.getType() == Material.EMERALD && itemInHand.hasItemMeta() &&

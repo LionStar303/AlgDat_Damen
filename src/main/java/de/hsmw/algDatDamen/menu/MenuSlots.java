@@ -1,7 +1,8 @@
 package de.hsmw.algDatDamen.menu;
 
 /**
- * Contains the slot numbers of the menu. Only works with Inventories with >= 27 slots
+ * Contains the slot numbers of the menu. Only works with Inventories with >= 27
+ * slots
  */
 public enum MenuSlots {
     ADD_BOARD(1),
@@ -23,7 +24,6 @@ public enum MenuSlots {
     CHECK_USER_CARPETS(19),
     WHITE_FIELD_MATERIAL(20),
     BLACK_FIELD_MATERIAL(21);
-
 
     public final int slot;
 

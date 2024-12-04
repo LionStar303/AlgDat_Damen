@@ -33,7 +33,8 @@ public class Superqueen extends Piece {
     }
 
     /**
-     * Provides a string representation of the SuperQueen, including its current position.
+     * Provides a string representation of the SuperQueen, including its current
+     * position.
      *
      * @return A string indicating the SuperQueen's position on the board.
      */
@@ -70,11 +71,12 @@ public class Superqueen extends Piece {
     public boolean checkCollision(int checkX, int checkY) {
         // Check for row, column, or diagonal conflicts using Queen's logic
         Queen q = new Queen(getX(), getY());
-    
+
         // Check for Knight-specific conflicts
         Knight k = new Knight(getX(), getY());
 
-        // A collision exists if either the Queen or the Knight movement rules are violated
+        // A collision exists if either the Queen or the Knight movement rules are
+        // violated
         return q.checkCollision(checkX, checkY) || k.checkCollision(checkX, checkY);
     }
 
@@ -87,10 +89,10 @@ public class Superqueen extends Piece {
     public char getLetter() {
         return 'S';
     }
-  
-  @Override
-  public Superqueen clone() {
-    Superqueen newP = new Superqueen(this.x , this.y);
-    return newP;
-  }
+
+    @Override
+    public Superqueen clone() {
+        Superqueen newP = new Superqueen(this.x, this.y);
+        return newP;
+    }
 } // End of Superqueen class

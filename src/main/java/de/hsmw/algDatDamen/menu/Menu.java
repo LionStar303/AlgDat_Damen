@@ -35,6 +35,7 @@ public class Menu implements Listener {
 
     /**
      * Generates an inventory menu with the given size.
+     * 
      * @param size Has to be a number dividable by 9.
      */
     public Menu(int size) {
@@ -44,8 +45,9 @@ public class Menu implements Listener {
 
     /**
      * Opens the menu inventory and stores the event.
+     * 
      * @param player Player which has to see the menu.
-     * @param event Triggering event.
+     * @param event  Triggering event.
      */
     public void openInventory(Player player, PlayerInteractEvent event) {
         player.openInventory(inventory);
@@ -58,7 +60,8 @@ public class Menu implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         // For Development Menu
-        if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü"))) return;
+        if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü")))
+            return;
         event.setCancelled(true);
 
         int slot = event.getSlot();
@@ -81,14 +84,16 @@ public class Menu implements Listener {
                     Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class);
                     method.invoke(instance, this.event);
                 } else if (commandData.arguments.length == 1) {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class, Integer.class);
+                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class,
+                            Integer.class);
                     method.invoke(instance, this.event, commandData.arguments[0]);
                 } else {
                     Method method = externalClass.getDeclaredMethod(commandData.command, Integer[].class);
                     method.invoke(instance, (Object) commandData.arguments);
                 }
 
-                if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
+                if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot
+                        || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
                     return;
                 } else {
                     inventory.close();
@@ -118,27 +123,38 @@ public class Menu implements Listener {
         this.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
                 "handleBacktrackStep");
         this.addMenuItem(Material.IRON_AXE, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL, "handleBacktrackToRow");
-        this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW, "increaseBacktrackRow");
-        this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION, "handleBacktrackAnimation");
-        this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST, "handleBacktrackAnimationQueenStep");
-        this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS, "checkUserCarpets");
-        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET, "placeUserCarpet");    
-        this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL, "changeWhiteFieldMaterial");
-        this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL, "changeBlackFieldMaterial");
+        this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW,
+                "increaseBacktrackRow");
+        this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION,
+                "handleBacktrackAnimation");
+        this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
+                "handleBacktrackAnimationQueenStep");
+        this.addMenuItem(Material.GREEN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
+                "checkUserCarpets");
+        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
+                "placeUserCarpet");
+        this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL,
+                "changeWhiteFieldMaterial");
+        this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
+                "changeBlackFieldMaterial");
 
         this.fillEmptySlots();
     }
 
     /**
      * Adds a new Item to the menu.
-     * @param material The item to be shown.
+     * 
+     * @param material    The item to be shown.
      * @param displayName The display name of the item.
-     * @param slot The slot number.
-     * @param function The name of the function to be executed. The function has to be in DevelopmentHandles class.
-     * @param arguments Arguments for the given function. It automatically adds the PlayerInteractEvent as first argument.
-     *                  The other arguments need to be Integers.
+     * @param slot        The slot number.
+     * @param function    The name of the function to be executed. The function has
+     *                    to be in DevelopmentHandles class.
+     * @param arguments   Arguments for the given function. It automatically adds
+     *                    the PlayerInteractEvent as first argument.
+     *                    The other arguments need to be Integers.
      */
-    public void addMenuItem(Material material, String displayName, MenuSlots slot, String function, Integer... arguments) {
+    public void addMenuItem(Material material, String displayName, MenuSlots slot, String function,
+            Integer... arguments) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(Component.text(displayName));
@@ -153,14 +169,16 @@ public class Menu implements Listener {
 
     /**
      * Updates the name of the item in the given slot.
-     * @param slot The MenuSlot.
+     * 
+     * @param slot        The MenuSlot.
      * @param displayName New display name.
      */
     public void updateItemName(MenuSlots slot, String displayName) {
         ItemStack item = inventory.getItem(slot.getSlot());
         ItemMeta itemMeta = item.getItemMeta();
 
-        if (itemMeta == null) return;
+        if (itemMeta == null)
+            return;
 
         itemMeta.displayName(Component.text(displayName));
         item.setItemMeta(itemMeta);
@@ -172,9 +190,9 @@ public class Menu implements Listener {
 
     public void fillEmptySlots() {
         for (int i = 0; i < size; i++) {
-            if (inventory.getItem(i) == null) inventory.setItem(i, new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE));
+            if (inventory.getItem(i) == null)
+                inventory.setItem(i, new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE));
         }
     }
 
 }
-

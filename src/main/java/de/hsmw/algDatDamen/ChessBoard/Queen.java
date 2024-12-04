@@ -4,7 +4,7 @@ package de.hsmw.algDatDamen.ChessBoard;
  * Represents a Queen on the chessboard.
  * A Queen can move any number of squares along a row, column, or diagonal.
  *
- * This class defines its position and provides collision-detection logic 
+ * This class defines its position and provides collision-detection logic
  * to validate the Queen's placement on the board.
  *
  * @version 1.1, 24.10.2024
@@ -32,7 +32,8 @@ public class Queen extends Piece {
     }
 
     /**
-     * Provides a string representation of the Queen, including its current position.
+     * Provides a string representation of the Queen, including its current
+     * position.
      *
      * @return A string describing the Queen's position on the board.
      */
@@ -66,7 +67,7 @@ public class Queen extends Piece {
     public boolean checkCollision(int checkX, int checkY) {
         // Check for conflicts in row, column, or diagonal
         return getX() == checkX || getY() == checkY ||
-               Math.abs(getX() - checkX) == Math.abs(getY() - checkY);
+                Math.abs(getX() - checkX) == Math.abs(getY() - checkY);
     }
 
     /**
@@ -78,12 +79,11 @@ public class Queen extends Piece {
     public char getLetter() {
         return 'Q';
     }
-  
+
     @Override
-  public Queen clone() {
-    Queen newP = new Queen(this.x , this.y);
-    return newP;
-  }
-  
-  
+    public Queen clone() {
+        Queen newP = new Queen(this.x, this.y);
+        return newP;
+    }
+
 }

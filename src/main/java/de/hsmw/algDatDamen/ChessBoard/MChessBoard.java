@@ -39,12 +39,13 @@ public class MChessBoard extends ChessBoard {
      * @param whiteFieldMaterial Material used for the white fields.
      * @param blackFieldMaterial Material used for the black fields.
      */
-    public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial, Material blackFieldMaterial) {
+    public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
+            Material blackFieldMaterial) {
         this.size = size;
         this.pieces = new ArrayList<>();
         this.console = true;
         this.originCorner = originCorner;
-        //updateOriginCorner(this.getBoardDirection(player));
+        // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
@@ -100,7 +101,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Sets whether the origin corner is a white field.
      *
-     * @param isOriginCornerWhite True if the origin corner should be white, false otherwise.
+     * @param isOriginCornerWhite True if the origin corner should be white, false
+     *                            otherwise.
      */
     public void setOriginCornerWhite(boolean isOriginCornerWhite) {
         this.isOriginCornerWhite = isOriginCornerWhite;
@@ -118,7 +120,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Sets whether carpets cause collision on the chessboard.
      *
-     * @param collisionCarpets True to enable collision for carpets, false otherwise.
+     * @param collisionCarpets True to enable collision for carpets, false
+     *                         otherwise.
      */
     public void setCollisionCarpets(boolean collisionCarpets) {
         this.collisionCarpets = collisionCarpets;
@@ -172,7 +175,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Sets whether an animation is currently running on the chessboard.
      *
-     * @param isAnimationRunning True to indicate that an animation is running, false otherwise.
+     * @param isAnimationRunning True to indicate that an animation is running,
+     *                           false otherwise.
      */
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
@@ -198,13 +202,14 @@ public class MChessBoard extends ChessBoard {
 
     // ----------- Functional Methods -----------
 
-// --- extension getter / setter ---
+    // --- extension getter / setter ---
 
     /**
      * Retrieves the chess piece at a specific location on the board.
      *
      * @param l The location to check for a piece.
-     * @return The {@link Piece} at the specified location, or null if no piece exists there.
+     * @return The {@link Piece} at the specified location, or null if no piece
+     *         exists there.
      */
     public Piece getPieceAt(Location l) {
         int minX = originCorner.getBlockX();
@@ -212,7 +217,8 @@ public class MChessBoard extends ChessBoard {
 
         for (Piece p : this.pieces) {
             if (console) {
-                System.out.println(p.getX() + " == " + (l.getBlockX() - minX) + " && " + p.getY() + " == " + (l.getBlockZ() - minZ));
+                System.out.println(p.getX() + " == " + (l.getBlockX() - minX) + " && " + p.getY() + " == "
+                        + (l.getBlockZ() - minZ));
             }
             if ((p.getX() == (l.getBlockX() - minX)) && (p.getY() == (l.getBlockZ() - minZ))) {
                 return p;
@@ -300,9 +306,9 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-// --- Override --
+    // --- Override --
 
-// --- Update ---
+    // --- Update ---
 
     /**
      * Updates the visual collision carpets on the chessboard.
@@ -312,25 +318,25 @@ public class MChessBoard extends ChessBoard {
     public void updateCollisionCarpets() {
         if (this.collisionCarpets) {
             despawnCollisionCarpets(); // Remove existing carpets
-            spawnCollisionCarpets();  // Spawn new carpets
+            spawnCollisionCarpets(); // Spawn new carpets
         } else {
             despawnCollisionCarpets(); // Remove carpets if disabled
         }
     }
 
-    public void updateBoard(){
+    public void updateBoard() {
         despawnChessBoard();
         spawnChessBoard();
         updatePieces();
         updateCollisionCarpets();
     }
 
-    public void updatePieces(){
+    public void updatePieces() {
         despawnAllPieces();
         spawnAllPieces();
     }
 
-// --- Check ---
+    // --- Check ---
 
     /**
      * Checks whether a given location is within the boundaries of the chessboard.
@@ -370,87 +376,89 @@ public class MChessBoard extends ChessBoard {
      * @return
      */
     public boolean checkUserCarpets() {
-        /*  // return false if there are no queens on the board
-        if (this.pieces.size() == 0) {
-            return false;
-        }
-
-        Set<String> correctPositions = new HashSet<>();
-        Set<String> queenPositions = new HashSet<>();
-
-        // Step 1: Calculate all correct positions where carpets should be placed,
-        // ignoring queen positions
-        for (Queen queen : queens) {
-            int queenX = queen.getX();
-            int queenY = queen.getY();
-
-            // Track queen positions to ignore them in the check
-            queenPositions.add(queenX + "," + queenY);
-
-            // Add row and column positions
-            for (int i = 0; i < size; i++) {
-                if (i != queenY)
-                    correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
-                if (i != queenX)
-                    correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
-            }
-
-            // Add diagonal positions
-            for (int i = -size; i < size; i++) {
-                int diagX1 = queenX + i;
-                int diagY1 = queenY + i;
-                int diagX2 = queenX + i;
-                int diagY2 = queenY - i;
-
-                if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
-                        && !(diagX1 == queenX && diagY1 == queenY)) {
-                    correctPositions.add(diagX1 + "," + diagY1);
-                }
-                if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
-                        && !(diagX2 == queenX && diagY2 == queenY)) {
-                    correctPositions.add(diagX2 + "," + diagY2);
-                }
-            }
-        }
-
-        // Step 2: Check each position on the board
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
-                        originCorner.getY() + 1, originCorner.getBlockZ() + y);
-                Block block = location.getBlock();
-                String positionKey = x + "," + y;
-
-                // Ignore positions where queens are located
-                if (queenPositions.contains(positionKey)) {
-                    continue;
-                }
-
-                // Case 1: Position should have a carpet but doesn't
-                if (correctPositions.contains(positionKey)
-                        && block.getType() != Material.LIME_CARPET) {
-                    System.out.println("Missing carpet at correct position: " + x + "," + y);
-                    return false;
-                }
-
-                // Case 2: Position shouldn't have a carpet but does
-                if (!correctPositions.contains(positionKey)
-                        && block.getType() == Material.LIME_CARPET) {
-                    System.out.println("Incorrect carpet at position: " + x + "," + y);
-                    block.setType(Material.RED_CARPET);
-                    return false;
-                }
-            }
-        }
-
-        System.out.println("Solution is correct!");
-        return true;
-
+        /*
+         * // return false if there are no queens on the board
+         * if (this.pieces.size() == 0) {
+         * return false;
+         * }
+         * 
+         * Set<String> correctPositions = new HashSet<>();
+         * Set<String> queenPositions = new HashSet<>();
+         * 
+         * // Step 1: Calculate all correct positions where carpets should be placed,
+         * // ignoring queen positions
+         * for (Queen queen : queens) {
+         * int queenX = queen.getX();
+         * int queenY = queen.getY();
+         * 
+         * // Track queen positions to ignore them in the check
+         * queenPositions.add(queenX + "," + queenY);
+         * 
+         * // Add row and column positions
+         * for (int i = 0; i < size; i++) {
+         * if (i != queenY)
+         * correctPositions.add(queenX + "," + i); // Same row, exclude queen's column
+         * if (i != queenX)
+         * correctPositions.add(i + "," + queenY); // Same column, exclude queen's row
+         * }
+         * 
+         * // Add diagonal positions
+         * for (int i = -size; i < size; i++) {
+         * int diagX1 = queenX + i;
+         * int diagY1 = queenY + i;
+         * int diagX2 = queenX + i;
+         * int diagY2 = queenY - i;
+         * 
+         * if (diagX1 >= 0 && diagX1 < size && diagY1 >= 0 && diagY1 < size
+         * && !(diagX1 == queenX && diagY1 == queenY)) {
+         * correctPositions.add(diagX1 + "," + diagY1);
+         * }
+         * if (diagX2 >= 0 && diagX2 < size && diagY2 >= 0 && diagY2 < size
+         * && !(diagX2 == queenX && diagY2 == queenY)) {
+         * correctPositions.add(diagX2 + "," + diagY2);
+         * }
+         * }
+         * }
+         * 
+         * // Step 2: Check each position on the board
+         * for (int x = 0; x < size; x++) {
+         * for (int y = 0; y < size; y++) {
+         * Location location = new Location(originCorner.getWorld(), originCorner.getX()
+         * + x,
+         * originCorner.getY() + 1, originCorner.getBlockZ() + y);
+         * Block block = location.getBlock();
+         * String positionKey = x + "," + y;
+         * 
+         * // Ignore positions where queens are located
+         * if (queenPositions.contains(positionKey)) {
+         * continue;
+         * }
+         * 
+         * // Case 1: Position should have a carpet but doesn't
+         * if (correctPositions.contains(positionKey)
+         * && block.getType() != Material.LIME_CARPET) {
+         * System.out.println("Missing carpet at correct position: " + x + "," + y);
+         * return false;
+         * }
+         * 
+         * // Case 2: Position shouldn't have a carpet but does
+         * if (!correctPositions.contains(positionKey)
+         * && block.getType() == Material.LIME_CARPET) {
+         * System.out.println("Incorrect carpet at position: " + x + "," + y);
+         * block.setType(Material.RED_CARPET);
+         * return false;
+         * }
+         * }
+         * }
+         * 
+         * System.out.println("Solution is correct!");
+         * return true;
+         * 
          */
-        return  false;
+        return false;
     }
 
-// --- add and remove ---
+    // --- add and remove ---
 
     /**
      * Adds a chess piece to the board at a specific location.
@@ -521,7 +529,7 @@ public class MChessBoard extends ChessBoard {
         updateCollisionCarpets();
     }
 
-// --- Spawn/Despawn ---
+    // --- Spawn/Despawn ---
 
     /**
      * Spawns the chessboard with alternating white and gray tiles.
@@ -535,8 +543,7 @@ public class MChessBoard extends ChessBoard {
                 Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
                         originCorner.getBlockX() + x,
                         originCorner.getBlockY(),
-                        originCorner.getBlockZ() + z
-                );
+                        originCorner.getBlockZ() + z);
                 currentBlock.setType(material);
             }
         }
@@ -570,7 +577,7 @@ public class MChessBoard extends ChessBoard {
                 placePieceBlocks(pieceLocation, AlgDatDamen.KNIGHT_BLOCK_TOP, AlgDatDamen.KNIGHT_BLOCK_BOTTOM);
                 break;
             default:
-                if(console){
+                if (console) {
                     System.out.println("non specific Piece can not spawned");
                 }
                 return false; // Invalid piece type
@@ -583,8 +590,8 @@ public class MChessBoard extends ChessBoard {
     /**
      * Helper method to place the top and bottom blocks for a piece.
      *
-     * @param location The top block's location.
-     * @param topBlockType The material type for the top block.
+     * @param location        The top block's location.
+     * @param topBlockType    The material type for the top block.
      * @param bottomBlockType The material type for the bottom block.
      */
     private void placePieceBlocks(Location location, Material topBlockType, Material bottomBlockType) {
@@ -605,10 +612,13 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * Spawns collision carpets on the chessboard to visually indicate restricted or occupied squares.
-     * The carpets alternate between orange and red, depending on the board's color scheme and position.
+     * Spawns collision carpets on the chessboard to visually indicate restricted or
+     * occupied squares.
+     * The carpets alternate between orange and red, depending on the board's color
+     * scheme and position.
      *
-     * Squares marked with carpets indicate potential collision areas for queens, except squares
+     * Squares marked with carpets indicate potential collision areas for queens,
+     * except squares
      * directly occupied by the bottom part of a queen.
      */
     public void spawnCollisionCarpets() {
@@ -623,13 +633,14 @@ public class MChessBoard extends ChessBoard {
 
                 Block block = location.getBlock();
 
-                // Skip blocks where there is no collision or where a queen's bottom part is present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
-                    {
+                // Skip blocks where there is no collision or where a queen's bottom part is
+                // present
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
                     continue;
                 }
 
-                // Determine the color of the carpet based on the square's position and board scheme
+                // Determine the color of the carpet based on the square's position and board
+                // scheme
                 if ((x + y) % 2 == 0) { // Even-positioned squares
                     block.setType(isOriginCornerWhite ? Material.ORANGE_CARPET : Material.RED_CARPET);
                 } else { // Odd-positioned squares
@@ -641,7 +652,8 @@ public class MChessBoard extends ChessBoard {
 
     /**
      * Removes all collision carpets from the chessboard.
-     * Only carpets are removed; blocks representing queens or other elements are preserved.
+     * Only carpets are removed; blocks representing queens or other elements are
+     * preserved.
      */
     public void despawnCollisionCarpets() {
         for (int x = 0; x < size; x++) { // Iterate through the board's X-axis
@@ -656,7 +668,7 @@ public class MChessBoard extends ChessBoard {
                 Block block = location.getBlock();
 
                 // Skip blocks occupied by the bottom part of a queen
-                if (block.getType()==AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -700,10 +712,12 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
-     * Despawns the chessboard by resetting its materials and removing all visual elements.
+     * Despawns the chessboard by resetting its materials and removing all visual
+     * elements.
      *
      * This method:
-     * - Sets the materials for black and white fields to air, effectively clearing the board.
+     * - Sets the materials for black and white fields to air, effectively clearing
+     * the board.
      * - Disables collision carpets to prevent their reappearance.
      * - Removes all existing collision carpets and queens from the board.
      * - Respawns the board layout with the cleared state.
@@ -726,17 +740,17 @@ public class MChessBoard extends ChessBoard {
         spawnChessBoard();
     }
 
-   public void despawnPiece(Piece p){
-       if (p != null) {
-           Location queenLocation = getLocationofPiece(p);
-           if (queenLocation != null) {
-               queenLocation.getBlock().setType(Material.AIR); // Remove top block
-               queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
-           }
-       }
-   }
+    public void despawnPiece(Piece p) {
+        if (p != null) {
+            Location queenLocation = getLocationofPiece(p);
+            if (queenLocation != null) {
+                queenLocation.getBlock().setType(Material.AIR); // Remove top block
+                queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
+            }
+        }
+    }
 
-    public void despawnAllPieces(){
+    public void despawnAllPieces() {
         // clear all blocks above the board
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
@@ -748,7 +762,6 @@ public class MChessBoard extends ChessBoard {
             }
         }
     }
-
 
     // --- Rotation ---
 
@@ -799,14 +812,14 @@ public class MChessBoard extends ChessBoard {
 
     }
 
-    public void animationStepToRow(Piece p,int x) {
+    public void animationStepToRow(Piece p, int x) {
         playBacktrackToRow(p, x);
         updatePieces();
         updateCollisionCarpets();
 
     }
 
-    public void animationSolveToRow(Piece p,int x) {
+    public void animationSolveToRow(Piece p, int x) {
         solveBacktrackToRow(p, x);
         updatePieces();
         updateCollisionCarpets();
@@ -830,8 +843,8 @@ public class MChessBoard extends ChessBoard {
     public void animationField2Field(JavaPlugin plugin, long ticks, Piece p) {
         // Überprüfen, ob bereits eine Animation läuft
         if (isAnimationRunning) {
-            if(console){
-            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
             }
             return; // Verhindert das Starten einer neuen Animation
         }
@@ -864,7 +877,7 @@ public class MChessBoard extends ChessBoard {
     public void animationPiece2Piece(JavaPlugin plugin, long ticks, Piece p) {
         // Überprüfen, ob bereits eine Animation läuft
         if (isAnimationRunning) {
-            if(console){
+            if (console) {
                 System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
             }
             return; // Verhindert das Starten einer neuen Animation
@@ -898,7 +911,7 @@ public class MChessBoard extends ChessBoard {
     public void BongoSolveAnimation(JavaPlugin plugin, long ticks, Piece p) {
         // Überprüfen, ob bereits eine Animation läuft
         if (isAnimationRunning) {
-            if(console){
+            if (console) {
                 System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
             }
             return; // Verhindert das Starten einer neuen Animation
@@ -940,7 +953,5 @@ public class MChessBoard extends ChessBoard {
             System.out.println("Aktuelle Animation wurde abgebrochen.");
         }
     }
-
-
 
 }
