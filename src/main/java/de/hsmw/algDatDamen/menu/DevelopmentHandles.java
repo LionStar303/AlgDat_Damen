@@ -20,6 +20,9 @@ import static de.hsmw.algDatDamen.AlgDatDamen.instance;
 public class DevelopmentHandles {
 
     public static int boardSize = 4;
+    public static int backtrackRow = 1;
+    public static Material customWhiteFieldMaterial = Material.WHITE_CONCRETE;
+    public static Material customBlackFieldMaterial = Material.GRAY_CONCRETE;
 
     /**
      * Generates a new chess board at the clicked block location.
@@ -35,7 +38,7 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, customWhiteFieldMaterial, customBlackFieldMaterial);
         saveManager.getCbList().add(cb);
     }
 
@@ -220,7 +223,10 @@ public class DevelopmentHandles {
         devMenu.updateItemName(MenuSlots.BOARD_SIZE, "Größe: " + boardSize);
     }
 
-
+    public static void increaseBacktrackRow(PlayerInteractEvent event) {
+        backtrackRow = (backtrackRow < 16) ? backtrackRow + 1 : 1;
+        devMenu.updateItemName(MenuSlots.BACKTRACK_ROW, "Backtrack Zeile: " + backtrackRow);
+    }
 
     /**
      * A full run of the algorithm on the given chess board.
@@ -229,6 +235,12 @@ public class DevelopmentHandles {
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.animationSolve(new Knight());
+        event.setCancelled(true);
+    }
+
+    public static void handleBacktrackToRow(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.solveBacktrackToRowMC(backtrackRow);
         event.setCancelled(true);
     }
 
@@ -243,12 +255,30 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-
     public static void rotateQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.rotateMPieces(1);
         event.setCancelled(true);
     }
 
+    public static void changeWhiteFieldMaterial(PlayerInteractEvent event) {
+        Material clickedBlock = event.getClickedBlock().getType();
+        if (!clickedBlock.isAir()) {
+            customWhiteFieldMaterial = clickedBlock;
+        } else {
+            customWhiteFieldMaterial = Material.WHITE_CONCRETE;
+        }
+        devMenu.updateItemMaterial(MenuSlots.WHITE_FIELD_MATERIAL, customWhiteFieldMaterial);
+    }
+
+    public static void changeBlackFieldMaterial(PlayerInteractEvent event) {
+        Material clickedBlock = event.getClickedBlock().getType();
+        if (!clickedBlock.isAir()) {
+            customBlackFieldMaterial = clickedBlock;
+        } else {
+            customBlackFieldMaterial = Material.BLACK_CONCRETE;
+        }
+        devMenu.updateItemMaterial(MenuSlots.BLACK_FIELD_MATERIAL, customBlackFieldMaterial);
+    }
 
 }
