@@ -42,7 +42,7 @@ public class MChessBoard extends ChessBoard {
         this.pieces = new ArrayList<>();
         this.console = true;
         this.originCorner = originCorner;
-        updateOriginCorner(this.getBoardDirection(player));
+        //updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
@@ -316,6 +316,18 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    public void updateBoard(){
+        despawnChessBoard();
+        spawnChessBoard();
+        updatePieces();
+        updateCollisionCarpets();
+    }
+
+    public void updatePieces(){
+        despawnAllPieces();
+        spawnAllPieces();
+    }
+
 // --- Check ---
 
     /**
@@ -356,8 +368,8 @@ public class MChessBoard extends ChessBoard {
      * @return
      */
     public boolean checkUserCarpets() {
-        // return false if there are no queens on the board
-        if (queens.size() == 0) {
+        /*  // return false if there are no queens on the board
+        if (this.pieces.size() == 0) {
             return false;
         }
 
@@ -431,6 +443,9 @@ public class MChessBoard extends ChessBoard {
 
         System.out.println("Solution is correct!");
         return true;
+
+         */
+        return  false;
     }
 
 // --- add and remove ---
@@ -491,9 +506,8 @@ public class MChessBoard extends ChessBoard {
      * @param p The {@link Piece} to remove.
      */
     public void removePiece(Piece p) {
-        if (pieces.remove(p)) {
-            despawnPiece(p); // Visual removal from the board
-        }
+        despawnPiece(p); // Visual removal from the board
+        pieces.remove(p);
     }
 
     /**
@@ -545,15 +559,18 @@ public class MChessBoard extends ChessBoard {
 
         switch (p.getLetter()) {
             case 'Q': // Queen
-                placePieceBlocks(pieceLocation, AlgDatDamen.QUEEN_BLOCK_TOP, AlgDatDamen.QUEEN_BLOCK_BOTTOM);
+                //placePieceBlocks(pieceLocation, AlgDatDamen.QUEEN_BLOCK_TOP, AlgDatDamen.QUEEN_BLOCK_BOTTOM);
                 break;
-            case 'S': // Knight
-                // TODO: Add block placement logic for knights
+            case 'S': // Superqueen
+                //placePieceBlocks(pieceLocation, AlgDatDamen.SUPERQUEEN_BLOCK_TOP, AlgDatDamen.SUPERQUEEN_BLOCK_BOTTOM);
                 break;
-            case 'K': // King
-                // TODO: Add block placement logic for kings
+            case 'K': // Knight
+                //placePieceBlocks(pieceLocation, AlgDatDamen.KNIGHT_BLOCK_TOP, AlgDatDamen.KNIGHT_BLOCK_BOTTOM);
                 break;
             default:
+                if(console){
+                    System.out.println("non specific Piece can not spawned");
+                }
                 return false; // Invalid piece type
         }
 
@@ -605,7 +622,8 @@ public class MChessBoard extends ChessBoard {
                 Block block = location.getBlock();
 
                 // Skip blocks where there is no collision or where a queen's bottom part is present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                if (!checkCollision(x, y) )//|| block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
+                    {
                     continue;
                 }
 
@@ -636,7 +654,7 @@ public class MChessBoard extends ChessBoard {
                 Block block = location.getBlock();
 
                 // Skip blocks occupied by the bottom part of a queen
-                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                if (block.getType()!= null){// ==AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -706,12 +724,220 @@ public class MChessBoard extends ChessBoard {
         spawnChessBoard();
     }
 
+   public void despawnPiece(Piece p){
+       if (p != null) {
+           Location queenLocation = getLocationofPiece(p);
+           if (queenLocation != null) {
+               queenLocation.getBlock().setType(Material.AIR); // Remove top block
+               queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
+           }
+       }
+   }
+
+    public void despawnAllPieces(){
+        // clear all blocks above the board
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                for (int y = 1; y <= 2; y++) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + y, originCorner.getZ() + z);
+                    location.getBlock().setType(Material.AIR);
+                }
+            }
+        }
+    }
+
 
     // --- Rotation ---
 
-    // --- Animation ---
+    public void rotateMPieces(int rotation) {
+        this.rotatePieces(rotation);
+        updatePieces();
+        updateCollisionCarpets();
+    }
 
+    // --- Animation Steps ---
+    public boolean animationStepToNextField(Piece p) {
 
+        boolean step = stepBacktrack(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            return true;
+        }
+
+        // Zeige nächstes Feld
+        if (stateX + 1 <= size && stateY + 1 <= size) {
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
+        }
+
+        return false;
+    }
+
+    public boolean animationStepToNextPiece(Piece p) {
+        boolean step = playBacktrackToNextPiece(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public void animationStepToRow(Piece p,int x) {
+        playBacktrackToRow(p, x);
+        updatePieces();
+        updateCollisionCarpets();
+
+    }
+
+    public void animationSolveToRow(Piece p,int x) {
+        solveBacktrackToRow(p, x);
+        updatePieces();
+        updateCollisionCarpets();
+    }
+
+    public void animationSolve(Piece p) {
+        playBacktrack(p);
+        updatePieces();
+        updateCollisionCarpets();
+    }
+
+    public boolean animationStepBongo(Piece p) {
+        bongoStep(p);
+        updatePieces();
+        updateCollisionCarpets();
+        return isSolved();
+    }
+
+    // --- Animation with MC ---
+
+    public void animationField2Field(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if(console){
+            System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationStepToNextField(p)) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void animationPiece2Piece(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if(console){
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationStepToNextPiece(p)) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void BongoSolveAnimation(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if(console){
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationStepBongo(p)) {
+                        if (console) {
+                            System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        cancel(); // Stoppe den Task
+                        isAnimationRunning = false; // Setze das Flag zurück
+                    }
+                    if (stateX == (size)) {
+                        pieces.clear();
+                        stateX = 0;
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Methode, um eine laufende Animation zu stoppen
+    public void stopCurrentAnimation() {
+        if (currentAnimationTask != null) {
+            currentAnimationTask.cancel(); // Stoppe den aktuellen Task
+            isAnimationRunning = false; // Setze das Flag zurück
+            System.out.println("Aktuelle Animation wurde abgebrochen.");
+        }
+    }
 
 
 

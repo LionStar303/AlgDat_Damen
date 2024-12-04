@@ -24,6 +24,14 @@ public class Queen extends Piece {
     }
 
     /**
+     * Constructor to create a Queen at 0 0
+     */
+    public Queen() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    /**
      * Provides a string representation of the Queen, including its current position.
      *
      * @return A string describing the Queen's position on the board.

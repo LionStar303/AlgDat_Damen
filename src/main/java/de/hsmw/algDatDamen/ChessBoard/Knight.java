@@ -23,6 +23,14 @@ public class Knight extends Piece {
         this.y = y;
     }
 
+    /**
+     * Constructor to create a Knight at 0 0
+     */
+    public Knight() {
+        this.x = 0;
+        this.y = 0;
+    }
+
     // Methods specific to the Knight class
 
     /**

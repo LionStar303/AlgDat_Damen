@@ -25,6 +25,14 @@ public class Superqueen extends Piece {
     }
 
     /**
+     * Constructor to create a Superqueen at 0 0
+     */
+    public Superqueen() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    /**
      * Provides a string representation of the SuperQueen, including its current position.
      *
      * @return A string indicating the SuperQueen's position on the board.

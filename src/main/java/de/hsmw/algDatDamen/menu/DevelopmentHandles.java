@@ -1,6 +1,8 @@
 package de.hsmw.algDatDamen.menu;
 
 import de.hsmw.algDatDamen.ChessBoard.*;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
@@ -48,7 +50,7 @@ public class DevelopmentHandles {
             return;
         };
         MChessBoard mcB = getClickedMCB(event);
-        mcB.removeChessBoardFromGame();
+        mcB.despawnChessBoard();
         saveManager.getCbList().remove(mcB);
         event.setCancelled(true);
     }
@@ -70,11 +72,11 @@ public class DevelopmentHandles {
             return;
         }
 
-        Queen existingQueen = mcB.getQueenAt(clickedBlock.getLocation());
+        Piece existingQueen = mcB.getPieceAt(clickedBlock.getLocation());
         if (existingQueen != null) {
-            mcB.removeQueen(existingQueen);
+            mcB.removePiece(existingQueen);
         } else {
-            mcB.addQueen(clickedBlock.getLocation());
+            mcB.addPiece(clickedBlock.getLocation(), new Queen());
         }
         event.setCancelled(true);
     }
@@ -85,7 +87,7 @@ public class DevelopmentHandles {
      */
     public static void placeTestedQueen(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.addTestedQueen(event.getClickedBlock().getLocation());
+        mcB.addTestedQueen(event.getClickedBlock().getLocation(), new Queen());
         event.setCancelled(true);
     }
 
@@ -93,7 +95,7 @@ public class DevelopmentHandles {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB == null) return;
 
-        mcB.placeUserCarpet(event.getClickedBlock().getLocation());
+        //mcB.spawnUserCarpet(event.getClickedBlock().getLocation());
         event.setCancelled(true);
     }
 
@@ -113,7 +115,8 @@ public class DevelopmentHandles {
     public static void removeAllQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB == null) return;
-        mcB.deletAllQueensFromBoard();
+        mcB.removeAllPieces();
+        mcB.getPieces().clear();
         event.setCancelled(true);
     }
 
@@ -132,7 +135,7 @@ public class DevelopmentHandles {
         if(mcB.isAnimationRunning()){
             mcB.stopCurrentAnimation();
         }else{
-            mcB.BacktrackAnimationStep(AlgDatDamen.getInstance(), 5);
+            mcB.animationField2Field(AlgDatDamen.getInstance(), 5, new Queen());
         }
         event.setCancelled(true);
     }
@@ -148,7 +151,7 @@ public class DevelopmentHandles {
         if(mcB.isAnimationRunning()){
             mcB.stopCurrentAnimation();
         }else{
-            mcB.BacktrackAnimationQueenStep(AlgDatDamen.getInstance(), 5);
+            mcB.animationPiece2Piece(AlgDatDamen.getInstance(), 5, new Superqueen());
         }
 
         event.setCancelled(true);
@@ -165,7 +168,7 @@ public class DevelopmentHandles {
         if(mcB.isAnimationRunning()){
             mcB.stopCurrentAnimation();
         }else{
-            mcB.BongoSolveAnimationStep(AlgDatDamen.getInstance(), 5);
+            mcB.BongoSolveAnimation(AlgDatDamen.getInstance(), 5,new Queen());
         }
 
         event.setCancelled(true);
@@ -199,7 +202,7 @@ public class DevelopmentHandles {
         if (mcB == null) return;
 
         if (mcB.isCollisionCarpets()) {
-            mcB.cleanCollisionCarpets();
+            mcB.despawnCollisionCarpets();
             mcB.setCollisionCarpets(false);
         } else {
             mcB.spawnCollisionCarpets();
@@ -225,7 +228,7 @@ public class DevelopmentHandles {
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.showSolution();
+        mcB.animationSolve(new Knight());
         event.setCancelled(true);
     }
 
@@ -236,17 +239,14 @@ public class DevelopmentHandles {
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.animationStep();
+        mcB.animationStepToNextField(new Queen());
         event.setCancelled(true);
     }
 
 
-
-
-
     public static void rotateQueens(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.rotateMQueens(1);
+        mcB.rotateMPieces(1);
         event.setCancelled(true);
     }
 
