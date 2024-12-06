@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen.ChessBoard;
+//package de.hsmw.algDatDamen.ChessBoard;
 
 /**
  * Represents a Knight chess piece with its unique movement and attributes.
@@ -104,6 +104,11 @@ public class Knight extends Piece {
     @Override
     public Knight clone() {
         Knight newP = new Knight(this.x, this.y);
+        return newP;
+    }
+  
+    public Knight clone(int x, int y) {
+        Knight newP = new Knight(x, y);
         return newP;
     }
 

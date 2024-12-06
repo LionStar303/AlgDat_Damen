@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen.ChessBoard;
+//package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 
@@ -112,8 +112,7 @@ public class ChessBoard {
     public boolean addTestedPiece(Piece pnew) {
         if (pnew.getX() >= size || pnew.getY() >= size) {
             if (console) {
-                System.out
-                        .println("Not on Field " + size + "x" + size + " on X: " + pnew.getX() + "  Y: " + pnew.getY());
+                System.out.println("Not on Field " + size + "x" + size + " on X: " + pnew.getX() + "  Y: " + pnew.getY());
                 printBoard(true);
             }
             return false;
@@ -195,6 +194,9 @@ public class ChessBoard {
     // --- Collision Checks ---
     public boolean checkCollision(Piece p) {
         for (Piece existingPiece : pieces) {
+        if (console) {
+        //System.out.println("Check Piece:" + existingPiece.toString());  
+        } // end of if
             if (existingPiece.checkCollision(p.getX(), p.getY()) && !existingPiece.equals(p)) {
                 return true;
             }
@@ -204,11 +206,18 @@ public class ChessBoard {
 
     public boolean checkCollision(int x, int y) {
         for (Piece existingPiece : pieces) {
+        if (console) {
+        //System.out.println("Check Piece:" + existingPiece.toString());  
+        } // end of if
             if (existingPiece.checkCollision(x, y)) {
                 return true;
             }
         }
         return false; // No collision
+    }
+  
+  public boolean checkCollision(){
+    return checkCollision(stateX, stateY);
     }
 
     // ----------- Debugging and Visualization -----------
@@ -299,7 +308,7 @@ public class ChessBoard {
                 p.setX(row);
                 p.setY(i);
                 if (console) {
-                    System.out.println("Check -> row: " + row + " y: " + i);
+                    System.out.println("Check ->  row: " + row + " y: " + i);
                 }
                 if (addTestedPiece(p.clone())) {
                     if (console) {
@@ -313,6 +322,8 @@ public class ChessBoard {
                 }
             }
         }
+        stateX = size-1;
+        stateY = size-1;
         return true;
     }
 
@@ -339,7 +350,7 @@ public class ChessBoard {
         while (!addTestedPiece(p.clone())) {
             newY++;
             if (console) {
-                System.out.println("Back-Place -> row: " + row + "  Y = " + newY);
+                System.out.println("Back-Place ->  row: " + row + "  Y = " + newY);
             }
 
             if (newY >= size) {
@@ -354,16 +365,12 @@ public class ChessBoard {
         }
 
         if (console) {
-            System.out.println("End Backstep -> row: " + row + "  Y = " + newY);
+            System.out.println("End Backstep ->   row: " + row + "  Y = " + newY);
             printBoard(true);
         }
         return row;
     }
 
-    // Important in fron of this ?
-    // sortQueensByX();
-    // verfyQueens();
-    // stateX = numberOfQueens();
     public boolean stepBacktrack(Piece p) {
         if ((pieces.size() == size)) {
             if (isSolved()) {
@@ -373,7 +380,7 @@ public class ChessBoard {
                 } // end of if
                 return true;
             } else {
-                System.out.println("Step Backtrack failed");
+                if (console) {System.out.println("Step Backtrack failed");}
                 return true;
             } // end of if-else
         } // end of if
@@ -394,11 +401,66 @@ public class ChessBoard {
             }
         } else if (stateY >= size) {
             stateX--;
+            if (console) {
+            printBoard(true);
+            }
             stateY = pieces.get(pieces.size() - 1).getY();
             removeLastPiece();
         }
         stateY++;
         return false;
+    }
+  
+  public boolean reverseBackStep(Piece p){
+    if (console) {
+      System.out.println("Step Reverse Backstep X: " + stateX +" | Y: " +stateY);
+    }
+    
+    if (pieces.size() == 0) {
+      if (console) {
+         System.out.println("Board is Clear!");
+      }
+      if (stateX <= -1){
+        if (console) {
+         System.out.println("Finished");
+         }
+        stateX = 0;
+        stateY = 0;
+        return true;
+        }
+    } 
+    Piece lastP = null;
+    if(pieces.size() != 0){
+      lastP = pieces.get(pieces.size()-1);
+      }
+  
+   if (!checkCollision()) {
+      if (console) {
+         System.out.println("no Collision Spawn new highest Queen");
+      }
+      pieces.add(p.clone(stateX, stateY));
+      stateX++;
+      stateY = size-1;
+      return false;
+    }else if (lastP.getX() == stateX && lastP.getY() == stateY) {
+      if (console) {
+         System.out.println("delet highest Piece");
+        System.out.println("Piece: " + lastP.toString());
+          }
+      pieces.remove(lastP);
+    }
+    
+    if (stateY <= 0) {
+      stateX--;
+      if (pieces.size() != 0) {
+        stateY = pieces.get(pieces.size()-1).getY();
+      }else {
+        stateY = size -1; 
+       } // end of if-else
+    } else {
+      stateY--;
+    } // end of if-else
+    return false;
     }
 
     public boolean playBacktrackToRow(Piece p, int x) {
@@ -457,6 +519,20 @@ public class ChessBoard {
         }
 
         setStateX(pieces.size());
+        if (isSolved()) {
+        setStateX(size -1);
+        setStateY(size -1);
+        } else if (pieces.size() == 0) {
+        setStateX(0);
+        setStateY(0);   
+          }
+        if (console) {
+           System.out.println("Finished Verify");
+           printBoard(true);
+           System.out.println("StateX = " + stateX + "StateY"+ stateY); 
+        } // end of if
+        
+        
     }
 
     public void rotatePieces(int rotations) {

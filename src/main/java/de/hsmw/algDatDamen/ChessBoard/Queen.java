@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen.ChessBoard;
+//package de.hsmw.algDatDamen.ChessBoard;
 
 /**
  * Represents a Queen on the chessboard.
@@ -85,7 +85,13 @@ public class Queen extends Piece {
         Queen newP = new Queen(this.x, this.y);
         return newP;
     }
-
+  
+  @Override
+  public Queen clone(int x, int y) {
+        Queen newP = new Queen(x, y);
+        return newP;
+    }
+  
     public String getName(){
         return "Queen";
     }

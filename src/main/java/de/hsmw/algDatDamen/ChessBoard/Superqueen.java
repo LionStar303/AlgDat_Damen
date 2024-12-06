@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen.ChessBoard;
+//package de.hsmw.algDatDamen.ChessBoard;
 
 /**
  * Represents a SuperQueen chess piece with combined movement capabilities
@@ -93,6 +93,12 @@ public class Superqueen extends Piece {
     @Override
     public Superqueen clone() {
         Superqueen newP = new Superqueen(this.x, this.y);
+        return newP;
+    }
+    @Override
+  
+  public Superqueen clone(int x, int y) {
+        Superqueen newP = new Superqueen(x, y);
         return newP;
     }
 
