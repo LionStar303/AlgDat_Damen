@@ -106,4 +106,8 @@ public class Knight extends Piece {
         Knight newP = new Knight(this.x, this.y);
         return newP;
     }
+
+    public String getName(){
+        return "Knight";
+    }
 } // End of Knight class

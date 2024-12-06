@@ -10,6 +10,7 @@ public enum MenuSlots {
     BOARD_SIZE(3),
     CARPETS(11),
     QUEEN(5),
+    PIECE(8),
     TESTED_QUEEN(14),
     REMOVE_ALL_QUEENS(23),
     ROTATE_QUEENS(15),

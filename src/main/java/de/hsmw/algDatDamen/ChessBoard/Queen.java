@@ -86,4 +86,9 @@ public class Queen extends Piece {
         return newP;
     }
 
+    public String getName(){
+        return "Queen";
+    }
+
+
 }

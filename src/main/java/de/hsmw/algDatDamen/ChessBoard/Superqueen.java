@@ -95,4 +95,8 @@ public class Superqueen extends Piece {
         Superqueen newP = new Superqueen(this.x, this.y);
         return newP;
     }
+
+    public String getName(){
+        return "SuperQueen";
+    }
 } // End of Superqueen class

@@ -122,4 +122,12 @@ public class Piece {
         return newP;
     }
 
+    /**
+     *
+     */
+
+    public String getName(){
+        return "Piece";
+    }
+
 } // End of the Piece class

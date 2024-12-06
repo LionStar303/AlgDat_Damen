@@ -39,7 +39,7 @@ public class MChessBoard extends ChessBoard {
             Material blackFieldMaterial) {
         this.size = size;
         this.pieces = new ArrayList<>();
-        this.console = true;
+        this.console = false;
         this.originCorner = originCorner;
         // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
@@ -49,6 +49,7 @@ public class MChessBoard extends ChessBoard {
         this.stateY = 0;
         this.isAnimationRunning = false;
         spawnChessBoard();
+
     }
 
     /**
@@ -631,7 +632,7 @@ public class MChessBoard extends ChessBoard {
 
                 // Skip blocks where there is no collision or where a queen's bottom part is
                 // present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -809,6 +810,12 @@ public class MChessBoard extends ChessBoard {
     }
 
     public void animationStepToRow(Piece p, int x) {
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
         playBacktrackToRow(p, x);
         updatePieces();
         updateCollisionCarpets();
@@ -816,18 +823,36 @@ public class MChessBoard extends ChessBoard {
     }
 
     public void animationSolveToRow(Piece p, int x) {
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
         solveBacktrackToRow(p, x);
         updatePieces();
         updateCollisionCarpets();
     }
 
     public void animationSolve(Piece p) {
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
         playBacktrack(p);
         updatePieces();
         updateCollisionCarpets();
     }
 
     public boolean animationStepBongo(Piece p) {
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return false;
+        }
         bongoStep(p);
         updatePieces();
         updateCollisionCarpets();

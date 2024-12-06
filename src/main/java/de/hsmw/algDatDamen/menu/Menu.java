@@ -138,6 +138,8 @@ public class Menu implements Listener {
                 "changeWhiteFieldMaterial");
         this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
                 "changeBlackFieldMaterial");
+        this.addMenuItem(Material.IRON_BLOCK, "Akutelle Figur: " + p.getName(), MenuSlots.PIECE,
+                "changePiece");
 
         this.fillEmptySlots();
     }

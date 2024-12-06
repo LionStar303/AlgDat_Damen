@@ -22,6 +22,7 @@ public class DevelopmentHandles {
 
     public static int boardSize = 4;
     public static int backtrackRow = 1;
+    public static Piece p = new Queen();
     public static Material customWhiteFieldMaterial = Material.WHITE_CONCRETE;
     public static Material customBlackFieldMaterial = Material.GRAY_CONCRETE;
 
@@ -89,7 +90,7 @@ public class DevelopmentHandles {
         if (existingQueen != null) {
             mcB.removePiece(existingQueen);
         } else {
-            mcB.addPiece(clickedBlock.getLocation(), new Queen());
+            mcB.addPiece(clickedBlock.getLocation(), p);
         }
         event.setCancelled(true);
     }
@@ -102,7 +103,7 @@ public class DevelopmentHandles {
      */
     public static void placeTestedQueen(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.addTestedQueen(event.getClickedBlock().getLocation(), new Queen());
+        mcB.addTestedQueen(event.getClickedBlock().getLocation(), p);
         event.setCancelled(true);
     }
 
@@ -163,7 +164,7 @@ public class DevelopmentHandles {
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
         } else {
-            mcB.animationField2Field(AlgDatDamen.getInstance(), 5, new Queen());
+            mcB.animationField2Field(AlgDatDamen.getInstance(), 5, p);
         }
         event.setCancelled(true);
     }
@@ -179,7 +180,7 @@ public class DevelopmentHandles {
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
         } else {
-            mcB.animationPiece2Piece(AlgDatDamen.getInstance(), 5, new Superqueen());
+            mcB.animationPiece2Piece(AlgDatDamen.getInstance(), 5, p);
         }
 
         event.setCancelled(true);
@@ -196,7 +197,7 @@ public class DevelopmentHandles {
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
         } else {
-            mcB.BongoSolveAnimation(AlgDatDamen.getInstance(), 5, new Queen());
+            mcB.BongoSolveAnimation(AlgDatDamen.getInstance(), 5, p);
         }
 
         event.setCancelled(true);
@@ -264,13 +265,13 @@ public class DevelopmentHandles {
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolve(new Knight());
+        mcB.animationSolve(p);
         event.setCancelled(true);
     }
 
     public static void handleBacktrackToRow(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolveToRow(new Queen(), backtrackRow);
+        mcB.animationSolveToRow(p, backtrackRow);
         event.setCancelled(true);
     }
 
@@ -282,7 +283,7 @@ public class DevelopmentHandles {
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.animationStepToNextField(new Queen());
+        mcB.animationStepToNextField(p);
         event.setCancelled(true);
     }
 
@@ -311,5 +312,25 @@ public class DevelopmentHandles {
         }
         devMenu.updateItemMaterial(MenuSlots.BLACK_FIELD_MATERIAL, customBlackFieldMaterial);
     }
+
+    public static void changePiece(PlayerInteractEvent event) {
+        switch (p.getLetter()){
+        case 'Q':
+            p = new Superqueen();
+            break;
+        case 'S':
+            p = new Knight();
+            break;
+        case 'K':
+            p = new Queen();
+            break;
+        default:
+
+            p = new Queen();
+            System.out.println("Default");
+        break;
+    }
+    devMenu.updateItemName(MenuSlots.PIECE, ("Figur " + p.getName()));
+}
 
 }
