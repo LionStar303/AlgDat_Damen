@@ -5,39 +5,44 @@ package de.hsmw.algDatDamen.menu;
  * slots
  */
 public enum MenuSlots {
+    // Grundlegende Optionen
     ADD_BOARD(0),
-    REMOVE_BOARD(9),
-    BOARD_SIZE(18),
+    REMOVE_BOARD(1),
+    BOARD_SIZE(2),
 
-    WHITE_FIELD_MATERIAL(36),
-    BLACK_FIELD_MATERIAL(45),
+    // Materialien
+    WHITE_FIELD_MATERIAL(3),
+    BLACK_FIELD_MATERIAL(4),
 
-    QUEEN(19),
-    TESTED_QUEEN(28),
-    UPDATED_PIECE(10),
-    REMOVE_ALL_QUEENS(37),
-    ROTATE_QUEENS(46),
-    PIECE(1),
+    // Schachfiguren und Aktionen
+    PIECE(9),
+    QUEEN(10),
+    TESTED_QUEEN(11),
+    UPDATED_PIECE(12),
+    REMOVE_ALL_QUEENS(13),
+    ROTATE_QUEENS(14),
 
-    CARPETS(3),
-    PLACE_USER_CARPET(11),
+    // Teppiche und Interaktionen
+    CARPETS(18),
+    PLACE_USER_CARPET(19),
     CHECK_USER_CARPETS(20),
 
-    BACKTRACK_FULL(16),
-    BACKTRACK_STEP(7),
-    BACKTRACK_UNTIL(25),
-    BACKTRACK_ROW(24),
-    BACKTRACK_ANIMATION(34),
-    BACKTRACK_ANIMATION_FAST(43),
+    // Backtracking Optionen
+    BACKTRACK_FULL(21),
+    BACKTRACK_STEP(22),
+    BACKTRACK_ROW(23),
+    BACKTRACK_UNTIL(24),
+    BACKTRACK_ANIMATION(25), // Erweiterung im 27-Slot-Inventar
+    BACKTRACK_ANIMATION_FAST(26), // Erweiterung im 27-Slot-Inventar
 
+    // Rückschritte
     REVERSE_STEP(5),
-    REVERSE_ANIMATION(32),
-    REVERSE_ANIMATION_FAST(41),
+    REVERSE_ANIMATION(6), // Erweiterung
+    REVERSE_ANIMATION_FAST(7), // Erweiterung
 
-    BONGO_SOLVE(24),
-
-
-    MOVEMENT_SOLUTION(6);
+    // Spezialaktionen
+    MOVEMENT_SOLUTION(8),
+    BONGO_SOLVE(15); // Für eine gute Gruppierung;
 
     public final int slot;
 
