@@ -6,7 +6,7 @@ package de.hsmw.algDatDamen.ChessBoard;
  *
  * @version 1.1, 24.10.2024
  */
-public class Queen {
+public class Queen extends Piece{
 
     // Attributes
     private int x; // Row position
