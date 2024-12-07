@@ -1,0 +1,34 @@
+﻿[Files]
+File0=C:\Users\morit\OneDrive\Dokumente\KulowCup\Tippspiel_Kulowcup\AlgDat_Damen\src\main\java\de\hsmw\algDatDamen\ChessBoard\Piece.java
+
+[Box:  - Piece]
+X=680
+Y=90
+MinVis=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+FontSize=6
+FontName=Segoe UI
+
+[Diagram]
+comments=0
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+ShowConnections=0
+Fontname=Segoe UI
+Fontsize=6
+ShowObjectDiagram=0
+
+[Interactive]
+I0=
+I1=Queen queen1 = new Queen();
+I2=Queen queen1 = new Queen(5, 7);
+I3=queen1.getLetter();
+I4=queen1.toString();
+I5=queen1.checkCollision(2, 3);
+

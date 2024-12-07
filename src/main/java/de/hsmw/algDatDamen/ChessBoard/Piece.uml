@@ -1,0 +1,17 @@
+﻿[Diagram]
+comments=0
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowParameter=4
+SortOrder=0
+ShowIcons=1
+ShowConnections=0
+Fontname=Segoe UI
+Fontsize=6
+ShowObjectDiagram=0
+
+[Interactive]
+I0=
+I1=ChessBoard chessboard1 = new ChessBoard(4);
+
