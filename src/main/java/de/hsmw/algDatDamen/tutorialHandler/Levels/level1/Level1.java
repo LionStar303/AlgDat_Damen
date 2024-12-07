@@ -21,11 +21,11 @@ public class Level1 extends Level{
     public Level1(Player player) {
         // Schachbrett für Level 1 erstellen
         // TODO location festlegen
-        this(new MChessBoard(new Location(player.getWorld(), -45, 36, 235), 8, player), player);
+        this(new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player), player);
     }
 
     public Level1(MChessBoard chessBoard, Player player) {
-        this(chessBoard, player, chessBoard.getOriginCorner().clone().add(0,1,0));
+        this(chessBoard, player, new Location(player.getWorld(), -30, -43, 143));
     }
 
     public Level1(MChessBoard chessBoard, Player player, Location startLocation) {
