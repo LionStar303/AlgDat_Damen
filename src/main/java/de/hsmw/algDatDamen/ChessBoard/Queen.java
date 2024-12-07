@@ -1,4 +1,4 @@
-//package de.hsmw.algDatDamen.ChessBoard;
+package de.hsmw.algDatDamen.ChessBoard;
 
 /**
  * Represents a Queen on the chessboard.

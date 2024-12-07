@@ -809,6 +809,48 @@ public class MChessBoard extends ChessBoard {
 
     }
 
+    public boolean animationReverseStepToNextField(Piece p) {
+
+        boolean step = reverseBackStep(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Empty");
+            }
+            return true;
+        }
+
+        // Zeige nächstes Feld
+        if (stateX + 1 <= size && stateY + 1 <= size) {
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
+        }
+
+        return false;
+    }
+
+    public boolean animationReverseStepToNextPiece(Piece p) {
+        boolean step = playReverseBackTrackToNextPiece(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+
     public void animationStepToRow(Piece p, int x) {
         if (isAnimationRunning) {
             if (console) {
@@ -915,6 +957,74 @@ public class MChessBoard extends ChessBoard {
                     if (animationStepToNextPiece(p)) {
                         if (console) {
                             System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void animationReverseField2Field(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationReverseStepToNextField(p)) {
+                        if (console) {
+                            System.out.println("Reverse Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void animationReversePiece2Piece(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationReverseStepToNextPiece(p)) {
+                        if (console) {
+                            System.out.println("Reverse Backtracking abgeschlossen, Scheduler wird beendet.");
                         }
                         isAnimationRunning = false; // Setze das Flag zurück
                         cancel(); // Stoppe den Task

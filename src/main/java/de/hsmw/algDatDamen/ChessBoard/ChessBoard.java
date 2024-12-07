@@ -1,4 +1,4 @@
-//package de.hsmw.algDatDamen.ChessBoard;
+package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 
@@ -70,6 +70,11 @@ public class ChessBoard {
 
     public void setStateY(int stateY) {
         this.stateY = stateY;
+    }
+  
+    /** Retrieves the last piece on the board. */
+    private Piece getLastPiece() {
+    return pieces.isEmpty() ? null : pieces.get(pieces.size() - 1);
     }
 
     // ----------- Functional Methods -----------
@@ -404,66 +409,119 @@ public class ChessBoard {
             if (console) {
             printBoard(true);
             }
-            stateY = pieces.get(pieces.size() - 1).getY();
+            stateY = getLastPiece().getY();
             removeLastPiece();
         }
         stateY++;
         return false;
     }
   
-  public boolean reverseBackStep(Piece p){
-    if (console) {
-      System.out.println("Step Reverse Backstep X: " + stateX +" | Y: " +stateY);
-    }
-    
-    if (pieces.size() == 0) {
-      if (console) {
-         System.out.println("Board is Clear!");
-      }
-      if (stateX <= -1){
+   /**
+ * Reverses the backtracking step for the chessboard. This method attempts 
+ * to undo the placement of a piece and adjusts the internal state of the 
+ * board accordingly.
+ * 
+ * @param p the piece to backtrack (used as a reference for cloning new pieces)
+ * @return true if the backtracking process is complete (no further steps possible), false otherwise.
+ */
+public boolean reverseBackStep(Piece p) {
+    // Check for null input and handle it gracefully
+    if (p == null) {
         if (console) {
-         System.out.println("Finished");
-         }
-        stateX = 0;
-        stateY = 0;
-        return true;
+            System.out.println("Error: Provided piece is null!");
         }
-    } 
-    Piece lastP = null;
-    if(pieces.size() != 0){
-      lastP = pieces.get(pieces.size()-1);
-      }
-  
-   if (!checkCollision()) {
-      if (console) {
-         System.out.println("no Collision Spawn new highest Queen");
-      }
-      pieces.add(p.clone(stateX, stateY));
-      stateX++;
-      stateY = size-1;
-      return false;
-    }else if (lastP.getX() == stateX && lastP.getY() == stateY) {
-      if (console) {
-         System.out.println("delet highest Piece");
-        System.out.println("Piece: " + lastP.toString());
-          }
-      pieces.remove(lastP);
-    }
-    
-    if (stateY <= 0) {
-      stateX--;
-      if (pieces.size() != 0) {
-        stateY = pieces.get(pieces.size()-1).getY();
-      }else {
-        stateY = size -1; 
-       } // end of if-else
-    } else {
-      stateY--;
-    } // end of if-else
-    return false;
+        return false; // Treat as no-op
     }
 
+    // Log the current state if console messages are enabled
+    if (console) {
+        System.out.println("Step Reverse Backstep X: " + stateX + " | Y: " + stateY);
+    }
+
+    // Check if the backtracking process has finished
+    if (isReverseBackStepFinished()) {
+        return true;
+    }
+
+    // Retrieve the last placed piece on the board
+    Piece lastP = getLastPiece();
+
+    // Check if there are no collisions in the current state
+    if (!checkCollision()) {
+        if (console) {
+            System.out.println("No Collision: Spawn new highest Queen");
+        }
+        // Add a new piece at the current position and update the state
+        pieces.add(p.clone(stateX, stateY));
+        stateX++;
+        stateY = size - 1;
+        return false;
+    } else if (lastP != null && lastP.getX() == stateX && lastP.getY() == stateY) {
+        // If the last piece matches the current position, remove it
+        if (console) {
+            System.out.println("Delete highest Piece");
+            System.out.println("Piece: " + lastP.toString());
+        }
+        pieces.remove(lastP);
+    }
+     
+    // Retrieve the last placed piece on the board
+    if (isReverseBackStepFinished()) {
+        return true;
+    }
+
+    // Adjust the state to move to the next step back
+    if (stateY == 0) {
+        stateX--;
+        if (pieces.size() != 0) {
+            stateY = pieces.get(pieces.size() - 1).getY();
+        } else {
+            stateY = size - 1;
+        }
+    } else {
+        stateY--;
+    }
+
+    // Check again if the backtracking process is finished
+    return isReverseBackStepFinished();
+}
+
+/**
+ * Checks whether the reverse backtracking process is finished. 
+ * If so, resets the internal state and logs the completion.
+ * 
+ * @return true if backtracking is complete, false otherwise.
+ */
+public boolean isReverseBackStepFinished() {
+    if (pieces.size() == 0) {
+        if (console) {
+            System.out.println("Board is Clear!");
+        }
+        // If the backtracking has completed, reset the state
+        if (stateX < 0) {
+            if (console) {
+                System.out.println("Finished");
+            }
+        stateY = -1;
+        stateX = -1;
+            return true;
+        }
+    }
+    return false;
+}
+ 
+    public boolean playReverseBackTrackToNextPiece(Piece p){
+     int size = this.pieces.size();
+     while (size == this.pieces.size()) { 
+     reverseBackStep(p);
+     } // end of while
+     return isReverseBackStepFinished();
+   }
+
+
+
     public boolean playBacktrackToRow(Piece p, int x) {
+        verfyPieces(p);
         if (x > this.size) {
             return false;
         } // end of if
@@ -474,6 +532,7 @@ public class ChessBoard {
     }
 
     public boolean solveBacktrackToRow(Piece p, int x) {
+        removeAllPieces();
         if (x > this.size) {
             return false;
         } // end of if

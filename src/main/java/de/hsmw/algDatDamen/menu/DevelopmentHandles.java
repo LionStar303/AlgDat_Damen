@@ -275,6 +275,35 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    public static void updatePieces(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.updatePieces();
+        event.setCancelled(true);
+    }
+
+    /**
+     * A full run of the algorithm on the given chess board.
+     *
+     * @param event The triggering event.
+     */
+    public static void handleReverse(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.animationReverseField2Field(AlgDatDamen.getInstance(), 5, p);
+        event.setCancelled(true);
+    }
+
+    public static void handleReverseFast(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.animationReversePiece2Piece(AlgDatDamen.getInstance(), 5, p);
+        event.setCancelled(true);
+    }
+
+    public static void handleReverseStep(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.animationReverseStepToNextField(p);
+        event.setCancelled(true);
+    }
+
     /**
      * Performs the next step of the algorithm.
      * 
