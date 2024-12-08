@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import de.hsmw.algDatDamen.AlgDatDamen;
 import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
-import static de.hsmw.algDatDamen.AlgDatDamen.instance;
 
 /**
  * Class that contains development handles for managing chess boards and related

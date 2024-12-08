@@ -60,9 +60,7 @@ public class Level1 extends Level{
         super.start();
         steps[0] = new Step1(null);
         // TODO Steps initialisieren
-    }
-    @Override
-    protected void playSteps() {
+        
         // TODO Erklärung des Schachbretts durch NPC
         // Setzen einer Dame auf Schachbrett durch Computer
         // Erklärung der Dame durch NPC
@@ -72,5 +70,5 @@ public class Level1 extends Level{
         // Anzeigen der Bedrohungen der Damen
         // Erklärung der Bedrohungen durch NPC
         // Löschen aller Damen von Schachbrett
-    }    
+    }  
 }

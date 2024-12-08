@@ -7,5 +7,11 @@ public class Step1 extends Step{
     public Step1(Step step2) {
         super(null, step2);
     }
+
+    @Override
+    public void start() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'start'");
+    }
     
 }

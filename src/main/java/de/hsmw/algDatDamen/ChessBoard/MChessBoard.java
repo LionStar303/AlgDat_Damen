@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import de.hsmw.algDatDamen.AlgDatDamen;
 
+@SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
 
     // ----------- Attributes -----------

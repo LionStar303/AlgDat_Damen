@@ -1,7 +1,6 @@
 package de.hsmw.algDatDamen;
 
 import de.hsmw.algDatDamen.menu.Menu;
-import de.hsmw.algDatDamen.ChessBoard.*;
 import de.hsmw.algDatDamen.menu.MenuCommand;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
