@@ -39,20 +39,7 @@ public class Level1 extends Level{
 
     protected void setInventory() {
         player.getInventory().clear();
-        // Erstellen des Emerald-Items
-        ItemStack emerald = new ItemStack(Material.EMERALD);
-        ItemMeta meta = emerald.getItemMeta();
-
-        if (meta != null) {
-            // Setzen des Namens und der Verzauberung
-            meta.displayName(Component.text("Developer Menü", NamedTextColor.BLUE));
-            meta.addEnchant(Enchantment.FORTUNE, 1, true);  // Verzauberung hinzufügen
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);   // Versteckt das Verzauberungs-Glitzern
-
-            emerald.setItemMeta(meta);
-        }
-
-        player.getInventory().setItem(4, emerald);
+        setControlItems();
     }
 
     @Override

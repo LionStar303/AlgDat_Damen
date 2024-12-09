@@ -7,8 +7,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public abstract class Level implements Listener{
 
@@ -55,9 +58,38 @@ public abstract class Level implements Listener{
     }
 
     protected abstract void setInventory();
+    protected void setControlItems() {
+        ItemStack backItem = new ItemStack(Material.RED_DYE);
+        ItemStack returnItem = new ItemStack(Material.GREEN_DYE);
+        ItemStack forwardItem = new ItemStack(Material.BLUE_DYE);
+        
+        ItemMeta meta = backItem.getItemMeta();
+        meta.displayName(Component.text("zurück"));
+        backItem.setItemMeta(meta);
+
+        meta = returnItem.getItemMeta();
+        meta.displayName(Component.text("wiederhole"));
+        returnItem.setItemMeta(meta);
+
+        meta = forwardItem.getItemMeta();
+        meta.displayName(Component.text("weiter"));
+        forwardItem.setItemMeta(meta);
+        
+        player.getInventory().setItem(6, backItem);
+        player.getInventory().setItem(7, returnItem);
+        player.getInventory().setItem(8, forwardItem);
+    }
+
     private void nextStep() {
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
-        if(!currentStep.completed() || currentStep.getNext() == null) return;
+        if(!currentStep.completed()) {
+            player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
+            return;
+        }
+        if(currentStep.getNext() == null) {
+            player.sendMessage(Component.text("Du kannst ins nächste Level vorrücken.", NamedTextColor.RED));
+            return;
+        }
         currentStep = currentStep.getNext();
     }
     private void prevStep() {
@@ -76,9 +108,9 @@ public abstract class Level implements Listener{
         ItemStack itemInHand = event.getItem();
         if(itemInHand == null || !itemInHand.hasItemMeta()) return;
 
-        /* red dye - vorheriger Step
-         * green dye - wiederhole Step
-         * blue dye - nächster Step
+        /* slot 6 - red dye - vorheriger Step
+         * slot 7 - green dye - wiederhole Step
+         * slot 8 - blue dye - nächster Step
         */
         if(itemInHand.getType() == Material.RED_DYE && itemInHand.getItemMeta().displayName().toString() == "zurück") prevStep();
         else if(itemInHand.getType() == Material.GREEN_DYE && itemInHand.getItemMeta().displayName().toString() == "wiederhole") resetStep();
