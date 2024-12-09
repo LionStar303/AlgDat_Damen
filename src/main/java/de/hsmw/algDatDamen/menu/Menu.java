@@ -141,6 +141,15 @@ public class Menu implements Listener {
         this.addMenuItem(Material.IRON_BLOCK, "Akutelle Figur: " + p.getName(), MenuSlots.PIECE,
                 "changePiece");
 
+        this.addMenuItem(Material.IRON_BLOCK, "Update Piece" + p.getName(), MenuSlots.UPDATED_PIECE,
+                "updatePieces");
+        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt", MenuSlots.REVERSE_STEP,
+                "handleReverseFast");
+        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt Animation", MenuSlots.REVERSE_ANIMATION,
+                "handleReverse");
+        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt Animation Schnell", MenuSlots.REVERSE_ANIMATION_FAST,
+                "handleReverseStep");
+
         this.fillEmptySlots();
     }
 

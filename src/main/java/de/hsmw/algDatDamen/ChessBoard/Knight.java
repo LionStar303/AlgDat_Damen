@@ -106,6 +106,11 @@ public class Knight extends Piece {
         Knight newP = new Knight(this.x, this.y);
         return newP;
     }
+  
+    public Knight clone(int x, int y) {
+        Knight newP = new Knight(x, y);
+        return newP;
+    }
 
     public String getName(){
         return "Knight";
