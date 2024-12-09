@@ -25,4 +25,5 @@ public abstract class Step {
     public Step getPrev() { return prev; }
     public Step getNext() { return next; }
     public abstract void start();
+    public abstract void reset();
 }

@@ -13,5 +13,11 @@ public class Step1 extends Step{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'start'");
     }
+
+    @Override
+    public void reset() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+    }
     
 }

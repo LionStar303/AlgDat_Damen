@@ -61,7 +61,12 @@ public abstract class Level implements Listener{
         currentStep = currentStep.getNext();
     }
     private void prevStep() {
+        currentStep.reset();
         if(currentStep.getPrev() != null) currentStep = currentStep.getPrev();
+    }
+    private void resetStep() {
+        currentStep.reset();
+        currentStep.start();
     }
 
     @EventHandler
@@ -76,7 +81,7 @@ public abstract class Level implements Listener{
          * blue dye - nächster Step
         */
         if(itemInHand.getType() == Material.RED_DYE && itemInHand.getItemMeta().displayName().toString() == "zurück") prevStep();
-        else if(itemInHand.getType() == Material.GREEN_DYE && itemInHand.getItemMeta().displayName().toString() == "wiederhole") currentStep.start();
+        else if(itemInHand.getType() == Material.GREEN_DYE && itemInHand.getItemMeta().displayName().toString() == "wiederhole") resetStep();
         else if(itemInHand.getType() == Material.BLUE_DYE && itemInHand.getItemMeta().displayName().toString() == "weiter") nextStep();
     }
 }
