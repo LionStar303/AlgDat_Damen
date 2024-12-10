@@ -6,7 +6,7 @@ import de.hsmw.algDatDamen.tutorialHandler.Levels.level1.Level1;
 
 public class Tutorial {
 
-    Level firstLevel;
+    Level currentLevel;
     Player player;
 
     public Tutorial(Player player) {
@@ -14,15 +14,18 @@ public class Tutorial {
     }
 
     public void initialize() {
-        firstLevel = new Level1(player);
+        currentLevel = new Level1(player);
         
     }
 
     public void start() {
         System.out.println("Tutorial: starte Tutorial");
-        firstLevel.start();
+        currentLevel.start();
     }
 
+    public Level getCurrentLevel() {
+        return currentLevel;
+    }
     public Player getPlayer() {
         return player;
     }

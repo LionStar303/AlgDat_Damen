@@ -3,7 +3,6 @@ package de.hsmw.algDatDamen.tutorialHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +13,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public abstract class Level implements Listener{
+
+    private final String BACK_TEXT = "zurück";
+    private final String RETURN_TEXT = "wiederhole";
+    private final String FORWARD_TEXT = "weiter";
 
     private String name; // vielleicht als Bossbar anzeigen
     private String description;
@@ -64,15 +67,15 @@ public abstract class Level implements Listener{
         ItemStack forwardItem = new ItemStack(Material.BLUE_DYE);
         
         ItemMeta meta = backItem.getItemMeta();
-        meta.displayName(Component.text("zurück"));
+        meta.displayName(Component.text(BACK_TEXT));
         backItem.setItemMeta(meta);
 
         meta = returnItem.getItemMeta();
-        meta.displayName(Component.text("wiederhole"));
+        meta.displayName(Component.text(RETURN_TEXT));
         returnItem.setItemMeta(meta);
 
         meta = forwardItem.getItemMeta();
-        meta.displayName(Component.text("weiter"));
+        meta.displayName(Component.text(FORWARD_TEXT));
         forwardItem.setItemMeta(meta);
         
         player.getInventory().setItem(6, backItem);
@@ -101,19 +104,21 @@ public abstract class Level implements Listener{
         currentStep.start();
     }
 
-    @EventHandler
-    public void onBlockInteract(PlayerInteractEvent event) {
-        // return wenn anderer Spieler geklickt hat
-        if(player != event.getPlayer()) return;
+    public void handleEvent(PlayerInteractEvent event) {
+        // Event wird nur aufgerufen, wenn der Spieler ein Item in der Hand hält
         ItemStack itemInHand = event.getItem();
-        if(itemInHand == null || !itemInHand.hasItemMeta()) return;
+        if(!itemInHand.hasItemMeta()) return;
+
+        System.out.println("Clicked with " + itemInHand.getType().toString() + " " + itemInHand.getItemMeta().displayName().toString());
 
         /* slot 6 - red dye - vorheriger Step
          * slot 7 - green dye - wiederhole Step
          * slot 8 - blue dye - nächster Step
         */
-        if(itemInHand.getType() == Material.RED_DYE && itemInHand.getItemMeta().displayName().toString() == "zurück") prevStep();
-        else if(itemInHand.getType() == Material.GREEN_DYE && itemInHand.getItemMeta().displayName().toString() == "wiederhole") resetStep();
-        else if(itemInHand.getType() == Material.BLUE_DYE && itemInHand.getItemMeta().displayName().toString() == "weiter") nextStep();
+        if(itemInHand.getType() == Material.RED_DYE && itemInHand.getItemMeta().displayName().equals(Component.text(BACK_TEXT))) prevStep();
+        else if(itemInHand.getType() == Material.GREEN_DYE && itemInHand.getItemMeta().displayName().equals(Component.text(RETURN_TEXT))) resetStep();
+        else if(itemInHand.getType() == Material.BLUE_DYE && itemInHand.getItemMeta().displayName().equals(Component.text(FORWARD_TEXT))) nextStep();
+
+        event.setCancelled(true);
     }
 }

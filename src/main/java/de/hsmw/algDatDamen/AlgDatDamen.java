@@ -90,12 +90,21 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         ItemStack itemInHand = event.getItem();
 
         if (itemInHand == null) return;
+        Material itemInHandType = itemInHand.getType();
 
         // Check for Development menu item
-        if (itemInHand.getType() == Material.EMERALD && itemInHand.hasItemMeta() &&
+        if (itemInHandType == Material.EMERALD && itemInHand.hasItemMeta() &&
                 itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
+        } else if(itemInHandType == Material.RED_DYE || itemInHandType == Material.GREEN_DYE || itemInHandType == Material.BLUE_DYE) {
+            tutorials.forEach((t) -> {
+                if(t.getPlayer().equals(player)) {
+                    t.getCurrentLevel().handleEvent(event);
+                    event.setCancelled(true);
+                    return;
+                }
+            });
         }
     }
 
