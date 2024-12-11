@@ -39,7 +39,7 @@ public class Menu implements Listener {
      * @param size Has to be a number dividable by 9.
      */
     public Menu(int size) {
-        this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
+        this.inventory = Bukkit.createInventory(null, size, Component.text("Schach Menü"));
         this.size = size;
     }
 
