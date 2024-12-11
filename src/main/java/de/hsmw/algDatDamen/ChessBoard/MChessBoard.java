@@ -632,7 +632,8 @@ public class MChessBoard extends ChessBoard {
 
                 // Skip blocks where there is no collision or where a queen's bottom part is
                 // present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                        || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -848,8 +849,6 @@ public class MChessBoard extends ChessBoard {
         return false;
 
     }
-
-
 
     public void animationStepToRow(Piece p, int x) {
         if (isAnimationRunning) {

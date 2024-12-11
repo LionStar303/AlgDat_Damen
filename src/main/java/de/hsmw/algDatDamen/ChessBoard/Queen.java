@@ -85,16 +85,15 @@ public class Queen extends Piece {
         Queen newP = new Queen(this.x, this.y);
         return newP;
     }
-  
-  @Override
-  public Queen clone(int x, int y) {
+
+    @Override
+    public Queen clone(int x, int y) {
         Queen newP = new Queen(x, y);
         return newP;
     }
-  
-    public String getName(){
+
+    public String getName() {
         return "Queen";
     }
-
 
 }
