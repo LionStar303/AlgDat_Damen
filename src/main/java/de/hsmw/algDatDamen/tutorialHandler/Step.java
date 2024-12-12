@@ -28,11 +28,16 @@ public class Step {
     public void setNext(Step next) { this.next = next; }
     public Step getPrev() { return prev; }
     public Step getNext() { return next; }
+    public void backLink() {
+        next.setPrev(this);
+        if(next.getNext() != null) next.backLink();
+    }
     public void start() {
         onStart.run();
         completed = true;
     };
     public void reset() {
         onReset.run();
+        completed = false;
     };
 }

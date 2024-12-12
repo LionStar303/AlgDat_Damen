@@ -21,24 +21,24 @@ public abstract class Level implements Listener{
     private String name; // vielleicht als Bossbar anzeigen
     private String description;
     private Location startLocation;
-    protected MChessBoard chessBoard;
+    protected MChessBoard[] chessBoards;
     protected Player player;
     protected boolean active;
     protected boolean completed;
     protected Step currentStep;
 
-    public Level(String name, String description, MChessBoard chessBoard, Player player, Location startLocation, boolean completed) {
+    public Level(String name, String description, Player player, Location startLocation, boolean completed) {
         this.name = name;
         this.description = description;
-        this.chessBoard = chessBoard;
         this.player = player;
         this.startLocation = startLocation;
         this.completed = completed;
     }
 
     // Abstrakte Methoden
+    protected abstract void configureChessBoards();
     protected abstract void setInventory();
-    public abstract void initializeSteps();
+    protected abstract void initializeSteps();
 
     // Standardmethoden
     public void start() {
@@ -46,17 +46,22 @@ public abstract class Level implements Listener{
         active = true;
         teleportToStart();
 
-        setInventory();
-        // Erzeugung eines 8x8 Schachbretts
-        chessBoard.setSize(8);
-        chessBoard.spawnChessBoard();
+        configureChessBoards();
+        initializeSteps();
 
         player.setRespawnLocation(startLocation);
         player.sendMessage(name);
         player.sendMessage(description);
-        
-        initializeSteps();
+
+        setInventory();
+        spawnChessBoards();
         currentStep.start();
+    }
+    
+    private void spawnChessBoards() {
+        for(MChessBoard cb : chessBoards) {
+            cb.spawnChessBoard();
+        }
     }
 
     private void teleportToStart() {
@@ -87,6 +92,7 @@ public abstract class Level implements Listener{
     }
 
     private void nextStep() {
+        System.out.println("running next step");
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if(!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -97,12 +103,15 @@ public abstract class Level implements Listener{
             return;
         }
         currentStep = currentStep.getNext();
+        currentStep.start();
     }
     private void prevStep() {
+        System.out.println("running prev step");
         currentStep.reset();
         if(currentStep.getPrev() != null) currentStep = currentStep.getPrev();
     }
     private void resetStep() {
+        System.out.println("running reset step");
         currentStep.reset();
         currentStep.start();
     }
