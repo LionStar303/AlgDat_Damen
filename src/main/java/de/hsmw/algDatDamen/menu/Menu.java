@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.menu;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -50,7 +52,12 @@ public class Menu implements Listener {
      * @param event  Triggering event.
      */
     public void openInventory(Player player, PlayerInteractEvent event) {
-        player.openInventory(inventory);
+        InventoryView inventoryView = player.openInventory(inventory);
+        if (getClickedMCB(event) == null) {
+            inventoryView.setTitle("Schach Menü - " + ChatColor.GREEN + "Schachbrett ausgewählt!");
+        } else {
+            inventoryView.setTitle("Schach Menü - " + ChatColor.RED + "Kein Schachbrett ausgewählt!");
+        }
         this.event = event;
     }
 
@@ -93,8 +100,9 @@ public class Menu implements Listener {
                 }
 
                 if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot
-                        || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
-                    return;
+                        || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE
+                        || slot == MenuSlots.PIECE.slot) {
+
                 } else {
                     inventory.close();
                 }
@@ -132,17 +140,17 @@ public class Menu implements Listener {
                 "removeAllQueens");
         this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS,
                 "rotateQueens");
-        this.addMenuItem(Material.IRON_BLOCK, "Akutelle Figur: " + p.getName(), MenuSlots.PIECE,
+        this.addMenuItem(Material.IRON_BLOCK, "Aktuelle Figur: " + p.getName(), MenuSlots.PIECE,
                 "changePiece");
-        this.addMenuItem(Material.IRON_BLOCK, "Update Pieces" + p.getName(), MenuSlots.UPDATED_PIECE,
+        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces" + p.getName(), MenuSlots.UPDATED_PIECE,
                 "updatePieces");
 
         // - Backtrack Functions
         this.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL,
                 "handleBacktrack");
-        this.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
+        this.addMenuItem(Material.IRON_PICKAXE, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
                 "handleBacktrackStep");
-        this.addMenuItem(Material.IRON_AXE, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL,
+        this.addMenuItem(Material.GOLDEN_SWORD, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL,
                 "handleBacktrackToRow");
         this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW,
                 "increaseBacktrackRow");
@@ -151,11 +159,11 @@ public class Menu implements Listener {
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
                 "handleBacktrackAnimationQueenStep");
 
-        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt", MenuSlots.REVERSE_STEP,
+        this.addMenuItem(Material.GOLDEN_PICKAXE, "Rückschritt", MenuSlots.REVERSE_STEP,
                 "handleReverseStep");
-        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt Animation", MenuSlots.REVERSE_ANIMATION,
+        this.addMenuItem(Material.DIAMOND_HOE, "Rückschritt Animation", MenuSlots.REVERSE_ANIMATION,
                 "handleReverse");
-        this.addMenuItem(Material.IRON_BLOCK, "Rückschritt Animation Schnell", MenuSlots.REVERSE_ANIMATION_FAST,
+        this.addMenuItem(Material.GOLDEN_HOE, "Rückschritt Animation Schnell", MenuSlots.REVERSE_ANIMATION_FAST,
                 "handleReverseFast");
 
         this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL,
