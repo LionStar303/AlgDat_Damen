@@ -21,12 +21,10 @@ public abstract class Level implements Listener{
     private String name; // vielleicht als Bossbar anzeigen
     private String description;
     private Location startLocation;
-    private int stepCount;
     protected MChessBoard chessBoard;
     protected Player player;
     protected boolean active;
     protected boolean completed;
-    protected Step[] steps = new Step[stepCount];
     protected Step currentStep;
 
     public Level(String name, String description, MChessBoard chessBoard, Player player, Location startLocation, boolean completed) {
@@ -38,6 +36,11 @@ public abstract class Level implements Listener{
         this.completed = completed;
     }
 
+    // Abstrakte Methoden
+    protected abstract void setInventory();
+    public abstract void initializeSteps();
+
+    // Standardmethoden
     public void start() {
         System.out.println("Level: starte level");
         active = true;
@@ -52,6 +55,7 @@ public abstract class Level implements Listener{
         player.sendMessage(name);
         player.sendMessage(description);
         
+        initializeSteps();
         currentStep.start();
     }
 
@@ -60,7 +64,6 @@ public abstract class Level implements Listener{
         player.setFlying(false);
     }
 
-    protected abstract void setInventory();
     protected void setControlItems() {
         ItemStack backItem = new ItemStack(Material.RED_DYE);
         ItemStack returnItem = new ItemStack(Material.GREEN_DYE);

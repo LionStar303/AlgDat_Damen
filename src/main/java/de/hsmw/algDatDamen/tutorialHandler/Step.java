@@ -1,21 +1,25 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
-public abstract class Step {
+public class Step {
 
     private Step prev;
     private Step next;
+    private Runnable onStart;
+    private Runnable onReset;
     protected boolean completed;
 
-    public Step() {
-        this(null, null);
+    public Step(Runnable onStart, Runnable onReset) {
+        this(null, null, onStart, onReset);
     }
-    public Step(Step prev, Step next) {
+    public Step(Step prev, Step next, Runnable onStart, Runnable onReset) {
         // standard Initialisierung mit completed = false
-        this(next, prev, false);
+        this(next, prev, onStart, onReset, false);
     }
-    public Step(Step prev, Step next, boolean completed) {
+    public Step(Step prev, Step next, Runnable onStart, Runnable onReset, boolean completed) {
         this.prev = prev;
         this.next = next;
+        this.onStart = onStart;
+        this.onReset = onReset;
         this.completed = completed;
     }
 
@@ -24,6 +28,11 @@ public abstract class Step {
     public void setNext(Step next) { this.next = next; }
     public Step getPrev() { return prev; }
     public Step getNext() { return next; }
-    public abstract void start();
-    public abstract void reset();
+    public void start() {
+        onStart.run();
+        completed = true;
+    };
+    public void reset() {
+        onReset.run();
+    };
 }
