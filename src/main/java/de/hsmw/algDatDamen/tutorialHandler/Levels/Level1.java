@@ -55,7 +55,7 @@ public class Level1 extends Level{
             () -> {
                 // spawne Queen auf Feld (3,2)
                 System.out.println("setze Dame auf 3, 2");
-                // TODO Dame wird nicht richtig gespawnt
+                // TODO Dame wird nicht richtig gespawnt FFFF
                 chessBoards[0].addPiece(new Queen(3,2));
                 chessBoards[0].updatePieces();
             },
