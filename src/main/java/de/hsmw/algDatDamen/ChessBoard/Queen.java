@@ -1,106 +1,89 @@
 package de.hsmw.algDatDamen.ChessBoard;
 
 /**
- * This class represents a Queen on the chessboard.
- * It stores the position of the queen and whether it is a "super queen."
+ * Represents a Queen on the chessboard.
+ * A Queen can move any number of squares along a row, column, or diagonal.
+ *
+ * This class defines its position and provides collision-detection logic
+ * to validate the Queen's placement on the board.
  *
  * @version 1.1, 24.10.2024
+ * @author Moritz Kockert
  */
-public class Queen extends Piece{
-
-    // Attributes
-    private int x; // Row position
-    private int y; // Column position
-    private boolean isSuperQueen;
+public class Queen extends Piece {
 
     /**
-     * Constructor to create a regular queen at the specified position.
+     * Constructor to create a Queen at the specified position.
      *
-     * @param x The x-coordinate (row) of the queen.
-     * @param y The y-coordinate (column) of the queen.
+     * @param x The x-coordinate (row) of the Queen's position.
+     * @param y The y-coordinate (column) of the Queen's position.
      */
     public Queen(int x, int y) {
         this.x = x;
         this.y = y;
-        this.isSuperQueen = false;
     }
 
     /**
-     * Default constructor that initializes the queen at position (0, 0) as a
-     * regular queen.
+     * Constructor to create a Queen at 0 0
      */
     public Queen() {
         this.x = 0;
         this.y = 0;
-        this.isSuperQueen = false;
-    }
-
-    // Methods
-
-    /**
-     * Returns the x-coordinate (row) of the queen.
-     *
-     * @return int The x-coordinate of the queen.
-     */
-    public int getX() {
-        return x;
     }
 
     /**
-     * Sets the x-coordinate (row) of the queen.
+     * Provides a string representation of the Queen, including its current
+     * position.
      *
-     * @param newX The new x-coordinate of the queen.
-     */
-    public void setX(int newX) {
-        this.x = newX;
-    }
-
-    /**
-     * Returns the y-coordinate (column) of the queen.
-     *
-     * @return int The y-coordinate of the queen.
-     */
-    public int getY() {
-        return y;
-    }
-
-    /**
-     * Sets the y-coordinate (column) of the queen.
-     *
-     * @param newY The new y-coordinate of the queen.
-     */
-    public void setY(int newY) {
-        this.y = newY;
-    }
-
-    /**
-     * Returns whether the queen is a "super queen."
-     *
-     * @return boolean True if the queen is a super queen, false otherwise.
-     */
-    public boolean isSuperQueen() {
-        return isSuperQueen;
-    }
-
-    /**
-     * Sets the status of the queen as a "super queen."
-     *
-     * @param newSuperQueen True to mark the queen as a super queen, false to set as
-     *                      regular queen.
-     */
-    public void setSuperQueen(boolean newSuperQueen) {
-        this.isSuperQueen = newSuperQueen;
-    }
-
-    /**
-     * Returns a string representation of the queen, including position and type.
-     *
-     * @return String A description of the queen and its status.
+     * @return A string describing the Queen's position on the board.
      */
     @Override
     public String toString() {
-        return "Queen is at (" + x + ", " + y + ") "
-                + (isSuperQueen ? "and is a Super Queen." : "and is a regular Queen.");
+        return "Queen is at (" + getX() + ", " + getY() + ")";
+    }
+
+    /**
+     * Compares the position of this Queen with another Queen.
+     *
+     * @param q Another Queen object to compare.
+     * @return True if both Queens occupy the same position, false otherwise.
+     */
+    public boolean equals(Queen q) {
+        return q != null && q.getX() == getX() && q.getY() == getY();
+    }
+
+    /**
+     * Checks if placing a Queen at the specified coordinates (checkX, checkY)
+     * would cause a collision with this Queen.
+     *
+     * A collision occurs if the target position shares the same row, column,
+     * or diagonal as this Queen.
+     *
+     * @param checkX The x-coordinate of the position to check.
+     * @param checkY The y-coordinate of the position to check.
+     * @return True if a collision is detected, false otherwise.
+     */
+    @Override
+    public boolean checkCollision(int checkX, int checkY) {
+        // Check for conflicts in row, column, or diagonal
+        return getX() == checkX || getY() == checkY ||
+                Math.abs(getX() - checkX) == Math.abs(getY() - checkY);
+    }
+
+    /**
+     * Retrieves the character representation of the Queen.
+     *
+     * @return 'Q', representing the Queen piece.
+     */
+    @Override
+    public char getLetter() {
+        return 'Q';
+    }
+
+    @Override
+    public Queen clone() {
+        Queen newP = new Queen(this.x, this.y);
+        return newP;
     }
 
     @Override
