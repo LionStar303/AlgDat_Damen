@@ -34,7 +34,7 @@ public class Tutorial {
         levels = new ArrayList<Level>();
 
         // Levels erstellen
-        levels.add(new Level1(getPlayer()));
+        levels.add(new Level1(getPlayer(), this));
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
@@ -53,7 +53,15 @@ public class Tutorial {
         return Bukkit.getPlayer(playerUUID);
     }
 
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
     public int getProgress() {
         return this.progress;
+    }
+
+    public void incProgress() {
+        progress++;
     }
 }

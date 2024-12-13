@@ -16,22 +16,34 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 public class TutorialSaveManager {
 
     private final ArrayList<Tutorial> tutorialList;
-    private final ArrayList<Tutorial> tempProgressList;
+    private final ArrayList<Tutorial> saveProgressList;
     private static final String FILE_PATH = "tutorials.json";
     private Gson gson;
 
     public TutorialSaveManager() {
         this.tutorialList = new ArrayList<Tutorial>();
-        this.tempProgressList = new ArrayList<Tutorial>();
+        this.saveProgressList = new ArrayList<Tutorial>();
         gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
         loadTutorialProgress();
     }
 
     public void saveTutorialProgress() {
+        // copy current progress to saveList
+        for (Tutorial saveTutorial : saveProgressList) {
+            for (Tutorial mcTutorial : tutorialList) {
+                if (mcTutorial.getPlayer() == saveTutorial.getPlayer()) {
+                    saveTutorial.setProgress(mcTutorial.getProgress());
+                    break;
+                }
+            }
+        }
+
         // save chessboards to file
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            gson.toJson(tutorialList, writer);
-            System.out.println(tutorialList.size() + " Tutorial progress saved to file!");
+        try (
+
+                FileWriter writer = new FileWriter(FILE_PATH)) {
+            gson.toJson(saveProgressList, writer);
+            System.out.println(saveProgressList.size() + " Tutorial progress saved to file!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,9 +60,8 @@ public class TutorialSaveManager {
         // load progress out of file
         try (FileReader fileReader = new FileReader(FILE_PATH)) {
             Tutorial[] ProgressList = gson.fromJson(fileReader, Tutorial[].class);
-            tutorialList.clear();
             for (Tutorial tut : ProgressList) {
-                tempProgressList.add(tut);
+                saveProgressList.add(tut);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,8 +72,17 @@ public class TutorialSaveManager {
         return tutorialList;
     }
 
+    /**
+     * method to get a players tutorial progress
+     * ONLY USE TO INITIALIZE TUTORIALS
+     * as the returned progress represents the players progress when joining the
+     * server, not the current progress
+     *
+     * @param player player to request progress from
+     * @returns zero indexed number that represents the current level
+     */
     public int getProgress(Player player) {
-        for (Tutorial tutorial : tempProgressList) {
+        for (Tutorial tutorial : saveProgressList) {
             if (player == tutorial.getPlayer()) {
                 return tutorial.getProgress();
             }

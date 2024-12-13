@@ -7,9 +7,10 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
+import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
 
-public class Level1 extends Level{
+public class Level1 extends Level {
 
     private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
     private final static Component NPC_EXPLAIN_CHESSBOARD = Component.text("Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.");
@@ -17,17 +18,17 @@ public class Level1 extends Level{
     private final static Component NPC_EXPLAIN_MOVEMENT = Component.text("Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.");
     private final static Component NPC_EXPLAIN_THREATS = Component.text("Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.");
 
-    public Level1(Player player) {
-        this(player, new Location(player.getWorld(), -30, -43, 143));
+    public Level1(Player player, Tutorial parent) {
+        this(player, new Location(player.getWorld(), -30, -43, 143), parent);
     }
 
-    public Level1(Player player, Location startLocation) {
-        this(player, startLocation, false);
+    public Level1(Player player, Location startLocation, Tutorial parent) {
+        this(player, startLocation, false, parent);
     }
 
-    public Level1(Player player, Location startLocation, boolean completed) {
+    public Level1(Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super("Level 1 - Einführung", LEVEL_DESCRIPTION, player, startLocation, completed);
+        super("Level 1 - Einführung", LEVEL_DESCRIPTION, player, startLocation, completed, parent);
     }
 
     protected void setInventory() {

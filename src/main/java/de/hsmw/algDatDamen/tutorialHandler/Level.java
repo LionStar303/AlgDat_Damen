@@ -23,18 +23,21 @@ public abstract class Level implements Listener {
     private final Component LEVEL_NAME; // vielleicht als Bossbar anzeigen
     private final Component LEVEL_DESCRIPTION;
     private Location startLocation;
+    protected Tutorial parentTutorial;
     protected MChessBoard[] chessBoards;
     protected Player player;
     protected boolean active;
     protected boolean completed;
     protected Step currentStep;
 
-    public Level(String name, String description, Player player, Location startLocation, boolean completed) {
+    public Level(String name, String description, Player player, Location startLocation, boolean completed,
+            Tutorial parent) {
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
         this.startLocation = startLocation;
         this.completed = completed;
+        this.parentTutorial = parent;
     }
 
     // Abstrakte Methoden
@@ -62,6 +65,9 @@ public abstract class Level implements Listener {
         spawnChessBoards();
         // ersten Schritt starten
         currentStep.start();
+
+        // TODO Logik einbauen wenn Level beendet wird parentTutorial.incProgress()
+        // aufrufen
     }
 
     private void spawnChessBoards() {
