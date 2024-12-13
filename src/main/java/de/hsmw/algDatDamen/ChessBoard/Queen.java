@@ -102,14 +102,15 @@ public class Queen extends Piece{
         return "Queen is at (" + x + ", " + y + ") "
                 + (isSuperQueen ? "and is a Super Queen." : "and is a regular Queen.");
     }
-  
-  @Override
-  public Queen clone(int x, int y) {
+
+    @Override
+    public Queen clone(int x, int y) {
         Queen newP = new Queen(x, y);
         return newP;
     }
-  
-    public String getName(){
+
+    public String getName() {
         return "Queen";
     }
+
 }
