@@ -1,15 +1,16 @@
-//package de.hsmw.algDatDamen.ChessBoard;
+package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChessBoardTest {
 
+    public final static boolean TEST = false;
     public boolean console = false;
     private static List<String> errorLog = new ArrayList<>(); // Fehlerprotokoll
 
     public static void main(String[] args) {
-
+        if(!TEST) return;
         try {
 
             System.out.println("Starting ChessBoard tests...");

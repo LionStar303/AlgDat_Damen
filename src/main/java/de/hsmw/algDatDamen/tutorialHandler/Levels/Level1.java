@@ -42,7 +42,6 @@ public class Level1 extends Level{
             () -> {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(NPC_EXPLAIN_CHESSBOARD);
-                System.out.println("step 1 ausgeführt");
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {} // TODO NPC zum Schweigen bringen

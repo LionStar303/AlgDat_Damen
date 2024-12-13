@@ -40,7 +40,7 @@ public class MChessBoard extends ChessBoard {
             Material blackFieldMaterial) {
         this.size = size;
         this.pieces = new ArrayList<>();
-        this.console = false;
+        this.console = true;
         this.originCorner = originCorner;
         // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
@@ -557,10 +557,12 @@ public class MChessBoard extends ChessBoard {
     public boolean spawnPiece(Piece p) {
         int x = p.getX();
         int y = p.getY();
+        System.out.println("spawning Piece " + p.getLetter() + " at " + x + ", " + y);
 
         Location pieceLocation = originCorner.clone().add(x, 2, y);
 
         if (pieceLocation.getBlock().getType() != Material.AIR) {
+            System.out.println("could not Spawn Piece at non air block");
             return false;
         }
 
@@ -582,6 +584,7 @@ public class MChessBoard extends ChessBoard {
         }
 
         updateCollisionCarpets();
+        System.out.println("successfully spawned Piece");
         return true;
     }
 

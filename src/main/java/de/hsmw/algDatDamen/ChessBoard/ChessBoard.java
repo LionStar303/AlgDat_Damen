@@ -429,10 +429,6 @@ public class ChessBoard {
      *         possible), false otherwise.
      */
     public boolean reverseBackStep(Piece p) {
-        if (p.getLetter() == 'K') {
-      return false;    
-        } // end of if
-           
         // Check for null input and handle it gracefully
         if (p == null) {
             if (console) {
@@ -440,6 +436,8 @@ public class ChessBoard {
             }
             return false; // Treat as no-op
         }
+
+        if (p.getLetter() == 'K') return false;
 
         // Log the current state if console messages are enabled
         if (console) {
