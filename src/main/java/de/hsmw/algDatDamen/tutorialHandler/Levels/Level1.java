@@ -158,3 +158,5 @@ public class Level1 extends Level{
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player);
     }
 }
+
+                

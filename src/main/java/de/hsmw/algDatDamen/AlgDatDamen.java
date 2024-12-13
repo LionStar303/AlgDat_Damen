@@ -1,7 +1,9 @@
 package de.hsmw.algDatDamen;
 
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.menu.MenuCommand;
+import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import net.kyori.adventure.text.Component;
@@ -21,11 +23,15 @@ import java.util.ArrayList;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
+    /**
+     * initialize chessboard list
+     * 
+     * @deprecated only for testing purposes, use TutorialHandler instead
+     */
+    public static ArrayList<MChessBoard> chessBoards = new ArrayList<MChessBoard>();
 
-    private ArrayList<Tutorial> tutorials;
-    // private ArrayList<MChessBoard> chessBoards;
-    // List to store all created MChessBoard instances
-    public static ChessBoardSaveManager saveManager;
+    public static TutorialSaveManager saveManager = new TutorialSaveManager();
+
     // Generate development menu
     public static final Menu devMenu = new Menu(27);
     public static AlgDatDamen instance;
@@ -39,27 +45,13 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onEnable() {
         instance = this;
 
-        // Initialize the list of chess boards
-        // saveManager = new ChessBoardSaveManager();
-        tutorials = new ArrayList<Tutorial>();
-        // chessBoards = new ArrayList<MChessBoard>();
-
-        // Load saved chess boards
-        /*getLogger().info("Loaded " + saveManager.getCbList().size() + " chess boards from file!");
-        for (MChessBoard chessBoard : saveManager.getCbList()) {
-            chessBoards.add(chessBoard);
-            // chessBoard.spawnChessBoard();
-            // chessBoard.spawnAllQueens();
-            getLogger().info("chessBoards wurde initialisiert");
-        }*/
-
         // Register event listeners for player interactions
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(devMenu, this);
 
         // Register commands
         getCommand("schachmenu").setExecutor(new MenuCommand(devMenu));
-        getCommand("startTutorial").setExecutor(new TutorialCommand(tutorials));
+        getCommand("startTutorial").setExecutor(new TutorialCommand(saveManager.getTutorialList()));
 
         devMenu.init(boardSize); // Configure Menus
 
@@ -69,19 +61,27 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Log plugin shutdown
-        // saveManager.saveChessBoards();
+        saveManager.saveTutorialProgress();
+
+        // remove custom chessboards
+        chessBoards.forEach((cb) -> {
+            cb.despawnChessBoard();
+        });
         getLogger().info("AlgDatDamen Plugin is now inactive.");
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        tutorials.forEach((tutorial) -> { if(tutorial.getPlayer().equals(event.getPlayer())) return; });
+        saveManager.getTutorialList().forEach((tutorial) -> {
+            if (tutorial.getPlayer().equals(event.getPlayer()))
+                return;
+        });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        tutorials.add(new Tutorial(event.getPlayer()));
+        saveManager.getTutorialList().add(new Tutorial(event.getPlayer(), saveManager.getProgress(event.getPlayer())));
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
-        tutorials.getLast().initialize();
+        saveManager.getTutorialList().getLast().initialize();
     }
 
     @EventHandler
@@ -89,7 +89,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         ItemStack itemInHand = event.getItem();
 
-        if (itemInHand == null) return;
+        if (itemInHand == null)
+            return;
         Material itemInHandType = itemInHand.getType();
 
         // Check for Development menu item
@@ -97,9 +98,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
-        } else if(itemInHandType == Material.RED_DYE || itemInHandType == Material.GREEN_DYE || itemInHandType == Material.BLUE_DYE) {
-            tutorials.forEach((t) -> {
-                if(t.getPlayer().equals(player)) {
+        } else if (itemInHandType == Material.RED_DYE || itemInHandType == Material.GREEN_DYE
+                || itemInHandType == Material.BLUE_DYE) {
+            saveManager.getTutorialList().forEach((t) -> {
+                if (t.getPlayer().equals(player)) {
                     t.getCurrentLevel().handleEvent(event);
                     event.setCancelled(true);
                     return;

@@ -1,21 +1,43 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import com.google.gson.annotations.Expose;
 
 import de.hsmw.algDatDamen.tutorialHandler.Levels.Level1;
 
 public class Tutorial {
 
-    Level currentLevel;
-    Player player;
+    @Expose
+    private int progress;
+    @Expose
+    private UUID playerUUID;
+    private ArrayList<Level> levels;
+    private Level currentLevel;
 
-    public Tutorial(Player player) {
-        this.player = player;
+    public Tutorial(Player player, int progress) {
+        this.playerUUID = player.getUniqueId();
+        this.progress = progress;
+    }
+
+    public Tutorial(UUID playerUUID, int progress) {
+        this.playerUUID = playerUUID;
+        this.progress = progress;
     }
 
     public void initialize() {
-        currentLevel = new Level1(player);
-        
+        // Level ArrayList initialisieren
+        levels = new ArrayList<Level>();
+
+        // Levels erstellen
+        levels.add(new Level1(getPlayer()));
+
+        // aktuelles Level basierend auf dem gespeicherten Progress setzen
+        currentLevel = levels.get(progress);
     }
 
     public void start() {
@@ -26,7 +48,12 @@ public class Tutorial {
     public Level getCurrentLevel() {
         return currentLevel;
     }
+
     public Player getPlayer() {
-        return player;
+        return Bukkit.getPlayer(playerUUID);
+    }
+
+    public int getProgress() {
+        return this.progress;
     }
 }

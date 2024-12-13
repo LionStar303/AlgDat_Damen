@@ -1,17 +1,20 @@
 package de.hsmw.algDatDamen.menu;
 
-import de.hsmw.algDatDamen.ChessBoard.*;
-import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
-import de.hsmw.algDatDamen.ChessBoard.Piece;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
-import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
-import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
+import de.hsmw.algDatDamen.ChessBoard.Knight;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.ChessBoard.Superqueen;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
  * Class that contains development handles for managing chess boards and related
@@ -44,7 +47,7 @@ public class DevelopmentHandles {
 
         MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, customWhiteFieldMaterial,
                 customBlackFieldMaterial);
-        saveManager.getCbList().add(cb);
+        AlgDatDamen.chessBoards.add(cb);
     }
 
     /**
@@ -61,7 +64,7 @@ public class DevelopmentHandles {
         ;
         MChessBoard mcB = getClickedMCB(event);
         mcB.despawnChessBoard();
-        saveManager.getCbList().remove(mcB);
+        AlgDatDamen.chessBoards.remove(mcB);
         event.setCancelled(true);
     }
 
@@ -214,7 +217,7 @@ public class DevelopmentHandles {
             return null;
         }
 
-        for (MChessBoard mcB : saveManager.getCbList()) {
+        for (MChessBoard mcB : AlgDatDamen.chessBoards) {
             if (mcB.isPartOfBoard(clickedBlock.getLocation())) {
                 return mcB;
             }
@@ -342,23 +345,23 @@ public class DevelopmentHandles {
     }
 
     public static void changePiece(PlayerInteractEvent event) {
-        switch (p.getLetter()){
-        case 'Q':
-            p = new Superqueen();
-            break;
-        case 'S':
-            p = new Knight();
-            break;
-        case 'K':
-            p = new Queen();
-            break;
-        default:
+        switch (p.getLetter()) {
+            case 'Q':
+                p = new Superqueen();
+                break;
+            case 'S':
+                p = new Knight();
+                break;
+            case 'K':
+                p = new Queen();
+                break;
+            default:
 
-            p = new Queen();
-            System.out.println("Default");
-        break;
+                p = new Queen();
+                System.out.println("Default");
+                break;
+        }
+        devMenu.updateItemName(MenuSlots.PIECE, ("Figur " + p.getName()));
     }
-    devMenu.updateItemName(MenuSlots.PIECE, ("Figur " + p.getName()));
-}
 
 }

@@ -1,4 +1,4 @@
-package de.hsmw.algDatDamen;
+package de.hsmw.algDatDamen.saveManager;
 
 import java.io.IOException;
 
