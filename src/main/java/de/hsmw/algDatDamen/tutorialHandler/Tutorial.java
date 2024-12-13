@@ -2,7 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.entity.Player;
 
-import de.hsmw.algDatDamen.tutorialHandler.Levels.level1.Level1;
+import de.hsmw.algDatDamen.tutorialHandler.Levels.Level1;
 
 public class Tutorial {
 

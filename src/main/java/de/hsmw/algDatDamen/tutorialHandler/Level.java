@@ -47,6 +47,7 @@ public abstract class Level implements Listener{
         teleportToStart();
 
         configureChessBoards();
+        // alle Schritte erzeugen
         initializeSteps();
 
         player.setRespawnLocation(startLocation);
@@ -55,6 +56,7 @@ public abstract class Level implements Listener{
 
         setInventory();
         spawnChessBoards();
+        // ersten Schritt starten
         currentStep.start();
     }
     
@@ -109,6 +111,7 @@ public abstract class Level implements Listener{
         System.out.println("running prev step");
         currentStep.reset();
         if(currentStep.getPrev() != null) currentStep = currentStep.getPrev();
+        currentStep.start();
     }
     private void resetStep() {
         System.out.println("running reset step");
@@ -120,8 +123,6 @@ public abstract class Level implements Listener{
         // Event wird nur aufgerufen, wenn der Spieler ein Item in der Hand hält
         ItemStack itemInHand = event.getItem();
         if(!itemInHand.hasItemMeta()) return;
-
-        System.out.println("Clicked with " + itemInHand.getType().toString() + " " + itemInHand.getItemMeta().displayName().toString());
 
         /* slot 6 - red dye - vorheriger Step
          * slot 7 - green dye - wiederhole Step
