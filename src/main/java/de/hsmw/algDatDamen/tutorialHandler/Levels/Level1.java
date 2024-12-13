@@ -11,7 +11,7 @@ import net.kyori.adventure.text.Component;
 
 public class Level1 extends Level{
 
-    private final static String DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
+    private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
     private final static Component NPC_EXPLAIN_CHESSBOARD = Component.text("Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.");
     private final static Component NPC_EXPLAIN_QUEEN = Component.text("Im Schach gibt es sechs verschiedene Arten von Figuren. Aber heute sollen uns zwei reichen. Diese Figur nennt man Dame.");
     private final static Component NPC_EXPLAIN_MOVEMENT = Component.text("Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.");
@@ -27,7 +27,7 @@ public class Level1 extends Level{
 
     public Level1(Player player, Location startLocation, boolean completed) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super("Level 1 - Einführung", DESCRIPTION, player, startLocation, completed);
+        super("Level 1 - Einführung", LEVEL_DESCRIPTION, player, startLocation, completed);
     }
 
     protected void setInventory() {
@@ -41,7 +41,7 @@ public class Level1 extends Level{
         currentStep = new Step(
             () -> {
                 // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(NPC_EXPLAIN_CHESSBOARD);
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_CHESSBOARD));
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {} // TODO NPC zum Schweigen bringen
@@ -71,7 +71,7 @@ public class Level1 extends Level{
         setupStep.setNext(new Step(
             () -> {
                 // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(NPC_EXPLAIN_QUEEN);
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_QUEEN));
                 // TODO evtl Verzögerung einbauen...
             },
             () -> {} // TODO NPC zum Schweigen bringen
@@ -91,7 +91,7 @@ public class Level1 extends Level{
         setupStep.setNext(new Step(
             () -> {
                 // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(NPC_EXPLAIN_MOVEMENT);
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_MOVEMENT));
                 // TODO evtl Verzögerung einbauen...
             },
             () -> {} // TODO NPC zum Schweigen bringen
@@ -129,7 +129,7 @@ public class Level1 extends Level{
         setupStep.setNext(new Step(
             () -> {
                 // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(NPC_EXPLAIN_THREATS);
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS));
                 // TODO evtl Verzögerung einbauen...
             },
             () -> {} // TODO NPC zum Schweigen bringen

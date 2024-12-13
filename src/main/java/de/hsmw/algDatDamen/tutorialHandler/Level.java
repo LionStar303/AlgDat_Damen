@@ -18,8 +18,10 @@ public abstract class Level implements Listener{
     private final String RETURN_TEXT = "wiederhole";
     private final String FORWARD_TEXT = "weiter";
 
-    private String name; // vielleicht als Bossbar anzeigen
-    private String description;
+    protected final static Component EMPTY_LINE = Component.text("----\n", NamedTextColor.AQUA);
+
+    private final Component LEVEL_NAME; // vielleicht als Bossbar anzeigen
+    private final Component LEVEL_DESCRIPTION;
     private Location startLocation;
     protected MChessBoard[] chessBoards;
     protected Player player;
@@ -28,8 +30,8 @@ public abstract class Level implements Listener{
     protected Step currentStep;
 
     public Level(String name, String description, Player player, Location startLocation, boolean completed) {
-        this.name = name;
-        this.description = description;
+        this.LEVEL_NAME =  Component.text(name, NamedTextColor.BLUE);
+        this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
         this.startLocation = startLocation;
         this.completed = completed;
@@ -51,8 +53,8 @@ public abstract class Level implements Listener{
         initializeSteps();
 
         player.setRespawnLocation(startLocation);
-        player.sendMessage(name);
-        player.sendMessage(description);
+        player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
+        player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_DESCRIPTION));
 
         setInventory();
         spawnChessBoards();
