@@ -23,9 +23,10 @@ public class Level2 extends Level {
                 "Hierbei handelt es sich um das sogenannte N-Damen-Problem. Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett platziert werden müssen, ohne dass sich zwei Damen gegenseitig angreifen.\r\n" +
                 "Und wie du auch gesehen hast haben wir das Problem soeben gelöst.\r\n" +
                 "Also lass mich nun dazu über gehen wie das passiert ist.\r\n");
-                private final static Component NPC_EXPLAIN_3X3_1 = Component.text("Hier ist ein weitaus kleineres Feld, aber leider ist dieses Feld zu klein als das man hier ein Lösung finden könnte.");
-                private final static Component NPC_EXPLAIN_3X3_2 = Component.text("Egal wie ich diese drei Damen platziere, es würden sich immer mindestens zwei gegenseitig schlagen.\r\n" +
-                                        "Denn das N-Damen Problem kann man erst ab einer Größe von 4x4 lösen.\r\n");
+    private final static Component NPC_EXPLAIN_3X3_1 = Component.text("Hier ist ein weitaus kleineres Feld, aber leider ist dieses Feld zu klein als das man hier ein Lösung finden könnte.");
+    private final static Component NPC_EXPLAIN_3X3_2 = Component.text("Egal wie ich diese drei Damen platziere, es würden sich immer mindestens zwei gegenseitig schlagen.\r\n" +
+                "Denn das N-Damen Problem kann man erst ab einer Größe von 4x4 lösen.\r\n");
+    private final static Component NPC_EXPLAIN_4x4_SOLUTION = Component.text("Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen.");
 
     public Level2(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -56, -37, 139), parent);
@@ -170,8 +171,6 @@ public class Level2 extends Level {
 
         // Löschen aller Damen und Löschen des Schachbretts
         // Erzeugung eines 3x3 Schachbretts
-        // Erklärung von Problem mit 3x3 durch NPC
-        // Setzen von 3 falschen Damen auf Schachbrett durch Computer
         setupStep.setNext(new Step(
             () -> {
                 // TODO Audio vom NPC abspielen lassen
@@ -183,17 +182,84 @@ public class Level2 extends Level {
                 chessBoards[2].spawnChessBoard();
                 // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
             },
-            () -> {} // TODO NPC zum Schweigen bringen
+            () -> {
+                // 3x3 Brett löschen und gelöstes 8x8 Feld spawnen
+                chessBoards[2].despawnChessBoard();
+                chessBoards[0].spawnChessBoard();
+                chessBoards[0].animationSolve(new Queen()); // TODO könnte Bugs geben wenn das zu lange dauert
+                // TODO NPC zum Schweigen bringen
+            }
         ));
         setupStep = setupStep.getNext();
 
+        // Setzen von 3 falschen Damen auf Schachbrett durch Computer
         // Erklärung von Problem mit 3x3 durch NPC
+        setupStep.setNext(new Step(
+            () -> {
+                // TODO Audio vom NPC abspielen lassen
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_3X3_2));
+                /* 3 Damen platzieren
+                 * Q . Q
+                 * . . .
+                 * . Q .
+                 */
+                chessBoards[2].addPiece(new Queen(0,0));
+                chessBoards[2].addPiece(new Queen(2,0));
+                chessBoards[2].addPiece(new Queen(1,2));
+                chessBoards[2].updatePieces();
+                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+            },
+            () -> {
+                // alle drei Damen löschen
+                chessBoards[2].removeAllPieces();
+                // TODO NPC zum Schweigen bringen
+            }
+        ));
+        setupStep = setupStep.getNext();
+
         // Löschen aller Damen und Löschen des Schachbretts
         // Erzeugung eines 4x4 Schachbretts
         // Setzen aller Damen und Lösen des Problems durch Computer
         // Erklärung der Lösung durch NPC
         // Erklärung von Notwendigkeit für mindestens 4x4 Schachbrett
+        setupStep.setNext(new Step(
+            () -> {
+                // TODO Audio vom NPC abspielen lassen
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_4x4_SOLUTION));
+                // 3x3 Brett entfernen
+                chessBoards[2].despawnAllPieces();
+                chessBoards[2].despawnChessBoard();
+                // 4x4 Brett spawnen und lösen, wurde evtl schon mal gelöst
+                chessBoards[1].spawnChessBoard();
+                if(!chessBoards[1].isSolved()) chessBoards[1].playBacktrack(new Queen());
+                chessBoards[1].updatePieces();
+                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+            },
+            () -> {
+                // 4x4 Feld entfernen
+                chessBoards[1].despawnAllPieces();
+                chessBoards[1].despawnChessBoard();
+                // 3x3 Feld spawnen und Damen platzieren siehe voriger Schritt
+                chessBoards[2].spawnChessBoard();
+                chessBoards[2].spawnAllPieces();
+                // TODO NPC zum Schweigen bringen
+            }
+        ));
+        setupStep = setupStep.getNext();
+
         // Löschen aller Damen und Löschen des Schachbretts
+        setupStep.setNext(new Step(
+            () -> {
+                // 4x4 Brett samt Figuren entfernen
+                chessBoards[1].despawnAllPieces();
+                chessBoards[1].despawnChessBoard();
+            },
+            () -> {
+                chessBoards[1].spawnChessBoard();
+                chessBoards[1].updatePieces();
+            }
+        ));
+        setupStep = setupStep.getNext();
 
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
