@@ -10,6 +10,9 @@ import org.bukkit.util.Vector;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
 
 public class MChessBoard extends ChessBoard {
@@ -23,6 +26,7 @@ public class MChessBoard extends ChessBoard {
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
     private BukkitRunnable currentAnimationTask = null;
+    private Map<Location, Material> savedBlocks;
 
     // ----------- Constructors -----------
 
@@ -532,6 +536,7 @@ public class MChessBoard extends ChessBoard {
      * Spawns the chessboard with alternating white and gray tiles.
      */
     public void spawnChessBoard() {
+        saveBlocks();
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
                 boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
@@ -714,16 +719,14 @@ public class MChessBoard extends ChessBoard {
      * elements.
      *
      * This method:
-     * - Sets the materials for black and white fields to air, effectively clearing
-     * the board.
+     * - Sets the materials for black and white fields to the original blocks
      * - Disables collision carpets to prevent their reappearance.
      * - Removes all existing collision carpets and queens from the board.
      * - Respawns the board layout with the cleared state.
      */
     public void despawnChessBoard() {
-        // Reset the field materials to air, clearing the chessboard visually
-        this.blackFieldMaterial = Material.AIR;
-        this.whiteFieldMaterial = Material.AIR;
+        // Reset the field materials to the original blocks
+        restoreBlocks();
 
         // Disable collision carpets to ensure they are not displayed
         this.collisionCarpets = false;
@@ -735,7 +738,39 @@ public class MChessBoard extends ChessBoard {
         despawnAllPieces();
 
         // Respawn the board layout to reflect the cleared state
-        spawnChessBoard();
+        // spawnChessBoard();
+    }
+
+    /**
+     * Saves the original blocks at the location of the chessboard.
+     */
+    public void saveBlocks() {
+        this.savedBlocks = new HashMap<>();
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                Material block = location.getBlock().getType();
+                savedBlocks.put(location, block);
+            }
+        }
+    }
+
+    /**
+     * Restores the original blocks at the location of the chessboard.
+     */
+    public void restoreBlocks() {
+        if (savedBlocks == null) {
+            System.out.println("Fehler beim Laden der originalen Blöcke.");
+            return;
+        }
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                location.getBlock().setType(savedBlocks.get(location));
+            }
+        }
     }
 
     public void despawnPiece(Piece p) {
