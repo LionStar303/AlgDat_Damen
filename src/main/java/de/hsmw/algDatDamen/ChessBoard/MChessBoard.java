@@ -26,7 +26,7 @@ public class MChessBoard extends ChessBoard {
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
     private BukkitRunnable currentAnimationTask = null;
-    private Map<Location, Block> savedBlocks;
+    private Map<Location, Material> savedBlocks;
 
     // ----------- Constructors -----------
 
@@ -738,7 +738,7 @@ public class MChessBoard extends ChessBoard {
         despawnAllPieces();
 
         // Respawn the board layout to reflect the cleared state
-        //spawnChessBoard();
+        // spawnChessBoard();
     }
 
     /**
@@ -746,11 +746,11 @@ public class MChessBoard extends ChessBoard {
      */
     public void saveBlocks() {
         this.savedBlocks = new HashMap<>();
-        for (int x = 0; x < size; x++) { 
-            for (int z = 0; z < size; z++) { 
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x, 
-                        originCorner.getY() + 1, originCorner.getZ() + z); 
-                Block block = location.getBlock();
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                Material block = location.getBlock().getType();
                 savedBlocks.put(location, block);
             }
         }
@@ -764,11 +764,11 @@ public class MChessBoard extends ChessBoard {
             System.out.println("Fehler beim Laden der originalen Blöcke.");
             return;
         }
-        for (int x = 0; x < size; x++) { 
-            for (int z = 0; z < size; z++) { 
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x, 
-                        originCorner.getY() + 1, originCorner.getZ() + z); 
-                location.getBlock().setType(savedBlocks.get(location).getType());
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                location.getBlock().setType(savedBlocks.get(location));
             }
         }
     }
