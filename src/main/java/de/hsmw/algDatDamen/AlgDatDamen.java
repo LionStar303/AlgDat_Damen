@@ -40,6 +40,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
+    public static final boolean CONSOLE = true;
 
     @Override
     public void onEnable() {
@@ -74,11 +75,17 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         saveManager.getTutorialList().forEach((tutorial) -> {
             if (tutorial.getPlayer().equals(event.getPlayer()))
+            /* TODO handling wenn der Spieler den Server verlässt und neu betritt
+             * beim Verlassen muss das aktuelle Level "gestoppt" werden,
+             * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
+             * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
+             * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
+             */
                 return;
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        saveManager.getTutorialList().add(new Tutorial(event.getPlayer(), saveManager.getProgress(event.getPlayer())));
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
@@ -98,10 +105,13 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
+        // Check for Step Control Item
         } else if (itemInHandType == Material.RED_DYE || itemInHandType == Material.GREEN_DYE
                 || itemInHandType == Material.BLUE_DYE) {
+            // nach passendem Tutorial suchen
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
+                    // Event an Tutorial des Spielers übergeben
                     t.getCurrentLevel().handleEvent(event);
                     event.setCancelled(true);
                     return;

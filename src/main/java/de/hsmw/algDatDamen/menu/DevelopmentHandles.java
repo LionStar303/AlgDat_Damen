@@ -16,6 +16,7 @@ import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+@SuppressWarnings("deprecation")
 /**
  * Class that contains development handles for managing chess boards and related
  * interactions.

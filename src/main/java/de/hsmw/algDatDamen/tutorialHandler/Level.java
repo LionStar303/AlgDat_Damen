@@ -29,9 +29,10 @@ public abstract class Level implements Listener {
     protected boolean active;
     protected boolean completed;
     protected Step currentStep;
+    protected boolean console;
 
-    public Level(String name, String description, Player player, Location startLocation, boolean completed,
-            Tutorial parent) {
+    public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
+        this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
@@ -42,14 +43,12 @@ public abstract class Level implements Listener {
 
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
-
     protected abstract void setInventory();
-
     protected abstract void initializeSteps();
 
     // Standardmethoden
     public void start() {
-        System.out.println("Level: starte level");
+        if(console) System.out.println("Level: starte level");
         active = true;
         teleportToStart();
 
@@ -104,7 +103,7 @@ public abstract class Level implements Listener {
     }
 
     private void nextStep() {
-        System.out.println("running next step");
+        if(console) System.out.println("running next step");
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -119,15 +118,16 @@ public abstract class Level implements Listener {
     }
 
     private void prevStep() {
-        System.out.println("running prev step");
+        if(console) System.out.println("running prev step");
         currentStep.reset();
         if (currentStep.getPrev() != null)
             currentStep = currentStep.getPrev();
+        currentStep.reset(); // reset prev step
         currentStep.start();
     }
 
     private void resetStep() {
-        System.out.println("running reset step");
+        if(console) System.out.println("running reset step");
         currentStep.reset();
         currentStep.start();
     }

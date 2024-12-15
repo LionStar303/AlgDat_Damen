@@ -18,15 +18,16 @@ public class Tutorial {
     private UUID playerUUID;
     private ArrayList<Level> levels;
     private Level currentLevel;
+    private boolean console;
 
-    public Tutorial(Player player, int progress) {
-        this.playerUUID = player.getUniqueId();
-        this.progress = progress;
+    public Tutorial(boolean console, Player player, int progress) {
+        this(console, player.getUniqueId(), progress);
     }
 
-    public Tutorial(UUID playerUUID, int progress) {
+    public Tutorial(boolean console, UUID playerUUID, int progress) {
         this.playerUUID = playerUUID;
         this.progress = progress;
+        this.console = console;
     }
 
     public void initialize() {
@@ -34,7 +35,7 @@ public class Tutorial {
         levels = new ArrayList<Level>();
 
         // Levels erstellen
-        levels.add(new Level1(getPlayer(), this));
+        levels.add(new Level1(console, getPlayer(), this));
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);

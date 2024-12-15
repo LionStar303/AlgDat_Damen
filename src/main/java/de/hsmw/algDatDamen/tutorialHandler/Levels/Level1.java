@@ -12,25 +12,37 @@ import net.kyori.adventure.text.Component;
 
 public class Level1 extends Level {
 
+    private final static String LEVEL_NAME = "Level 1 - Einführung";
     private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
     private final static Component NPC_EXPLAIN_CHESSBOARD = Component.text("Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.");
     private final static Component NPC_EXPLAIN_QUEEN = Component.text("Im Schach gibt es sechs verschiedene Arten von Figuren. Aber heute sollen uns zwei reichen. Diese Figur nennt man Dame.");
     private final static Component NPC_EXPLAIN_MOVEMENT = Component.text("Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.");
     private final static Component NPC_EXPLAIN_THREATS = Component.text("Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.");
 
-    public Level1(Player player, Tutorial parent) {
-        this(player, new Location(player.getWorld(), -30, -43, 143), parent);
+    public Level1(boolean console, Player player, Tutorial parent) {
+        this(console, player, new Location(player.getWorld(), -30, -43, 143), parent);
     }
 
-    public Level1(Player player, Location startLocation, Tutorial parent) {
-        this(player, startLocation, false, parent);
+    public Level1(boolean console, Player player, Location startLocation, Tutorial parent) {
+        this(console, player, startLocation, false, parent);
     }
 
-    public Level1(Player player, Location startLocation, boolean completed, Tutorial parent) {
+    public Level1(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super("Level 1 - Einführung", LEVEL_DESCRIPTION, player, startLocation, completed, parent);
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent);
     }
 
+    @Override
+    /*
+     * erstellt alle für das Level benötigten Schachbretter und speichert diese in chessBoards
+     */
+    protected void configureChessBoards() {
+        // 8x8 Schachbrett für Level 1 erstellen
+        chessBoards = new MChessBoard[1];
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player);
+    }
+
+    @Override
     protected void setInventory() {
         player.getInventory().clear();
         setControlItems();
@@ -55,7 +67,7 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
             () -> {
                 // spawne Queen auf Feld (3,2)
-                System.out.println("setze Dame auf 3, 2");
+                if(console) System.out.println("setze Dame auf 3, 2");
                 // TODO Dame wird nicht richtig gespawnt FFFF
                 chessBoards[0].addPiece(new Queen(3,2));
                 chessBoards[0].updatePieces();
@@ -147,16 +159,6 @@ public class Level1 extends Level {
 
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
-    }
-
-    @Override
-    /*
-     * erstellt alle für das Level benötigten Schachbretter und speichert diese in chessBoards
-     */
-    protected void configureChessBoards() {
-        // 8x8 Schachbrett für Level 1 erstellen
-        chessBoards = new MChessBoard[1];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player);
     }
 }
 
