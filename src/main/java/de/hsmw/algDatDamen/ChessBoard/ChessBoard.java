@@ -1,7 +1,6 @@
 package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 
 /**
  * Represents a chessboard for solving the Queen's problem.
@@ -172,9 +171,9 @@ public class ChessBoard {
             } // end of if
         }
     }
-  
-  public void removeAllQueens(){
-         this.queens = new ArrayList<>();
+
+    public void removeAllQueens() {
+        this.queens = new ArrayList<>();
     }
 
     public void removeLastQueen() {
@@ -442,13 +441,13 @@ public class ChessBoard {
         return true;
     }
 
-    public boolean solveBacktrackToRow(int x){
+    public boolean solveBacktrackToRow(int x) {
         if (x > this.size) {
             return false;
         } // end of if
         playBacktrack();
         sortQueensByX();
-        for(int i = 0; i < x; i++){
+        for (int i = 0; i < x; i++) {
             queens.remove(numberOfQueens() - 1);
         }
         return true;
@@ -501,10 +500,10 @@ public class ChessBoard {
         }
     }
 
-    public void bongoSolve(){
+    public void bongoSolve() {
         verfyQueens();
-        while(bongoStep() == false){
-            if(console){
+        while (bongoStep() == false) {
+            if (console) {
                 printBoard();
             }
             if (stateX == (size)) {
@@ -515,8 +514,8 @@ public class ChessBoard {
 
     }
 
-    public boolean bongoStep(){
-        addQueen(new Queen(stateX, (int)(Math.random()*(size)) ));
+    public boolean bongoStep() {
+        addQueen(new Queen(stateX, (int) (Math.random() * (size))));
         stateX++;
         return isSolved();
     }

@@ -1,21 +1,20 @@
 package de.hsmw.algDatDamen.menu;
 
-import de.hsmw.algDatDamen.ChessBoard.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
+import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.NPC;
-
-import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
-import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
-import static de.hsmw.algDatDamen.AlgDatDamen.instance;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
  * Class that contains development handles for managing chess boards and related
@@ -42,7 +41,7 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, false);
         saveManager.getCbList().add(cb);
     }
 

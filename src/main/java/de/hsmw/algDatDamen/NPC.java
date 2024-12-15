@@ -1,21 +1,29 @@
 package de.hsmw.algDatDamen;
 
 import java.util.HashMap;
+import org.bukkit.util.Vector;
+
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class NPC {
     private int progress;
-    private HashMap<String, Sound> data;
+    private HashMap<String, Sound> textData;
     private Location location;
 
+    /**
+     * Creates a new NPC object at the given location.
+     * 
+     * @param location the originCorner of the chessboard
+     */
     public NPC(Location location) {
-        this.location = location;
+        this.location = location.clone().add(new Vector(-1, 1, -0.5));
         this.progress = 0;
-        this.data = new HashMap<>();
+        this.textData = new HashMap<>();
     }
 
     /**
@@ -25,7 +33,7 @@ public class NPC {
      * @param value the sound to play.
      */
     public void addText(String key, Sound value) {
-        data.put(key, value);
+        textData.put(key, value);
     }
 
     /**
@@ -38,20 +46,20 @@ public class NPC {
             }
         });
         Villager v = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
-        v.setAI(false);
+        v.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 100, false, false));
         v.setInvulnerable(true);
         v.setProfession(Villager.Profession.NITWIT);
-        // v.lookAt(location.getWorld().getPlayers().getFirst());
     }
 
     /**
      * Plays the next text in the list of texts.
      */
     public void playNext() {
-        if (progress < data.size()) {
-            Sound[] sounds = new Sound[data.size()];
-            data.values().toArray(sounds);
-            location.getNearbyPlayers(100).forEach(p -> p.sendMessage(data.keySet().toArray()[progress].toString()));
+        if (progress < textData.size()) {
+            Sound[] sounds = new Sound[textData.size()];
+            textData.values().toArray(sounds);
+            location.getNearbyPlayers(100)
+                    .forEach(p -> p.sendMessage(textData.keySet().toArray()[progress].toString()));
             location.getWorld().playSound(location, sounds[progress], 1, 1);
             progress++;
         }
@@ -64,14 +72,6 @@ public class NPC {
         location.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(e -> {
             if (e instanceof Villager) {
                 e.remove();
-            }
-        });
-    }
-
-    public void lookAtPlayer(Player player) {
-        location.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(e -> {
-            if (e instanceof Villager) {
-                ((Villager)e).lookAt(player);
             }
         });
     }

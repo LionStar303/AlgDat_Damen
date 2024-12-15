@@ -35,21 +35,27 @@ public class MChessBoard extends ChessBoard {
      * @param player             The player for determining the board direction.
      * @param whiteFieldMaterial Material used for the white fields.
      * @param blackFieldMaterial Material used for the black fields.
+     * @param spawnInDirection board will be spawned in the direction of the playe
+     *                          + no NPC will be spawned
      */
     public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
-            Material blackFieldMaterial) {
+            Material blackFieldMaterial, boolean spawnInDirection) {
         this.size = size;
         this.queens = new ArrayList<>();
-        this.console = true;
+        this.console = false;
         this.originCorner = originCorner;
-        Location npcLoc = updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
-        this.npc = new NPC(npcLoc);
+        if (spawnInDirection) {
+            updateOriginCorner(this.getBoardDirection(player));
+            this.npc = null;
+        } else {
+            this.npc = new NPC(originCorner);
+        }
         spawnChessBoard();
     }
 
@@ -57,12 +63,16 @@ public class MChessBoard extends ChessBoard {
      * Constructor to create a chessboard with specific parameters and default field
      * materials.
      *
-     * @param originCorner Starting location for the chessboard.
-     * @param size         The size of the chessboard.
-     * @param player       The player for determining the board direction.
+     * @param originCorner     Starting location for the chessboard.
+      @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+      * @param spawnInDirection board will be spawned in the direction of the playe
+     *                          + no NPC will be spawned
      */
-    public MChessBoard(Location originCorner, int size, Player player) {
-        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE); // Default materials: wool
+    public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
+        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
+                                                                                                             // materials:
+                                                                                                             // wool
     }
 
     // Getter and Setter Methods
@@ -189,10 +199,9 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
-        if (npc == null) {
-            return;
+        if (npc != null) {
+            npc.spawn();
         }
-        npc.spawn();
     }
 
     /**
@@ -587,9 +596,10 @@ public class MChessBoard extends ChessBoard {
      * The origin corner is adjusted to ensure the chessboard's orientation aligns
      * with the player's view
      * and also takes the size of the board into account.
+     * 
      * @return The location where the NPC should spawn.
      */
-    private Location updateOriginCorner(Vector direction) {
+    private void updateOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
         int xMod = (int) direction.getX(); // East/West orientation modifier
         int zMod = (int) direction.getZ(); // North/South orientation modifier
@@ -613,18 +623,6 @@ public class MChessBoard extends ChessBoard {
             // Facing East and North: Shift origin up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
-
-        // Location for npc to spawn, based on player's facing direction, boardsize is irrelevant
-        Location npcLocation = new Location(originCorner.getWorld(), x + 2, originCorner.getBlockY() + 1, z + 2);
-
-        if (xMod > 0 && zMod > 0) {
-            // Facing West and South: Shift origin to the right
-            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
-            npcLocation = new Location(originCorner.getWorld(), x - 2, originCorner.getBlockY() + 1,
-                    z - 2);
-        }
-
-        return npcLocation;
     }
 
     public void removeChessBoardFromGame() {
@@ -635,7 +633,9 @@ public class MChessBoard extends ChessBoard {
         cleanCollisionCarpets();
         removeALLQueensFromBoard();
         spawnChessBoard();
-        npc.remove();
+        if (npc != null) {
+            npc.remove();
+        }
     }
 
     public void rotateMQueens(int rotation) {
