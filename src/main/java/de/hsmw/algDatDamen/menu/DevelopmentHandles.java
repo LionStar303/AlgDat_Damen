@@ -10,8 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import de.hsmw.algDatDamen.AlgDatDamen;
-import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
-import static de.hsmw.algDatDamen.AlgDatDamen.saveManager;
+
+import static de.hsmw.algDatDamen.AlgDatDamen.*;
 
 /**
  * Class that contains development handles for managing chess boards and related
@@ -345,12 +345,15 @@ public class DevelopmentHandles {
         switch (p.getLetter()){
         case 'Q':
             p = new Superqueen();
+            devMenu.updateItemMaterial(MenuSlots.PIECE, SUPERQUEEN_BLOCK_TOP);
             break;
         case 'S':
             p = new Knight();
+            devMenu.updateItemMaterial(MenuSlots.PIECE, KNIGHT_BLOCK_TOP);
             break;
         case 'K':
             p = new Queen();
+            devMenu.updateItemMaterial(MenuSlots.PIECE, QUEEN_BLOCK_TOP);
             break;
         default:
 
@@ -358,7 +361,7 @@ public class DevelopmentHandles {
             System.out.println("Default");
         break;
     }
-    devMenu.updateItemName(MenuSlots.PIECE, ("Figur " + p.getName()));
+    devMenu.updateItemName(MenuSlots.PIECE, ("Aktuelle Figur: " + p.getName()));
 }
 
 }
