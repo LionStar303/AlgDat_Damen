@@ -40,6 +40,7 @@ public class Level2 extends Level {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent);
     }
+    
     @Override
     protected void configureChessBoards() {
         // 8x8, 4x4 und 3x3 Schachbretter erstellen
