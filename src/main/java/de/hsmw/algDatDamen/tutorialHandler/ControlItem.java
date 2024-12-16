@@ -9,7 +9,7 @@ import net.kyori.adventure.text.Component;
 public enum ControlItem {
 
     PREVIOUS_STEP(Material.RED_DYE, Component.text("zurück")),
-    RETURN_STEP(Material.GREEN_DYE, Component.text("wiederhole")),
+    RESET_STEP(Material.GREEN_DYE, Component.text("wiederhole")),
     NEXT_STEP(Material.BLUE_DYE, Component.text("weiter")),
     PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame"));
 
@@ -39,6 +39,10 @@ public enum ControlItem {
     }
 
     // gibt das auf ein übergebenes Item zutreffende ControlItem zurück
+    public static ControlItem fromItem(ItemStack item) {
+        return fromItem(item.getType(), item.getItemMeta().displayName());
+    }
+
     public static ControlItem fromItem(Material material, Component displayName) {
         for (ControlItem item : values()) {
             if (item.material == material && item.displayName.equals(displayName)) {

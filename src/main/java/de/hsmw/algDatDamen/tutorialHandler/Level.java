@@ -1,22 +1,14 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public abstract class Level implements Listener {
-
-    private final String BACK_TEXT = "zurück";
-    private final String RETURN_TEXT = "wiederhole";
-    private final String FORWARD_TEXT = "weiter";
 
     protected final static Component EMPTY_LINE = Component.text("----\n", NamedTextColor.AQUA);
 
@@ -74,25 +66,9 @@ public abstract class Level implements Listener {
     }
 
     protected void setControlItems() {
-        ItemStack backItem = new ItemStack(Material.RED_DYE);
-        ItemStack returnItem = new ItemStack(Material.GREEN_DYE);
-        ItemStack forwardItem = new ItemStack(Material.BLUE_DYE);
-
-        ItemMeta meta = backItem.getItemMeta();
-        meta.displayName(Component.text(BACK_TEXT));
-        backItem.setItemMeta(meta);
-
-        meta = returnItem.getItemMeta();
-        meta.displayName(Component.text(RETURN_TEXT));
-        returnItem.setItemMeta(meta);
-
-        meta = forwardItem.getItemMeta();
-        meta.displayName(Component.text(FORWARD_TEXT));
-        forwardItem.setItemMeta(meta);
-
-        player.getInventory().setItem(6, backItem);
-        player.getInventory().setItem(7, returnItem);
-        player.getInventory().setItem(8, forwardItem);
+        player.getInventory().setItem(6, ControlItem.PREVIOUS_STEP.getItemStack());
+        player.getInventory().setItem(7, ControlItem.RESET_STEP.getItemStack());
+        player.getInventory().setItem(8, ControlItem.NEXT_STEP.getItemStack());
     }
 
     private void nextStep() {
@@ -125,27 +101,19 @@ public abstract class Level implements Listener {
         currentStep.start();
     }
 
-    public void handleEvent(PlayerInteractEvent event) {
-        // Event wird nur aufgerufen, wenn der Spieler ein Item in der Hand hält
-        ItemStack itemInHand = event.getItem();
-        if (!itemInHand.hasItemMeta())
-            return;
-
-        /*
-         * slot 6 - red dye - vorheriger Step
-         * slot 7 - green dye - wiederhole Step
-         * slot 8 - blue dye - nächster Step
-         */
-        if (itemInHand.getType() == Material.RED_DYE
-                && itemInHand.getItemMeta().displayName().equals(Component.text(BACK_TEXT)))
-            prevStep();
-        else if (itemInHand.getType() == Material.GREEN_DYE
-                && itemInHand.getItemMeta().displayName().equals(Component.text(RETURN_TEXT)))
-            resetStep();
-        else if (itemInHand.getType() == Material.BLUE_DYE
-                && itemInHand.getItemMeta().displayName().equals(Component.text(FORWARD_TEXT)))
-            nextStep();
-
-        event.setCancelled(true);
+    public void handleEvent(ControlItem item) {
+        switch (item) {
+            case PREVIOUS_STEP:
+                prevStep();
+                break;
+            case RESET_STEP:
+                resetStep();
+                break;
+            case NEXT_STEP:
+                nextStep();
+                break;
+            default:
+                break;
+        }
     }
 }
