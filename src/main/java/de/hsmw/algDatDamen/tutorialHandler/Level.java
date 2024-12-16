@@ -113,7 +113,7 @@ public abstract class Level implements Listener {
         // Increase Level
         currentStepID++;
         if (currentStepID <= stepCount) {
-            player.setExp(currentStepID / stepCount);
+            player.setExp((float) currentStepID / stepCount);
         }
 
         currentStep = currentStep.getNext();
