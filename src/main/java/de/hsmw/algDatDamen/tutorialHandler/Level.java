@@ -30,6 +30,8 @@ public abstract class Level implements Listener {
     protected boolean completed;
     protected Step currentStep;
     protected boolean console;
+    private int stepCount;
+    private int currentStepID;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
         this.console = console;
@@ -55,6 +57,7 @@ public abstract class Level implements Listener {
         configureChessBoards();
         // alle Schritte erzeugen
         initializeSteps();
+        countSteps();
 
         player.setRespawnLocation(startLocation);
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
@@ -106,6 +109,13 @@ public abstract class Level implements Listener {
             player.sendMessage(Component.text("Du kannst ins nächste Level vorrücken.", NamedTextColor.RED));
             return;
         }
+
+        // Increase Level
+        currentStepID++;
+        if (currentStepID <= stepCount) {
+            player.setExp(currentStepID / stepCount);
+        }
+
         currentStep = currentStep.getNext();
         currentStep.start();
     }
@@ -149,15 +159,17 @@ public abstract class Level implements Listener {
         event.setCancelled(true);
     }
 
-    private int getStepCount() {
-        if (currentStep == null)
-            return 0;
+    /**
+     * Counts the steps of the level and stores it in stepCount variable.
+     */
+    private void countSteps() {
+        if (currentStep == null) stepCount = 0;
         int count = 1;
         Step step = currentStep;
         while (step.getNext() != null) {
             step = step.getNext();
             count++;
         }
-        return count;
+        stepCount = count;
     }
 }
