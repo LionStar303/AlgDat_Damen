@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
@@ -41,6 +42,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
     public static final boolean CONSOLE = true;
+    private static int MIN_HEIGHT = -60;
 
     @Override
     public void onEnable() {
@@ -73,8 +75,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
         saveManager.getTutorialList().forEach((tutorial) -> {
-            if (tutorial.getPlayer().equals(event.getPlayer()))
+            if (tutorial.getPlayer().equals(player))
             /* TODO handling wenn der Spieler den Server verlässt und neu betritt
              * beim Verlassen muss das aktuelle Level "gestoppt" werden,
              * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
@@ -85,10 +89,14 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
-        event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
-        event.getPlayer().setFlying(false);
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, player, saveManager.getProgress(player)));
+        player.teleport(new Location(player.getWorld(), 0, -45, 170));
+        player.setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
+
+        player.setInvulnerable(true);
+        player.setHealth(20);
+        player.setFoodLevel(20);
     }
 
     @EventHandler
@@ -117,6 +125,24 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                     return;
                 }
             });
+        }
+    }
+
+    /**
+     * Handles teleporting the player back to the start point if he falls off the island.
+     */
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Location location = player.getLocation();
+        if (location.getY() <= MIN_HEIGHT) {
+            for(Tutorial t : saveManager.getTutorialList()) {
+                if (t.getPlayer().equals(player)) {
+                    player.teleport(t.getCurrentLevel().getStartLocation());
+                    return;
+                }
+            }
+            player.teleport(player.getRespawnLocation());
         }
     }
 

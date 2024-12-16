@@ -45,7 +45,7 @@ public class Tutorial {
         System.out.println("Tutorial: starte Tutorial");
         currentLevel.start();
         // Progress Bar auf Level 1 setzen
-        Bukkit.getPlayer(playerUUID).setLevel(progress);
+        getPlayer().setLevel(progress);
     }
 
     public Level getCurrentLevel() {
