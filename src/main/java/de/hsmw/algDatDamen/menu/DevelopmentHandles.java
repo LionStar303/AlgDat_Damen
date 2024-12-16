@@ -3,11 +3,13 @@ package de.hsmw.algDatDamen.menu;
 import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.NPC;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
@@ -46,8 +48,7 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, customWhiteFieldMaterial,
-                customBlackFieldMaterial);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, false);
         AlgDatDamen.chessBoards.add(cb);
     }
 
@@ -316,6 +317,14 @@ public class DevelopmentHandles {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
         mcB.animationStepToNextField(p);
+        event.setCancelled(true);
+    }
+
+    public static void playVillagerText(PlayerInteractEvent event) {
+        NPC npc = getClickedMCB(event).getNpc();
+        npc.addText("Hallo", Sound.BLOCK_BARREL_CLOSE);
+        npc.playNext();
+        npc.resetProgress(); // JUST FOR TESTING, REMOVE IN FINAL VERSION
         event.setCancelled(true);
     }
 
