@@ -69,8 +69,9 @@ public class MChessBoard extends ChessBoard {
      * @param originCorner     Starting location for the chessboard.
      * @param size             The size of the chessboard.
      *                         he player for determining the board direction.
-     * @param spawnInDirection board will be spawned in the direction of the playe
-     *                         + no NPC will be spawned
+     * @param spawnInDirection board will be spawned in the direction of the player
+     *                         + no NPC will be spawned, SET FALSE IF USED IN LEVEL
+     *                         CONFIG
      */
     public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
         this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
@@ -1138,7 +1139,7 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-    public NPC getNpc() {
+    public NPC getNPC() {
         return npc;
     }
 }

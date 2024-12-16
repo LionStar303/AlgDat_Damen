@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.Sound;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
@@ -14,14 +15,10 @@ public class Level1 extends Level {
 
     private final static String LEVEL_NAME = "Level 1 - Einführung";
     private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
-    private final static Component NPC_EXPLAIN_CHESSBOARD = Component.text(
-            "Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.");
-    private final static Component NPC_EXPLAIN_QUEEN = Component.text(
-            "Im Schach gibt es sechs verschiedene Arten von Figuren. Aber heute sollen uns zwei reichen. Diese Figur nennt man Dame.");
-    private final static Component NPC_EXPLAIN_MOVEMENT = Component
-            .text("Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.");
-    private final static Component NPC_EXPLAIN_THREATS = Component.text(
-            "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.");
+    private final static String NPC_EXPLAIN_CHESSBOARD = "Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.";
+    private final static String NPC_EXPLAIN_QUEEN = "Im Schach gibt es sechs verschiedene Arten von Figuren. Aber heute sollen uns zwei reichen. Diese Figur nennt man Dame.";
+    private final static String NPC_EXPLAIN_MOVEMENT = "Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.";
+    private final static String NPC_EXPLAIN_THREATS = "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.";
 
     public Level1(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -30, -43, 143), parent);
@@ -55,18 +52,18 @@ public class Level1 extends Level {
 
     @Override
     public void initializeSteps() {
+        MChessBoard chessBoard1 = chessBoards[0];
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {
-                    chessBoards[0].spawnChessBoard();
-                    // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_CHESSBOARD));
+                    chessBoard1.spawnChessBoard();
+                    chessBoard1.getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.AMBIENT_CAVE);
+                    chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
                 () -> {
-                    chessBoards[0].despawnChessBoard();
-                    // TODO NPC zum Schweigen bringen
+                    chessBoard1.despawnChessBoard();
                 });
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
@@ -81,17 +78,16 @@ public class Level1 extends Level {
                     if (console)
                         System.out.println("setze Dame auf 3, 2");
                     // TODO Dame wird nicht richtig gespawnt FFFF
-                    chessBoards[0].addPiece(new Queen(3, 2));
-                    chessBoards[0].updatePieces();
-                    // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_QUEEN));
+                    chessBoard1.addPiece(new Queen(3, 2));
+                    chessBoard1.updatePieces();
+                    chessBoard1.getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.AMBIENT_CAVE);
+                    chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
                     // entferne alle Figuren
-                    chessBoards[0].clearBoard();
-                    chessBoards[0].updatePieces();
-                    // TODO NPC zum Schweigen bringen
+                    chessBoard1.clearBoard();
+                    chessBoard1.updatePieces();
                 }));
         setupStep = setupStep.getNext();
 
@@ -99,14 +95,13 @@ public class Level1 extends Level {
         // Erklärung der Bewegungsmuster durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnCollisionCarpets();
-                    // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_MOVEMENT));
+                    chessBoard1.spawnCollisionCarpets();
+                    chessBoard1.getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.AMBIENT_CAVE);
+                    chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
-                    chessBoards[0].despawnCollisionCarpets();
-                    // TODO NPC zum Schweigen bringen
+                    chessBoard1.despawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -114,16 +109,16 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // Bewegungsmuster entfernen (wird im nächsten Schritt wieder erzeugt)
-                    chessBoards[0].despawnCollisionCarpets();
+                    chessBoard1.despawnCollisionCarpets();
                     // spawne Queen auf Feld (5,3)
-                    chessBoards[0].addPiece(new Queen(5, 3));
-                    chessBoards[0].updatePieces();
+                    chessBoard1.addPiece(new Queen(5, 3));
+                    chessBoard1.updatePieces();
                 },
                 () -> {
                     // entferne zuletzt gesetzte Dame von Feld (5,3)
-                    chessBoards[0].removeLastQueen();
-                    chessBoards[0].updatePieces();
-                    chessBoards[0].spawnCollisionCarpets();
+                    chessBoard1.removeLastQueen();
+                    chessBoard1.updatePieces();
+                    chessBoard1.spawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -131,14 +126,13 @@ public class Level1 extends Level {
         // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnCollisionCarpets();
-                    // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS));
+                    chessBoard1.spawnCollisionCarpets();
+                    chessBoard1.getNPC().addText(NPC_EXPLAIN_THREATS, Sound.AMBIENT_CAVE);
+                    chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
-                    chessBoards[0].despawnCollisionCarpets();
-                    // TODO NPC zum Schweigen bringen
+                    chessBoard1.despawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -146,13 +140,13 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 // alle Figuren entfernen
                 () -> {
-                    chessBoards[0].despawnAllPieces();
-                    chessBoards[0].despawnChessBoard();
+                    chessBoard1.despawnAllPieces();
+                    chessBoard1.despawnChessBoard();
                 },
                 // alle Figuren spawnen
                 () -> {
-                    chessBoards[0].spawnChessBoard();
-                    chessBoards[0].spawnAllPieces();
+                    chessBoard1.spawnChessBoard();
+                    chessBoard1.spawnAllPieces();
                 }));
 
         // alle Steps in beide Richtungen miteinander verknüpfen
