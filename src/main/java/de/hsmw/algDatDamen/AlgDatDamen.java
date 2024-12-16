@@ -76,17 +76,19 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         saveManager.getTutorialList().forEach((tutorial) -> {
             if (tutorial.getPlayer().equals(event.getPlayer()))
-            /* TODO handling wenn der Spieler den Server verlässt und neu betritt
-             * beim Verlassen muss das aktuelle Level "gestoppt" werden,
-             * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
-             * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
-             * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
-             */
+                /*
+                 * TODO handling wenn der Spieler den Server verlässt und neu betritt
+                 * beim Verlassen muss das aktuelle Level "gestoppt" werden,
+                 * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
+                 * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
+                 * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
+                 */
                 return;
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
+        saveManager.getTutorialList()
+                .add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();

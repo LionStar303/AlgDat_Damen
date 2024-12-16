@@ -5,10 +5,10 @@ package de.hsmw.algDatDamen.menu;
  * slots
  */
 public enum MenuSlots {
-    // Grundlegende Optionen
-    ADD_BOARD(0),
-    REMOVE_BOARD(1),
-    BOARD_SIZE(2),
+    ADD_BOARD(1),
+    REMOVE_BOARD(2),
+    BOARD_SIZE(3),
+    PLAY_VILLAGER(21),
 
     // Materialien
     WHITE_FIELD_MATERIAL(3),
