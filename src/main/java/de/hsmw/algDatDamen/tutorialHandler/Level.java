@@ -61,18 +61,11 @@ public abstract class Level implements Listener {
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_DESCRIPTION));
 
         setInventory();
-        spawnChessBoards();
         // ersten Schritt starten
         currentStep.start();
 
         // TODO Logik einbauen wenn Level beendet wird parentTutorial.incProgress()
         // aufrufen
-    }
-
-    private void spawnChessBoards() {
-        for (MChessBoard cb : chessBoards) {
-            cb.spawnChessBoard();
-        }
     }
 
     private void teleportToStart() {

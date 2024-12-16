@@ -53,17 +53,22 @@ public class Level1 extends Level {
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
             () -> {
+                chessBoards[0].spawnChessBoard();
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_CHESSBOARD));
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
-            () -> {} // TODO NPC zum Schweigen bringen
+            () -> {
+                chessBoards[0].despawnChessBoard();
+                // TODO NPC zum Schweigen bringen
+            }
         );
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen verknüpft
         Step setupStep = currentStep;
 
         // Setzen einer Dame auf Schachbrett durch Computer
+        // Erklärung der Dame durch NPC
         setupStep.setNext(new Step(
             () -> {
                 // spawne Queen auf Feld (3,2)
@@ -71,43 +76,32 @@ public class Level1 extends Level {
                 // TODO Dame wird nicht richtig gespawnt FFFF
                 chessBoards[0].addPiece(new Queen(3,2));
                 chessBoards[0].updatePieces();
+                // TODO Audio vom NPC abspielen lassen
+                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_QUEEN));
+                // TODO evtl Verzögerung einbauen...
             },
             () -> {
                 // entferne alle Figuren
                 chessBoards[0].clearBoard();
                 chessBoards[0].updatePieces();
+                // TODO NPC zum Schweigen bringen
             }
-        ));
-        setupStep = setupStep.getNext();
-
-        // Erklärung der Dame durch NPC
-        setupStep.setNext(new Step(
-            () -> {
-                // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_QUEEN));
-                // TODO evtl Verzögerung einbauen...
-            },
-            () -> {} // TODO NPC zum Schweigen bringen
         ));
         setupStep = setupStep.getNext();
     
         // Anzeigen der Bewegungsmuster der Dame
-        setupStep.setNext(new Step(
-            // Teppiche für Bewegungsmuster spawnen
-            () -> chessBoards[0].spawnCollisionCarpets(),
-            // Teppiche für Bewegungsmuster spawnen
-            () -> chessBoards[0].despawnCollisionCarpets()
-        ));
-        setupStep = setupStep.getNext();
-
         // Erklärung der Bewegungsmuster durch NPC
         setupStep.setNext(new Step(
             () -> {
+                chessBoards[0].spawnCollisionCarpets();
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_MOVEMENT));
                 // TODO evtl Verzögerung einbauen...
             },
-            () -> {} // TODO NPC zum Schweigen bringen
+            () -> {
+                chessBoards[0].despawnCollisionCarpets();
+                // TODO NPC zum Schweigen bringen
+            }
         ));
         setupStep = setupStep.getNext();
 
@@ -130,36 +124,36 @@ public class Level1 extends Level {
         setupStep = setupStep.getNext();
 
         // Anzeigen der Bedrohungen der Damen
-        setupStep.setNext(new Step(
-            // Teppiche für Bewegungsmuster spawnen
-            () -> chessBoards[0].spawnCollisionCarpets(),
-            // Teppiche für Bewegungsmuster spawnen
-            () -> chessBoards[0].despawnCollisionCarpets()
-        ));
-        setupStep = setupStep.getNext();
-
         // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
             () -> {
+                chessBoards[0].spawnCollisionCarpets();
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS));
                 // TODO evtl Verzögerung einbauen...
             },
-            () -> {} // TODO NPC zum Schweigen bringen
+            () -> {
+                chessBoards[0].despawnCollisionCarpets();
+                // TODO NPC zum Schweigen bringen
+            }
         ));
         setupStep = setupStep.getNext();
 
         // Löschen aller Damen von Schachbrett
         setupStep.setNext(new Step(
             // alle Figuren entfernen
-            () -> chessBoards[0].despawnAllPieces(),
+            () -> {
+                chessBoards[0].despawnAllPieces();
+                chessBoards[0].despawnChessBoard();
+            },
             // alle Figuren spawnen
-            () -> chessBoards[0].spawnAllPieces()
+            () -> {
+                chessBoards[0].spawnChessBoard();
+                chessBoards[0].spawnAllPieces();
+            }
         ));
 
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
     }
 }
-
-                
