@@ -148,4 +148,16 @@ public abstract class Level implements Listener {
 
         event.setCancelled(true);
     }
+
+    private int getStepCount() {
+        if (currentStep == null)
+            return 0;
+        int count = 1;
+        Step step = currentStep;
+        while (step.getNext() != null) {
+            step = step.getNext();
+            count++;
+        }
+        return count;
+    }
 }
