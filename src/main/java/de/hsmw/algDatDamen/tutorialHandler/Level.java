@@ -22,6 +22,8 @@ public abstract class Level implements Listener {
     protected boolean completed;
     protected Step currentStep;
     protected boolean console;
+    private int stepCount;
+    private int currentStepID;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
         this.console = console;
@@ -47,6 +49,8 @@ public abstract class Level implements Listener {
         configureChessBoards();
         // alle Schritte erzeugen
         initializeSteps();
+        countSteps();
+        currentStepID = 0;
 
         player.setRespawnLocation(startLocation);
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
@@ -82,6 +86,14 @@ public abstract class Level implements Listener {
             player.sendMessage(Component.text("Du kannst ins nächste Level vorrücken.", NamedTextColor.RED));
             return;
         }
+
+        // Increase Level
+        currentStepID++;
+        if(console) System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
+        if (currentStepID <= stepCount) {
+            player.setExp((float) currentStepID / stepCount);
+        }
+
         currentStep = currentStep.getNext();
         currentStep.start();
     }
@@ -89,8 +101,15 @@ public abstract class Level implements Listener {
     private void prevStep() {
         if(console) System.out.println("running prev step");
         currentStep.reset();
-        if (currentStep.getPrev() != null)
+        if (currentStep.getPrev() != null) {
             currentStep = currentStep.getPrev();
+            currentStepID--;
+        } 
+
+        if (currentStepID <= stepCount) {
+            player.setExp((float) currentStepID / stepCount);
+        }
+
         currentStep.reset(); // reset prev step
         currentStep.start();
     }
@@ -115,5 +134,19 @@ public abstract class Level implements Listener {
             default:
                 break;
         }
+    }
+
+    /**
+     * Counts the steps of the level and stores it in stepCount variable.
+     */
+    private void countSteps() {
+        if (currentStep == null) stepCount = 0;
+        int count = 1;
+        Step step = currentStep;
+        while (step.getNext() != null) {
+            step = step.getNext();
+            count++;
+        }
+        stepCount = count;
     }
 }
