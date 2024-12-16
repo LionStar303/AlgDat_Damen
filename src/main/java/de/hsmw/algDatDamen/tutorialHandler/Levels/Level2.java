@@ -68,11 +68,13 @@ public class Level2 extends Level {
                 chessBoards[0].spawnChessBoard();
                 // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu kommen
                 chessBoards[0].addPiece(new Queen(3, 2));
+                chessBoards[0].updatePieces();
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 // Dame entfernen und Chessboard despawnen
                 chessBoards[0].removeAllPieces();
+                chessBoards[0].updatePieces();
                 chessBoards[0].despawnChessBoard();
                 // TODO NPC zum Schweigen bringen
             }
@@ -105,10 +107,12 @@ public class Level2 extends Level {
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS_2));
                 // platziere Dame auf Feld(6,5) welches von Dame(3,2) bedroht ist
                 chessBoards[0].addPiece(new Queen(6, 5));
+                chessBoards[0].updatePieces();
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 chessBoards[0].removeLastPiece();
+                chessBoards[0].updatePieces();
                 // TODO NPC zum Schweigen bringen
             }
         ));
@@ -142,8 +146,8 @@ public class Level2 extends Level {
             () -> {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_SOLVE));
-                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
                 chessBoards[0].animationSolve(new Queen());
+                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
             },
             () -> {
                 // neue Dame entfernen und alte Dame wieder setzen
@@ -163,7 +167,7 @@ public class Level2 extends Level {
             () -> {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_SOLUTION));
-                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+                // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {} // TODO NPC zum Schweigen bringen
         ));
@@ -176,17 +180,17 @@ public class Level2 extends Level {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_3X3_1));
                 // 8x8 Schachbrett löschen
-                chessBoards[0].removeAllPieces();
+                chessBoards[0].despawnAllPieces();
                 chessBoards[0].despawnChessBoard(); // TODO ggf einfach weglassen
                 // 3x3 Schachbrett spawnen
                 chessBoards[2].spawnChessBoard();
-                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+                // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 // 3x3 Brett löschen und gelöstes 8x8 Feld spawnen
                 chessBoards[2].despawnChessBoard();
                 chessBoards[0].spawnChessBoard();
-                chessBoards[0].animationSolve(new Queen()); // TODO könnte Bugs geben wenn das zu lange dauert
+                chessBoards[0].spawnAllPieces();
                 // TODO NPC zum Schweigen bringen
             }
         ));
@@ -207,7 +211,7 @@ public class Level2 extends Level {
                 chessBoards[2].addPiece(new Queen(2,0));
                 chessBoards[2].addPiece(new Queen(1,2));
                 chessBoards[2].updatePieces();
-                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+                // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 // alle drei Damen löschen
@@ -233,7 +237,7 @@ public class Level2 extends Level {
                 chessBoards[1].spawnChessBoard();
                 if(!chessBoards[1].isSolved()) chessBoards[1].playBacktrack(new Queen());
                 chessBoards[1].updatePieces();
-                // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn der NPC fertig ist
+                // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 // 4x4 Feld entfernen
