@@ -9,7 +9,6 @@ import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
-import net.kyori.adventure.text.Component;
 
 public class Level1 extends Level {
 

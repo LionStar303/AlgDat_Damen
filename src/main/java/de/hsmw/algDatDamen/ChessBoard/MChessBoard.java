@@ -30,6 +30,33 @@ public class MChessBoard extends ChessBoard {
     // ----------- Constructors -----------
 
     /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     * Use this Constructor for Level Creation
+     * @param originCorner     Starting location for the chessboard.
+     * @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+     */
+    public MChessBoard(Location originCorner, int size, Player player) {
+        this(originCorner, size, player, false);
+    }
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     *
+     * @param originCorner     Starting location for the chessboard.
+     * @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+     * @param spawnInDirection board will be spawned in the direction of the player
+     *                         + no NPC will be spawned, SET FALSE IF USED IN LEVEL
+     *                         CONFIG
+     */
+    public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
+        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
+                                                                                                             // materials:
+                                                                                                             // wool
+    }
+    /**
      * Constructor to create a chessboard with specific parameters.
      *
      * @param originCorner       Starting location for the chessboard.
@@ -60,23 +87,6 @@ public class MChessBoard extends ChessBoard {
         }
         spawnChessBoard();
 
-    }
-
-    /**
-     * Constructor to create a chessboard with specific parameters and default field
-     * materials.
-     *
-     * @param originCorner     Starting location for the chessboard.
-     * @param size             The size of the chessboard.
-     *                         he player for determining the board direction.
-     * @param spawnInDirection board will be spawned in the direction of the player
-     *                         + no NPC will be spawned, SET FALSE IF USED IN LEVEL
-     *                         CONFIG
-     */
-    public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
-        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
-                                                                                                             // materials:
-                                                                                                             // wool
     }
 
     // ----------- Getters and Setters -----------
