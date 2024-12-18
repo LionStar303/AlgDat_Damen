@@ -10,6 +10,9 @@ import org.bukkit.util.Vector;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
 
 public class MChessBoard extends ChessBoard {
@@ -23,6 +26,7 @@ public class MChessBoard extends ChessBoard {
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
     private BukkitRunnable currentAnimationTask = null;
+    private Map<Location, Material> savedBlocks;
 
     // ----------- Constructors -----------
 
@@ -532,6 +536,7 @@ public class MChessBoard extends ChessBoard {
      * Spawns the chessboard with alternating white and gray tiles.
      */
     public void spawnChessBoard() {
+        saveBlocks();
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
                 boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
@@ -632,7 +637,8 @@ public class MChessBoard extends ChessBoard {
 
                 // Skip blocks where there is no collision or where a queen's bottom part is
                 // present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                        || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -713,16 +719,14 @@ public class MChessBoard extends ChessBoard {
      * elements.
      *
      * This method:
-     * - Sets the materials for black and white fields to air, effectively clearing
-     * the board.
+     * - Sets the materials for black and white fields to the original blocks
      * - Disables collision carpets to prevent their reappearance.
      * - Removes all existing collision carpets and queens from the board.
      * - Respawns the board layout with the cleared state.
      */
     public void despawnChessBoard() {
-        // Reset the field materials to air, clearing the chessboard visually
-        this.blackFieldMaterial = Material.AIR;
-        this.whiteFieldMaterial = Material.AIR;
+        // Reset the field materials to the original blocks
+        restoreBlocks();
 
         // Disable collision carpets to ensure they are not displayed
         this.collisionCarpets = false;
@@ -734,7 +738,39 @@ public class MChessBoard extends ChessBoard {
         despawnAllPieces();
 
         // Respawn the board layout to reflect the cleared state
-        spawnChessBoard();
+        // spawnChessBoard();
+    }
+
+    /**
+     * Saves the original blocks at the location of the chessboard.
+     */
+    public void saveBlocks() {
+        this.savedBlocks = new HashMap<>();
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                Material block = location.getBlock().getType();
+                savedBlocks.put(location, block);
+            }
+        }
+    }
+
+    /**
+     * Restores the original blocks at the location of the chessboard.
+     */
+    public void restoreBlocks() {
+        if (savedBlocks == null) {
+            System.out.println("Fehler beim Laden der originalen Blöcke.");
+            return;
+        }
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                        originCorner.getY(), originCorner.getZ() + z);
+                location.getBlock().setType(savedBlocks.get(location));
+            }
+        }
     }
 
     public void despawnPiece(Piece p) {
@@ -795,6 +831,46 @@ public class MChessBoard extends ChessBoard {
 
     public boolean animationStepToNextPiece(Piece p) {
         boolean step = playBacktrackToNextPiece(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Solved!");
+            }
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean animationReverseStepToNextField(Piece p) {
+
+        boolean step = reverseBackStep(p);
+
+        updatePieces();
+        updateCollisionCarpets();
+        if (step) {
+            if (console) {
+                System.out.println("ChessBoard is Empty");
+            }
+            return true;
+        }
+
+        // Zeige nächstes Feld
+        if (stateX + 1 <= size && stateY + 1 <= size) {
+            Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            Block block = location.getBlock();
+            block.setType(Material.BLUE_CARPET);
+        }
+
+        return false;
+    }
+
+    public boolean animationReverseStepToNextPiece(Piece p) {
+        boolean step = playReverseBackTrackToNextPiece(p);
 
         updatePieces();
         updateCollisionCarpets();
@@ -915,6 +991,74 @@ public class MChessBoard extends ChessBoard {
                     if (animationStepToNextPiece(p)) {
                         if (console) {
                             System.out.println("Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void animationReverseField2Field(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationReverseStepToNextField(p)) {
+                        if (console) {
+                            System.out.println("Reverse Backtracking abgeschlossen, Scheduler wird beendet.");
+                        }
+                        isAnimationRunning = false; // Setze das Flag zurück
+                        cancel(); // Stoppe den Task
+                    }
+                }
+            };
+
+            // Aufgabe wird alle `ticks` wiederholt ausgeführt
+            currentAnimationTask.runTaskTimer(plugin, 0L, ticks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void animationReversePiece2Piece(JavaPlugin plugin, long ticks, Piece p) {
+        // Überprüfen, ob bereits eine Animation läuft
+        if (isAnimationRunning) {
+            if (console) {
+                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
+            }
+            return; // Verhindert das Starten einer neuen Animation
+        }
+
+        this.isAnimationRunning = true; // Setze das Flag, dass eine Animation läuft
+        verfyPieces(p);
+        try {
+            // Starte eine neue Animation
+            currentAnimationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    if (animationReverseStepToNextPiece(p)) {
+                        if (console) {
+                            System.out.println("Reverse Backtracking abgeschlossen, Scheduler wird beendet.");
                         }
                         isAnimationRunning = false; // Setze das Flag zurück
                         cancel(); // Stoppe den Task

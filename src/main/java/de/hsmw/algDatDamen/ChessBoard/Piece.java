@@ -122,12 +122,22 @@ public class Piece {
         return newP;
     }
 
+    public Piece clone(int x, int y) {
+        Piece newP = new Piece(x, y);
+        return newP;
+    }
+
     /**
      *
      */
 
-    public String getName(){
+    public String getName() {
         return "Piece";
+    }
+
+    @Override
+    public String toString() {
+        return ("Piece on Field: X->" + this.x + "  Y->" + this.y);
     }
 
 } // End of the Piece class

@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.menu;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +41,7 @@ public class Menu implements Listener {
      * @param size Has to be a number dividable by 9.
      */
     public Menu(int size) {
-        this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
+        this.inventory = Bukkit.createInventory(null, size, Component.text("Schach Menü"));
         this.size = size;
     }
 
@@ -50,7 +52,12 @@ public class Menu implements Listener {
      * @param event  Triggering event.
      */
     public void openInventory(Player player, PlayerInteractEvent event) {
-        player.openInventory(inventory);
+        InventoryView inventoryView = player.openInventory(inventory);
+        if (getClickedMCB(event) == null) {
+            inventoryView.setTitle("Schach Menü - " + ChatColor.GREEN + "Schachbrett ausgewählt!");
+        } else {
+            inventoryView.setTitle("Schach Menü - " + ChatColor.RED + "Kein Schachbrett ausgewählt!");
+        }
         this.event = event;
     }
 
@@ -93,8 +100,9 @@ public class Menu implements Listener {
                 }
 
                 if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot
-                        || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE) {
-                    return;
+                        || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE
+                        || slot == MenuSlots.PIECE.slot) {
+
                 } else {
                     inventory.close();
                 }
@@ -107,39 +115,61 @@ public class Menu implements Listener {
 
     public void init(Integer boardSize) {
         // - Chess Board Functions
-        this.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD, "handleBoardCreation", boardSize);
+        this.addMenuItem(Material.DIAMOND, "Spawne Schachbrett", MenuSlots.ADD_BOARD,
+                "handleBoardCreation", boardSize);
         this.addMenuItem(Material.BARRIER, "Entferne Schachbrett", MenuSlots.REMOVE_BOARD,
                 "removeChessBoardFromGame");
-        this.addMenuItem(Material.REDSTONE_TORCH, "Größe: " + boardSize, MenuSlots.BOARD_SIZE, "increaseBoardSize");
-        this.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS, "handleCollisionCarpets");
+        this.addMenuItem(Material.REDSTONE_TORCH, "Größe: " + boardSize, MenuSlots.BOARD_SIZE,
+                "increaseBoardSize");
+        this.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS,
+                "handleCollisionCarpets");
+        this.addMenuItem(Material.CYAN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
+                "checkUserCarpets");
+        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
+                "placeUserCarpet");
+
+        this.addMenuItem(Material.GREEN_CARPET, "Movement Lösung anzeigen", MenuSlots.MOVEMENT_SOLUTION,
+                "showMovementSolution");
+
         // - Queen Functions
-        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.QUEEN, "placeQueen");
+        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.SPAWN_QUEEN,
+                "placeQueen");
         this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
                 "placeTestedQueen");
-        this.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS, "removeAllQueens");
-        this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS, "rotateQueens");
+        this.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS,
+                "removeAllQueens");
+        this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS,
+                "rotateQueens");
+        this.addMenuItem(Material.IRON_BLOCK, "Aktuelle Figur: " + p.getName(), MenuSlots.PIECE,
+                "changePiece");
+        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces" + p.getName(), MenuSlots.UPDATED_PIECE,
+                "updatePieces");
+
         // - Backtrack Functions
-        this.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL, "handleBacktrack");
-        this.addMenuItem(Material.IRON_SWORD, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
+        this.addMenuItem(Material.DIAMOND_SWORD, "Löse Schachbrett", MenuSlots.BACKTRACK_FULL,
+                "handleBacktrack");
+        this.addMenuItem(Material.IRON_PICKAXE, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
                 "handleBacktrackStep");
-        this.addMenuItem(Material.IRON_AXE, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL, "handleBacktrackToRow");
+        this.addMenuItem(Material.GOLDEN_SWORD, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL,
+                "handleBacktrackToRow");
         this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW,
                 "increaseBacktrackRow");
         this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION,
                 "handleBacktrackAnimation");
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
                 "handleBacktrackAnimationQueenStep");
-        this.addMenuItem(Material.CYAN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
-                "checkUserCarpets");
-        this.addMenuItem(Material.GREEN_CARPET, "Movement Lösung anzeigen", MenuSlots.MOVEMENT_SOLUTION, "showMovementSolution");
-        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
-                "placeUserCarpet");
+
+        this.addMenuItem(Material.GOLDEN_PICKAXE, "Rückschritt", MenuSlots.REVERSE_STEP,
+                "handleReverseStep");
+        this.addMenuItem(Material.DIAMOND_HOE, "Rückschritt Animation", MenuSlots.REVERSE_ANIMATION,
+                "handleReverse");
+        this.addMenuItem(Material.GOLDEN_HOE, "Rückschritt Animation Schnell", MenuSlots.REVERSE_ANIMATION_FAST,
+                "handleReverseFast");
+
         this.addMenuItem(customWhiteFieldMaterial, "Ändere Weiße Blöcke", MenuSlots.WHITE_FIELD_MATERIAL,
                 "changeWhiteFieldMaterial");
         this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
                 "changeBlackFieldMaterial");
-        this.addMenuItem(Material.IRON_BLOCK, "Akutelle Figur: " + p.getName(), MenuSlots.PIECE,
-                "changePiece");
 
         this.fillEmptySlots();
     }
@@ -192,9 +222,14 @@ public class Menu implements Listener {
     }
 
     public void fillEmptySlots() {
+        ItemStack filler = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+        ItemMeta fillerMeta = filler.getItemMeta();
+        fillerMeta.displayName(Component.text(""));
+        filler.setItemMeta(fillerMeta);
+
         for (int i = 0; i < size; i++) {
             if (inventory.getItem(i) == null)
-                inventory.setItem(i, new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE));
+                inventory.setItem(i, filler);
         }
     }
 
