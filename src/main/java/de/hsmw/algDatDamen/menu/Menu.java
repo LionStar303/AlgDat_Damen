@@ -53,7 +53,7 @@ public class Menu implements Listener {
      */
     public void openInventory(Player player, PlayerInteractEvent event) {
         InventoryView inventoryView = player.openInventory(inventory);
-        if (getClickedMCB(event) == null) {
+        if (getClickedMCB(event) != null) {
             inventoryView.setTitle("Schach Menü - " + ChatColor.GREEN + "Schachbrett ausgewählt!");
         } else {
             inventoryView.setTitle("Schach Menü - " + ChatColor.RED + "Kein Schachbrett ausgewählt!");
