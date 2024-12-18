@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.google.gson.annotations.Expose;
 
-import de.hsmw.algDatDamen.tutorialHandler.Levels.Level1;
+import de.hsmw.algDatDamen.tutorialHandler.Levels.*;
 
 public class Tutorial {
 
@@ -36,13 +36,15 @@ public class Tutorial {
 
         // Levels erstellen
         levels.add(new Level1(console, getPlayer(), this));
+        levels.add(new Level2(console, getPlayer(), this));
+        levels.add(new Level3(console, getPlayer(), this));
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
     }
 
     public void start() {
-        System.out.println("Tutorial: starte Tutorial");
+        if(console) System.out.println("Tutorial: starte Tutorial");
         currentLevel.start();
         // Progress Bar auf Level 1 setzen
         getPlayer().setLevel(progress);

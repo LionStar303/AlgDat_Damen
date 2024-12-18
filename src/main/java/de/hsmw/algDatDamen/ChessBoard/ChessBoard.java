@@ -437,7 +437,8 @@ public class ChessBoard {
             return false; // Treat as no-op
         }
 
-        if (p.getLetter() == 'K') return false;
+        if (p.getLetter() == 'K')
+            return false;
 
         // Log the current state if console messages are enabled
         if (console) {

@@ -4,6 +4,7 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.menu.MenuCommand;
 import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
+import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import net.kyori.adventure.text.Component;
@@ -92,6 +93,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         saveManager.getTutorialList().add(new Tutorial(CONSOLE, player, saveManager.getProgress(player)));
         player.teleport(new Location(player.getWorld(), 0, -45, 170));
         player.setFlying(false);
+
         saveManager.getTutorialList().getLast().initialize();
 
         player.setInvulnerable(true);
@@ -113,14 +115,16 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 itemInHand.getItemMeta().displayName().equals(Component.text("Developer Menü", NamedTextColor.BLUE))) {
             devMenu.openInventory(player, event);
             event.setCancelled(true);
-        // Check for Step Control Item
-        } else if (itemInHandType == Material.RED_DYE || itemInHandType == Material.GREEN_DYE
-                || itemInHandType == Material.BLUE_DYE) {
+        }
+
+        // nach Control Item aus Tutorial suchen
+        ControlItem controlItem = ControlItem.fromItem(event.getItem());
+        if(controlItem != null) {
             // nach passendem Tutorial suchen
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
                     // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleEvent(event);
+                    t.getCurrentLevel().handleEvent(controlItem);
                     event.setCancelled(true);
                     return;
                 }

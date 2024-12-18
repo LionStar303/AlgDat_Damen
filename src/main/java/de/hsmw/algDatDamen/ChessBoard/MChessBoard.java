@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.NPC;
 
 @SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
@@ -24,9 +25,37 @@ public class MChessBoard extends ChessBoard {
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
     private BukkitRunnable currentAnimationTask = null;
+    private NPC npc;
 
     // ----------- Constructors -----------
 
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     * Use this Constructor for Level Creation
+     * @param originCorner     Starting location for the chessboard.
+     * @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+     */
+    public MChessBoard(Location originCorner, int size, Player player) {
+        this(originCorner, size, player, false);
+    }
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     *
+     * @param originCorner     Starting location for the chessboard.
+     * @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+     * @param spawnInDirection board will be spawned in the direction of the player
+     *                         + no NPC will be spawned, SET FALSE IF USED IN LEVEL
+     *                         CONFIG
+     */
+    public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
+        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
+                                                                                                             // materials:
+                                                                                                             // wool
+    }
     /**
      * Constructor to create a chessboard with specific parameters.
      *
@@ -35,34 +64,29 @@ public class MChessBoard extends ChessBoard {
      * @param player             The player for determining the board direction.
      * @param whiteFieldMaterial Material used for the white fields.
      * @param blackFieldMaterial Material used for the black fields.
+     * @param spawnInDirection   board will be spawned in the direction of the playe
+     *                           + no NPC will be spawned
      */
     public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
-            Material blackFieldMaterial) {
+            Material blackFieldMaterial, boolean spawnInDirection) {
         this.size = size;
         this.pieces = new ArrayList<>();
-        this.console = true;
+        this.console = false;
         this.originCorner = originCorner;
-        // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
+        if (spawnInDirection) {
+            updateOriginCorner(this.getBoardDirection(player));
+            this.npc = null;
+        } else {
+            this.npc = new NPC(originCorner);
+        }
         spawnChessBoard();
 
-    }
-
-    /**
-     * Constructor to create a chessboard with specific parameters and default field
-     * materials.
-     *
-     * @param originCorner Starting location for the chessboard.
-     * @param size         The size of the chessboard.
-     * @param player       The player for determining the board direction.
-     */
-    public MChessBoard(Location originCorner, int size, Player player) {
-        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE); // Default materials: wool
     }
 
     // ----------- Getters and Setters -----------
@@ -277,6 +301,8 @@ public class MChessBoard extends ChessBoard {
      * The origin corner is adjusted to ensure the chessboard's orientation aligns
      * with the player's view
      * and also takes the size of the board into account.
+     * 
+     * @return The location where the NPC should spawn.
      */
     private void setOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
@@ -1088,4 +1114,42 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    /**
+     * Updates the origin corner of the chessboard based on the player's facing
+     * direction.
+     * The origin corner is adjusted to ensure the chessboard's orientation aligns
+     * with the player's view
+     * and also takes the size of the board into account.
+     * 
+     * @return The location where the NPC should spawn.
+     */
+    private void updateOriginCorner(Vector direction) {
+        // Determine direction modifiers based on boardDirection
+        int xMod = (int) direction.getX(); // East/West orientation modifier
+        int zMod = (int) direction.getZ(); // North/South orientation modifier
+
+        // Current origin corner coordinates
+        int x = originCorner.getBlockX();
+        int z = originCorner.getBlockZ();
+
+        // Adjust origin corner based on player's facing direction
+        if (xMod > 0 && zMod > 0) {
+            // Facing East and South: Set origin at the bottom-left corner
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod > 0) {
+            // Facing West and South: Shift origin to the right
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod < 0) {
+            // Facing West and North: Shift origin both right and up
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(),
+                    z - (size - 1));
+        } else if (xMod > 0 && zMod < 0) {
+            // Facing East and North: Shift origin up
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
+        }
+    }
+
+    public NPC getNPC() {
+        return npc;
+    }
 }
