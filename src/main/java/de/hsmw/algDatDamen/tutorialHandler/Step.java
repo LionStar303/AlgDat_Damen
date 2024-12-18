@@ -6,20 +6,25 @@ public class Step {
     private Step next;
     private Runnable onStart;
     private Runnable onReset;
+    private Runnable checkCompletion;
     protected boolean completed;
 
     public Step(Runnable onStart, Runnable onReset) {
-        this(null, null, onStart, onReset);
+        this(onStart, onReset, null);
     }
-    public Step(Step prev, Step next, Runnable onStart, Runnable onReset) {
+    public Step(Runnable onStart, Runnable onReset, Runnable checkCompletion) {
+        this(null, null, onStart, onReset, checkCompletion);
+    }
+    public Step(Step prev, Step next, Runnable onStart, Runnable onReset, Runnable checkCompletion) {
         // standard Initialisierung mit completed = false
-        this(next, prev, onStart, onReset, false);
+        this(next, prev, onStart, onReset, checkCompletion, false);
     }
-    public Step(Step prev, Step next, Runnable onStart, Runnable onReset, boolean completed) {
+    public Step(Step prev, Step next, Runnable onStart, Runnable onReset, Runnable checkCompletion, boolean completed) {
         this.prev = prev;
         this.next = next;
         this.onStart = onStart;
         this.onReset = onReset;
+        this.checkCompletion = checkCompletion;
         this.completed = completed;
     }
 
@@ -34,8 +39,12 @@ public class Step {
     }
     public void start() {
         onStart.run();
-        completed = true;
+        if(checkCompletion == null) completed = true;
     };
+    public void checkCompletion() {
+        // TODO müsste boolean zurückgeben
+        checkCompletion.run();
+    }
     public void reset() {
         onReset.run();
         completed = false;
