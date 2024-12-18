@@ -3,6 +3,7 @@ package de.hsmw.algDatDamen.tutorialHandler;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import net.kyori.adventure.text.Component;
@@ -24,8 +25,11 @@ public abstract class Level implements Listener {
     protected boolean console;
     private int stepCount;
     private int currentStepID;
+    private Teleporter teleporter;
+    protected Location teleporterLocation;
 
-    public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
+    public Level(boolean console, String name, String description, Player player, Location startLocation,
+            boolean completed, Tutorial parent) {
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
@@ -37,16 +41,23 @@ public abstract class Level implements Listener {
 
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
+
     protected abstract void setInventory();
+
     protected abstract void initializeSteps();
 
     // Standardmethoden
     public void start() {
-        if(console) System.out.println("Level: starte level");
+        if (console)
+            System.out.println("Level: starte level");
         active = true;
         teleportToStart();
 
         configureChessBoards();
+
+        this.teleporter = new Teleporter(teleporterLocation);
+        teleporter.spawnTeleporter();
+
         // alle Schritte erzeugen
         initializeSteps();
         countSteps();
@@ -76,7 +87,8 @@ public abstract class Level implements Listener {
     }
 
     private void nextStep() {
-        if(console) System.out.println("running next step");
+        if (console)
+            System.out.println("running next step");
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -89,7 +101,8 @@ public abstract class Level implements Listener {
 
         // Increase Level
         currentStepID++;
-        if(console) System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
+        if (console)
+            System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
         if (currentStepID <= stepCount) {
             player.setExp((float) currentStepID / stepCount);
         }
@@ -99,12 +112,13 @@ public abstract class Level implements Listener {
     }
 
     private void prevStep() {
-        if(console) System.out.println("running prev step");
+        if (console)
+            System.out.println("running prev step");
         currentStep.reset();
         if (currentStep.getPrev() != null) {
             currentStep = currentStep.getPrev();
             currentStepID--;
-        } 
+        }
 
         if (currentStepID <= stepCount) {
             player.setExp((float) currentStepID / stepCount);
@@ -115,12 +129,13 @@ public abstract class Level implements Listener {
     }
 
     private void resetStep() {
-        if(console) System.out.println("running reset step");
+        if (console)
+            System.out.println("running reset step");
         currentStep.reset();
         currentStep.start();
     }
 
-    public void handleEvent(ControlItem item) {
+    public void handleEvent(ControlItem item, PlayerInteractEvent event) {
         switch (item) {
             case PREVIOUS_STEP:
                 prevStep();
@@ -131,6 +146,11 @@ public abstract class Level implements Listener {
             case NEXT_STEP:
                 nextStep();
                 break;
+            case TELEPORT_ITEM:
+                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled()) {
+                    // TODO: Porten, Level Start
+                }
+                break;
             default:
                 break;
         }
@@ -140,7 +160,8 @@ public abstract class Level implements Listener {
      * Counts the steps of the level and stores it in stepCount variable.
      */
     private void countSteps() {
-        if (currentStep == null) stepCount = 0;
+        if (currentStep == null)
+            stepCount = 0;
         int count = 1;
         Step step = currentStep;
         while (step.getNext() != null) {
@@ -152,5 +173,9 @@ public abstract class Level implements Listener {
 
     public Location getStartLocation() {
         return startLocation;
+    }
+
+    protected void configureTeleporter(Location location) {
+        teleporterLocation = location;
     }
 }

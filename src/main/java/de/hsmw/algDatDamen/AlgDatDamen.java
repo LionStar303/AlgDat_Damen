@@ -124,7 +124,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
                     // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleEvent(controlItem);
+                    t.getCurrentLevel().handleEvent(controlItem, event);
                     event.setCancelled(true);
                     return;
                 }

@@ -11,7 +11,8 @@ public enum ControlItem {
     PREVIOUS_STEP(Material.RED_DYE, Component.text("zurück")),
     RESET_STEP(Material.GREEN_DYE, Component.text("wiederhole")),
     NEXT_STEP(Material.BLUE_DYE, Component.text("weiter")),
-    PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame"));
+    PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame")),
+    TELEPORT_ITEM(Material.REDSTONE, Component.text("Teleport Pulver"));
 
     private final Material material;
     private final Component displayName;
