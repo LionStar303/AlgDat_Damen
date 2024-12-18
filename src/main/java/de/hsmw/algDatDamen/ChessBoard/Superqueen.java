@@ -96,7 +96,14 @@ public class Superqueen extends Piece {
         return newP;
     }
 
-    public String getName(){
+    @Override
+
+    public Superqueen clone(int x, int y) {
+        Superqueen newP = new Superqueen(x, y);
+        return newP;
+    }
+
+    public String getName() {
         return "SuperQueen";
     }
 } // End of Superqueen class

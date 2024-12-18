@@ -107,7 +107,12 @@ public class Knight extends Piece {
         return newP;
     }
 
-    public String getName(){
+    public Knight clone(int x, int y) {
+        Knight newP = new Knight(x, y);
+        return newP;
+    }
+
+    public String getName() {
         return "Knight";
     }
 } // End of Knight class
