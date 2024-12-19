@@ -26,10 +26,9 @@ public abstract class Level implements Listener {
     private int stepCount;
     private int currentStepID;
     private Teleporter teleporter;
-    protected Location teleporterLocation;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
-            boolean completed, Tutorial parent) {
+            boolean completed, Tutorial parent, Location teleporterLocation) {
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
@@ -37,6 +36,7 @@ public abstract class Level implements Listener {
         this.startLocation = startLocation;
         this.completed = completed;
         this.parentTutorial = parent;
+        this.teleporter = new Teleporter(teleporterLocation);
     }
 
     // Abstrakte Methoden
@@ -55,7 +55,6 @@ public abstract class Level implements Listener {
 
         configureChessBoards();
 
-        this.teleporter = new Teleporter(teleporterLocation);
         teleporter.spawnTeleporter();
 
         // alle Schritte erzeugen
@@ -173,9 +172,5 @@ public abstract class Level implements Listener {
 
     public Location getStartLocation() {
         return startLocation;
-    }
-
-    protected void configureTeleporter(Location location) {
-        teleporterLocation = location;
     }
 }
