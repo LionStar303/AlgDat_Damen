@@ -29,7 +29,7 @@ public class Level1 extends Level {
 
     public Level1(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent);
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -50, -42, 138));
     }
 
     @Override
@@ -52,7 +52,6 @@ public class Level1 extends Level {
     @Override
     public void initializeSteps() {
         MChessBoard chessBoard1 = chessBoards[0];
-        configureTeleporter(new Location(player.getWorld(), -50, -42, 138));
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {
