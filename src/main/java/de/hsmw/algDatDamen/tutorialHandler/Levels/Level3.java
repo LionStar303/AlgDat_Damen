@@ -25,7 +25,7 @@ public class Level3 extends Level {
 
     public Level3(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent);
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -50, -32, 138));
     }
 
     @Override
