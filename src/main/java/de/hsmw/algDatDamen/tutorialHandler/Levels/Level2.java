@@ -287,11 +287,4 @@ public class Level2 extends Level {
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
     }
-
-    @Override
-    protected void configureTeleporter(Location location) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'configureTeleporter'");
-    }
-
 }
