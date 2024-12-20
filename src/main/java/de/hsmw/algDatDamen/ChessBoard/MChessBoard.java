@@ -33,13 +33,15 @@ public class MChessBoard extends ChessBoard {
      * Constructor to create a chessboard with specific parameters and default field
      * materials.
      * Use this Constructor for Level Creation
-     * @param originCorner     Starting location for the chessboard.
-     * @param size             The size of the chessboard.
-     *                         he player for determining the board direction.
+     * 
+     * @param originCorner Starting location for the chessboard.
+     * @param size         The size of the chessboard.
+     *                     he player for determining the board direction.
      */
     public MChessBoard(Location originCorner, int size, Player player) {
         this(originCorner, size, player, false);
     }
+
     /**
      * Constructor to create a chessboard with specific parameters and default field
      * materials.
@@ -56,6 +58,7 @@ public class MChessBoard extends ChessBoard {
                                                                                                              // materials:
                                                                                                              // wool
     }
+
     /**
      * Constructor to create a chessboard with specific parameters.
      *
@@ -572,6 +575,7 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
+        this.npc.spawn();
     }
 
     /**
