@@ -1,6 +1,7 @@
 package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
@@ -8,36 +9,26 @@ import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
-import net.kyori.adventure.text.Component;
 
 public class Level2 extends Level {
 
     private final static String LEVEL_NAME = "Level 2 - Boot Camp";
     private final static String LEVEL_DESCRIPTION = "Erklärung des N-Damen-Problems";
-    private final static Component NPC_INTRO = Component.text(
-            "Jetzt will ich dir zeigen wie ich ein 8x8 Feld fülle ohne das sich eine der Damen gegenseitig bedroht.");
-    private final static Component NPC_EXPLAIN_THREATS_1 = Component
-            .text("Denn, wie du sehen kannst, wenn ich die Dame so platziere bedroht sie folgende Felder.");
-    private final static Component NPC_EXPLAIN_THREATS_2 = Component
-            .text("Und würde ich jetzt eine weitere Dame platzieren. Ungefähr so…");
-    private final static Component NPC_EXPLAIN_PROBLEM = Component.text(
-            "Dann würde meine erste Dame die zweite schlagen können und das wollen wir hier vermeiden. Also entfernen wir die zweite Dame wieder und setzen sie neu.");
-    private final static Component NPC_SOLVE = Component.text(
-            "Nun bedrohen sich die beiden Damen nicht mehr. Aber so ist das Brett natürlich noch nicht gefüllt. Lass mich die restlichen Damen auch noch platzieren.");
-    private final static Component NPC_EXPLAIN_SOLUTION = Component.text(
-            "Wenn du jetzt selbst einen Blick auf das Feld wirfst solltest du feststellen können das wir keine weitere Dame mehr platzieren können, ohne das sie bedroht wird, aber auch kein unbedrohtes Feld übrig bleibt.\r\n"
-                    +
-                    "Hierbei handelt es sich um das sogenannte N-Damen-Problem. Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett platziert werden müssen, ohne dass sich zwei Damen gegenseitig angreifen.\r\n"
-                    +
-                    "Und wie du auch gesehen hast haben wir das Problem soeben gelöst.\r\n" +
-                    "Also lass mich nun dazu über gehen wie das passiert ist.\r\n");
-    private final static Component NPC_EXPLAIN_3X3_1 = Component.text(
-            "Hier ist ein weitaus kleineres Feld, aber leider ist dieses Feld zu klein als das man hier ein Lösung finden könnte.");
-    private final static Component NPC_EXPLAIN_3X3_2 = Component.text(
-            "Egal wie ich diese drei Damen platziere, es würden sich immer mindestens zwei gegenseitig schlagen.\r\n" +
-                    "Denn das N-Damen Problem kann man erst ab einer Größe von 4x4 lösen.\r\n");
-    private final static Component NPC_EXPLAIN_4x4_SOLUTION = Component.text(
-            "Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen.");
+    private final static String NPC_INTRO = "Jetzt will ich dir zeigen wie ich ein 8x8 Feld fülle ohne das sich eine der Damen gegenseitig bedroht.";
+    private final static String NPC_EXPLAIN_THREATS_1 = "Denn, wie du sehen kannst, wenn ich die Dame so platziere bedroht sie folgende Felder.";
+    private final static String NPC_EXPLAIN_THREATS_2 = "Und würde ich jetzt eine weitere Dame platzieren. Ungefähr so…";
+    private final static String NPC_EXPLAIN_PROBLEM = "Dann würde meine erste Dame die zweite schlagen können und das wollen wir hier vermeiden. Also entfernen wir die zweite Dame wieder und setzen sie neu.";
+    private final static String NPC_SOLVE = "Nun bedrohen sich die beiden Damen nicht mehr. Aber so ist das Brett natürlich noch nicht gefüllt. Lass mich die restlichen Damen auch noch platzieren.";
+    private final static String NPC_EXPLAIN_SOLUTION = "Wenn du jetzt selbst einen Blick auf das Feld wirfst solltest du feststellen können das wir keine weitere Dame mehr platzieren können, ohne das sie bedroht wird, aber auch kein unbedrohtes Feld übrig bleibt.\r\n"
+            +
+            "Hierbei handelt es sich um das sogenannte N-Damen-Problem. Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett platziert werden müssen, ohne dass sich zwei Damen gegenseitig angreifen.\r\n"
+            +
+            "Und wie du auch gesehen hast haben wir das Problem soeben gelöst.\r\n" +
+            "Also lass mich nun dazu über gehen wie das passiert ist.\r\n";
+    private final static String NPC_EXPLAIN_3X3_1 = "Hier ist ein weitaus kleineres Feld, aber leider ist dieses Feld zu klein als das man hier ein Lösung finden könnte.";
+    private final static String NPC_EXPLAIN_3X3_2 = "Egal wie ich diese drei Damen platziere, es würden sich immer mindestens zwei gegenseitig schlagen.\r\n"
+            + "Denn das N-Damen Problem kann man erst ab einer Größe von 4x4 lösen.\r\n";
+    private final static String NPC_EXPLAIN_4x4_SOLUTION = "Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen.";
 
     public Level2(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -56, -37, 139), parent);
@@ -58,8 +49,17 @@ public class Level2 extends Level {
         chessBoards = new MChessBoard[3];
         // TODO richtige Location für 8x8 Schachbrett finden
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -70, -36, 128), 8, player, false);
+        chessBoards[0].getNPC().addText(NPC_INTRO, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_1, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_2, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_PROBLEM, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_SOLVE, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_SOLUTION, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_3X3_1, Sound.AMBIENT_CAVE);
         chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -70, -36, 128), 4, player, false);
         chessBoards[2] = new MChessBoard(new Location(player.getWorld(), -78, -36, 130), 3, player, false);
+        chessBoards[2].getNPC().addText(NPC_EXPLAIN_3X3_2, Sound.AMBIENT_CAVE);
+        chessBoards[2].getNPC().addText(NPC_EXPLAIN_4x4_SOLUTION, Sound.AMBIENT_CAVE);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Level2 extends Level {
         currentStep = new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_INTRO));
+                    chessBoards[0].getNPC().playNext();
                     chessBoards[0].spawnChessBoard();
                     // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
                     // kommen
@@ -89,7 +89,7 @@ public class Level2 extends Level {
                     // Dame entfernen und Chessboard despawnen
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updatePieces();
-                    chessBoards[0].despawnChessBoard();
+                    // chessBoards[0].despawnChessBoard();
                     // TODO NPC zum Schweigen bringen
                 });
 
@@ -103,7 +103,7 @@ public class Level2 extends Level {
                 () -> {
                     chessBoards[0].spawnCollisionCarpets();
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS_1));
+                    chessBoards[0].getNPC().playNext();
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
@@ -118,7 +118,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_THREATS_2));
+                    chessBoards[0].getNPC().playNext();
                     // platziere Dame auf Feld(6,5) welches von Dame(3,2) bedroht ist
                     chessBoards[0].addPiece(new Queen(6, 5));
                     chessBoards[0].updatePieces();
@@ -138,7 +138,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_PROBLEM));
+                    chessBoards[0].getNPC().playNext();
                     // im vorherigen Schritt platzierte Dame entfernen
                     chessBoards[0].removeLastPiece();
                     // platziere Dame auf Feld(6,4) welches nicht bedroht ist
@@ -160,7 +160,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_SOLVE));
+                    chessBoards[0].getNPC().playNext();
                     chessBoards[0].animationSolve(new Queen());
                     // TODO evtl Verzögerung einbauen, sodass das Schachbrett erst gelöst wird wenn
                     // der NPC fertig ist
@@ -182,7 +182,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_SOLUTION));
+                    chessBoards[0].getNPC().playNext();
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
@@ -196,7 +196,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_3X3_1));
+                    chessBoards[0].getNPC().playNext();
                     // 8x8 Schachbrett löschen
                     chessBoards[0].despawnAllPieces();
                     chessBoards[0].despawnChessBoard(); // TODO ggf einfach weglassen
@@ -219,7 +219,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_3X3_2));
+                    chessBoards[2].getNPC().playNext();
                     /*
                      * 3 Damen platzieren
                      * Q . Q
@@ -248,7 +248,7 @@ public class Level2 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_EXPLAIN_4x4_SOLUTION));
+                    chessBoards[2].getNPC().playNext();
                     // 3x3 Brett entfernen
                     chessBoards[2].despawnAllPieces();
                     chessBoards[2].despawnChessBoard();
@@ -276,7 +276,7 @@ public class Level2 extends Level {
                 () -> {
                     // 4x4 Brett samt Figuren entfernen
                     chessBoards[1].despawnAllPieces();
-                    chessBoards[1].despawnChessBoard();
+                    // chessBoards[1].despawnChessBoard();
                 },
                 () -> {
                     chessBoards[1].spawnChessBoard();
