@@ -16,7 +16,7 @@ public class Level3 extends Level {
     private final static Component NPC_INTRO = Component.text("Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. Setzte vier Damen so das keine eine andere bedroht.");
 
     public Level3(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -75, -33, 103), parent);
+        this(console, player, new Location(player.getWorld(), -88, -32, 83), parent);
     }
 
     public Level3(boolean console, Player player, Location startLocation, Tutorial parent) {
@@ -60,7 +60,25 @@ public class Level3 extends Level {
             }
         );
 
+        // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
+        // verknüpft
+        Step setupStep = currentStep;
+
         // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
+        setupStep.setNext(new Step(
+                () -> {
+                    chessBoards[0].spawnCollisionCarpets();
+                    chessBoards[0].setActive(true);
+                },
+                () -> {
+                    // Schachbrett leeren
+                    chessBoards[0].setActive(false);
+                    chessBoards[0].despawnCollisionCarpets();
+                    chessBoards[0].updatePieces();
+                    chessBoards[0].removeAllPieces();
+                }));
+        setupStep = setupStep.getNext();
+
         // Löschen aller Damen von Schachbrett
         // Erzeugung zweier 4x4 Schachbretter
         // Erklärung des Levelabschnitts durch NPC

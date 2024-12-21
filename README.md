@@ -100,24 +100,24 @@ Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
 ---
 ## Übersicht Level:
 ### Level Koordinaten
-- Spawn `0 -45 170`
+- Spawn `0 -46 170`
 #### Level 1 - Einführung:
-- Startpunkt `-30 -43 143`
+- Startpunkt `-38 -43 140`
 - Schachbrett `8x8 -40 -44 128`
 #### Level 2 - Bootcamp:
-- Startpunkt `-56 -37 139`
-- Schachbrett `4x4 -70 -36 128`, `3x3 -78 -36 130`
+- Startpunkt `-76 -36 119`
+- Schachbrett `4x4 -70 -36 128`, `8x8 -78 -36 130`
 #### Level 3 - Scandi Zwilling:
-- Startpunkt `-75 -33 103`
+- Startpunkt `-88 -32 83`
 - Schachbrett `4x4 -76 -32 81`, `4x4 -76 -32 89`
 #### Level 4 - _erster versuch_:
-- Startpunkt `-106 -25 83`
+- Startpunkt `-143 -24 62`
 - Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
 #### Level 5 - Amazonas:
-- Startpunkt `-153 -19 45`
+- Startpunkt `-188 -20 -7`
 - Schachbrett `4x4 -171 -19 25`, `8x8 -187 -19 14`
 #### Level 6- Boreal:
-- Startpunkt `-182 -12 -21`
+- Startpunkt `-164 -12 -59`
 - Schachbrett `8x8 -185 -14 -46`
 #### Level 7- Eiskönigin:
 - Startpunkt `-128 -7 -70`
