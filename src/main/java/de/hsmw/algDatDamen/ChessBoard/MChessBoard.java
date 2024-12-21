@@ -1,17 +1,17 @@
 package de.hsmw.algDatDamen.ChessBoard;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import org.bukkit.util.Vector;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 
@@ -43,10 +43,10 @@ public class MChessBoard extends ChessBoard {
             Material blackFieldMaterial) {
         this.size = size;
         this.pieces = new ArrayList<>();
-        this.console = false;
+        this.console = true;
         this.originCorner = originCorner;
         // updateOriginCorner(this.getBoardDirection(player));
-        this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
+        this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
@@ -586,6 +586,9 @@ public class MChessBoard extends ChessBoard {
         }
 
         updateCollisionCarpets();
+        if (console) {
+            printBoard(true);
+        }
         return true;
     }
 
@@ -597,8 +600,20 @@ public class MChessBoard extends ChessBoard {
      * @param bottomBlockType The material type for the bottom block.
      */
     private void placePieceBlocks(Location location, Material topBlockType, Material bottomBlockType) {
+
+        // Set the top block
         location.getBlock().setType(topBlockType);
+
+        // Check and set the bottom block
         location.getBlock().getRelative(BlockFace.DOWN).setType(bottomBlockType);
+        
+        if (console) {
+            System.out.println("Placing top block: " + topBlockType + " at " + location);
+            System.out.println("Placing bottom block: " + bottomBlockType + " at "
+                    + location.getBlock().getRelative(BlockFace.DOWN).getLocation());
+            System.out
+                    .println("Current bottom block type: " + location.getBlock().getRelative(BlockFace.DOWN).getType());
+        }
     }
 
     /**
@@ -661,7 +676,7 @@ public class MChessBoard extends ChessBoard {
     public void despawnCollisionCarpets() {
         for (int x = 0; x < size; x++) { // Iterate through the board's X-axis
             for (int y = 0; y < size; y++) { // Iterate through the board's Y-axis
-                // Calculate the location of the current square
+
                 Location location = new Location(
                         originCorner.getWorld(),
                         originCorner.getX() + x,
@@ -670,10 +685,14 @@ public class MChessBoard extends ChessBoard {
 
                 Block block = location.getBlock();
 
-                // Skip blocks occupied by the bottom part of a queen
-                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                // Skip blocks where there is no collision or where a queen's bottom part is
+                // present
+                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                        || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
+
+               
 
                 // Clear the block by setting it to air
                 block.setType(Material.AIR);

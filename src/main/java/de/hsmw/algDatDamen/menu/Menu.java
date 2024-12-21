@@ -123,26 +123,26 @@ public class Menu implements Listener {
                 "increaseBoardSize");
         this.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS,
                 "handleCollisionCarpets");
-        this.addMenuItem(Material.CYAN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
+        this.addMenuItem(Material.CYAN_CARPET, "Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
                 "checkUserCarpets");
-        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
+        this.addMenuItem(Material.PURPLE_CARPET, "Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
                 "placeUserCarpet");
 
         this.addMenuItem(Material.GREEN_CARPET, "Movement Lösung anzeigen", MenuSlots.MOVEMENT_SOLUTION,
                 "showMovementSolution");
 
         // - Queen Functions
-        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.SPAWN_QUEEN,
+        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne: " + p.getName(), MenuSlots.SPAWN_QUEEN,
                 "placeQueen");
-        this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
+        this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete: " + p.getName(), MenuSlots.TESTED_QUEEN,
                 "placeTestedQueen");
-        this.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS,
+        this.addMenuItem(Material.TNT, "Entferne alle: "  + p.getName(), MenuSlots.REMOVE_ALL_QUEENS,
                 "removeAllQueens");
-        this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS,
+        this.addMenuItem(Material.COMPASS, "Rotiere: " + p.getName(), MenuSlots.ROTATE_QUEENS,
                 "rotateQueens");
         this.addMenuItem(Material.IRON_BLOCK, "Aktuelle Figur: " + p.getName(), MenuSlots.PIECE,
                 "changePiece");
-        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces" + p.getName(), MenuSlots.UPDATED_PIECE,
+        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces", MenuSlots.UPDATED_PIECE,
                 "updatePieces");
 
         // - Backtrack Functions
