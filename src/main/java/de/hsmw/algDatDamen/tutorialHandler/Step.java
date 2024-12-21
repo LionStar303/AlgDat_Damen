@@ -6,8 +6,8 @@ public class Step {
 
     private Step prev;
     private Step next;
-    private Runnable onStart;
-    private Runnable onReset;
+    private final Runnable onStart;
+    private final Runnable onReset;
     private final Predicate<Void> checkCompletion;
     protected boolean completed;
 
@@ -44,6 +44,7 @@ public class Step {
     }
     public void start() {
         onStart.run();
+        if(checkCompletion == null) completed = true;
         if(checkCompletion == null) completed = true;
     };
     public void reset() {

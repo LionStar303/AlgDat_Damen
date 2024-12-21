@@ -41,6 +41,10 @@ public class Level1 extends Level {
         // 8x8 Schachbrett für Level 1 erstellen
         chessBoards = new MChessBoard[1];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player, false);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS, Sound.AMBIENT_CAVE);
     }
 
     @Override
@@ -56,13 +60,12 @@ public class Level1 extends Level {
         currentStep = new Step(
                 () -> {
                     chessBoard1.spawnChessBoard();
-                    chessBoard1.getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.AMBIENT_CAVE);
                     chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
                 () -> {
-                    chessBoard1.despawnChessBoard();
+                    // chessBoard1.despawnChessBoard();
                 });
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
@@ -79,7 +82,6 @@ public class Level1 extends Level {
                     // TODO Dame wird nicht richtig gespawnt FFFF
                     chessBoard1.addPiece(new Queen(3, 2));
                     chessBoard1.updatePieces();
-                    chessBoard1.getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.AMBIENT_CAVE);
                     chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
@@ -95,7 +97,6 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoard1.spawnCollisionCarpets();
-                    chessBoard1.getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.AMBIENT_CAVE);
                     chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
@@ -126,7 +127,6 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoard1.spawnCollisionCarpets();
-                    chessBoard1.getNPC().addText(NPC_EXPLAIN_THREATS, Sound.AMBIENT_CAVE);
                     chessBoard1.getNPC().playNext();
                     // TODO evtl Verzögerung einbauen...
                 },
@@ -140,7 +140,7 @@ public class Level1 extends Level {
                 // alle Figuren entfernen
                 () -> {
                     chessBoard1.despawnAllPieces();
-                    chessBoard1.despawnChessBoard();
+                    // chessBoard1.despawnChessBoard();
                 },
                 // alle Figuren spawnen
                 () -> {

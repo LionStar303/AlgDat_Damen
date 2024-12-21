@@ -48,7 +48,7 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, false);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, true);
         AlgDatDamen.chessBoards.add(cb);
     }
 

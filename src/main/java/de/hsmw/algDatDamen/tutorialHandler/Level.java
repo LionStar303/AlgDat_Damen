@@ -174,4 +174,8 @@ public abstract class Level implements Listener {
         }
         stepCount = count;
     }
+
+    public Location getStartLocation() {
+        return startLocation;
+    }
 }

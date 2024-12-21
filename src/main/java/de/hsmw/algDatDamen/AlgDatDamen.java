@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
@@ -41,7 +42,20 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
+    public static Material SPAWN_QUEEN = Material.YELLOW_DYE;
+    public static Material SPAWN_KNIGHT = Material.ORANGE_DYE;
+    public static Material SPAWN_SUPERQUEEN = Material.LIGHT_BLUE_DYE;
+    public static Material TUTORIAL_FORWARD = Material.BLUE_DYE;
+    public static Material TUTORIAL_BACKWARD = Material.RED_DYE;
+    public static Material TUTORIAL_REPEAT = Material.GREEN_DYE;
+    public static Material BACKTRACKING_FORWARD = Material.LIME_DYE;
+    public static Material BACKTRACKING_BACKWARD = Material.PINK_DYE;
+    public static Material SPAWN_CARPET = Material.MAGENTA_DYE;
+    public static Material SHOW_CARPET = Material.BROWN_DYE;
+    public static Material CHECK_CARPET = Material.BLACK_DYE;
+    public static Material TELEPORT = Material.WHITE_DYE;
     public static final boolean CONSOLE = true;
+    private static int MIN_HEIGHT = -60;
 
     @Override
     public void onEnable() {
@@ -74,15 +88,16 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
         saveManager.getTutorialList().forEach((tutorial) -> {
-            if (tutorial.getPlayer().equals(event.getPlayer()))
-                /*
-                 * TODO handling wenn der Spieler den Server verlässt und neu betritt
-                 * beim Verlassen muss das aktuelle Level "gestoppt" werden,
-                 * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
-                 * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
-                 * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
-                 */
+            if (tutorial.getPlayer().equals(player))
+            /* TODO handling wenn der Spieler den Server verlässt und neu betritt
+             * beim Verlassen muss das aktuelle Level "gestoppt" werden,
+             * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
+             * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
+             * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
+             */
                 return;
         });
 
@@ -92,6 +107,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
+
+        player.setInvulnerable(true);
+        player.setHealth(20);
+        player.setFoodLevel(20);
     }
 
     @EventHandler
@@ -121,6 +140,24 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                     return;
                 }
             });
+        }
+    }
+
+    /**
+     * Handles teleporting the player back to the start point if he falls off the island.
+     */
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Location location = player.getLocation();
+        if (location.getY() <= MIN_HEIGHT) {
+            for(Tutorial t : saveManager.getTutorialList()) {
+                if (t.getPlayer().equals(player)) {
+                    player.teleport(t.getCurrentLevel().getStartLocation());
+                    return;
+                }
+            }
+            player.teleport(player.getRespawnLocation());
         }
     }
 
