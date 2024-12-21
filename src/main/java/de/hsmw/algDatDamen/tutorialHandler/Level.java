@@ -1,10 +1,15 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -24,6 +29,7 @@ public abstract class Level implements Listener {
     protected boolean console;
     private int stepCount;
     private int currentStepID;
+    private long cooldownMillis;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
         this.console = console;
@@ -33,6 +39,7 @@ public abstract class Level implements Listener {
         this.startLocation = startLocation;
         this.completed = completed;
         this.parentTutorial = parent;
+        cooldownMillis = 0;
     }
 
     // Abstrakte Methoden
@@ -120,7 +127,9 @@ public abstract class Level implements Listener {
         currentStep.start();
     }
 
-    public void handleEvent(ControlItem item) {
+    public void handleEvent(ControlItem item, PlayerInteractEvent event) {
+        if(System.currentTimeMillis() < cooldownMillis) return;
+        cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
             case PREVIOUS_STEP:
                 prevStep();
@@ -131,9 +140,25 @@ public abstract class Level implements Listener {
             case NEXT_STEP:
                 nextStep();
                 break;
+            case PLACE_QUEEN:
+                for(MChessBoard cb : chessBoards) {
+                    Block clickedBlock = event.getClickedBlock();
+                    Location clickedLocation = clickedBlock.getLocation();
+                    if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+                    if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
+                        Piece existingQueen = cb.getPieceAt(clickedLocation);
+                        if(existingQueen != null) cb.removePiece(existingQueen);
+                        else cb.addPiece(clickedLocation, new Queen());
+                        if(console) System.out.println("Dame gesetzt");
+                        cb.updatePieces();
+                        cb.updateCollisionCarpets();
+                        currentStep.checkForCompletion();
+                    }
+                }
             default:
                 break;
         }
+        event.setCancelled(true);
     }
 
     /**

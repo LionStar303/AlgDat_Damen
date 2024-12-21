@@ -24,6 +24,7 @@ public class MChessBoard extends ChessBoard {
     private Material whiteFieldMaterial; // Material used for white fields on the board
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
+    private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private NPC npc;
 
@@ -79,6 +80,7 @@ public class MChessBoard extends ChessBoard {
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
+        this.active = false;
         if (spawnInDirection) {
             updateOriginCorner(this.getBoardDirection(player));
             this.npc = null;
@@ -195,6 +197,13 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
+     * @return True wenn Spieler Pieces setzen darf, sonst false
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
      * Sets whether an animation is currently running on the chessboard.
      *
      * @param isAnimationRunning True to indicate that an animation is running,
@@ -202,6 +211,13 @@ public class MChessBoard extends ChessBoard {
      */
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
+    }
+    
+    /**
+     * @param active wenn Spieler Pieces setzen darf, sonst false
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /**

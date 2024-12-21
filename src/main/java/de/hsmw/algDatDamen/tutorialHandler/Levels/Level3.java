@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -39,7 +40,6 @@ public class Level3 extends Level {
     protected void setInventory() {
         player.getInventory().clear();
         setControlItems();
-        // TODO items für Interaktion hinzufügen
     }
 
     @Override
@@ -67,16 +67,23 @@ public class Level3 extends Level {
         // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnCollisionCarpets();
+                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setActive(true);
+                    // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
+                    setInventory();
+                    player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                 },
                 () -> {
                     // Schachbrett leeren
+                    chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].setActive(false);
-                    chessBoards[0].despawnCollisionCarpets();
-                    chessBoards[0].updatePieces();
                     chessBoards[0].removeAllPieces();
-                }));
+                    // Inventar auf Urspungszustand zurücksetzen
+                    setInventory();
+                },
+                // Step ist complete wenn das Schachbrett gelöst ist
+                unused -> chessBoards[0].isSolved()
+                ));
         setupStep = setupStep.getNext();
 
         // Löschen aller Damen von Schachbrett
@@ -89,6 +96,9 @@ public class Level3 extends Level {
         // Erklärung des Levelabschnitts durch NPC
         // Setzen von 4 richtigen Damen ohne bedrohte Felder durch Lernenden
         // Löschen aller Damen und Löschen des Schachbretts
+
+        // alle Steps in beide Richtungen miteinander verknüpfen
+        currentStep.backLink();
     }
     
 }

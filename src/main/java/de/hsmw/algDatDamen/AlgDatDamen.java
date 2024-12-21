@@ -87,8 +87,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        saveManager.getTutorialList()
-                .add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
+        //saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 2)); // <- nur zum testen
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
@@ -117,8 +117,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
                     // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleEvent(controlItem);
-                    event.setCancelled(true);
+                    t.getCurrentLevel().handleEvent(controlItem, event);
                     return;
                 }
             });
