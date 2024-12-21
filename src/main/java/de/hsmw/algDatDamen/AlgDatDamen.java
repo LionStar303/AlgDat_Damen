@@ -42,6 +42,18 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
+    public static Material SPAWN_QUEEN = Material.YELLOW_DYE;
+    public static Material SPAWN_KNIGHT = Material.ORANGE_DYE;
+    public static Material SPAWN_SUPERQUEEN = Material.LIGHT_BLUE_DYE;
+    public static Material TUTORIAL_FORWARD = Material.BLUE_DYE;
+    public static Material TUTORIAL_BACKWARD = Material.RED_DYE;
+    public static Material TUTORIAL_REPEAT = Material.GREEN_DYE;
+    public static Material BACKTRACKING_FORWARD = Material.LIME_DYE;
+    public static Material BACKTRACKING_BACKWARD = Material.PINK_DYE;
+    public static Material SPAWN_CARPET = Material.MAGENTA_DYE;
+    public static Material SHOW_CARPET = Material.BROWN_DYE;
+    public static Material CHECK_CARPET = Material.BLACK_DYE;
+    public static Material TELEPORT = Material.WHITE_DYE;
     public static final boolean CONSOLE = true;
     private static int MIN_HEIGHT = -60;
 
