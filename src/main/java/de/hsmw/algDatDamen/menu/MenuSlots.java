@@ -11,16 +11,16 @@ public enum MenuSlots {
     PLAY_VILLAGER(21),
 
     // Materialien
-    WHITE_FIELD_MATERIAL(3),
-    BLACK_FIELD_MATERIAL(4),
+    WHITE_FIELD_MATERIAL(45),
+    BLACK_FIELD_MATERIAL(46),
 
     // Schachfiguren und Aktionen
-    PIECE(9),
-    QUEEN(10),
-    TESTED_QUEEN(11),
-    UPDATED_PIECE(12),
-    REMOVE_ALL_QUEENS(13),
-    ROTATE_QUEENS(14),
+    PIECE(48),
+    SPAWN_QUEEN(13),
+    TESTED_QUEEN(14),
+    UPDATED_PIECE(17),
+    REMOVE_ALL_QUEENS(15),
+    ROTATE_QUEENS(16),
 
     // Teppiche und Interaktionen
     CARPETS(18),
@@ -28,21 +28,21 @@ public enum MenuSlots {
     CHECK_USER_CARPETS(20),
 
     // Backtracking Optionen
-    BACKTRACK_FULL(21),
-    BACKTRACK_STEP(22),
-    BACKTRACK_ROW(23),
-    BACKTRACK_UNTIL(24),
-    BACKTRACK_ANIMATION(25), // Erweiterung im 27-Slot-Inventar
-    BACKTRACK_ANIMATION_FAST(26), // Erweiterung im 27-Slot-Inventar
+    BACKTRACK_FULL(32),
+    BACKTRACK_STEP(33),
+    BACKTRACK_ROW(53),
+    BACKTRACK_UNTIL(35),
+    BACKTRACK_ANIMATION(41), // Erweiterung im 27-Slot-Inventar
+    BACKTRACK_ANIMATION_FAST(42), // Erweiterung im 27-Slot-Inventar
 
     // Rückschritte
-    REVERSE_STEP(5),
-    REVERSE_ANIMATION(6), // Erweiterung
-    REVERSE_ANIMATION_FAST(7), // Erweiterung
+    REVERSE_STEP(34),
+    REVERSE_ANIMATION(50), // Erweiterung
+    REVERSE_ANIMATION_FAST(51), // Erweiterung
 
     // Spezialaktionen
-    MOVEMENT_SOLUTION(8),
-    BONGO_SOLVE(15); // Für eine gute Gruppierung;
+    MOVEMENT_SOLUTION(21),
+    BONGO_SOLVE(38); // Für eine gute Gruppierung;
 
     public final int slot;
 

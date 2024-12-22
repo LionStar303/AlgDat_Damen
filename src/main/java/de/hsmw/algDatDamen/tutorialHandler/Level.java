@@ -1,13 +1,19 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public abstract class Level implements Listener {
 
@@ -15,28 +21,34 @@ public abstract class Level implements Listener {
 
     private final Component LEVEL_NAME; // vielleicht als Bossbar anzeigen
     private final Component LEVEL_DESCRIPTION;
-    private Location startLocation;
+    private final Location startLocation;
+    private final Location teleporterLocation;
     protected Tutorial parentTutorial;
     protected MChessBoard[] chessBoards;
     protected Player player;
+    protected Step currentStep;
+    protected String latestPlayerInput;
     protected boolean active;
     protected boolean completed;
-    protected Step currentStep;
     protected boolean console;
     private int stepCount;
     private int currentStepID;
     protected Teleporter teleporter;
+    private long cooldownMillis;
 
-    public Level(boolean console, String name, String description, Player player, Location startLocation,
-            boolean completed, Tutorial parent, Location teleporterLocation) {
+    public Level(boolean console, String name, String description, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
+
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
         this.startLocation = startLocation;
+        this.teleporterLocation = teleporterLocation;
         this.completed = completed;
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation);
+
+        cooldownMillis = 0;
     }
 
     // Abstrakte Methoden
@@ -139,7 +151,43 @@ public abstract class Level implements Listener {
         parentTutorial.getCurrentLevel().start();
     }
 
-    public void handleEvent(ControlItem item, PlayerInteractEvent event) {
+    private void tryPlaceQueen(PlayerInteractEvent event, boolean tested) {
+        for(MChessBoard cb : chessBoards) {
+            Block clickedBlock = event.getClickedBlock();
+            Location clickedLocation = clickedBlock.getLocation();
+            if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
+                Piece existingQueen = cb.getPieceAt(clickedLocation);
+                if(existingQueen != null) cb.removePiece(existingQueen);
+                else cb.addPiece(clickedLocation, new Queen());
+                if(console) System.out.println("Dame gesetzt");
+                cb.updatePieces();
+                cb.updateCollisionCarpets();
+                currentStep.checkForCompletion();
+            }
+        }
+    }
+
+    /**
+     * AsyncChatEvent behandeln
+     * @param event auslösendes Event
+     */
+    public void handleChatEvent(AsyncChatEvent event) {
+        this.latestPlayerInput = PlainTextComponentSerializer.plainText().serialize(event.message());
+        if(console) System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
+        currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
+        event.setCancelled(true);
+    }
+
+    /**
+     * PlayerInteractionEvent behandeln
+     * @param item entsprechendes ControlItem in der Hand des Spielers
+     * @param event auslösendes Event
+     * je nach benutztem ControlItem wird die entsprechende Funktion ausgeführt
+     */
+    public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
+        if(System.currentTimeMillis() < cooldownMillis) return;
+        cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
             case PREVIOUS_STEP:
                 prevStep();
@@ -158,11 +206,14 @@ public abstract class Level implements Listener {
                     player.sendMessage("Irgendwas hat hier noch nicht geklappt");
                     player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ", "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
                 }
+            case PLACE_QUEEN:
+                tryPlaceQueen(event, false);
                 break;
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
                 break;
         }
+        event.setCancelled(true);
     }
 
     /**

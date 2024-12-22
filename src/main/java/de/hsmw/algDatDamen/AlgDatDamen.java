@@ -7,6 +7,7 @@ import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -35,13 +36,25 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static TutorialSaveManager saveManager = new TutorialSaveManager();
 
     // Generate development menu
-    public static final Menu devMenu = new Menu(27);
+    public static final Menu devMenu = new Menu(54);
     public static AlgDatDamen instance;
     public static Material QUEEN_BLOCK_TOP = Material.EMERALD_BLOCK;
     public static Material QUEEN_BLOCK_BOTTOM = Material.SEA_LANTERN;
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
+    public static Material SPAWN_QUEEN = Material.YELLOW_DYE;
+    public static Material SPAWN_KNIGHT = Material.ORANGE_DYE;
+    public static Material SPAWN_SUPERQUEEN = Material.LIGHT_BLUE_DYE;
+    public static Material TUTORIAL_FORWARD = Material.BLUE_DYE;
+    public static Material TUTORIAL_BACKWARD = Material.RED_DYE;
+    public static Material TUTORIAL_REPEAT = Material.GREEN_DYE;
+    public static Material BACKTRACKING_FORWARD = Material.LIME_DYE;
+    public static Material BACKTRACKING_BACKWARD = Material.PINK_DYE;
+    public static Material SPAWN_CARPET = Material.MAGENTA_DYE;
+    public static Material SHOW_CARPET = Material.BROWN_DYE;
+    public static Material CHECK_CARPET = Material.BLACK_DYE;
+    public static Material TELEPORT = Material.WHITE_DYE;
     public static final boolean CONSOLE = true;
     private static int MIN_HEIGHT = -60;
 
@@ -90,10 +103,10 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, player, saveManager.getProgress(player)));
-        player.teleport(new Location(player.getWorld(), 0, -45, 170));
-        player.setFlying(false);
-
+        //saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 0)); // <- nur zum testen
+        event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
+        event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
 
         player.setInvulnerable(true);
@@ -124,7 +137,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
                     // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleEvent(controlItem, event);
+                    t.getCurrentLevel().handleInteractionEvent(controlItem, event);
                     event.setCancelled(true);
                     return;
                 }
@@ -147,6 +160,17 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 }
             }
             player.teleport(player.getRespawnLocation());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncChatEvent event) {
+        Player player = event.getPlayer();
+        for(Tutorial t : saveManager.getTutorialList()) {
+            if(t.getPlayer().equals(player)) {
+                t.getCurrentLevel().handleChatEvent(event);
+                return;
+            }
         }
     }
 

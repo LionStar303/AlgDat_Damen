@@ -47,6 +47,7 @@ public class NPC {
         });
         Villager v = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
         v.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 100, false, false));
+        v.setCollidable(false);
         v.setInvulnerable(true);
         v.setProfession(Villager.Profession.NITWIT);
     }

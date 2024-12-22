@@ -101,6 +101,7 @@ public class ChessBoard {
 
     // --- Adding/Removing Pieces ---
     public boolean addPiece(Piece pnew) {
+        pnew = pnew.clone();
         if (pnew.getX() >= size || pnew.getY() >= size) {
             return false;
         } // end of if
@@ -543,15 +544,15 @@ public class ChessBoard {
         } // end of if
         playBacktrack(p);
         sortPiecesByX();
-        for (int i = 0; i <= x; i++) {
+        while (x != pieces.size()) {
             removeLastPiece();
         }
         return true;
     }
 
     public boolean playBacktrackToNextPiece(Piece p) {
-        int numQ = pieces.size() + 1;
-        while (!(numQ == pieces.size())) {
+        int numP = pieces.size();
+        while (numP == pieces.size()) {
             stepBacktrack(p);
         } // end of while
         return isSolved();

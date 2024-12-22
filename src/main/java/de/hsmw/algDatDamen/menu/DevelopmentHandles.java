@@ -1,7 +1,5 @@
 package de.hsmw.algDatDamen.menu;
 
-import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
-
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -17,7 +15,8 @@ import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
+import static de.hsmw.algDatDamen.AlgDatDamen.*;
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 @SuppressWarnings("deprecation")
 /**
  * Class that contains development handles for managing chess boards and related
@@ -41,6 +40,7 @@ public class DevelopmentHandles {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
 
+
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             player.sendMessage(
                     Component.text("Du musst einen Block anklicken, an dem das Schachbrett gespawnt werden soll!",
@@ -48,8 +48,9 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, false);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, true);
         AlgDatDamen.chessBoards.add(cb);
+        cb.spawnChessBoard();
     }
 
     /**
@@ -218,7 +219,6 @@ public class DevelopmentHandles {
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             return null;
         }
-
         for (MChessBoard mcB : AlgDatDamen.chessBoards) {
             if (mcB.isPartOfBoard(clickedBlock.getLocation())) {
                 return mcB;
@@ -269,13 +269,21 @@ public class DevelopmentHandles {
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolve(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationSolve(p);
+        }
         event.setCancelled(true);
     }
 
     public static void handleBacktrackToRow(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolveToRow(p, backtrackRow);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationSolveToRow(p, backtrackRow);
+        }
         event.setCancelled(true);
     }
 
@@ -292,19 +300,34 @@ public class DevelopmentHandles {
      */
     public static void handleReverse(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReverseField2Field(AlgDatDamen.getInstance(), 5, p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReverseField2Field(AlgDatDamen.getInstance(), 5, p);
+        }
+
         event.setCancelled(true);
     }
 
     public static void handleReverseFast(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReversePiece2Piece(AlgDatDamen.getInstance(), 5, p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReversePiece2Piece(AlgDatDamen.getInstance(), 5, p);
+        }
+
         event.setCancelled(true);
     }
 
     public static void handleReverseStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReverseStepToNextField(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReverseStepToNextField(p);
+        }
+
         event.setCancelled(true);
     }
 
@@ -316,7 +339,11 @@ public class DevelopmentHandles {
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.animationStepToNextField(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationStepToNextField(p);
+        }
         event.setCancelled(true);
     }
 
@@ -358,12 +385,15 @@ public class DevelopmentHandles {
         switch (p.getLetter()) {
             case 'Q':
                 p = new Superqueen();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, SUPERQUEEN_BLOCK_TOP);
                 break;
             case 'S':
                 p = new Knight();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, KNIGHT_BLOCK_TOP);
                 break;
             case 'K':
                 p = new Queen();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, QUEEN_BLOCK_TOP);
                 break;
             default:
 
@@ -371,7 +401,7 @@ public class DevelopmentHandles {
                 System.out.println("Default");
                 break;
         }
-        devMenu.updateItemName(MenuSlots.PIECE, ("Figur " + p.getName()));
+        devMenu.updateItemName(MenuSlots.PIECE, ("Aktuelle Figur: " + p.getName()));
     }
 
 }
