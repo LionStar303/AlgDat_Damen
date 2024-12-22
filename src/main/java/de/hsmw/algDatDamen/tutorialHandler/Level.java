@@ -19,7 +19,8 @@ public abstract class Level implements Listener {
 
     private final Component LEVEL_NAME; // vielleicht als Bossbar anzeigen
     private final Component LEVEL_DESCRIPTION;
-    private Location startLocation;
+    private final Location startLocation;
+    private final Location teleporterLocation;
     protected Tutorial parentTutorial;
     protected MChessBoard[] chessBoards;
     protected Player player;
@@ -31,12 +32,13 @@ public abstract class Level implements Listener {
     private int currentStepID;
     private long cooldownMillis;
 
-    public Level(boolean console, String name, String description, Player player, Location startLocation, boolean completed, Tutorial parent) {
+    public Level(boolean console, String name, String description, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
         this.startLocation = startLocation;
+        this.teleporterLocation = teleporterLocation;
         this.completed = completed;
         this.parentTutorial = parent;
         cooldownMillis = 0;
@@ -127,6 +129,28 @@ public abstract class Level implements Listener {
         currentStep.start();
     }
 
+    private void startNextLevel() {
+        parentTutorial.incProgress();
+        parentTutorial.getCurrentLevel().start();
+    }
+
+    private void tryPlaceQueen(PlayerInteractEvent event, boolean tested) {
+        for(MChessBoard cb : chessBoards) {
+            Block clickedBlock = event.getClickedBlock();
+            Location clickedLocation = clickedBlock.getLocation();
+            if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
+                Piece existingQueen = cb.getPieceAt(clickedLocation);
+                if(existingQueen != null) cb.removePiece(existingQueen);
+                else cb.addPiece(clickedLocation, new Queen());
+                if(console) System.out.println("Dame gesetzt");
+                cb.updatePieces();
+                cb.updateCollisionCarpets();
+                currentStep.checkForCompletion();
+            }
+        }
+    }
+
     public void handleEvent(ControlItem item, PlayerInteractEvent event) {
         if(System.currentTimeMillis() < cooldownMillis) return;
         cooldownMillis = System.currentTimeMillis() + 100;
@@ -141,20 +165,12 @@ public abstract class Level implements Listener {
                 nextStep();
                 break;
             case PLACE_QUEEN:
-                for(MChessBoard cb : chessBoards) {
-                    Block clickedBlock = event.getClickedBlock();
-                    Location clickedLocation = clickedBlock.getLocation();
-                    if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
-                    if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
-                        Piece existingQueen = cb.getPieceAt(clickedLocation);
-                        if(existingQueen != null) cb.removePiece(existingQueen);
-                        else cb.addPiece(clickedLocation, new Queen());
-                        if(console) System.out.println("Dame gesetzt");
-                        cb.updatePieces();
-                        cb.updateCollisionCarpets();
-                        currentStep.checkForCompletion();
-                    }
-                }
+                tryPlaceQueen(event, false);
+                break;
+            case NEXT_LEVEL:
+                // starte nächstes Level, wenn Teleporter angeklickt und letzter Step
+                if(event.getClickedBlock().getLocation().equals(teleporterLocation) && currentStep.getNext() == null) startNextLevel();
+                break;
             default:
                 break;
         }

@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -20,16 +21,16 @@ public class Level1 extends Level {
     private final static String NPC_EXPLAIN_THREATS = "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.";
 
     public Level1(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -38, -43, 140), parent);
+        this(console, player, new Location(player.getWorld(), -17, -44, 144), new Location(player.getWorld(), -38, -43, 140), parent);
     }
 
-    public Level1(boolean console, Player player, Location startLocation, Tutorial parent) {
-        this(console, player, startLocation, false, parent);
+    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {
+        this(console, player, startLocation, teleporterLocation, false, parent);
     }
 
-    public Level1(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
+    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent);
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class Level1 extends Level {
     protected void configureChessBoards() {
         // 8x8 Schachbrett für Level 1 erstellen
         chessBoards = new MChessBoard[1];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -40, -44, 128), 8, player, false);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -28, -45, 130), 8, player, false);
         chessBoards[0].getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.AMBIENT_CAVE);
         chessBoards[0].getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.AMBIENT_CAVE);
         chessBoards[0].getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.AMBIENT_CAVE);
@@ -140,10 +141,13 @@ public class Level1 extends Level {
                 // alle Figuren entfernen
                 () -> {
                     chessBoard1.despawnAllPieces();
-                    // chessBoard1.despawnChessBoard();
+                    chessBoard1.despawnChessBoard();
+                    setInventory();
+                    player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                 },
                 // alle Figuren spawnen
                 () -> {
+                    setInventory();
                     chessBoard1.spawnChessBoard();
                     chessBoard1.spawnAllPieces();
                 }));
