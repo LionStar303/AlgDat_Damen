@@ -103,8 +103,8 @@ Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
 - Spawn `0 -45 170`
 - Teleporter `0 -46 170`
 ### Level 1 - Einführung:
-- Startpunkt `-30 -43 143`
-- Schachbrett `8x8 -40 -44 128`
+- Startpunkt `-17 -44 144`
+- Schachbrett `8x8 -28 -45 130`
 - Teleporter `-38 -43 140`
 ### Level 2 - Bootcamp:
 - Startpunkt `-56 -37 139`
