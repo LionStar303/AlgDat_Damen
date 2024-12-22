@@ -7,6 +7,7 @@ import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -103,7 +104,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
         //saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 0)); // <- nur zum testen
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 2)); // <- nur zum testen
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
@@ -136,7 +137,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             saveManager.getTutorialList().forEach((t) -> {
                 if (t.getPlayer().equals(player)) {
                     // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleEvent(controlItem, event);
+                    t.getCurrentLevel().handleInteractionEvent(controlItem, event);
                     return;
                 }
             });
@@ -158,6 +159,17 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 }
             }
             player.teleport(player.getRespawnLocation());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerChat(AsyncChatEvent event) {
+        Player player = event.getPlayer();
+        for(Tutorial t : saveManager.getTutorialList()) {
+            if(t.getPlayer().equals(player)) {
+                t.getCurrentLevel().handleChatEvent(event);
+                return;
+            }
         }
     }
 

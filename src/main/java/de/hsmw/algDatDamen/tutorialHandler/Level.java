@@ -10,8 +10,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public abstract class Level implements Listener {
 
@@ -24,9 +26,10 @@ public abstract class Level implements Listener {
     protected Tutorial parentTutorial;
     protected MChessBoard[] chessBoards;
     protected Player player;
+    protected Step currentStep;
+    protected String latestPlayerInput;
     protected boolean active;
     protected boolean completed;
-    protected Step currentStep;
     protected boolean console;
     private int stepCount;
     private int currentStepID;
@@ -151,7 +154,24 @@ public abstract class Level implements Listener {
         }
     }
 
-    public void handleEvent(ControlItem item, PlayerInteractEvent event) {
+    /**
+     * AsyncChatEvent behandeln
+     * @param event auslösendes Event
+     */
+    public void handleChatEvent(AsyncChatEvent event) {
+        this.latestPlayerInput = PlainTextComponentSerializer.plainText().serialize(event.message());
+        if(console) System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
+        currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
+        event.setCancelled(true);
+    }
+
+    /**
+     * PlayerInteractionEvent behandeln
+     * @param item entsprechendes ControlItem in der Hand des Spielers
+     * @param event auslösendes Event
+     * je nach benutztem ControlItem wird die entsprechende Funktion ausgeführt
+     */
+    public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
         if(System.currentTimeMillis() < cooldownMillis) return;
         cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
