@@ -25,7 +25,7 @@ public abstract class Level implements Listener {
     protected boolean console;
     private int stepCount;
     private int currentStepID;
-    private Teleporter teleporter;
+    protected Teleporter teleporter;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
             boolean completed, Tutorial parent, Location teleporterLocation) {
@@ -134,6 +134,11 @@ public abstract class Level implements Listener {
         currentStep.start();
     }
 
+    private void startNextLevel() {
+        parentTutorial.incProgress();
+        parentTutorial.getCurrentLevel().start();
+    }
+
     public void handleEvent(ControlItem item, PlayerInteractEvent event) {
         switch (item) {
             case PREVIOUS_STEP:
@@ -145,12 +150,17 @@ public abstract class Level implements Listener {
             case NEXT_STEP:
                 nextStep();
                 break;
-            case TELEPORT_ITEM:
-                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled()) {
-                    // TODO: Porten, Level Start
+            case NEXT_LEVEL:
+                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled() && currentStep.getNext() == null) {
+                    player.sendMessage("Teleport zu nächstem Level");
+                    startNextLevel();
+                } else {
+                    player.sendMessage("Irgendwas hat hier noch nicht geklappt");
+                    player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ", "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
                 }
                 break;
             default:
+                player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
                 break;
         }
     }

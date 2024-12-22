@@ -29,7 +29,7 @@ public class Level1 extends Level {
 
     public Level1(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -50, -42, 138));
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -50, -41, 138));
     }
 
     @Override
@@ -141,6 +141,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoard1.despawnAllPieces();
                     chessBoard1.despawnChessBoard();
+                    teleporter.setEnabled(true);
                 },
                 // alle Figuren spawnen
                 () -> {

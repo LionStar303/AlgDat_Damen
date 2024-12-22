@@ -25,7 +25,7 @@ public class Level3 extends Level {
 
     public Level3(boolean console, Player player, Location startLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
-        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -50, -32, 138));
+        super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, completed, parent, new Location(player.getWorld(), -88, -31, 83));
     }
 
     @Override
@@ -51,6 +51,7 @@ public class Level3 extends Level {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_INTRO));
                 chessBoards[0].spawnChessBoard();
+                teleporter.setEnabled(true);
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {

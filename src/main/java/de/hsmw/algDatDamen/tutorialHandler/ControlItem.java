@@ -12,7 +12,7 @@ public enum ControlItem {
     RESET_STEP(Material.GREEN_DYE, Component.text("wiederhole")),
     NEXT_STEP(Material.BLUE_DYE, Component.text("weiter")),
     PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame")),
-    TELEPORT_ITEM(Material.REDSTONE, Component.text("Teleport Pulver"));
+    NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver"));
 
     private final Material material;
     private final Component displayName;
@@ -50,6 +50,7 @@ public enum ControlItem {
                 return item;
             }
         }
+        System.out.println("Kein Controll Item erkannt.");
         return null; // kein passendes Control Item
     }
 }

@@ -69,5 +69,6 @@ public class Tutorial {
     public void incProgress() {
         progress++;
         Bukkit.getPlayer(playerUUID).setLevel(progress);
+        currentLevel = levels.get(progress);
     }
 }
