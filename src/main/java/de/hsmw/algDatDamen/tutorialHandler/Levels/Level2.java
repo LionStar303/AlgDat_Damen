@@ -50,17 +50,17 @@ public class Level2 extends Level {
         chessBoards = new MChessBoard[3];
         // TODO richtige Location für 8x8 Schachbrett finden
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -74, -36, 128), 8, player, false);
-        chessBoards[0].getNPC().addText(NPC_INTRO, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_1, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_2, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_PROBLEM, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_SOLVE, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_SOLUTION, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_3X3_1, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_INTRO, Sound.ENTITY_ARMADILLO_HURT_REDUCED);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_1, Sound.ENTITY_ARMADILLO_LAND);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS_2, Sound.ENTITY_ARMADILLO_PEEK);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_PROBLEM, Sound.ENTITY_ARMADILLO_ROLL);
+        chessBoards[0].getNPC().addText(NPC_SOLVE, Sound.ENTITY_ARMADILLO_SCUTE_DROP);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_SOLUTION, Sound.ENTITY_ARMADILLO_UNROLL_FINISH);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_3X3_1, Sound.ENTITY_ARMADILLO_STEP);
         chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -69, -36, 140), 4, player, false);
         chessBoards[2] = new MChessBoard(chessBoards[1].getOriginCorner(), 3, player, false);
-        chessBoards[2].getNPC().addText(NPC_EXPLAIN_3X3_2, Sound.AMBIENT_CAVE);
-        chessBoards[2].getNPC().addText(NPC_EXPLAIN_4x4_SOLUTION, Sound.AMBIENT_CAVE);
+        chessBoards[2].getNPC().addText(NPC_EXPLAIN_3X3_2, Sound.ENTITY_ARMADILLO_UNROLL_START);
+        chessBoards[2].getNPC().addText(NPC_EXPLAIN_4x4_SOLUTION, Sound.ENTITY_AXOLOTL_ATTACK);
     }
 
     @Override

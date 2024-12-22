@@ -42,10 +42,10 @@ public class Level1 extends Level {
         // 8x8 Schachbrett für Level 1 erstellen
         chessBoards = new MChessBoard[1];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -28, -45, 130), 8, player, false);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.AMBIENT_CAVE);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS, Sound.AMBIENT_CAVE);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.ENTITY_ARMADILLO_BRUSH);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.ENTITY_ARMADILLO_DEATH);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.ENTITY_ARMADILLO_EAT);
+        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS, Sound.ENTITY_ARMADILLO_HURT);
     }
 
     @Override
