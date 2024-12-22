@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -95,8 +96,6 @@ public class MChessBoard extends ChessBoard {
         } else {
             this.npc = new NPC(originCorner);
         }
-        spawnChessBoard();
-
     }
 
     // ----------- Getters and Setters -----------
@@ -597,7 +596,9 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
-        this.npc.spawn();
+        if(npc != null){
+            this.npc.spawn();
+        }
     }
 
     /**

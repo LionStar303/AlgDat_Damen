@@ -16,6 +16,7 @@ import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import static de.hsmw.algDatDamen.AlgDatDamen.*;
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 @SuppressWarnings("deprecation")
 /**
  * Class that contains development handles for managing chess boards and related
@@ -39,6 +40,7 @@ public class DevelopmentHandles {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
 
+
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             player.sendMessage(
                     Component.text("Du musst einen Block anklicken, an dem das Schachbrett gespawnt werden soll!",
@@ -48,6 +50,7 @@ public class DevelopmentHandles {
 
         MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, true);
         AlgDatDamen.chessBoards.add(cb);
+        cb.spawnChessBoard();
     }
 
     /**
@@ -216,7 +219,6 @@ public class DevelopmentHandles {
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             return null;
         }
-
         for (MChessBoard mcB : AlgDatDamen.chessBoards) {
             if (mcB.isPartOfBoard(clickedBlock.getLocation())) {
                 return mcB;
