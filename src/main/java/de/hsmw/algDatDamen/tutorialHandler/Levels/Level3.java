@@ -21,7 +21,7 @@ public class Level3 extends Level {
     private final static Component NPC_SECOND_TASK = Component.text("Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen so setzt, dass sie sich nicht gegenseitig schlagen.");
 
     public Level3(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -75, -32, 103), new Location(player.getWorld(), -88, -32, 83), parent);
+        this(console, player, new Location(player.getWorld(), -76, -32, 103, 180, 0), new Location(player.getWorld(), -88, -32, 83), parent);
     }
 
     public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {

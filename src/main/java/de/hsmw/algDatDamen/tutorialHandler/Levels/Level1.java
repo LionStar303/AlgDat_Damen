@@ -21,7 +21,7 @@ public class Level1 extends Level {
     private final static String NPC_EXPLAIN_THREATS = "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.";
 
     public Level1(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -17, -44, 144), new Location(player.getWorld(), -38, -43, 140), parent);
+        this(console, player, new Location(player.getWorld(), -17, -44, 144, 150, 0), new Location(player.getWorld(), -38, -43, 140), parent);
     }
 
     public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {
