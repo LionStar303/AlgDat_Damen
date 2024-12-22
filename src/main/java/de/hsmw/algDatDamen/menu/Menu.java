@@ -72,7 +72,7 @@ public class Menu implements Listener {
         event.setCancelled(true);
 
         int slot = event.getSlot();
-        System.out.println("Slot: " + slot);
+        //System.out.println("Slot: " + slot);
 
         // Get assigned function and execute it
         if (commandsMap.containsKey(slot)) {
@@ -82,8 +82,8 @@ public class Menu implements Listener {
                 Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.menu.DevelopmentHandles");
                 Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
 
-                System.out.println(commandData.command());
-                System.out.println(Arrays.toString(commandData.arguments()));
+                //System.out.println(commandData.command());
+                //System.out.println(Arrays.toString(commandData.arguments()));
 
                 // Get method and invoke it with given arguments.
                 // It automatically adds the event as the first argument.

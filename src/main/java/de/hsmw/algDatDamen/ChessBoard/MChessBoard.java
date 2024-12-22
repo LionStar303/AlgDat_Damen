@@ -43,7 +43,7 @@ public class MChessBoard extends ChessBoard {
             Material blackFieldMaterial) {
         this.size = size;
         this.pieces = new ArrayList<>();
-        this.console = true;
+        this.console = false;
         this.originCorner = originCorner;
         // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
@@ -744,8 +744,9 @@ public class MChessBoard extends ChessBoard {
      * - Respawns the board layout with the cleared state.
      */
     public void despawnChessBoard() {
-        // Reset the field materials to the original blocks
-        restoreBlocks();
+
+        // Remove all queens from the chessboard
+        despawnAllPieces();
 
         // Disable collision carpets to ensure they are not displayed
         this.collisionCarpets = false;
@@ -753,11 +754,8 @@ public class MChessBoard extends ChessBoard {
         // Remove any remaining collision carpets from the board
         despawnCollisionCarpets();
 
-        // Remove all queens from the chessboard
-        despawnAllPieces();
-
-        // Respawn the board layout to reflect the cleared state
-        // spawnChessBoard();
+        // Reset the field materials to the original blocks
+        restoreBlocks();
     }
 
     /**
