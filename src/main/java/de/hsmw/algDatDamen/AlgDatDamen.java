@@ -35,7 +35,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static TutorialSaveManager saveManager = new TutorialSaveManager();
 
     // Generate development menu
-    public static final Menu devMenu = new Menu(27);
+    public static final Menu devMenu = new Menu(54);
     public static AlgDatDamen instance;
     public static Material QUEEN_BLOCK_TOP = Material.EMERALD_BLOCK;
     public static Material QUEEN_BLOCK_BOTTOM = Material.SEA_LANTERN;
