@@ -17,7 +17,7 @@ public class Level3 extends Level {
     private final static Component NPC_INTRO = Component.text("Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. Setzte vier Damen so das keine eine andere bedroht.");
 
     public Level3(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -75, -33, 103), new Location(player.getWorld(), -88, -32, 83), parent);
+        this(console, player, new Location(player.getWorld(), -75, -32, 103), new Location(player.getWorld(), -88, -32, 83), parent);
     }
 
     public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {

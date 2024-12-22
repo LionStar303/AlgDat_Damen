@@ -32,7 +32,7 @@ public class Level2 extends Level {
     private final static String NPC_EXPLAIN_4x4_SOLUTION = "Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen.";
 
     public Level2(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -56, -36, 139), new Location(player.getWorld(), -76, -36, 119), parent);
+        this(console, player, new Location(player.getWorld(), -56, -37, 139), new Location(player.getWorld(), -76, -36, 119), parent);
     }
 
     public Level2(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {
