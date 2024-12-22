@@ -142,6 +142,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoard1.despawnAllPieces();
                     chessBoard1.despawnChessBoard();
+                    teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                 },
@@ -155,4 +156,5 @@ public class Level1 extends Level {
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
     }
+
 }

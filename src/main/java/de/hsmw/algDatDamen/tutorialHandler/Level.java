@@ -33,9 +33,11 @@ public abstract class Level implements Listener {
     protected boolean console;
     private int stepCount;
     private int currentStepID;
+    protected Teleporter teleporter;
     private long cooldownMillis;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
+
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
@@ -44,21 +46,29 @@ public abstract class Level implements Listener {
         this.teleporterLocation = teleporterLocation;
         this.completed = completed;
         this.parentTutorial = parent;
+        this.teleporter = new Teleporter(teleporterLocation);
+
         cooldownMillis = 0;
     }
 
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
+
     protected abstract void setInventory();
+
     protected abstract void initializeSteps();
 
     // Standardmethoden
     public void start() {
-        if(console) System.out.println("Level: starte level");
+        if (console)
+            System.out.println("Level: starte level");
         active = true;
         teleportToStart();
 
         configureChessBoards();
+
+        teleporter.spawnTeleporter();
+
         // alle Schritte erzeugen
         initializeSteps();
         countSteps();
@@ -88,7 +98,8 @@ public abstract class Level implements Listener {
     }
 
     private void nextStep() {
-        if(console) System.out.println("running next step");
+        if (console)
+            System.out.println("running next step");
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -101,7 +112,8 @@ public abstract class Level implements Listener {
 
         // Increase Level
         currentStepID++;
-        if(console) System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
+        if (console)
+            System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
         if (currentStepID <= stepCount) {
             player.setExp((float) currentStepID / stepCount);
         }
@@ -111,12 +123,13 @@ public abstract class Level implements Listener {
     }
 
     private void prevStep() {
-        if(console) System.out.println("running prev step");
+        if (console)
+            System.out.println("running prev step");
         currentStep.reset();
         if (currentStep.getPrev() != null) {
             currentStep = currentStep.getPrev();
             currentStepID--;
-        } 
+        }
 
         if (currentStepID <= stepCount) {
             player.setExp((float) currentStepID / stepCount);
@@ -127,7 +140,8 @@ public abstract class Level implements Listener {
     }
 
     private void resetStep() {
-        if(console) System.out.println("running reset step");
+        if (console)
+            System.out.println("running reset step");
         currentStep.reset();
         currentStep.start();
     }
@@ -184,14 +198,19 @@ public abstract class Level implements Listener {
             case NEXT_STEP:
                 nextStep();
                 break;
+            case NEXT_LEVEL:
+                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled() && currentStep.getNext() == null) {
+                    player.sendMessage("Teleport zu nächstem Level");
+                    startNextLevel();
+                } else {
+                    player.sendMessage("Irgendwas hat hier noch nicht geklappt");
+                    player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ", "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
+                }
             case PLACE_QUEEN:
                 tryPlaceQueen(event, false);
                 break;
-            case NEXT_LEVEL:
-                // starte nächstes Level, wenn Teleporter angeklickt und letzter Step
-                if(event.getClickedBlock().getLocation().equals(teleporterLocation) && currentStep.getNext() == null) startNextLevel();
-                break;
             default:
+                player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
                 break;
         }
         event.setCancelled(true);
@@ -201,7 +220,8 @@ public abstract class Level implements Listener {
      * Counts the steps of the level and stores it in stepCount variable.
      */
     private void countSteps() {
-        if (currentStep == null) stepCount = 0;
+        if (currentStep == null)
+            stepCount = 0;
         int count = 1;
         Step step = currentStep;
         while (step.getNext() != null) {

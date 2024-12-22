@@ -55,6 +55,7 @@ public class Level3 extends Level {
                 // TODO Audio vom NPC abspielen lassen
                 player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_INTRO));
                 chessBoards[0].spawnChessBoard();
+                teleporter.setEnabled(true);
                 // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {

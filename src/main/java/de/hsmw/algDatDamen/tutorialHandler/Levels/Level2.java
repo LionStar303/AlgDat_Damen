@@ -278,6 +278,7 @@ public class Level2 extends Level {
                     // 4x4 Brett samt Figuren entfernen
                     chessBoards[1].despawnAllPieces();
                     chessBoards[1].despawnChessBoard();
+                    teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                 },
@@ -291,5 +292,4 @@ public class Level2 extends Level {
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
     }
-
 }
