@@ -30,7 +30,7 @@ public enum NPCTrack {
     // Level 3
     NPC_301_INTRO(Sound.ENTITY_AXOLOTL_HURT ,"Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. Setzte vier Damen so, dass keine eine andere bedroht."),
     NPC_302_DIFFERENT_SOLUTIONS(Sound.ENTITY_AXOLOTL_IDLE_AIR ,"Aber es hätte auch eine andere Lösung gegeben. Bestimme wie die Lösungen auf diesen beiden Brettern sich unterscheiden."),
-    NPC_303_SECOND_TASK(Sound.ENTITY_AXOLOTL_IDLE_WATER ,"Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen so setzt, dass sie sich nicht gegenseitig schlagen.")
+    NPC_303_SECOND_TASK(Sound.ENTITY_AXOLOTL_IDLE_WATER ,"Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen so setzt, dass sie sich nicht gegenseitig schlagen."),
 
     // Level 4
     NPC_401_INTRO(Sound.ENTITY_PIG_AMBIENT ,"Lass uns das ganze jetzt wieder auf einem acht mal acht Feld betrachten und den Backtracking-Algoritmus verwenden."),
@@ -51,11 +51,11 @@ public enum NPCTrack {
     NPC_505_EXPLAIN_3(Sound.ENTITY_BEE_HURT ,"Setz nur die ersten drei Damen."),
     NPC_506_EXPLAIN_4(Sound.ENTITY_BEE_LOOP ,"Hier sind zwei acht mal acht Felder, eins ist gelöst, das andere nicht. Welches ist welches?"),
 
-    //Level 6
+    // Level 6
     NPC_601_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE ,"Jetzt werden wir das N-Damen-Problem auf einem noch größeren Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen mit der Größe des Schachbretts ändern."),
     NPC_602_EXPLAIN(Sound.ENTITY_BEE_POLLINATE ,"Aber fühl dich nicht allzu eingeschüchtert. Du musst nur sechs der zehn Damen setzen."),
 
-    //Level 7
+    // Level 7
     NPC_701_INTRO(Sound.ENTITY_BEE_STING ,"Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen."),
     NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT ,"Der Springer bewegt sich in einem L-förmigen Muster. Er kann zwei Felder in eine Richtung und dann ein Feld in eine senkrechte Richtung springen oder umgekehrt."),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN ,"Ziemlich genauso würde das dann aussehen."),
@@ -68,7 +68,7 @@ public enum NPCTrack {
                              "Versuche nun dieses Brett mit Superdamen zu füllen."),
     NPC_710_END(Sound.ENTITY_CAMEL_DEATH ,"Ich hoffe, dass dir dies beim Verstehen des N-Damen-Problems und der Lösung durch die Anwendung des Backtracking-Algorithmus geholfen hat, und ich wünsche dir weiterhin viel Erfolg."),
 
-    //Positive Response
+    // Positive Response
     NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT ,"Richtig!"),
     NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT ,"Korrekt!"),
     NPC_POSITIVE_3(Sound.ENTITY_CAMEL_SADDLE ,"Ganz genau!"),
@@ -76,15 +76,12 @@ public enum NPCTrack {
     NPC_POSITIVE_5(Sound.ENTITY_CAMEL_STAND ,"Ich hätte es selber nicht besser machen können!"),
     NPC_POSITIVE_6(Sound.ENTITY_CAMEL_STEP ,"Hervorragend!"),
 
-
-
-    
-    //Negativ Response
+    // Negative Response
     NPC_NEGATIVE_1(Sound.ENTITY_ELDER_GUARDIAN_CURSE ,"Nicht so."),
     NPC_NEGATIVE_2(Sound.ENTITY_ELDER_GUARDIAN_DEATH ,"Schaue es dir nochmal an."),
-    NPC_NEGATIVE_3(Sound.ENTITY_GUARDIAN_DEATH_LAND ,"Versuch es nochmal."),
-    NPC_NEGATIVE_4(Sound.ENTITY_GUARDIAN_FLOP ,"So ist das leider nicht richtig."),
-    NPC_NEGATIVE_5(Sound.ENTITY_CAMEL_GUARDIAN_HURT ,"Du findest bestimmt die richtige Lösung."),
+    NPC_NEGATIVE_3(Sound.ENTITY_ELDER_GUARDIAN_DEATH_LAND ,"Versuch es nochmal."),
+    NPC_NEGATIVE_4(Sound.ENTITY_ELDER_GUARDIAN_FLOP ,"So ist das leider nicht richtig."),
+    NPC_NEGATIVE_5(Sound.ENTITY_ELDER_GUARDIAN_HURT ,"Du findest bestimmt die richtige Lösung.");
 
     
     private Sound sound;
