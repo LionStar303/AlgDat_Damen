@@ -15,7 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
-import de.hsmw.algDatDamen.NPC;
 
 @SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
@@ -31,7 +30,6 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
-    private NPC npc;
 
     // ----------- Constructors -----------
 
@@ -92,9 +90,6 @@ public class MChessBoard extends ChessBoard {
         this.active = false;
         if (spawnInDirection) {
             updateOriginCorner(this.getBoardDirection(player));
-            this.npc = null;
-        } else {
-            this.npc = new NPC(originCorner);
         }
     }
 
@@ -596,9 +591,6 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
-        if(npc != null){
-            this.npc.spawn();
-        }
     }
 
     /**
@@ -1222,9 +1214,5 @@ public class MChessBoard extends ChessBoard {
             // Facing East and North: Shift origin up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
-    }
-
-    public NPC getNPC() {
-        return npc;
     }
 }

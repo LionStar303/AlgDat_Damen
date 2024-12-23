@@ -1,13 +1,11 @@
 package de.hsmw.algDatDamen.menu;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
-import de.hsmw.algDatDamen.NPC;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
@@ -348,10 +346,6 @@ public class DevelopmentHandles {
     }
 
     public static void playVillagerText(PlayerInteractEvent event) {
-        NPC npc = getClickedMCB(event).getNPC();
-        npc.addText("Hallo", Sound.BLOCK_BARREL_CLOSE);
-        npc.playNext();
-        npc.resetProgress(); // JUST FOR TESTING, REMOVE IN FINAL VERSION
         event.setCancelled(true);
     }
 
