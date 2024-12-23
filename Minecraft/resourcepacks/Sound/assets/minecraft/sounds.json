@@ -88,6 +88,11 @@
     "subtitle": "",
     "sounds": [{"name": "ENTITY_AXOLOTL_IDLE_WATER"}]
   },
+  "entity.pig.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_PIG_AMBIENT"}]
+  },
   "entity.axolotl.splash": {
     "replace": true,
     "subtitle": "",
