@@ -31,6 +31,7 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
+    /**@deprecated es sollte der neue NPC im tutorialHandler benutzt werden */
     private NPC npc;
 
     // ----------- Constructors -----------

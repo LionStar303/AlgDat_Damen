@@ -33,7 +33,6 @@ public class Level2 extends Level {
     protected void configureChessBoards() {
         // 8x8, 4x4 und 3x3 Schachbretter erstellen
         chessBoards = new MChessBoard[3];
-        // TODO richtige Location für 8x8 Schachbrett finden
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -74, -36, 128), 8, player, false);
         chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -69, -36, 140), 4, player, false);
         chessBoards[2] = new MChessBoard(chessBoards[1].getOriginCorner(), 3, player, false);
@@ -47,10 +46,11 @@ public class Level2 extends Level {
 
     @Override
     protected void initializeSteps() {
+        // TODO alle Steps: NPC laufen lassen
+
         // Erklärung des N-Damen-Problems durch NPC
         currentStep = new Step(
                 () -> {
-                    // TODO NPC zum Schachbrett laufen lassen
                     npc.playTrack(NPCTrack.NPC_201_INTRO);
                 },
                 () -> {}
@@ -67,8 +67,6 @@ public class Level2 extends Level {
                 () -> {
                     npc.playTrack(NPCTrack.NPC_202_EXPLAIN_THREATS_1);
                     chessBoards[0].spawnChessBoard();
-                    // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
-                    // kommen
                     chessBoards[0].addPiece(new Queen(4, 2));
                     chessBoards[0].updatePieces();
                 },
@@ -116,8 +114,6 @@ public class Level2 extends Level {
                     // im vorherigen Schritt platzierte Dame entfernen
                     chessBoards[0].removeLastPiece();
                     // platziere Dame auf Feld(3,5) welches nicht bedroht ist
-                    // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
-                    // kommen
                     chessBoards[0].addPiece(new Queen(3, 5));
                     chessBoards[0].updatePieces();
                 },
@@ -140,8 +136,6 @@ public class Level2 extends Level {
                     // neue Dame entfernen und alte Dame wieder setzen
                     chessBoards[0].removeAllPieces();
                     // vorher platzierte Königinnen wieder setzen
-                    // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
-                    // kommen
                     chessBoards[0].addPiece(new Queen(4, 2));
                     chessBoards[0].addPiece(new Queen(3, 5));
                     chessBoards[0].updatePieces();
@@ -158,8 +152,6 @@ public class Level2 extends Level {
                     chessBoards[0].despawnChessBoard(); // TODO ggf einfach weglassen
                     // 3x3 Schachbrett spawnen
                     chessBoards[2].spawnChessBoard();
-                    // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
-                    // der NPC fertig ist
                 },
                 () -> {
                     // 3x3 Brett löschen und gelöstes 8x8 Feld spawnen
@@ -185,8 +177,6 @@ public class Level2 extends Level {
                     chessBoards[2].addPiece(new Queen(2, 0));
                     chessBoards[2].addPiece(new Queen(1, 2));
                     chessBoards[2].updatePieces();
-                    // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
-                    // der NPC fertig ist
                 },
                 () -> {
                     // alle drei Damen löschen

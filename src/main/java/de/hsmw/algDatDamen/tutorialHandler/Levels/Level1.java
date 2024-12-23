@@ -48,17 +48,16 @@ public class Level1 extends Level {
 
     @Override
     public void initializeSteps() {
-        MChessBoard chessBoard1 = chessBoards[0];
+        // TODO alle Steps: NPC laufen lassen
+        
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {
-                    chessBoard1.spawnChessBoard();
+                    chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
-                    // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
-                    // der NPC fertig ist
                 },
                 () -> {
-                    chessBoard1.despawnChessBoard();
+                    chessBoards[0].despawnChessBoard();
                 });
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
@@ -71,16 +70,14 @@ public class Level1 extends Level {
                 () -> {
                     // spawne Queen auf Feld (3,2)
                     if (console) System.out.println("setze Dame auf 3, 2");
-                    // TODO Dame wird nicht richtig gespawnt FFFF
-                    chessBoard1.addPiece(new Queen(3, 2));
-                    chessBoard1.updatePieces();
+                    chessBoards[0].addPiece(new Queen(3, 2));
+                    chessBoards[0].updatePieces();
                     npc.playTrack(NPCTrack.NPC_102_EXPLAIN_QUEEN);
-                    // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
                     // entferne alle Figuren
-                    chessBoard1.clearBoard();
-                    chessBoard1.updatePieces();
+                    chessBoards[0].clearBoard();
+                    chessBoards[0].updatePieces();
                 }));
         setupStep = setupStep.getNext();
 
@@ -88,12 +85,11 @@ public class Level1 extends Level {
         // Erklärung der Bewegungsmuster durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoard1.spawnCollisionCarpets();
+                    chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
-                    // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
-                    chessBoard1.despawnCollisionCarpets();
+                    chessBoards[0].despawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -101,16 +97,16 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // Bewegungsmuster entfernen (wird im nächsten Schritt wieder erzeugt)
-                    chessBoard1.despawnCollisionCarpets();
+                    chessBoards[0].despawnCollisionCarpets();
                     // spawne Queen auf Feld (5,3)
-                    chessBoard1.addPiece(new Queen(5, 3));
-                    chessBoard1.updatePieces();
+                    chessBoards[0].addPiece(new Queen(5, 3));
+                    chessBoards[0].updatePieces();
                 },
                 () -> {
                     // entferne zuletzt gesetzte Dame von Feld (5,3)
-                    chessBoard1.removeLastQueen();
-                    chessBoard1.updatePieces();
-                    chessBoard1.spawnCollisionCarpets();
+                    chessBoards[0].removeLastQueen();
+                    chessBoards[0].updatePieces();
+                    chessBoards[0].spawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -118,12 +114,11 @@ public class Level1 extends Level {
         // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoard1.spawnCollisionCarpets();
+                    chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_104_EXPLAIN_THREATS);
-                    // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
-                    chessBoard1.despawnCollisionCarpets();
+                    chessBoards[0].despawnCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
@@ -131,8 +126,8 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 // alle Figuren entfernen
                 () -> {
-                    chessBoard1.despawnAllPieces();
-                    chessBoard1.despawnChessBoard();
+                    chessBoards[0].despawnAllPieces();
+                    chessBoards[0].despawnChessBoard();
                     teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
@@ -140,8 +135,8 @@ public class Level1 extends Level {
                 // alle Figuren spawnen
                 () -> {
                     setInventory();
-                    chessBoard1.spawnChessBoard();
-                    chessBoard1.spawnAllPieces();
+                    chessBoards[0].spawnChessBoard();
+                    chessBoards[0].spawnAllPieces();
                 }));
 
         // alle Steps in beide Richtungen miteinander verknüpfen

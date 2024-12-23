@@ -10,6 +10,9 @@ import org.bukkit.entity.Villager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ * @deprecated es sollte der neue NPC im tutorialHandler benutzt werden
+ */
 public class NPC {
     private int progress;
     private HashMap<String, Sound> textData;
