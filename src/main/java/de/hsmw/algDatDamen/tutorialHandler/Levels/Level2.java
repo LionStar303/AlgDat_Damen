@@ -48,8 +48,6 @@ public class Level2 extends Level {
     @Override
     protected void initializeSteps() {
         // Erklärung des N-Damen-Problems durch NPC
-        // Erzeugung eines 8x8 Schachbretts
-        // Setzen einer Dame auf Schachbrett durch Computer
         currentStep = new Step(
                 () -> {
                     // TODO NPC zum Schachbrett laufen lassen
@@ -62,13 +60,16 @@ public class Level2 extends Level {
         // verknüpft
         Step setupStep = currentStep;
 
+        // Erzeugung eines 8x8 Schachbretts
+        // Setzen einer Dame auf Schachbrett durch Computer
+        // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_202_EXPLAIN_THREATS_1);
                     chessBoards[0].spawnChessBoard();
                     // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
                     // kommen
-                    chessBoards[0].addPiece(new Queen(3, 2));
+                    chessBoards[0].addPiece(new Queen(4, 2));
                     chessBoards[0].updatePieces();
                 },
                 () -> {
@@ -79,7 +80,6 @@ public class Level2 extends Level {
         setupStep = setupStep.getNext();
 
         // Anzeigen der Bedrohungen der Dame
-        // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].setCollisionCarpets(true);
@@ -94,11 +94,12 @@ public class Level2 extends Level {
 
         // Erklärung der Bedrohungen zwischen Damen durch NPC
         // Setzen einer weiteren Dame in bedrohtes Feld durch Computer
+        // Erklärung des N-Damen-Problems durch NPC
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_204_EXPLAIN_PROBLEM);
-                    // platziere Dame auf Feld(6,5) welches von Dame(3,2) bedroht ist
-                    chessBoards[0].addPiece(new Queen(6, 5));
+                    // platziere Dame auf Feld(4,5) welches von Dame(4,2) bedroht ist
+                    chessBoards[0].addPiece(new Queen(4, 5));
                     chessBoards[0].updatePieces();
                 },
                 () -> {
@@ -107,7 +108,6 @@ public class Level2 extends Level {
                 }));
         setupStep = setupStep.getNext();
 
-        // Erklärung des N-Damen-Problems durch NPC
         // Löschen der letzten Dame
         // Setzen einer weiteren Dame in nicht bedrohtes Feld durch Computer
         setupStep.setNext(new Step(
@@ -115,19 +115,22 @@ public class Level2 extends Level {
                     npc.playTrack(NPCTrack.NPC_205_SOLVE);
                     // im vorherigen Schritt platzierte Dame entfernen
                     chessBoards[0].removeLastPiece();
-                    // platziere Dame auf Feld(6,4) welches nicht bedroht ist
+                    // platziere Dame auf Feld(3,5) welches nicht bedroht ist
                     // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
                     // kommen
-                    chessBoards[0].addPiece(new Queen(6, 4));
+                    chessBoards[0].addPiece(new Queen(3, 5));
+                    chessBoards[0].updatePieces();
                 },
                 () -> {
                     // neue Dame entfernen und falsche Dame wieder setzen
                     chessBoards[0].removeLastPiece();
-                    chessBoards[0].addPiece(new Queen(6, 5));
+                    chessBoards[0].addPiece(new Queen(4, 5));
+                    chessBoards[0].updatePieces();
                 }));
         setupStep = setupStep.getNext();
 
         // Setzen aller Damen und Lösen des Problems durch Computer
+        // Erklärung der Lösung durch NPC
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_206_EXPLAIN_SOLUTION);
@@ -135,30 +138,21 @@ public class Level2 extends Level {
                 },
                 () -> {
                     // neue Dame entfernen und alte Dame wieder setzen
-                    // TODO prüfen, ob Animation abgeschlossen ist bzw Animation abbrechen
                     chessBoards[0].removeAllPieces();
                     // vorher platzierte Königinnen wieder setzen
                     // TODO evtl Koordinaten anpassen um nicht in Konflikt mit Animation Solve zu
                     // kommen
-                    chessBoards[0].addPiece(new Queen(3, 2));
-                    chessBoards[0].addPiece(new Queen(6, 5));
+                    chessBoards[0].addPiece(new Queen(4, 2));
+                    chessBoards[0].addPiece(new Queen(3, 5));
+                    chessBoards[0].updatePieces();
                 }));
-        setupStep = setupStep.getNext();
-
-        // Erklärung der Lösung durch NPC
-        setupStep.setNext(new Step(
-                () -> {
-                    npc.playTrack(NPCTrack.NPC_207_EXPLAIN_3X3_1);
-                },
-                () -> {}
-        ));
         setupStep = setupStep.getNext();
 
         // Löschen aller Damen und Löschen des Schachbretts
         // Erzeugung eines 3x3 Schachbretts
         setupStep.setNext(new Step(
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_208_EXPLAIN_3X3_2);
+                    npc.playTrack(NPCTrack.NPC_207_EXPLAIN_3X3_1);
                     // 8x8 Schachbrett löschen
                     chessBoards[0].despawnAllPieces();
                     chessBoards[0].despawnChessBoard(); // TODO ggf einfach weglassen
@@ -171,6 +165,7 @@ public class Level2 extends Level {
                     // 3x3 Brett löschen und gelöstes 8x8 Feld spawnen
                     chessBoards[2].despawnChessBoard();
                     chessBoards[0].spawnChessBoard();
+                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].spawnAllPieces();
                 }));
         setupStep = setupStep.getNext();

@@ -45,7 +45,7 @@ public abstract class Level implements Listener {
         this.startLocation = startLocation;
         this.completed = completed;
         this.parentTutorial = parent;
-        this.teleporter = new Teleporter(teleporterLocation);
+        this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0));
         this.npc = new NPC(startLocation, console);
 
         cooldownMillis = 0;
