@@ -2,12 +2,12 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.Sound;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
@@ -15,10 +15,6 @@ public class Level1 extends Level {
 
     private final static String LEVEL_NAME = "Level 1 - Einführung";
     private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
-    private final static String NPC_EXPLAIN_CHESSBOARD = "Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein Schachbrett. Wir betrachten das Problem in unterschiedlichen Variablen. Das hier ist ein 8*8 Schachbrett, es ist unterteilt in bikolorierten Quadraten auf denen sich pro Quadrat nur eine Figur befinden kann.";
-    private final static String NPC_EXPLAIN_QUEEN = "Im Schach gibt es sechs verschiedene Arten von Figuren. Aber heute sollen uns zwei reichen. Diese Figur nennt man Dame.";
-    private final static String NPC_EXPLAIN_MOVEMENT = "Die Dame kann sich beliebig weit in alle Diagonale und Graden bewegen.";
-    private final static String NPC_EXPLAIN_THREATS = "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie bedroht und kann von der sich bewegenden Figur geschlagen werden.";
 
     public Level1(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -17, -44, 144, 150, 0), new Location(player.getWorld(), -38, -43, 140), parent);
@@ -42,10 +38,6 @@ public class Level1 extends Level {
         // 8x8 Schachbrett für Level 1 erstellen
         chessBoards = new MChessBoard[1];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -28, -45, 130), 8, player, false);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_CHESSBOARD, Sound.ENTITY_ARMADILLO_BRUSH);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_QUEEN, Sound.ENTITY_ARMADILLO_DEATH);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_MOVEMENT, Sound.ENTITY_ARMADILLO_EAT);
-        chessBoards[0].getNPC().addText(NPC_EXPLAIN_THREATS, Sound.ENTITY_ARMADILLO_HURT);
     }
 
     @Override
@@ -61,12 +53,12 @@ public class Level1 extends Level {
         currentStep = new Step(
                 () -> {
                     chessBoard1.spawnChessBoard();
-                    chessBoard1.getNPC().playNext();
+                    npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
                 () -> {
-                    // chessBoard1.despawnChessBoard();
+                    chessBoard1.despawnChessBoard();
                 });
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
@@ -78,12 +70,11 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // spawne Queen auf Feld (3,2)
-                    if (console)
-                        System.out.println("setze Dame auf 3, 2");
+                    if (console) System.out.println("setze Dame auf 3, 2");
                     // TODO Dame wird nicht richtig gespawnt FFFF
                     chessBoard1.addPiece(new Queen(3, 2));
                     chessBoard1.updatePieces();
-                    chessBoard1.getNPC().playNext();
+                    npc.playTrack(NPCTrack.NPC_102_EXPLAIN_QUEEN);
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
@@ -98,7 +89,7 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoard1.spawnCollisionCarpets();
-                    chessBoard1.getNPC().playNext();
+                    npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {
@@ -128,7 +119,7 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoard1.spawnCollisionCarpets();
-                    chessBoard1.getNPC().playNext();
+                    npc.playTrack(NPCTrack.NPC_104_EXPLAIN_THREATS);
                     // TODO evtl Verzögerung einbauen...
                 },
                 () -> {

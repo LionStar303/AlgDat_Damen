@@ -22,18 +22,18 @@ public abstract class Level implements Listener {
     private final Component LEVEL_NAME; // vielleicht als Bossbar anzeigen
     private final Component LEVEL_DESCRIPTION;
     private final Location startLocation;
-    private final Location teleporterLocation;
     protected Tutorial parentTutorial;
     protected MChessBoard[] chessBoards;
+    protected Teleporter teleporter;
     protected Player player;
     protected Step currentStep;
     protected String latestPlayerInput;
     protected boolean active;
     protected boolean completed;
     protected boolean console;
+    protected NPC npc;
     private int stepCount;
     private int currentStepID;
-    protected Teleporter teleporter;
     private long cooldownMillis;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
@@ -43,10 +43,10 @@ public abstract class Level implements Listener {
         this.LEVEL_DESCRIPTION = Component.text(description, NamedTextColor.AQUA);
         this.player = player;
         this.startLocation = startLocation;
-        this.teleporterLocation = teleporterLocation;
         this.completed = completed;
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation);
+        this.npc = new NPC(startLocation);
 
         cooldownMillis = 0;
     }
@@ -68,6 +68,7 @@ public abstract class Level implements Listener {
         configureChessBoards();
 
         teleporter.spawnTeleporter();
+        npc.spawn();
 
         // alle Schritte erzeugen
         initializeSteps();
