@@ -153,7 +153,7 @@ public abstract class Level implements Listener {
         parentTutorial.getCurrentLevel().start();
     }
 
-    private void tryPlaceQueen(PlayerInteractEvent event, boolean tested) {
+    private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
         for(MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
             Location clickedLocation = clickedBlock.getLocation();
@@ -161,10 +161,11 @@ public abstract class Level implements Listener {
             if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
                 Piece existingQueen = cb.getPieceAt(clickedLocation);
                 if(existingQueen != null) cb.removePiece(existingQueen);
-                else cb.addPiece(clickedLocation, new Queen());
-                if(console) System.out.println("Dame gesetzt");
-                cb.updatePieces();
-                cb.updateCollisionCarpets();
+                else {
+                    if(exploding) cb.addExplodingPiece(clickedLocation, new Queen());
+                    else cb.addPiece(clickedLocation, new Queen());
+                }
+                // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
                 currentStep.checkForCompletion();
             }
         }
@@ -208,8 +209,12 @@ public abstract class Level implements Listener {
                     player.sendMessage("Irgendwas hat hier noch nicht geklappt");
                     player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ", "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
                 }
+                break;
             case PLACE_QUEEN:
                 tryPlaceQueen(event, false);
+                break;
+            case PLACE_EXPLODING_QUEEN:
+                tryPlaceQueen(event, true);
                 break;
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);

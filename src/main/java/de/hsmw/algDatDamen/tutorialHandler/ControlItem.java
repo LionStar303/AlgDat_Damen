@@ -12,7 +12,17 @@ public enum ControlItem {
     RESET_STEP(Material.GREEN_DYE, Component.text("wiederhole")),
     NEXT_STEP(Material.BLUE_DYE, Component.text("weiter")),
     PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame")),
-    NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver"));
+    PLACE_KNIGHT(Material.ORANGE_DYE, Component.text("Springer")),
+    PLACE_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame")),
+    PLACE_EXPLODING_QUEEN(Material.YELLOW_DYE, Component.text("Dame ")),
+    PLACE_EXPLODING_KNIGHT(Material.ORANGE_DYE, Component.text("Springer ")),
+    PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame ")),
+    BACKTRACKING_FORWARD(Material.LIME_DYE, Component.text("weiter")),
+    BACKTRACKING_BACKWARD(Material.PINK_DYE, Component.text("zurück")),
+    NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver")),
+    SPAWN_CARPET(Material.MAGENTA_DYE, Component.text("")),
+    SHOW_CARPET(Material.BROWN_DYE, Component.text("")),
+    CHECK_CARPET(Material.BLACK_DYE, Component.text(""));
 
     private final Material material;
     private final Component displayName;

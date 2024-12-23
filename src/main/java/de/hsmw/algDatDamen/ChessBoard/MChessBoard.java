@@ -7,6 +7,8 @@ import java.util.Map;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -551,6 +553,34 @@ public class MChessBoard extends ChessBoard {
         p.setY(l.getBlockZ() - minZ);
 
         if (!addTestedPiece(p)) {
+            return false;
+        }
+        spawnPiece(p);
+
+        return true;
+    }
+
+    /**
+     * Adds a piece to the board only if it passes additional validation.
+     * wenn nicht, wird ein explosionsähnlicher Partikeleffekt erzeugt
+     * @param l The {@link Location} on the board.
+     * @param p The {@link Piece} to add.
+     * @return True if the piece was added successfully, false otherwise.
+     */
+    public boolean addExplodingPiece(Location l, Piece p) {
+        if (!isPartOfBoard(l)) {
+            return false;
+        }
+
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+
+        p.setX(l.getBlockX() - minX);
+        p.setY(l.getBlockZ() - minZ);
+
+        if (!addTestedPiece(p)) {
+            l.getWorld().spawnParticle(Particle.EXPLOSION, l, 5, 0, 1, 0);
+            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
             return false;
         }
         spawnPiece(p);
