@@ -4,6 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.Path;
+
 public class NPC {
     private Location location;
     private Villager villager;
@@ -33,6 +36,8 @@ public class NPC {
         villager.setCollidable(false);
         villager.setInvulnerable(true);
         villager.setProfession(Villager.Profession.NITWIT);
+        villager.setAI(false);
+        System.out.println("Villager gespawnt bei: " + villager.getLocation().toString());
     }
 
     /**
@@ -58,5 +63,27 @@ public class NPC {
                 e.remove();
             }
         });
+    }
+
+    public void moveVillagerWithPathfinding(Location target, double speed) {
+        villager.setAI(true);
+        // Get the NMS Villager entity
+        net.minecraft.world.entity.npc.Villager nmsVillager = ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
+
+        // Access the Villager's navigation system
+        PathNavigation navigation = nmsVillager.getNavigation();
+
+        // Generate a path to the target
+        Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 1);
+
+        if (path != null) {
+            System.out.println("Villager bewegt sich nach " + target.toString());
+            while(navigation.moveTo(path, speed));
+        } else {
+            System.out.println("Kein Pfad gefunden. Teleportiere Villager");
+            // Villager in die Nähe teleportieren
+            villager.teleport(new Location(villager.getWorld(), target.getX(), target.getY(), target.getZ()));
+        }
+        villager.setAI(false);
     }
 }
