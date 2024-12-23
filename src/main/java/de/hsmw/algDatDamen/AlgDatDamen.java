@@ -104,7 +104,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
         //saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), saveManager.getProgress(event.getPlayer())));
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 0)); // <- nur zum testen
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 1)); // <- nur zum testen
         event.getPlayer().teleport(new Location(event.getPlayer().getWorld(), 0, -45, 170));
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();

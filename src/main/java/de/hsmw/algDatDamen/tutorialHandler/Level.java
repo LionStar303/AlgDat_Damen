@@ -46,7 +46,7 @@ public abstract class Level implements Listener {
         this.completed = completed;
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation);
-        this.npc = new NPC(startLocation);
+        this.npc = new NPC(startLocation, console);
 
         cooldownMillis = 0;
     }
@@ -120,6 +120,7 @@ public abstract class Level implements Listener {
         }
 
         currentStep = currentStep.getNext();
+        npc.stopSound();
         currentStep.start();
     }
 
@@ -136,14 +137,14 @@ public abstract class Level implements Listener {
             player.setExp((float) currentStepID / stepCount);
         }
 
-        currentStep.reset(); // reset prev step
-        currentStep.start();
+        resetStep();
     }
 
     private void resetStep() {
         if (console)
             System.out.println("running reset step");
         currentStep.reset();
+        npc.stopSound();
         currentStep.start();
     }
 

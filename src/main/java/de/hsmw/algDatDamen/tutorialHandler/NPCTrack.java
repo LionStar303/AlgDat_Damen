@@ -23,8 +23,8 @@ public enum NPCTrack {
     NPC_207_EXPLAIN_3X3_1(Sound.ENTITY_ARMADILLO_STEP ,"Hier ist ein weitaus kleineres Feld, aber leider ist dieses Feld zu klein als das man hier ein Lösung finden könnte."),
     NPC_208_EXPLAIN_3X3_2(Sound.ENTITY_ARMADILLO_UNROLL_START ,"Egal wie ich diese drei Damen platziere, es würden sich immer mindestens zwei gegenseitig schlagen.\r\n" + //
                 "Denn das N-Damen Problem kann man erst ab einer Größe von 4x4 lösen.\r\n"),
-    NPC_206_EXPLAIN_4x4_SOLUTION(Sound.ENTITY_AXOLOTL_ATTACK ,"Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen."),
-    NPC_207_SUMMARY(Sound.ENTITY_AXOLOTL_DEATH ,"Also fassen wir zusammen.\r\n"+
+    NPC_209_EXPLAIN_4x4_SOLUTION(Sound.ENTITY_AXOLOTL_ATTACK ,"Ab 4x4 kann ich allerdings wieder allen Damen einen Platz zuweisen ohne das sie sich gegenseitig bedrohen."),
+    NPC_210_SUMMARY(Sound.ENTITY_AXOLOTL_DEATH ,"Also fassen wir zusammen.\r\n"+
                  "Auf einem Schachbrett der Größe 3x3 gibt es keine gültige Lösung, erst ab einer Größe von 4x4 ist eine zu finden."),
 
     // Level 3
