@@ -23,7 +23,7 @@
     "subtitle": "",
     "sounds": [{"name": "ENTITY_ARMADILLO_EAT"}]
   },
-  "entity.armadillo.hurt.reduced": {
+  "entity.armadillo.hurt_reduced": {
     "replace": true,
     "subtitle": "",
     "sounds": [{"name": "ENTITY_ARMADILLO_HURT_REDUCED"}]
