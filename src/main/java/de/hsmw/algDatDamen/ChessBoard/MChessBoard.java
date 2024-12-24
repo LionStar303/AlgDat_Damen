@@ -579,8 +579,11 @@ public class MChessBoard extends ChessBoard {
         p.setY(l.getBlockZ() - minZ);
 
         if (!addTestedPiece(p)) {
-            l.getWorld().spawnParticle(Particle.EXPLOSION, l, 5, 0, 1, 0);
-            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+            // TODO Animation verfeinern
+            l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
+            l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
+            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
+            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
             return false;
         }
         spawnPiece(p);
