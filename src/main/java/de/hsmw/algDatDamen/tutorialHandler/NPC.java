@@ -3,6 +3,8 @@ package de.hsmw.algDatDamen.tutorialHandler;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
@@ -23,6 +25,14 @@ public class NPC {
         this.console = console;
     }
 
+    public void setSlowness(boolean slowness) {
+        if(slowness) {
+            villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 9999, 9999, false, false));
+        } else {
+            villager.clearActivePotionEffects();
+        }
+    }
+
     /**
      * Spawns the NPC at the location.
      */
@@ -36,7 +46,7 @@ public class NPC {
         villager.setCollidable(false);
         villager.setInvulnerable(true);
         villager.setProfession(Villager.Profession.NITWIT);
-        villager.setAI(false);
+        setSlowness(true);
         System.out.println("Villager gespawnt bei: " + villager.getLocation().toString());
     }
 
@@ -66,7 +76,7 @@ public class NPC {
     }
 
     public void moveVillagerWithPathfinding(Location target, double speed) {
-        villager.setAI(true);
+        setSlowness(false);
         // Get the NMS Villager entity
         net.minecraft.world.entity.npc.Villager nmsVillager = ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
 
@@ -74,16 +84,16 @@ public class NPC {
         PathNavigation navigation = nmsVillager.getNavigation();
 
         // Generate a path to the target
-        Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 1);
+        Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 2);
 
         if (path != null) {
             System.out.println("Villager bewegt sich nach " + target.toString());
-            while(navigation.moveTo(path, speed));
+            navigation.moveTo(path, speed);
         } else {
             System.out.println("Kein Pfad gefunden. Teleportiere Villager");
             // Villager in die Nähe teleportieren
             villager.teleport(new Location(villager.getWorld(), target.getX(), target.getY(), target.getZ()));
         }
-        villager.setAI(false);
+        setSlowness(true);
     }
 }
