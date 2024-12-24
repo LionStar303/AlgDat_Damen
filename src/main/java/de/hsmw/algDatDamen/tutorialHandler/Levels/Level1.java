@@ -54,6 +54,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoard1.spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 1);
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
@@ -91,6 +92,7 @@ public class Level1 extends Level {
                     chessBoard1.spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
                     // TODO evtl Verzögerung einbauen...
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 1);
                 },
                 () -> {
                     chessBoard1.despawnCollisionCarpets();
@@ -136,6 +138,7 @@ public class Level1 extends Level {
                     teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(),-33, -42, 137), 1);
                 },
                 // alle Figuren spawnen
                 () -> {
