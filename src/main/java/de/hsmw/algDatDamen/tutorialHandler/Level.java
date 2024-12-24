@@ -156,7 +156,7 @@ public abstract class Level implements Listener {
         parentTutorial.getCurrentLevel().start();
     }
 
-    private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
+    private void tryPlaceQueen(PlayerInteractEvent event) {
         for(MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
             Location clickedLocation = clickedBlock.getLocation();
@@ -164,10 +164,7 @@ public abstract class Level implements Listener {
             if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
                 Piece existingQueen = cb.getPieceAt(clickedLocation);
                 if(existingQueen != null) cb.removePiece(existingQueen);
-                else {
-                    if(exploding) cb.addExplodingPiece(clickedLocation, new Queen());
-                    else cb.addPiece(clickedLocation, new Queen());
-                }
+                else cb.addPiece(clickedLocation, new Queen());
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
                 currentStep.checkForCompletion();
             }
@@ -214,10 +211,7 @@ public abstract class Level implements Listener {
                 }
                 break;
             case PLACE_QUEEN:
-                tryPlaceQueen(event, false);
-                break;
-            case PLACE_EXPLODING_QUEEN:
-                tryPlaceQueen(event, true);
+                tryPlaceQueen(event);
                 break;
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);

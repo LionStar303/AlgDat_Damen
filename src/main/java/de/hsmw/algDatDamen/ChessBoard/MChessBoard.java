@@ -33,8 +33,7 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
-    /**@deprecated es sollte der neue NPC im tutorialHandler benutzt werden */
-    private NPC npc;
+    private MChessboardMode mode;
 
     // ----------- Constructors -----------
 
@@ -93,12 +92,7 @@ public class MChessBoard extends ChessBoard {
         this.stateY = 0;
         this.isAnimationRunning = false;
         this.active = false;
-        if (spawnInDirection) {
-            updateOriginCorner(this.getBoardDirection(player));
-            this.npc = null;
-        } else {
-            this.npc = new NPC(originCorner);
-        }
+        this.mode = MChessboardMode.INACTIVE;
     }
 
     // ----------- Getters and Setters -----------
@@ -630,9 +624,6 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
-        if(npc != null){
-            this.npc.spawn();
-        }
     }
 
     /**
@@ -1256,9 +1247,5 @@ public class MChessBoard extends ChessBoard {
             // Facing East and North: Shift origin up
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
-    }
-
-    public NPC getNPC() {
-        return npc;
     }
 }
