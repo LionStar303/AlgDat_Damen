@@ -39,12 +39,6 @@ public class Level3 extends Level {
     }
 
     @Override
-    protected void setInventory() {
-        player.getInventory().clear();
-        setControlItems();
-    }
-
-    @Override
     protected void initializeSteps() {
         // TODO alle Steps: NPC laufen lassen
         
@@ -54,7 +48,6 @@ public class Level3 extends Level {
             () -> {
                 npc.playTrack(NPCTrack.NPC_301_INTRO);
                 chessBoards[0].spawnChessBoard();
-                teleporter.setEnabled(true);
             },
             () -> {
                 // Chessboard despawnen
@@ -172,13 +165,15 @@ public class Level3 extends Level {
                 setInventory();
                 chessBoards[1].despawnChessBoard();
                 // teleport item geben
+                teleporter.setEnabled(true);
                 setInventory();
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {
                 // Schachbrett wieder spawnen
-                chessBoards[1].spawnChessBoard();
                 setInventory();
+                teleporter.setEnabled(false);
+                chessBoards[1].spawnChessBoard();
             }
             ));
 

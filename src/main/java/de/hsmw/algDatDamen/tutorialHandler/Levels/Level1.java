@@ -41,12 +41,6 @@ public class Level1 extends Level {
     }
 
     @Override
-    protected void setInventory() {
-        player.getInventory().clear();
-        setControlItems();
-    }
-
-    @Override
     public void initializeSteps() {
         // TODO alle Steps: NPC laufen lassen
         
@@ -135,6 +129,7 @@ public class Level1 extends Level {
                 // alle Figuren spawnen
                 () -> {
                     setInventory();
+                    teleporter.setEnabled(false);
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].spawnAllPieces();
                 }));

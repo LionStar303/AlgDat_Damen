@@ -54,8 +54,6 @@ public abstract class Level implements Listener {
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
 
-    protected abstract void setInventory();
-
     protected abstract void initializeSteps();
 
     // Standardmethoden
@@ -87,12 +85,17 @@ public abstract class Level implements Listener {
         // aufrufen
     }
 
+    protected void setInventory() {
+        player.getInventory().clear();
+        setControlItems();
+    }
+
     private void teleportToStart() {
         player.teleport(startLocation);
         player.setFlying(false);
     }
 
-    protected void setControlItems() {
+    private void setControlItems() {
         player.getInventory().setItem(6, ControlItem.PREVIOUS_STEP.getItemStack());
         player.getInventory().setItem(7, ControlItem.RESET_STEP.getItemStack());
         player.getInventory().setItem(8, ControlItem.NEXT_STEP.getItemStack());
