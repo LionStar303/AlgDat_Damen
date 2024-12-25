@@ -35,8 +35,10 @@ public abstract class Level implements Listener {
     private int stepCount;
     private int currentStepID;
     private long cooldownMillis;
+    public int currentCBID;
 
-    public Level(boolean console, String name, String description, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
+    public Level(boolean console, String name, String description, Player player, Location startLocation,
+            Location teleporterLocation, boolean completed, Tutorial parent) {
 
         this.console = console;
         this.LEVEL_NAME = Component.text(name, NamedTextColor.BLUE);
@@ -47,7 +49,7 @@ public abstract class Level implements Listener {
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0));
         this.npc = new NPC(startLocation, console);
-
+        this.currentCBID = 0;
         cooldownMillis = 0;
     }
 
@@ -104,6 +106,8 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
+        currentStep.checkForCompletion();
+
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -157,42 +161,53 @@ public abstract class Level implements Listener {
     }
 
     private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
-        for(MChessBoard cb : chessBoards) {
+        for (MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
             Location clickedLocation = clickedBlock.getLocation();
-            if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
-            if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
+            if (console)
+                System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            if (cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
                 Piece existingQueen = cb.getPieceAt(clickedLocation);
-                if(existingQueen != null) cb.removePiece(existingQueen);
+                if (existingQueen != null)
+                    cb.removePiece(existingQueen);
                 else {
-                    if(exploding) cb.addExplodingPiece(clickedLocation, new Queen());
-                    else cb.addPiece(clickedLocation, new Queen());
+                    if (exploding)
+                        cb.addExplodingPiece(clickedLocation, new Queen());
+                    else
+                        cb.addPiece(clickedLocation, new Queen());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                currentStep.checkForCompletion();
+                // currentStep.checkForCompletion();
+                cb.updatePieces();
+                cb.updateCollisionCarpets();
             }
         }
     }
 
     /**
      * AsyncChatEvent behandeln
+     * 
      * @param event auslösendes Event
      */
     public void handleChatEvent(AsyncChatEvent event) {
         this.latestPlayerInput = PlainTextComponentSerializer.plainText().serialize(event.message());
-        if(console) System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
+        if (console)
+            System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
         currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
         event.setCancelled(true);
     }
 
     /**
      * PlayerInteractionEvent behandeln
-     * @param item entsprechendes ControlItem in der Hand des Spielers
+     * 
+     * @param item  entsprechendes ControlItem in der Hand des Spielers
      * @param event auslösendes Event
-     * je nach benutztem ControlItem wird die entsprechende Funktion ausgeführt
+     *              je nach benutztem ControlItem wird die entsprechende Funktion
+     *              ausgeführt
      */
     public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
-        if(System.currentTimeMillis() < cooldownMillis) return;
+        if (System.currentTimeMillis() < cooldownMillis)
+            return;
         cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
             case PREVIOUS_STEP:
@@ -205,12 +220,14 @@ public abstract class Level implements Listener {
                 nextStep();
                 break;
             case NEXT_LEVEL:
-                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled() && currentStep.getNext() == null) {
+                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled()
+                        && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
                     startNextLevel();
                 } else {
                     player.sendMessage("Irgendwas hat hier noch nicht geklappt");
-                    player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ", "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
+                    player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ",
+                            "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
                 }
                 break;
             case PLACE_QUEEN:
@@ -219,6 +236,33 @@ public abstract class Level implements Listener {
             case PLACE_EXPLODING_QUEEN:
                 tryPlaceQueen(event, true);
                 break;
+            case BACKTRACKING_FORWARD_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (!chessBoards[currentCBID].isSolved()) {
+                    chessBoards[currentCBID].animationStepToNextField(new Queen());
+                }
+                break;
+            case BACKTRACKING_FORWARDFAST_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (!chessBoards[currentCBID].isSolved()) {
+                    chessBoards[currentCBID].animationStepToNextPiece(new Queen());
+                }
+                break;
+
+            case BACKTRACKING_BACKWARD_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (chessBoards[currentCBID].getPieces().size() != 0) {
+                    chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
+                }
+                break;
+            
+                case BACKTRACKING_BACKWARDFAST_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (chessBoards[currentCBID].getPieces().size() != 0) {
+                    chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
+                }
+                break;
+
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
                 break;

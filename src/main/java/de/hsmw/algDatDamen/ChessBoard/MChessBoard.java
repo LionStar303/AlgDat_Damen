@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
-import de.hsmw.algDatDamen.NPC;
 
 @SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
@@ -33,8 +32,6 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
-    /**@deprecated es sollte der neue NPC im tutorialHandler benutzt werden */
-    private NPC npc;
 
     // ----------- Constructors -----------
 
@@ -85,7 +82,6 @@ public class MChessBoard extends ChessBoard {
         this.pieces = new ArrayList<>();
         this.console = false;
         this.originCorner = originCorner;
-        // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
@@ -95,9 +91,6 @@ public class MChessBoard extends ChessBoard {
         this.active = false;
         if (spawnInDirection) {
             updateOriginCorner(this.getBoardDirection(player));
-            this.npc = null;
-        } else {
-            this.npc = new NPC(originCorner);
         }
     }
 
@@ -222,7 +215,7 @@ public class MChessBoard extends ChessBoard {
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
     }
-    
+
     /**
      * @param active wenn Spieler Pieces setzen darf, sonst false
      */
@@ -530,7 +523,7 @@ public class MChessBoard extends ChessBoard {
 
         addPiece(p);
         spawnPiece(p);
-
+        updateCollisionCarpets();
         return true;
     }
 
@@ -563,6 +556,7 @@ public class MChessBoard extends ChessBoard {
     /**
      * Adds a piece to the board only if it passes additional validation.
      * wenn nicht, wird ein explosionsähnlicher Partikeleffekt erzeugt
+     * 
      * @param l The {@link Location} on the board.
      * @param p The {@link Piece} to add.
      * @return True if the piece was added successfully, false otherwise.
@@ -599,6 +593,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
+        updateBoard();
     }
 
     /**
@@ -630,9 +625,6 @@ public class MChessBoard extends ChessBoard {
             }
         }
         updateCollisionCarpets();
-        if(npc != null){
-            this.npc.spawn();
-        }
     }
 
     /**
@@ -675,7 +667,7 @@ public class MChessBoard extends ChessBoard {
             printBoard(true);
             System.out.println("successfully spawned Piece");
         }
-        
+
         return true;
     }
 
@@ -693,7 +685,7 @@ public class MChessBoard extends ChessBoard {
 
         // Check and set the bottom block
         location.getBlock().getRelative(BlockFace.DOWN).setType(bottomBlockType);
-        
+
         if (console) {
             System.out.println("Placing top block: " + topBlockType + " at " + location);
             System.out.println("Placing bottom block: " + bottomBlockType + " at "
@@ -778,8 +770,6 @@ public class MChessBoard extends ChessBoard {
                         || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
-
-               
 
                 // Clear the block by setting it to air
                 block.setType(Material.AIR);
@@ -1258,7 +1248,6 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-    public NPC getNPC() {
-        return npc;
-    }
+    // --- Tutorial Command ---
+
 }
