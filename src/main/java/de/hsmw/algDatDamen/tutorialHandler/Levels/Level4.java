@@ -187,8 +187,10 @@ public class Level4 extends Level {
                     // des Backtracking-Algorithmus mit NPC-Interaktion, Hilfestellung und
                     // Möglichkeiten vor- und zurückzuspringen
                     player.getInventory().setItem(0, ControlItem.BACKTRACKING_FORWARD_Q.getItemStack());
-                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
-                    player.getInventory().setItem(2, ControlItem.BACKTRACKING_BACKWARD_Q.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.BACKTRACKING_FORWARDFAST_Q.getItemStack());
+                    player.getInventory().setItem(3, ControlItem.SHOW_CARPET.getItemStack());
+                    player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARD_Q.getItemStack());
+                    player.getInventory().setItem(5, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
                 },
                 () -> {
                     chessBoards[0].setActive(false);

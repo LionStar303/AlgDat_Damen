@@ -35,7 +35,7 @@ public abstract class Level implements Listener {
     private int stepCount;
     private int currentStepID;
     private long cooldownMillis;
-    private int currentCBID;
+    public int currentCBID;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
             Location teleporterLocation, boolean completed, Tutorial parent) {
@@ -237,16 +237,29 @@ public abstract class Level implements Listener {
                 tryPlaceQueen(event, true);
                 break;
             case BACKTRACKING_FORWARD_Q:
-                chessBoards[currentCBID].verfyPieces(p);
+                chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextField(new Queen());
                 }
                 break;
+            case BACKTRACKING_FORWARDFAST_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (!chessBoards[currentCBID].isSolved()) {
+                    chessBoards[currentCBID].animationStepToNextPiece(new Queen());
+                }
+                break;
 
             case BACKTRACKING_BACKWARD_Q:
-                chessBoards[currentCBID].verfyPieces(p);
+                chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
+                }
+                break;
+            
+                case BACKTRACKING_BACKWARDFAST_Q:
+                chessBoards[currentCBID].verfyPieces(new Queen());
+                if (chessBoards[currentCBID].getPieces().size() != 0) {
+                    chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
                 }
                 break;
 
