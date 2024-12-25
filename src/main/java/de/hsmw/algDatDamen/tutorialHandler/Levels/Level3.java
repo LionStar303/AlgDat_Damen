@@ -114,9 +114,9 @@ public class Level3 extends Level {
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].despawnChessBoard();
             },
-            // Step ist complete wenn Eingabe "gespiegelt" kam
+            // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if(latestPlayerInput.equals("gespiegelt")) {
+                if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
