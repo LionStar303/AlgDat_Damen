@@ -43,6 +43,37 @@ public class NPC {
         location.getWorld().playSound(location, track.getSound(), 1, 1);
         if(console) System.out.println("Track abgespielt");
     }
+    
+    /**
+     * spielt einen zufälligen positiven Track ab
+     * @return {@link NPCTrack}
+     */
+    public NPCTrack playTrackPositive() {
+        int n = (int) Math.round((Math.random() * 6d));
+        switch (n) {
+            case 0: return NPCTrack.NPC_POSITIVE_1;
+            case 1: return NPCTrack.NPC_POSITIVE_2;
+            case 2: return NPCTrack.NPC_POSITIVE_3;
+            case 3: return NPCTrack.NPC_POSITIVE_4;
+            case 4: return NPCTrack.NPC_POSITIVE_5;
+            default: return NPCTrack.NPC_POSITIVE_6;
+        }
+    }
+    
+    /**
+     * spielt einen zufälligen negativen Track ab
+     * @return {@link NPCTrack}
+     */
+    public NPCTrack playTrackNegative() {
+        int n = (int) Math.round((Math.random() * 5d));
+        switch (n) {
+            case 0: return NPCTrack.NPC_NEGATIVE_1;
+            case 1: return NPCTrack.NPC_NEGATIVE_2;
+            case 2: return NPCTrack.NPC_NEGATIVE_3;
+            case 3: return NPCTrack.NPC_NEGATIVE_4;
+            default: return NPCTrack.NPC_NEGATIVE_5;
+        }
+    }
 
     public void stopSound() {
         location.getWorld().getNearbyPlayers(location, 50).forEach(p -> p.stopAllSounds());
