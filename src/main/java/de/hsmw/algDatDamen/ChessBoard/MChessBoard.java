@@ -246,6 +246,10 @@ public class MChessBoard extends ChessBoard {
 
     // --- extension getter / setter ---
 
+    public MChessBoardMode getMode() {
+        return this.mode;
+    }
+
     /**
      * Retrieves the chess piece at a specific location on the board.
      *
@@ -313,6 +317,17 @@ public class MChessBoard extends ChessBoard {
         } else {
             return new Vector(1, 0, -1); // North
         }
+    }
+
+    public void setMode(MChessBoardMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * setzt den <code>mode</code> auf <code>INACTIVE</code> zurück
+     */
+    public void resetMode() {
+        this.mode = MChessBoardMode.INACTIVE;
     }
 
     /**
