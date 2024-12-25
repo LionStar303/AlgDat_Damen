@@ -514,24 +514,24 @@ public class MChessBoard extends ChessBoard {
     public boolean addPiece(Location l, Piece p) {
         // check if location is part of the chessboard and chessboard allows player interaction
         if (!isPartOfBoard(l)) return false;
+
         // get local coordinates
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
 
-        // remove existing piece if location is already occupied
         Piece existingPiece = this.getPieceAt(l);
-        if(existingPiece != null) {
-            this.removePiece(existingPiece);
-            return false;
-        }
-
         switch (mode) {
             // keine Interaktion
             case INACTIVE: return false;
             // jede Dame wird gesetzt
             case NORMAL:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
                 if(addPiece(p)) {
                     spawnPiece(p);
                     return true;
@@ -539,6 +539,11 @@ public class MChessBoard extends ChessBoard {
                 else return false;
             // nur nicht bedrohte Damen werden gesetzt
             case TESTED:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
                 if(addTestedPiece(p)) {
                     spawnPiece(p);
                     return true;
@@ -546,6 +551,11 @@ public class MChessBoard extends ChessBoard {
                 else return false;
             // wie TESTED, nur falsche Damen explodieren
             case EXPLODING:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
                 if(addTestedPiece(p)) {
                     spawnPiece(p);
                     return true;
@@ -553,13 +563,33 @@ public class MChessBoard extends ChessBoard {
                 playExplosionAnimation(l);
                 return false;
             case TUTORIAL:
-                // TODO verhalten im Tutorial Mode hinzufügen
-                return false;
-            default:
-                break;
+                /* TODO verhalten im Tutorial Mode hinzufügen
+                 * Das Schachbrett zeigt mit blauen Teppichen an, wo der Algorithmus das nächste Piece platzieren würde
+                 * Spieler kann das zuletzt platzierte Piece entfernen, um einen Schritt zurück zu gehen
+                 * Ansonsten kann er das Piece nur an der markierten Position platzieren
+                 */
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    // Spieler kann nur das zuletzt gesetzte Piece entfernen
+                    if(!existingPiece.equals(pieces.getLast())) return false;
+                    this.removePiece(existingPiece);
+                    // Backtracking bis zum vorherigen Piece rückwärts laufen lassen
+                    return false;
+                }
+                /* siehe pseudocode
+                if(Piece Location != Backtrack Location) {
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                */
+                /* siehe pseudocode
+                addPiece(p);
+                spawnPiece(p);
+                playBacktrack einen Schritt weiter
+                */
+                return true; // wenn Piece richtig gesetzt wurde
+            default: return false;
         }
-
-        return true;
     }
 
     /**
