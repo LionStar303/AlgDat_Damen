@@ -109,7 +109,6 @@ public class Level4 extends Level {
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setActive(false);
-                    chessBoards[0].updateBoard();
                     // Inventar auf Urspungszustand zurücksetzen
                     setInventory();
                 },
@@ -117,7 +116,7 @@ public class Level4 extends Level {
                 // sind.
                 unused -> //(chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > (1000 * 60 * 3))
                 {
-                    if (chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > (1000 * 60 * 3)) {
+                    if (chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > 10){//(1000 * 60 * 3)) {
                         return true;
                     } else {
                        
@@ -137,11 +136,11 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_403_EXPLAIN_BACKTRACKING_1);
                     // TODO NPC Text Abspielen - ENTITY_AXOLOTL_SWIM
                     // TODO warten bis NPC feritg
-
-                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].setActive(false);
                     chessBoards[0].updateBoard();
+                    chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].updateCollisionCarpets();
+                    chessBoards[0].setActive(false);
                     chessBoards[0].animationField2Field(AlgDatDamen.getInstance(), 1, new Queen()); // <-- später 8
 
                     npc.playTrack(NPCTrack.NPC_404_STEP_BY_STEP);
@@ -151,10 +150,10 @@ public class Level4 extends Level {
                     setInventory();
                 },
                 () -> {
+                    chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setActive(false);
-                    chessBoards[0].updateBoard();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -182,6 +181,7 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setActive(true);
+                    this.currentCBID = 0;
                     setInventory();
                     // Löschen und Neusetzen von Damen bis zur richtigen Lösung unter Zuhilfenahme
                     // des Backtracking-Algorithmus mit NPC-Interaktion, Hilfestellung und

@@ -533,8 +533,8 @@ public class MChessBoard extends ChessBoard {
         p.setY(l.getBlockZ() - minZ);
 
         addPiece(p);
-        //spawnPiece(p);
-        updateBoard();
+        spawnPiece(p);  
+        updateCollisionCarpets();
         return true;
     }
 
@@ -1262,8 +1262,6 @@ public class MChessBoard extends ChessBoard {
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
     }
-
-
 
     // --- Tutorial Command ---
     
