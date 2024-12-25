@@ -19,6 +19,8 @@ public enum ControlItem {
     PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame ")),
     BACKTRACKING_FORWARD_Q(Material.LIME_DYE, Component.text("weiter")),
     BACKTRACKING_BACKWARD_Q(Material.PINK_DYE, Component.text("zurück")),
+    BACKTRACKING_FORWARDFAST_Q(Material.GREEN_WOOL, Component.text("schnell weiter")),
+    BACKTRACKING_BACKWARDFAST_Q(Material.PINK_WOOL, Component.text("schnell zurück")),
     NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver")),
     SPAWN_CARPET(Material.MAGENTA_DYE, Component.text("")),
     SHOW_CARPET(Material.BROWN_DYE, Component.text("")),
