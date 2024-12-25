@@ -33,7 +33,7 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
-    private MChessboardMode mode;
+    private MChessBoardMode mode;
 
     // ----------- Constructors -----------
 
@@ -92,7 +92,7 @@ public class MChessBoard extends ChessBoard {
         this.stateY = 0;
         this.isAnimationRunning = false;
         this.active = false;
-        this.mode = MChessboardMode.INACTIVE;
+        this.mode = MChessBoardMode.INACTIVE;
     }
 
     // ----------- Getters and Setters -----------
@@ -505,84 +505,73 @@ public class MChessBoard extends ChessBoard {
     // --- add and remove ---
 
     /**
-     * Adds a chess piece to the board at a specific location.
+     * Handles a player interaction depending on the current {@link MChessBoardMode}
      *
-     * @param l The {@link Location} on the board to place the piece.
+     * @param l The clicked {@link Location}
      * @param p The {@link Piece} to be added.
-     * @return True if the piece was successfully added, false otherwise.
+     * @return True if the piece was placed, false otherwise
      */
     public boolean addPiece(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
+        // check if location is part of the chessboard and chessboard allows player interaction
+        if (!isPartOfBoard(l)) return false;
+        // get local coordinates
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
-
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
 
-        addPiece(p);
-        spawnPiece(p);
+        // remove existing piece if location is already occupied
+        Piece existingPiece = this.getPieceAt(l);
+        if(existingPiece != null) {
+            this.removePiece(existingPiece);
+            return false;
+        }
+
+        switch (mode) {
+            // keine Interaktion
+            case INACTIVE: return false;
+            // jede Dame wird gesetzt
+            case NORMAL:
+                if(addPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // nur nicht bedrohte Damen werden gesetzt
+            case TESTED:
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // wie TESTED, nur falsche Damen explodieren
+            case EXPLODING:
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                playExplosionAnimation(l);
+                return false;
+            case TUTORIAL:
+                // TODO verhalten im Tutorial Mode hinzufügen
+                return false;
+            default:
+                break;
+        }
 
         return true;
     }
 
     /**
-     * Adds a piece to the board only if it passes additional validation.
-     *
-     * @param l The {@link Location} on the board.
-     * @param p The {@link Piece} to add.
-     * @return True if the piece was added successfully, false otherwise.
+     * spielt an der übergebenen {@link Location} eine Explosions Animation ab
+     * @param l Location für die Animation
      */
-    public boolean addTestedQueen(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
-        int minX = originCorner.getBlockX();
-        int minZ = originCorner.getBlockZ();
-
-        p.setX(l.getBlockX() - minX);
-        p.setY(l.getBlockZ() - minZ);
-
-        if (!addTestedPiece(p)) {
-            return false;
-        }
-        spawnPiece(p);
-
-        return true;
-    }
-
-    /**
-     * Adds a piece to the board only if it passes additional validation.
-     * wenn nicht, wird ein explosionsähnlicher Partikeleffekt erzeugt
-     * @param l The {@link Location} on the board.
-     * @param p The {@link Piece} to add.
-     * @return True if the piece was added successfully, false otherwise.
-     */
-    public boolean addExplodingPiece(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
-        int minX = originCorner.getBlockX();
-        int minZ = originCorner.getBlockZ();
-
-        p.setX(l.getBlockX() - minX);
-        p.setY(l.getBlockZ() - minZ);
-
-        if (!addTestedPiece(p)) {
-            // TODO Animation verfeinern
-            l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
-            l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
-            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
-            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
-            return false;
-        }
-        spawnPiece(p);
-
-        return true;
+    private void playExplosionAnimation(Location l) {
+        // TODO Animation verfeinern
+        l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
+        l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
     }
 
     /**

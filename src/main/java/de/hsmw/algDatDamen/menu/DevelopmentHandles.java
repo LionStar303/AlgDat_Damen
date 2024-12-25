@@ -98,18 +98,6 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-    /**
-     * Like <code>placeQueen</code> but with a check, if the queen is allowed on
-     * this field of the board.
-     * 
-     * @param event Triggering event.
-     */
-    public static void placeTestedQueen(PlayerInteractEvent event) {
-        MChessBoard mcB = getClickedMCB(event);
-        mcB.addTestedQueen(event.getClickedBlock().getLocation(), p);
-        event.setCancelled(true);
-    }
-
     public static void placeUserCarpet(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB == null)
