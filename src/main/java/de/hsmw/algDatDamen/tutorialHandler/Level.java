@@ -104,6 +104,8 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
+        currentStep.checkForCompletion();
+        
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
@@ -169,9 +171,29 @@ public abstract class Level implements Listener {
                     else cb.addPiece(clickedLocation, new Queen());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                currentStep.checkForCompletion();
+                //currentStep.checkForCompletion();
+                cb.updateBoard();
             }
         }
+    }
+
+    /**
+     * Retrieves the chess board associated with the clicked block, if any.
+     * 
+     * @param event Triggering event.
+     * @return Corresponding chess board or null if not found.
+     */
+    public MChessBoard getClickedMCB(PlayerInteractEvent event) {
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+            return null;
+        }
+        for (MChessBoard mcB : chessBoards) {
+            if (mcB.isPartOfBoard(clickedBlock.getLocation())) {
+                return mcB;
+            }
+        }
+        return null;
     }
 
     /**
@@ -192,6 +214,7 @@ public abstract class Level implements Listener {
      * je nach benutztem ControlItem wird die entsprechende Funktion ausgeführt
      */
     public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
+        MChessBoard mcb = null;
         if(System.currentTimeMillis() < cooldownMillis) return;
         cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
@@ -219,6 +242,16 @@ public abstract class Level implements Listener {
             case PLACE_EXPLODING_QUEEN:
                 tryPlaceQueen(event, true);
                 break;
+            case BACKTRACKING_FORWARD_Q:
+                mcb = getClickedMCB(event);
+                if(!mcb.isSolved())mcb.animationStepToNextField(new Queen());
+                break;
+            
+            case BACKTRACKING_BACKWARD_Q:
+                mcb = getClickedMCB(event);
+                mcb.animationReverseStepToNextField(null);
+                break;
+            
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
                 break;

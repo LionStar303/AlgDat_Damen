@@ -248,6 +248,10 @@ public class MChessBoard extends ChessBoard {
         this.currentAnimationTask = currentAnimationTask;
     }
 
+    public NPC getNPC() {
+        return npc;
+    }
+
     // ----------- Functional Methods -----------
 
     // --- extension getter / setter ---
@@ -529,8 +533,8 @@ public class MChessBoard extends ChessBoard {
         p.setY(l.getBlockZ() - minZ);
 
         addPiece(p);
-        spawnPiece(p);
-
+        //spawnPiece(p);
+        updateBoard();
         return true;
     }
 
@@ -599,6 +603,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
+        updateBoard();
     }
 
     /**
@@ -1258,7 +1263,8 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
-    public NPC getNPC() {
-        return npc;
-    }
+
+
+    // --- Tutorial Command ---
+    
 }
