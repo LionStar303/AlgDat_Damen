@@ -39,6 +39,7 @@ public enum NPCTrack {
                             "Das ist der Punkt, an dem der Backtracking-Algorithmus ins Spiel kommt."),
     NPC_403_EXPLAIN_BACKTRACKING_1(Sound.ENTITY_AXOLOTL_SWIM ,"Der Backtracking-Algorithmus ist eine Methode, um Lösungen für Probleme zu finden, indem man systematisch alle möglichen Optionen ausprobiert und zurückgeht, wenn man auf eine Sackgasse stößt.\r\n" + 
                             "Lass mich dir zeigen, wie das funktioniert."),
+    @Deprecated
     NPC_404_STEP_BY_STEP(Sound.ENTITY_BAT_AMBIENT ,"Lass uns den Algorithmus nun Schritt für Schritt durchlaufen."),
     NPC_405_EXPLAIN_BACKTRACKING_2(Sound.ENTITY_BAT_DEATH ,"Jedes mal wenn eine Dame platziert wird, prüfen wir ob diese Position es erlaubt eine weiter zu stellen, ansonsten nehmen wir die Dame wieder vom Brett und versuchen sie an einer anderen Stelle zu platzieren, wo wir dann wieder prüfen, ob sie gültig ist."),
 

@@ -23,7 +23,7 @@ public enum ControlItem {
     BACKTRACKING_BACKWARDFAST_Q(Material.GUNPOWDER, Component.text("schnell zurück")),
     NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver")),
     SPAWN_CARPET(Material.MAGENTA_DYE, Component.text("")),
-    SHOW_CARPET(Material.BROWN_DYE, Component.text("")),
+    SHOW_CARPET(Material.BROWN_DYE, Component.text("Bedrohungen anzeigen")),
     CHECK_CARPET(Material.BLACK_DYE, Component.text(""));
 
     private final Material material;

@@ -368,7 +368,7 @@ public class MChessBoard extends ChessBoard {
     }
 
     public void updateBoard() {
-        //despawnChessBoard();
+        despawnChessBoard();
         spawnChessBoard();
         updatePieces();
         updateCollisionCarpets();

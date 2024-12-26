@@ -11,7 +11,6 @@ import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
-import net.kyori.adventure.text.Component;
 
 /* 
 ### Level 4 - _erster versuch_:
@@ -19,7 +18,7 @@ import net.kyori.adventure.text.Component;
 - Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
 - Teleporter `-143 -24 62`
 */
-
+// TODO muss getestet werden
 public class Level4 extends Level {
     
     private long cooldownMillisStep = 0;
@@ -54,12 +53,7 @@ public class Level4 extends Level {
         // Erzeugung eines 8x8 Schachbretts
         currentStep = new Step(
                 () -> {
-                    // TODO Audio vom NPC abspielen lassen -> Welcher keine Ahnung :(
-                    chessBoards[0].removeAllPieces();
-                    chessBoards[0].updateBoard();
                     npc.playTrack(NPCTrack.NPC_401_INTRO);
-                    // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
-                    // der NPC fertig ist
                 },
                 () -> {
                     
@@ -73,42 +67,38 @@ public class Level4 extends Level {
         chessBoards[0].setConsoleEnabled(true);
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].removeAllPieces();
+                    // Erklärung des Levelabschnitts und des Problems mit großen Schachbrettern durch NPC
+                    /* TODO neuer Text
+                     * 
+                     */
+                    npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
+
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setActive(true);
+                    chessBoards[0].setActive(true); // TODO an mode anpassen
+
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                 },
                 () -> {
-
-                    if (chessBoards[0].isSolved()) {
-                        // TODO super gemacht, so war es mühsamm bla bla, mit Backtracking einfacher
-                        player.sendMessage(
-                                "Stark!! Du Hast das Schachbrett gelöst");
-                    } else {
-                        player.sendMessage(
-                                "Du hast es leider nicht geschafft. Diesbezüglich keine Panik, im folgenden wirst du es lernen.");
-                        // TODO nicht so schlimm ich erkläre es dir ??
-                    }
-                    // Erklärung des falschen Ergebnisses und des Problems mit großen Schachbrettern
-                    // durch NPC
-                    npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
-                    // TODO NPC Text Abspielen - ENTITY_AXOLOTL_SPLASH
-
-                    chessBoards[0].setActive(false);
+                    chessBoards[0].setActive(false); // TODO mode
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].despawnChessBoard();
                     // Inventar auf Urspungszustand zurücksetzen
                     setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist, oder 3 min abgelaufen
                 // sind.
-                unused -> //(chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > (1000 * 60 * 3))
-                {
-                    if (chessBoards[0].isSolved() || System.currentTimeMillis() - this.cooldownMillisStep > (1000 * 60 * 3)) {
+                unused -> {
+                    if (chessBoards[0].isSolved()) {
+                        // Easteregg
+                        npc.playTrackPositive();
+                        return true;
+                    } else if(System.currentTimeMillis() - this.cooldownMillisStep > (1000 * 60 * 3)) {
                         return true;
                     } else {
-                       
+                        // TODO vielleicht schicker machen
                         player.sendMessage(
                                 "Das Schachbrett ist noch nicht gelöst und du muss noch " + ((((1000 * 60 * 3)  - (System.currentTimeMillis() - this.cooldownMillisStep)) )/1000)+ "Sekunden probieren das Schachbrett zu Lösen");
                         return false;
@@ -123,21 +113,18 @@ public class Level4 extends Level {
                 () -> {
                     // Erklärung des Backtracking-Algorithmus durch NPC
                     npc.playTrack(NPCTrack.NPC_403_EXPLAIN_BACKTRACKING_1);
-                    // TODO NPC Text Abspielen - ENTITY_AXOLOTL_SWIM
-                    // TODO warten bis NPC feritg
+
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setActive(false);
+                    chessBoards[0].setActive(false); // TODO mode
                     chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
-                    npc.playTrack(NPCTrack.NPC_404_STEP_BY_STEP);
-                    // TODO NPC Text Abspielen - ENTITY_BAT_AMBIENT
-                    // TODO warten bis NPC feritg
-                    // Clear Inventory
-                    setInventory();
                 },
                 () -> {
-                    chessBoards[0].setActive(false);
+                    // Chessboard leeren und Animation stoppen
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].updateBoard();
+                    chessBoards[0].stopCurrentAnimation();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -165,7 +152,7 @@ public class Level4 extends Level {
                     chessBoards[0].updateBoard();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setActive(true);
+                    chessBoards[0].setActive(true); // TODO mode
                     this.currentCBID = 0;
                     setInventory();
                     // Löschen und Neusetzen von Damen bis zur richtigen Lösung unter Zuhilfenahme
@@ -178,7 +165,7 @@ public class Level4 extends Level {
                     player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
                 },
                 () -> {
-                    chessBoards[0].setActive(false);
+                    chessBoards[0].setActive(false); // TODO mode
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -199,7 +186,6 @@ public class Level4 extends Level {
 
         setupStep.setNext(new Step(
                 () -> {
-                    
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     teleporter.setEnabled(true);
