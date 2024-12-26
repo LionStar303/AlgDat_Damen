@@ -28,7 +28,7 @@ public class Level5 extends Level{
 
     @Override
     protected void configureChessBoards() {
-        chessBoards = new MChessBoard[0];
+        chessBoards = new MChessBoard[2];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
         chessBoards[0].setCollisionCarpets(false);
 

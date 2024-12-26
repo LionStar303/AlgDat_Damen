@@ -50,7 +50,6 @@ public enum NPCTrack {
                             "Setze die sechs Damen wieder auf dem Brett nach den bekannten Vorgaben, aber nutze diesmal dein Wissen über den Backtracking-Algorithmus."),
     NPC_502_EXPLAIN_1(Sound.ENTITY_BAT_LOOP ,"Schaffst du es auch, wenn wir die Farben tauschen?"),
     
-
     // Level 6
     // TODO Intro für Level 6
     NPC_601_INTRO(Sound.ENTITY_BAT_TAKEOFF ,"Das ging ja schneller als gedacht, hier darfst du dich an einem richtigen Schachbrett versuchen."),
@@ -58,7 +57,7 @@ public enum NPCTrack {
     // NPC_602_HELP(Sound.ENTITY_BAT_TAKEOFF ,""),
     NPC_602_EXPLAIN_2(Sound.ENTITY_BEE_DEATH ,"Versuch jetzt das Brett zu vervollständigen. Aber keine Panik (diesbezüglich), ich gebe dir etwas Hilfestellung."),
     // TODO abgeänderter Text wenn genug Zeit ist
-    NPC_603_EXPLAIN_3(Sound.ENTITY_BEE_HURT ,"Jetzt musst du nur noch den Anfang versuchen, setze nur die ersten drei Damen."),
+    NPC_603_EXPLAIN_3(Sound.ENTITY_BEE_HURT ,"Jetzt musst du noch den Anfang versuchen, setze nur die ersten drei Damen."),
     @Deprecated // die fliegt raus
     NPC_605_EXPLAIN_4(Sound.ENTITY_BEE_LOOP ,"Hier sind zwei 8x8 Felder, eins ist gelöst, das andere nicht. Welches ist welches?"),
 
