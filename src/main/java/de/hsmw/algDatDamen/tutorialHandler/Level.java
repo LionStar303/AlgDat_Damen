@@ -1,14 +1,13 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
-import de.hsmw.algDatDamen.ChessBoard.Piece;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -80,9 +79,6 @@ public abstract class Level implements Listener {
         setInventory();
         // ersten Schritt starten
         currentStep.start();
-
-        // TODO Logik einbauen wenn Level beendet wird parentTutorial.incProgress()
-        // aufrufen
     }
 
     protected void setInventory() {
@@ -161,13 +157,10 @@ public abstract class Level implements Listener {
             Block clickedBlock = event.getClickedBlock();
             Location clickedLocation = clickedBlock.getLocation();
             if(console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
-            if(cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
-                Piece existingQueen = cb.getPieceAt(clickedLocation);
-                if(existingQueen != null) cb.removePiece(existingQueen);
-                else cb.addPiece(clickedLocation, new Queen());
-                // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                currentStep.checkForCompletion();
-            }
+            // chessboard kümmert sich um das weitere handling
+            cb.addPiece(clickedLocation, new Queen());
+            // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
+            currentStep.checkForCompletion();
         }
     }
 

@@ -375,12 +375,10 @@ public class MChessBoard extends ChessBoard {
      * Otherwise, any existing carpets are removed.
      */
     public void updateCollisionCarpets() {
-        if (this.collisionCarpets) {
-            despawnCollisionCarpets(); // Remove existing carpets
-            spawnCollisionCarpets(); // Spawn new carpets
-        } else {
-            despawnCollisionCarpets(); // Remove carpets if disabled
-        }
+        // Teppiche entfernen
+        despawnCollisionCarpets();
+        // wieder spawnen falls enabled
+        if (this.collisionCarpets) spawnCollisionCarpets();
     }
 
     public void updateBoard() {
@@ -627,6 +625,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
+        updateCollisionCarpets();
     }
 
     /**
@@ -797,9 +796,9 @@ public class MChessBoard extends ChessBoard {
 
                 Block block = location.getBlock();
 
-                // Skip blocks where there is no collision or where a queen's bottom part is
+                // Skip blocks where there is collision or where a queen's bottom part is
                 // present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                if (checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
                         || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }

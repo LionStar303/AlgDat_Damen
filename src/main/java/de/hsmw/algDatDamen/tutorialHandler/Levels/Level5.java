@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -26,7 +27,7 @@ public class Level5 extends Level{
 
     @Override
     protected void configureChessBoards() {
-        chessBoards = new MChessBoard[0];
+        chessBoards = new MChessBoard[1];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
     }
 
@@ -50,19 +51,20 @@ public class Level5 extends Level{
         // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
-
-
+                    chessBoards[0].spawnChessBoard();
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setActive(true);
+
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.PLACE_KNIGHT.getItemStack());
                 },
                 () -> {
                     // Chessboard despawnen
                     chessBoards[0].despawnChessBoard();
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 }
                 ));
         setupStep = setupStep.getNext();
