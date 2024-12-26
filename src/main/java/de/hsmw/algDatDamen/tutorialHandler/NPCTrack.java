@@ -33,6 +33,7 @@ public enum NPCTrack {
     NPC_303_SECOND_TASK(Sound.ENTITY_AXOLOTL_IDLE_WATER ,"Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen so setzt, dass sie sich nicht gegenseitig schlagen."),
 
     // Level 4
+    // TODO falsch benannt
     NPC_401_INTRO(Sound.ENTITY_PIG_AMBIENT ,"Lass uns das ganze jetzt wieder auf einem acht mal acht Feld betrachten und den Backtracking-Algoritmus verwenden."),
     NPC_402_EXPLAIN_PROBLEM(Sound.ENTITY_AXOLOTL_SPLASH ,"Wie du sehen kannst, ist es nicht so einfach, alle Damen auf einem 8x8 Schachbrett zu platzieren.\r\n"+ 
                             "Manchmal führt eine falsche Platzierung dazu, dass wir nicht weiterkommen.\r\n"+ 
@@ -47,17 +48,24 @@ public enum NPCTrack {
     NPC_501_INTRO(Sound.ENTITY_BAT_HURT ,"Prüfe nun wieder selbst, ob du den Algorithmus anwenden kannst.\r\n" +
                             "Setze die vier Damen wieder auf dem Brett nach den bekannten Vorgaben, aber nutze diesmal dein Wissen über den Backtracking-Algorithmus."),
     NPC_502_EXPLAIN_1(Sound.ENTITY_BAT_LOOP ,"Schaffst du es auch, wenn wir die Farben tauschen?"),
-    NPC_503_HELP(Sound.ENTITY_BAT_TAKEOFF ,"Ich gebe dir etwas Hilfestellung."),
-    NPC_504_EXPLAIN_2(Sound.ENTITY_BEE_DEATH ,"Versuch jetzt das Brett zu vervollständigen."),
-    NPC_505_EXPLAIN_3(Sound.ENTITY_BEE_HURT ,"Setz nur die ersten drei Damen."),
-    NPC_506_EXPLAIN_4(Sound.ENTITY_BEE_LOOP ,"Hier sind zwei acht mal acht Felder, eins ist gelöst, das andere nicht. Welches ist welches?"),
+    
 
     // Level 6
-    NPC_601_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE ,"Jetzt werden wir das N-Damen-Problem auf einem noch größeren Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen mit der Größe des Schachbretts ändern."),
-    NPC_602_EXPLAIN(Sound.ENTITY_BEE_POLLINATE ,"Aber fühl dich nicht allzu eingeschüchtert. Du musst nur sechs der zehn Damen setzen."),
+    // TODO Intro für Level 6
+    NPC_601_INTRO(Sound.ENTITY_BAT_TAKEOFF ,"Das ging ja schneller als gedacht, hier darfst du dich an einem richtigen Schachbrett versuchen."),
+    // TODO NPC_602_HELP und NPC_603_EXPLAIN_2 zusammenfassen (ENTITY_BAT_TAKEOFF wird für Intro verwendet)
+    // NPC_602_HELP(Sound.ENTITY_BAT_TAKEOFF ,""),
+    NPC_602_EXPLAIN_2(Sound.ENTITY_BEE_DEATH ,"Versuch jetzt das Brett zu vervollständigen. Aber keine Panik (diesbezüglich), ich gebe dir etwas Hilfestellung."),
+    // TODO abgeänderter Text wenn genug Zeit ist
+    NPC_603_EXPLAIN_3(Sound.ENTITY_BEE_HURT ,"Jetzt musst du nur noch den Anfang versuchen, setze nur die ersten drei Damen."),
+    @Deprecated // die fliegt raus
+    NPC_605_EXPLAIN_4(Sound.ENTITY_BEE_LOOP ,"Hier sind zwei 8x8 Felder, eins ist gelöst, das andere nicht. Welches ist welches?"),
 
     // Level 7
-    NPC_701_INTRO(Sound.ENTITY_BEE_STING ,"Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen."),
+    NPC_701_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE ,"Jetzt werden wir das N-Damen-Problem auf einem noch größeren Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen mit der Größe des Schachbretts ändern."),
+    NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE ,"Aber fühl dich nicht allzu eingeschüchtert. Du musst nur sechs der zehn Damen setzen."),
+    // TODO NPC_701_OLD mit NPC_702_KNIGHT_1 zusammenfassen
+    NPC_701_OLD(Sound.ENTITY_BEE_STING ,"Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen."),
     NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT ,"Der Springer bewegt sich in einem L-förmigen Muster. Er kann zwei Felder in eine Richtung und dann ein Feld in eine senkrechte Richtung springen oder umgekehrt."),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN ,"Ziemlich genauso würde das dann aussehen."),
     NPC_704_KNIGHT_AND_QUEEN_1(Sound.ENTITY_BLAZE_DEATH ,"Jetzt wollen wir beide kombinieren. Platziere Damen und Springer so, dass sich niemand gegenseitig schlägt."),
