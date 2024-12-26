@@ -952,12 +952,15 @@ public class MChessBoard extends ChessBoard {
             return true;
         }
 
-        // Zeige nächstes Feld
+        // Zeige nächstes Fel
         if (stateX + 1 <= size && stateY + 1 <= size) {
             Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
-                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
-            block.setType(Material.BLUE_CARPET);
+            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
+                block.setType(Material.BLUE_CARPET);
+            }
+            
         }
 
         return false;
