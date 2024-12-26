@@ -45,8 +45,9 @@ public enum NPCTrack {
     NPC_405_EXPLAIN_BACKTRACKING_2(Sound.ENTITY_BAT_DEATH ,"Jedes mal wenn eine Dame platziert wird, prüfen wir ob diese Position es erlaubt eine weiter zu stellen, ansonsten nehmen wir die Dame wieder vom Brett und versuchen sie an einer anderen Stelle zu platzieren, wo wir dann wieder prüfen, ob sie gültig ist."),
 
     // Level 5
+    // TODO für sechs Damen anpassen
     NPC_501_INTRO(Sound.ENTITY_BAT_HURT ,"Prüfe nun wieder selbst, ob du den Algorithmus anwenden kannst.\r\n" +
-                            "Setze die vier Damen wieder auf dem Brett nach den bekannten Vorgaben, aber nutze diesmal dein Wissen über den Backtracking-Algorithmus."),
+                            "Setze die sechs Damen wieder auf dem Brett nach den bekannten Vorgaben, aber nutze diesmal dein Wissen über den Backtracking-Algorithmus."),
     NPC_502_EXPLAIN_1(Sound.ENTITY_BAT_LOOP ,"Schaffst du es auch, wenn wir die Farben tauschen?"),
     
 
