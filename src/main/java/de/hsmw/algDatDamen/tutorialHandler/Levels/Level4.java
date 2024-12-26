@@ -21,22 +21,11 @@ import net.kyori.adventure.text.Component;
 */
 
 public class Level4 extends Level {
+    
+    private long cooldownMillisStep = 0;
 
     private final static String LEVEL_NAME = "Level 4 - Erster versuch:";
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
-    private final static Component NPC_INTRO = Component.text(
-            "Lass uns das ganze jetzt wieder auf einem acht mal acht Feld betrachten und den Backtracking-Algoritmus verwenden");
-    private final static Component NPC_INSTRUCTION = Component
-            .text("Setzen aller Damen ohne Lösung des Problems durch Computer");
-    private final static Component NPC_HELP = Component.text(
-            "Wie du sehen kannst, ist es nicht so einfach, alle Damen auf einem 8x8 Schachbrett zu platzieren. Manchmal führt eine falsche Platzierung dazu, dass wir nicht weiterkommen. Das ist der Punkt, an dem der Backtracking-Algorithmus ins Spiel kommt.");
-    private final static Component NPC_EXPLAIN_BACKTRACK_1 = Component.text(
-            "Der Backtracking-Algorithmus ist eine Methode, um Lösungen für Probleme zu finden, indem man systematisch alle möglichen Optionen ausprobiert und zurückgeht, wenn man auf eine Sackgasse stößt. Lass mich dir zeigen, wie das funktioniert.");
-    private final static Component NPC_SHOW_STEPS = Component
-            .text("Lass uns den Algorithmus nun Schritt für Schritt durchlaufen.");
-    private final static Component NPC_EXPLAIN_BACKTRACK_2 = Component.text(
-            "Jedes mal wenn eine Dame platziert wird, prüfen wir ob diese Position es erlaubt eine weiter zu stellen, ansonsten nehmen wir die Dame wieder vom Brett und versuchen sie an eine andere Stelle zu platzieren, wo wir dann wieder prüfen, ob sie gültig ist.");
-    private long cooldownMillis;
 
     public Level4(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -106, -25, 83),
@@ -57,7 +46,7 @@ public class Level4 extends Level {
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[1];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -132, -25, 75), 8, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -132, -25, 75), 6, player);
     }
 
     @Override
@@ -66,23 +55,27 @@ public class Level4 extends Level {
         currentStep = new Step(
                 () -> {
                     // TODO Audio vom NPC abspielen lassen -> Welcher keine Ahnung :(
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].updateBoard();
                     npc.playTrack(NPCTrack.NPC_401_INTRO);
                     // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn
                     // der NPC fertig ist
                 },
                 () -> {
-                    chessBoards[0].spawnChessBoard();
+                    
                 });
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
         // verknüpft
         Step setupStep = currentStep;
 
         // Setzen aller Damen ohne Lösung des Problems durch Computer
-        cooldownMillis = System.currentTimeMillis();
+        this.cooldownMillisStep = System.currentTimeMillis();
         chessBoards[0].setConsoleEnabled(true);
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].updateBoard();
+                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setActive(true);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
@@ -92,22 +85,18 @@ public class Level4 extends Level {
 
                     if (chessBoards[0].isSolved()) {
                         // TODO super gemacht, so war es mühsamm bla bla, mit Backtracking einfacher
-                        // player.sendMessage(Component.textOfChildren(EMPTY_LINE, "Super gemacht
-                        // TODO"));
+                        player.sendMessage(
+                                "Stark!! Du Hast das Schachbrett gelöst");
                     } else {
-                        // player.sendMessage(Component.textOfChildren(EMPTY_LINE, "Keine Panik
-                        // Diesbezüglic dir wird geholfen!"));
+                        player.sendMessage(
+                                "Du hast es leider nicht geschafft. Diesbezüglich keine Panik, im folgenden wirst du es lernen.");
                         // TODO nicht so schlimm ich erkläre es dir ??
                     }
                     // Erklärung des falschen Ergebnisses und des Problems mit großen Schachbrettern
                     // durch NPC
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
-                    player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_HELP));
                     // TODO NPC Text Abspielen - ENTITY_AXOLOTL_SPLASH
 
-                    // Schachbrett leeren
-                    chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].removeAllPieces();
                     chessBoards[0].setActive(false);
                     // Inventar auf Urspungszustand zurücksetzen
                     setInventory();
@@ -116,12 +105,12 @@ public class Level4 extends Level {
                 // sind.
                 unused -> //(chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > (1000 * 60 * 3))
                 {
-                    if (chessBoards[0].isSolved() || System.currentTimeMillis() - cooldownMillis > 10){//(1000 * 60 * 3)) {
+                    if (chessBoards[0].isSolved() || System.currentTimeMillis() - this.cooldownMillisStep > (1000 * 60 * 3)) {
                         return true;
                     } else {
                        
                         player.sendMessage(
-                                "Das Schachbrett ist noch nicht gelöst und du muss noch " + ((1000 * 60 * 3) - System.currentTimeMillis() - cooldownMillis) + "millis testen");
+                                "Das Schachbrett ist noch nicht gelöst und du muss noch " + ((((1000 * 60 * 3)  - (System.currentTimeMillis() - this.cooldownMillisStep)) )/1000)+ "Sekunden probieren das Schachbrett zu Lösen");
                         return false;
                     }
                 }
@@ -139,10 +128,8 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].updateCollisionCarpets();
                     chessBoards[0].setActive(false);
-                    chessBoards[0].animationField2Field(AlgDatDamen.getInstance(), 1, new Queen()); // <-- später 8
-
+                    chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
                     npc.playTrack(NPCTrack.NPC_404_STEP_BY_STEP);
                     // TODO NPC Text Abspielen - ENTITY_BAT_AMBIENT
                     // TODO warten bis NPC feritg
@@ -150,9 +137,6 @@ public class Level4 extends Level {
                     setInventory();
                 },
                 () -> {
-                    chessBoards[0].updateBoard();
-                    chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].removeAllPieces();
                     chessBoards[0].setActive(false);
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
@@ -178,6 +162,7 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_405_EXPLAIN_BACKTRACKING_2);
                     // TODO NPC Text Abspielen - ENTITY_BAT_DEATH
                     // TODO warten bis NPC feritg
+                    chessBoards[0].updateBoard();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setActive(true);
@@ -188,9 +173,9 @@ public class Level4 extends Level {
                     // Möglichkeiten vor- und zurückzuspringen
                     player.getInventory().setItem(0, ControlItem.BACKTRACKING_FORWARD_Q.getItemStack());
                     player.getInventory().setItem(1, ControlItem.BACKTRACKING_FORWARDFAST_Q.getItemStack());
-                    player.getInventory().setItem(3, ControlItem.SHOW_CARPET.getItemStack());
-                    player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARD_Q.getItemStack());
-                    player.getInventory().setItem(5, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
+                    player.getInventory().setItem(2, ControlItem.SHOW_CARPET.getItemStack());
+                    player.getInventory().setItem(3, ControlItem.BACKTRACKING_BACKWARD_Q.getItemStack());
+                    player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
                 },
                 () -> {
                     chessBoards[0].setActive(false);
@@ -209,15 +194,14 @@ public class Level4 extends Level {
                 }));
 
         // Lernenden
-        // Löschen aller Damen und Löschen des Schachbretts
         setupStep = setupStep.getNext();
 
-        // Löschen aller Damen und Löschen des Schachbretts
+
         setupStep.setNext(new Step(
                 () -> {
-                    // 4x4 Brett samt Figuren entfernen
-                    chessBoards[0].despawnAllPieces();
-                    chessBoards[0].despawnChessBoard();
+                    
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].updateBoard();
                     teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
@@ -225,8 +209,6 @@ public class Level4 extends Level {
                 () -> {
                     setInventory();
                     teleporter.setEnabled(false);
-                    chessBoards[0].spawnChessBoard();
-                    chessBoards[0].updatePieces();
                 }));
         setupStep = setupStep.getNext();
 

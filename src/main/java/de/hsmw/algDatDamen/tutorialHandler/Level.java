@@ -34,7 +34,7 @@ public abstract class Level implements Listener {
     protected NPC npc;
     private int stepCount;
     private int currentStepID;
-    private long cooldownMillis;
+    public long cooldownMillis;
     public int currentCBID;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
@@ -50,7 +50,7 @@ public abstract class Level implements Listener {
         this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0));
         this.npc = new NPC(startLocation, console);
         this.currentCBID = 0;
-        cooldownMillis = 0;
+        this.cooldownMillis = 0;
     }
 
     // Abstrakte Methoden
@@ -237,20 +237,20 @@ public abstract class Level implements Listener {
                 tryPlaceQueen(event, true);
                 break;
             case BACKTRACKING_FORWARD_Q:
-                chessBoards[currentCBID].verfyPieces(new Queen());
+                if(chessBoards[currentCBID].getPieces().size() != 0)chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextField(new Queen());
                 }
                 break;
             case BACKTRACKING_FORWARDFAST_Q:
-                chessBoards[currentCBID].verfyPieces(new Queen());
+                if(chessBoards[currentCBID].getPieces().size() != 0)chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextPiece(new Queen());
                 }
                 break;
 
             case BACKTRACKING_BACKWARD_Q:
-                chessBoards[currentCBID].verfyPieces(new Queen());
+                //chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
                 }
@@ -261,6 +261,14 @@ public abstract class Level implements Listener {
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
                 }
+                break;
+            case SHOW_CARPET:
+                if(chessBoards[currentCBID].isCollisionCarpets()){
+                    chessBoards[currentCBID].setCollisionCarpets(false);
+                } else {
+                    chessBoards[currentCBID].setCollisionCarpets(true);
+                }
+                chessBoards[currentCBID].updateCollisionCarpets();
                 break;
 
             default:
