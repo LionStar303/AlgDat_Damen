@@ -23,7 +23,7 @@ public class ChessBoard {
     public ChessBoard(int boardSize) {
         this.size = boardSize;
         this.pieces = new ArrayList<Piece>();
-        this.console = true;
+        this.console = false;
         this.stateX = 0;
         this.stateY = 0;
     }
