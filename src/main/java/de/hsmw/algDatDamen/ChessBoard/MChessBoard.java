@@ -584,22 +584,32 @@ public class MChessBoard extends ChessBoard {
                 // remove existing piece if location is already occupied
                 if(existingPiece != null) {
                     // Spieler kann nur das zuletzt gesetzte Piece entfernen
-                    if(!existingPiece.equals(pieces.getLast())) return false;
+                    if(!existingPiece.equals(pieces.get(pieces.size()-2))) return false;
                     this.removePiece(existingPiece);
-                    // Backtracking bis zum vorherigen Piece rückwärts laufen lassen
+                    this.verfyPieces(p); //geht schöner passt so könnte stateX und stateY auf Location setzen
                     return false;
                 }
+
+                
                 /* siehe pseudocode
                 if(Piece Location != Backtrack Location) {
                     playExplosionAnimation(l);
                     return false;
                 }
                 */
+                if(existingPiece == null){
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                
+
                 /* siehe pseudocode
                 addPiece(p);
                 spawnPiece(p);
                 playBacktrack einen Schritt weiter
                 */
+                spawnAllPieces(); //wenn schöner spawnPiece(pieces.getLast());
+                playBacktrackToNextPiece(p);
                 return true; // wenn Piece richtig gesetzt wurde
             default: return false;
         }
