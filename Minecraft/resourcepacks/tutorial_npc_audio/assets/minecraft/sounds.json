@@ -1,0 +1,256 @@
+{"entity.armadillo.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_AMBIENT"}]
+  },
+  "entity.armadillo.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_HURT"}]
+  },
+  "entity.armadillo.brush": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_BRUSH"}]
+  },
+  "entity.armadillo.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_DEATH"}]
+  },
+  "entity.armadillo.eat": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_EAT"}]
+  },
+  "entity.armadillo.hurt.reduced": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_HURT_REDUCED"}]
+  },
+  "entity.armadillo.land": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_LAND"}]
+  },
+  "entity.armadillo.peek": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_PEEK"}]
+  },
+  "entity.armadillo.roll": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_ROLL"}]
+  },
+  "entity.armadillo.scute_drop": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_SCUTE_DROP"}]
+  },
+  "entity.armadillo.step": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_STEP"}]
+  },
+  "entity.armadillo.unroll_finish": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_UNROLL_FINISH"}]
+  },
+  "entity.armadillo.unroll_start": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ARMADILLO_UNROLL_START"}]
+  },
+  "entity.axolotl.attack": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_ATTACK"}]
+  },
+  "entity.axolotl.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_DEATH"}]
+  },
+  "entity.axolotl.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_HURT"}]
+  },
+  "entity.axolotl.idle_air": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_IDLE_AIR"}]
+  },
+  "entity.axolotl.idle_water": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_IDLE_WATER"}]
+  },
+  "entity.axolotl.splash": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_SPLASH"}]
+  },
+  "entity.axolotl.swim": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_AXOLOTL_SWIM"}]
+  },
+  "entity.bat.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BAT_AMBIENT"}]
+  },
+  "entity.bat.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BAT_DEATH"}]
+  },
+  "entity.bat.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BAT_HURT"}]
+  },
+  "entity.bat.loop": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BAT_LOOP"}]
+  },
+   "entity.bat.takeoff": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BAT_TAKEOFF"}]
+  },
+  "entity.bee.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_DEATH"}]
+  },
+  "entity.bee.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_HURT"}]
+  },
+  "entity.bee.loop": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_LOOP"}]
+  },
+  "entity.bee.loop_aggressive": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_LOOP_AGGRESSIVE"}]
+  },
+  "entity.bee.pollinate": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_POLLINATE"}]
+  },
+  "entity.bee.sting": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BEE_STING"}]
+  },
+  "entity.blaze.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BLAZE_AMBIENT"}]
+  },
+  "entity.blaze.burn": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BLAZE_BURN"}]
+  },
+  "entity.blaze.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BLAZE_DEATH"}]
+  },
+  "entity.blaze.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BLAZE_HURT"}]
+  },
+  "entity.blaze.shoot": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_BLAZE_SHOOT"}]
+  },
+  "entity.camel.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_AMBIENT"}]
+  },
+  "entity.camel.dash": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_DASH"}]
+  },
+  "entity.camel.dash_ready": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_DASH_READY"}]
+  },
+  "entity.camel.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_DEATH"}]
+  },
+  "entity.camel.eat": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_EAT"}]
+  },
+  "entity.camel.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_HURT"}]
+  },
+  "entity.camel.saddle": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_SADDLE"}]
+  },
+  "entity.camel.sit": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_SIT"}]
+  },
+  "entity.camel.stand": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_STAND"}]
+  },
+  "entity.camel.step": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_CAMEL_STEP"}]
+  },
+  "entity.elder_guardian.curse": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_CURSE"}]
+  },
+  "entity.elder_guardian.death": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_DEATH"}]
+  },
+  "entity.elder_guardian.death_land": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_DEATH_LAND"}]
+  },
+   "entity.elder_guardian.flop": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_FLOP"}]
+  },
+  "entity.elder_guardian.hurt": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_HURT"}]
+  }
+}

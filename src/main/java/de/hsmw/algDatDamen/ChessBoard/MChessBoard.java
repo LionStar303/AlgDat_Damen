@@ -7,6 +7,8 @@ import java.util.Map;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -80,7 +82,6 @@ public class MChessBoard extends ChessBoard {
         this.pieces = new ArrayList<>();
         this.console = false;
         this.originCorner = originCorner;
-        // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
@@ -214,7 +215,7 @@ public class MChessBoard extends ChessBoard {
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
     }
-    
+
     /**
      * @param active wenn Spieler Pieces setzen darf, sonst false
      */
@@ -522,7 +523,7 @@ public class MChessBoard extends ChessBoard {
 
         addPiece(p);
         spawnPiece(p);
-
+        updateCollisionCarpets();
         return true;
     }
 
@@ -553,6 +554,38 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
+     * Adds a piece to the board only if it passes additional validation.
+     * wenn nicht, wird ein explosionsähnlicher Partikeleffekt erzeugt
+     * 
+     * @param l The {@link Location} on the board.
+     * @param p The {@link Piece} to add.
+     * @return True if the piece was added successfully, false otherwise.
+     */
+    public boolean addExplodingPiece(Location l, Piece p) {
+        if (!isPartOfBoard(l)) {
+            return false;
+        }
+
+        int minX = originCorner.getBlockX();
+        int minZ = originCorner.getBlockZ();
+
+        p.setX(l.getBlockX() - minX);
+        p.setY(l.getBlockZ() - minZ);
+
+        if (!addTestedPiece(p)) {
+            // TODO Animation verfeinern
+            l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
+            l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
+            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
+            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
+            return false;
+        }
+        spawnPiece(p);
+
+        return true;
+    }
+
+    /**
      * Removes a specific chess piece from the board.
      *
      * @param p The {@link Piece} to remove.
@@ -560,6 +593,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
+        updateBoard();
     }
 
     /**
@@ -633,7 +667,7 @@ public class MChessBoard extends ChessBoard {
             printBoard(true);
             System.out.println("successfully spawned Piece");
         }
-        
+
         return true;
     }
 
@@ -651,7 +685,7 @@ public class MChessBoard extends ChessBoard {
 
         // Check and set the bottom block
         location.getBlock().getRelative(BlockFace.DOWN).setType(bottomBlockType);
-        
+
         if (console) {
             System.out.println("Placing top block: " + topBlockType + " at " + location);
             System.out.println("Placing bottom block: " + bottomBlockType + " at "
@@ -736,8 +770,6 @@ public class MChessBoard extends ChessBoard {
                         || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
-
-               
 
                 // Clear the block by setting it to air
                 block.setType(Material.AIR);
@@ -920,12 +952,15 @@ public class MChessBoard extends ChessBoard {
             return true;
         }
 
-        // Zeige nächstes Feld
+        // Zeige nächstes Fel
         if (stateX + 1 <= size && stateY + 1 <= size) {
             Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
-                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+            originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
-            block.setType(Material.BLUE_CARPET);
+            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
+                block.setType(Material.BLUE_CARPET);
+            }
+            
         }
 
         return false;
@@ -1215,4 +1250,7 @@ public class MChessBoard extends ChessBoard {
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
     }
+
+    // --- Tutorial Command ---
+
 }

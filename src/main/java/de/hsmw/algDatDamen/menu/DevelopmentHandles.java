@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import static de.hsmw.algDatDamen.AlgDatDamen.*;
 import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
+
 @SuppressWarnings("deprecation")
 /**
  * Class that contains development handles for managing chess boards and related
@@ -37,7 +38,6 @@ public class DevelopmentHandles {
     public static void handleBoardCreation(PlayerInteractEvent event, Integer size) {
         Block clickedBlock = event.getClickedBlock();
         Player player = event.getPlayer();
-
 
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             player.sendMessage(
@@ -342,10 +342,6 @@ public class DevelopmentHandles {
         } else {
             mcB.animationStepToNextField(p);
         }
-        event.setCancelled(true);
-    }
-
-    public static void playVillagerText(PlayerInteractEvent event) {
         event.setCancelled(true);
     }
 

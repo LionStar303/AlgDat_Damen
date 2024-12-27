@@ -7,18 +7,17 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+// TODO testen
 public class Level3 extends Level {
 
     private final static String LEVEL_NAME = "Level 3 - Scandi Zwilling";
     private final static String LEVEL_DESCRIPTION = "Lösung mit und ohne Hilfestellung, sowie Vorgabe und Vergleich mehrerer Lösungsmöglichkeiten";
-    private final static Component NPC_INTRO = Component.text("Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. Setzte vier Damen so, dass keine eine andere bedroht.");
-    private final static Component NPC_DIFFERENT_SOLUTIONS = Component.text("Aber es hätte auch eine andere Lösung gegeben. Bestimme wie die Lösungen auf diesen beiden Brettern sich unterscheiden.");
-    private final static Component NPC_SECOND_TASK = Component.text("Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen so setzt, dass sie sich nicht gegenseitig schlagen.");
 
     public Level3(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -76, -32, 103, 180, 0), new Location(player.getWorld(), -88, -32, 83), parent);
@@ -36,32 +35,24 @@ public class Level3 extends Level {
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[2];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -76, -32, 81), 4, player);
-        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -76, -32, 89), 4, player);
-    }
-
-    @Override
-    protected void setInventory() {
-        player.getInventory().clear();
-        setControlItems();
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -76, -32, 89), 4, player);
+        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -76, -32, 81), 4, player);
     }
 
     @Override
     protected void initializeSteps() {
+        // TODO alle Steps: NPC laufen lassen
+        
         // Erzeugung eines 4x4 Schachbretts
         // Erklärung des Levelabschnitts durch NPC
         currentStep = new Step(
             () -> {
-                // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_INTRO));
+                npc.playTrack(NPCTrack.NPC_301_INTRO);
                 chessBoards[0].spawnChessBoard();
-                teleporter.setEnabled(true);
-                // TODO evtl Verzögerung einbauen, sodass completed erst true gesetzt wird wenn der NPC fertig ist
             },
             () -> {
                 // Chessboard despawnen
                 chessBoards[0].despawnChessBoard();
-                // TODO NPC zum Schweigen bringen
             }
         );
 
@@ -87,7 +78,12 @@ public class Level3 extends Level {
                     setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
-                unused -> chessBoards[0].isSolved()
+                unused -> {
+                    if(chessBoards[0].isSolved()) {
+                        npc.playTrackPositive();
+                        return true;
+                    } else return false;
+                }
                 ));
         setupStep = setupStep.getNext();
 
@@ -105,8 +101,7 @@ public class Level3 extends Level {
                 chessBoards[0].setCollisionCarpets(false);
                 chessBoards[0].removeAllPieces();
                 chessBoards[1].spawnChessBoard();
-                // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_DIFFERENT_SOLUTIONS));
+                npc.playTrack(NPCTrack.NPC_302_DIFFERENT_SOLUTIONS);
                 // gespiegelte Lösungen spawnen
                 chessBoards[0].addPiece(new Queen(0, 1));
                 chessBoards[0].addPiece(new Queen(1, 3));
@@ -124,11 +119,10 @@ public class Level3 extends Level {
                 chessBoards[0].removeAllPieces();
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].despawnChessBoard();
-                // TODO NPC zum schweigen bringen
             },
-            // Step ist complete wenn Eingabe "gespiegelt" kam
+            // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if(latestPlayerInput.equals("gespiegelt")) {
+                if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
@@ -152,8 +146,7 @@ public class Level3 extends Level {
                 // zweites chessboard für spieler interaktion vorbereiten
                 chessBoards[1].setActive(true);
                 chessBoards[0].setCollisionCarpets(false);
-                // TODO Audio vom NPC abspielen lassen
-                player.sendMessage(Component.textOfChildren(EMPTY_LINE, NPC_SECOND_TASK));
+                npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
                 player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -167,7 +160,12 @@ public class Level3 extends Level {
                 setInventory();
             },
             // Step ist complete wenn das Schachbrett gelöst ist
-            unused -> chessBoards[1].isSolved()
+            unused -> {
+                if(chessBoards[1].isSolved()) {
+                    npc.playTrackPositive();
+                    return true;
+                } else return false;
+            }
             ));
         setupStep = setupStep.getNext();
 
@@ -177,14 +175,15 @@ public class Level3 extends Level {
                 // Inventar leeren
                 setInventory();
                 chessBoards[1].despawnChessBoard();
+                teleporter.setEnabled(true);
                 // teleport item geben
-                setInventory();
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {
                 // Schachbrett wieder spawnen
-                chessBoards[1].spawnChessBoard();
                 setInventory();
+                teleporter.setEnabled(false);
+                chessBoards[1].spawnChessBoard();
             }
             ));
 

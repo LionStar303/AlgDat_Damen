@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.Listener;
@@ -54,12 +55,75 @@ public class NPC implements Listener {
     }
 
     /**
-     * @param track der Track der abgespielt wird
+ * Spielt den Track für Spieler in der Nähe der Location ab.
+ *
+ * @param track der Track, der abgespielt wird
+ */
+public void playTrack(NPCTrack track) {
+    // Radius für Nachrichten
+    int messageRadius = 100;
+
+    // Spieler im Nachrichtenradius informieren
+    location.getNearbyPlayers(messageRadius).forEach(p -> {
+        p.sendMessage(track.getText());
+        p.sendMessage("\n\n");
+    });
+
+    // Sound für Spieler im erweiterten Soundradius abspielen
+    location.getNearbyPlayers(messageRadius).forEach(p -> 
+        p.playSound(location, track.getSound(), SoundCategory.MASTER, 1.0f, 1.0f)
+    );
+
+    if (console) System.out.println("Track abgespielt");
+}
+    
+    /**
+     * spielt einen zufälligen positiven Track ab
      */
-    public void playTrack(NPCTrack track) {
-        location.getNearbyPlayers(50).forEach(p -> p.sendMessage(track.getText()));
-        location.getWorld().playSound(location, track.getSound(), 1, 1);
-        if(console) System.out.println("Track abgespielt");
+    public void playTrackPositive() {
+        playTrack(getTrackPositive());
+    }
+
+    /**
+     * spielt einen zufälligen positiven Track ab
+     * @return {@link NPCTrack}
+     */
+    public NPCTrack getTrackPositive() {
+        int n = (int) Math.round((Math.random() * 6d));
+        if(console)System.out.println("playTrackPositive: " + n);
+        switch (n) {
+            case 0: return NPCTrack.NPC_POSITIVE_1;
+            case 1: return NPCTrack.NPC_POSITIVE_2;
+            case 2: return NPCTrack.NPC_POSITIVE_3;
+            case 3: return NPCTrack.NPC_POSITIVE_4;
+            case 4: return NPCTrack.NPC_POSITIVE_5;
+            default: return NPCTrack.NPC_POSITIVE_6;
+        }
+    }
+
+
+    
+    /**
+     * spielt einen zufälligen negativen Track ab
+     */
+    public void playTrackNegative() {
+        playTrack(getTrackNegative());
+    }
+
+     /**
+     * spielt einen zufälligen negativen Track ab
+     * @return {@link NPCTrack}
+     */
+    public NPCTrack getTrackNegative() {
+        int n = (int) Math.round((Math.random() * 5d));
+        if(console)System.out.println("playTrackNegative: " + n);
+        switch (n) {
+            case 0: return NPCTrack.NPC_NEGATIVE_1;
+            case 1: return NPCTrack.NPC_NEGATIVE_2;
+            case 2: return NPCTrack.NPC_NEGATIVE_3;
+            case 3: return NPCTrack.NPC_NEGATIVE_4;
+            default: return NPCTrack.NPC_NEGATIVE_5;
+        }
     }
 
     public void stopSound() {
