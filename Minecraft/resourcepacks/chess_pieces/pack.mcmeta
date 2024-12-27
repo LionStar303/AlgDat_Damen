@@ -1,0 +1,34 @@
+{
+    "pack": {
+        "pack_format": 34,
+        "description": [
+            "",
+            {
+                "text": "N-Queen Problem Graphics",
+                "color": "gold",
+                "bold": true
+            },
+            "\n",
+            {
+                "text": "By ",
+                "color": "gray"
+            },
+            {
+                "text": "Gruppe21",
+                "color": "blue"
+            },
+            {
+                "text": " - ",
+                "color": "gray"
+            },
+            {
+                "text": "1.0",
+                "color": "gold"
+            }
+        ]
+    }, 
+  "minecraft": {
+    "version": "1.21.3"
+  }
+
+}
