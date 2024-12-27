@@ -5,6 +5,9 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 public class NPC {
     private Location location;
     private Villager villager;
@@ -47,7 +50,9 @@ public void playTrack(NPCTrack track) {
 
     // Spieler im Nachrichtenradius informieren
     location.getNearbyPlayers(messageRadius).forEach(p -> {
-        p.sendMessage(track.getText());
+        NamedTextColor color = track.getColor();
+        if(color == null) p.sendMessage(Component.text(track.getText()));
+        else p.sendMessage(Component.text(track.getText(), color));
         p.sendMessage("\n\n");
     });
 
