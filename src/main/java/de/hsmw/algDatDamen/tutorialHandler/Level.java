@@ -6,10 +6,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.Bukkit; 
+import org.bukkit.boss.BarColor; 
+import org.bukkit.boss.BarStyle; 
+import org.bukkit.boss.BossBar; 
+import org.bukkit.plugin.java.JavaPlugin; 
+import org.bukkit.scheduler.BukkitRunnable;
 
+import de.hsmw.algDatDamen.AlgDatDamen;
+import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -36,6 +45,9 @@ public abstract class Level implements Listener {
     private int currentStepID;
     public long cooldownMillis;
     public int currentCBID;
+    protected boolean bbisRunning;
+    protected BukkitRunnable bossBarTask; 
+    protected BossBar bossBar;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
             Location teleporterLocation, boolean completed, Tutorial parent) {
@@ -51,10 +63,19 @@ public abstract class Level implements Listener {
         this.npc = new NPC(startLocation, console);
         this.currentCBID = 0;
         this.cooldownMillis = 0;
+        this.bbisRunning = false;
+        this.bossBarTask = null;
+        this.bossBar = null;
     }
 
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
+
+    protected void initBossBar(){
+        this.bossBar = Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID);
+        bossBar.setVisible(false);
+        bossBar.addPlayer(player);
+    }
 
     protected abstract void initializeSteps();
 
@@ -78,7 +99,7 @@ public abstract class Level implements Listener {
         player.setRespawnLocation(startLocation);
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_DESCRIPTION));
-
+        player.sendMessage("\n\n");
         setInventory();
         // ersten Schritt starten
         currentStep.start();
@@ -163,6 +184,7 @@ public abstract class Level implements Listener {
     private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
         for (MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
+            if(clickedBlock == null)continue;
             Location clickedLocation = clickedBlock.getLocation();
             if (console)
                 System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
@@ -177,7 +199,32 @@ public abstract class Level implements Listener {
                         cb.addPiece(clickedLocation, new Queen());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                // currentStep.checkForCompletion();
+                currentStep.checkForCompletion();
+                cb.updatePieces();
+                cb.updateCollisionCarpets();
+            }
+        }
+    }
+
+    private void tryPlacePiece(PlayerInteractEvent event, boolean exploding, Piece p) {
+        for (MChessBoard cb : chessBoards) {
+            Block clickedBlock = event.getClickedBlock();
+            if(clickedBlock == null)continue;
+            Location clickedLocation = clickedBlock.getLocation();
+            if (console)
+                System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            if (cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
+                Piece existingQueen = cb.getPieceAt(clickedLocation);
+                if (existingQueen != null)
+                    cb.removePiece(existingQueen);
+                else {
+                    if (exploding)
+                        cb.addExplodingPiece(clickedLocation, p.clone());
+                    else
+                        cb.addPiece(clickedLocation, p.clone());
+                }
+                // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
+                currentStep.checkForCompletion();
                 cb.updatePieces();
                 cb.updateCollisionCarpets();
             }
@@ -220,8 +267,10 @@ public abstract class Level implements Listener {
                 nextStep();
                 break;
             case NEXT_LEVEL:
-                if (teleporter.isTeleportBlock(event.getClickedBlock()) && teleporter.isEnabled()
-                        && currentStep.getNext() == null) {
+                if (    (teleporter.isTeleportBlock(event.getClickedBlock()) || 
+                        (player.getLocation().distance(teleporter.getLocation()) <= 2)) 
+                    && teleporter.isEnabled() 
+                    && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
                     startNextLevel();
                 } else {
@@ -231,10 +280,16 @@ public abstract class Level implements Listener {
                 }
                 break;
             case PLACE_QUEEN:
-                tryPlaceQueen(event, false);
+                tryPlacePiece(event, false, new Queen());
                 break;
             case PLACE_EXPLODING_QUEEN:
-                tryPlaceQueen(event, true);
+                tryPlacePiece(event, true, new Queen());
+                break;
+            case PLACE_KNIGHT:
+                tryPlacePiece(event, false, new Knight());
+                break;
+            case PLACE_SUPERQUEEN:
+                tryPlacePiece(event, false, new Superqueen());
                 break;
             case BACKTRACKING_FORWARD_Q:
                 if(chessBoards[currentCBID].getPieces().size() != 0)chessBoards[currentCBID].verfyPieces(new Queen());
@@ -296,4 +351,42 @@ public abstract class Level implements Listener {
     public Location getStartLocation() {
         return startLocation;
     }
+
+    protected  void startBossBarTimer(int minutes, String title) {
+        bbisRunning = true;
+    
+        if (bossBarTask != null && !bossBarTask.isCancelled()) {
+            bossBarTask.cancel();
+        }
+    
+        bossBar.setVisible(true);
+    
+        bossBarTask = new BukkitRunnable() {
+            private int time = minutes * 60; // Minuten in Sekunden
+    
+            @Override
+            public void run() {
+                if (time <= 0) {
+                    bossBar.setVisible(false);
+                    bbisRunning = false;
+                    cancel();
+                } else {
+                    int minutesLeft = time / 60;
+                    int secondsLeft = time % 60;
+                    bossBar.setTitle(title + " " + minutesLeft + "m " + secondsLeft + "s");
+    
+                    double progress = (double) time / (minutes * 60);
+                    bossBar.setProgress(progress);
+    
+                    time--;
+                }
+            }
+        };
+    
+        bossBarTask.runTaskTimer(AlgDatDamen.getInstance(), 0L, 20L); // 20 Ticks = 1 Sekunde
+    }
+    
+    
+    protected void stopBossBar() { if (bossBarTask != null) { bossBarTask.cancel(); } bossBar.setVisible(false); bbisRunning = false; }
+
 }

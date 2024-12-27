@@ -28,9 +28,7 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 public class Level4 extends Level {
     
     private long cooldownMillisStep = 0;
-    private boolean bbisRunning;
-    private BukkitRunnable bossBarTask; 
-    private BossBar bossBar;
+   
 
     private final static String LEVEL_NAME = "Level 4 - Erster versuch:";
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
@@ -55,13 +53,12 @@ public class Level4 extends Level {
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[1];
         chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -131, -25, 76), 6, player);
-        bossBar = Bukkit.createBossBar("BossBar", BarColor.BLUE, BarStyle.SOLID); 
-        bossBar.setVisible(false);
-        bossBar.addPlayer(player);
     }
 
     @Override
     protected void initializeSteps() {
+        initBossBar();
+
         // Erzeugung eines 8x8 Schachbretts
         currentStep = new Step(
                 () -> {
@@ -92,7 +89,7 @@ public class Level4 extends Level {
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
-                    startBossBarTimer(3, "Skippcounter");
+                    startBossBarTimer(3, "Überspringen verfügbar in:");
                 },
                 () -> {
                     chessBoards[0].setActive(false); // TODO mode
@@ -125,6 +122,7 @@ public class Level4 extends Level {
                     // Erklärung des Backtracking-Algorithmus durch NPC
                     npc.playTrack(NPCTrack.NPC_403_EXPLAIN_BACKTRACKING_1);
                     stopBossBar();
+                    setInventory();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
@@ -161,6 +159,7 @@ public class Level4 extends Level {
                     chessBoards[0].updateBoard();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setStateX(0); chessBoards[0].setStateY(0);
                     chessBoards[0].setActive(true); // TODO mode
                     this.currentCBID = 0;
                     setInventory();
@@ -211,32 +210,4 @@ public class Level4 extends Level {
         currentStep.backLink();
     }
 
-    private void startBossBarTimer(int minutes, String title) {
-        bbisRunning = true;
-        bossBar.setTitle(title);
-        bossBar.setVisible(true);
-
-        if(bbisRunning){
-            return;
-        }
-        bossBarTask = new BukkitRunnable() {
-            private int time = minutes * 60; // 3 Minuten in Sekunden
-
-            @Override
-            public void run() {
-                if (time <= 0) {
-                    bossBar.setVisible(false);
-                    bbisRunning = false;
-                    cancel();
-                } else {
-                    double progress = (double) time / (3 * 60);
-                    bossBar.setProgress(progress);
-                    time--;
-                }
-            }
-        };
-        bossBarTask.runTaskTimer(AlgDatDamen.getInstance(), 0L, 20L); // 20 Ticks entsprechen 1 Sekunde
-    }
-    
-    public void stopBossBar() { if (bossBarTask != null) { bossBarTask.cancel(); } bossBar.setVisible(false); bbisRunning = false; }
 }

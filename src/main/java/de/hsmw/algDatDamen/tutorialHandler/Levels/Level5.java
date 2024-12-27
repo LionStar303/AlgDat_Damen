@@ -86,6 +86,7 @@ public class Level5 extends Level{
                     //chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[0].despawnChessBoard();
                     chessBoards[1].spawnChessBoard();
+                    chessBoards[1].setActive(true);
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat

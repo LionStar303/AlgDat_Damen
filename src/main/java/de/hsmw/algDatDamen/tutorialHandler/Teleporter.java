@@ -69,4 +69,8 @@ public class Teleporter {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public Location getLocation(){
+        return teleporterLocation;
+    }
 }
