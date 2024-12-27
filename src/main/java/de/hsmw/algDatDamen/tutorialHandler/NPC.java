@@ -1,15 +1,18 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Villager;
+import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.level.pathfinder.Path;
+import com.destroystokyo.paper.entity.Pathfinder;
+import de.hsmw.algDatDamen.AlgDatDamen;
 
-public class NPC {
+public class NPC implements Listener {
     private Location location;
     private Villager villager;
     private boolean console;
@@ -78,22 +81,49 @@ public class NPC {
     public void moveVillagerWithPathfinding(Location target, double speed) {
         setSlowness(false);
         // Get the NMS Villager entity
-        net.minecraft.world.entity.npc.Villager nmsVillager = ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
+        //net.minecraft.world.entity.npc.Villager nmsVillager = ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
 
         // Access the Villager's navigation system
-        PathNavigation navigation = nmsVillager.getNavigation();
+        //PathNavigation navigation = nmsVillager.getNavigation();
 
         // Generate a path to the target
-        Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 2);
+        //Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 2);
 
-        if (path != null) {
-            System.out.println("Villager bewegt sich nach " + target.toString());
-            navigation.moveTo(path, speed);
-        } else {
+        Pathfinder villagerPathfinder = villager.getPathfinder();
+
+        boolean result = villagerPathfinder.moveTo(target);
+
+        if(/* path == null || */ !result) {
             System.out.println("Kein Pfad gefunden. Teleportiere Villager");
             // Villager in die Nähe teleportieren
-            villager.teleport(new Location(villager.getWorld(), target.getX(), target.getY(), target.getZ()));
+            villager.teleport(target);
+            setSlowness(true);
         }
-        setSlowness(true);
+        
+        if (villagerPathfinder.hasPath()) {
+            System.out.println("Villager bewegt sich.");
+
+            BukkitTask[] villagerTask = new BukkitTask[2]; // Ein Array, um die Referenz später zu setzen
+            villagerTask[0] = Bukkit.getScheduler().runTaskTimer(AlgDatDamen.getInstance(), () -> {
+                if (villager.getLocation().distanceSquared(target) < 2) {
+                    setSlowness(true);
+                    System.out.println("Villager wird gefreezed.");
+                    villagerTask[0].cancel(); // Zugriff auf die Array-Referenz
+                }
+            }, 0L, 3L);
+            System.out.println("Task gestartet: " + villagerTask[0].toString());
+
+            int delay = 3;  // Sekunden
+
+            villagerTask[1] = Bukkit.getScheduler().runTaskLater(AlgDatDamen.getInstance(), () -> {
+                if (!villagerTask[0].isCancelled()) {
+                    System.out.println("Villager hat Ziel nicht gefunden... teleportiere.");
+                    villager.teleport(target);
+                    setSlowness(true);
+                    villagerTask[0].cancel();
+                }
+                villagerTask[1].cancel();
+            }, 20L * delay);
+        }      
     }
 }
