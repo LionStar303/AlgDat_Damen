@@ -50,6 +50,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 1);
                 },
                 () -> {
                     chessBoards[0].despawnChessBoard();
@@ -82,6 +83,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 1);
                 },
                 () -> {
                     chessBoards[0].despawnCollisionCarpets();
@@ -126,6 +128,7 @@ public class Level1 extends Level {
                     teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(),-33, -42, 137), 1);
                 },
                 // alle Figuren spawnen
                 () -> {
