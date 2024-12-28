@@ -14,6 +14,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -81,6 +82,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         player.getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        player.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        player.getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        player.getWorld().setDifficulty(Difficulty.PEACEFUL);
 
         saveManager.getTutorialList().forEach((tutorial) -> {
             if (tutorial.getPlayer().equals(player))
