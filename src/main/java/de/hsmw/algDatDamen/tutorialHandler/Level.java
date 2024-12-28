@@ -340,6 +340,11 @@ public abstract class Level implements Listener {
                 }
                 chessBoards[currentCBID].updateCollisionCarpets();
                 break;
+            case SPAWN_CARPET:
+                if (event.getClickedBlock() == null)
+                    return;
+                chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
+                break;
 
             default:
                 player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
