@@ -36,7 +36,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material QUEEN_BLOCK_BOTTOM = Material.SEA_LANTERN;
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
-    public static Material KNIGHT_BLOCK_BOTTOM = Material.IRON_BLOCK;
+    public static Material KNIGHT_BLOCK_BOTTOM = Material.SHROOMLIGHT;
     public static final boolean CONSOLE = true;
     private static int MIN_HEIGHT = -60;
 
