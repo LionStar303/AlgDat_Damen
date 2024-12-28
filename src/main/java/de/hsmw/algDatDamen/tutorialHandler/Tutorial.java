@@ -50,6 +50,7 @@ public class Tutorial {
         currentLevel.start();
         // Progress Bar auf Level 1 setzen
         getPlayer().setLevel(progress);
+        getPlayer().setExp(0);
     }
 
     public Level getCurrentLevel() {
@@ -70,7 +71,8 @@ public class Tutorial {
 
     public void incProgress() {
         progress++;
-        Bukkit.getPlayer(playerUUID).setLevel(progress);
+        getPlayer().setLevel(progress);
+        getPlayer().setExp(0);
         currentLevel = levels.get(progress);
     }
 }
