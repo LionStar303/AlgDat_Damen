@@ -2,6 +2,8 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Sound;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+
 public enum NPCTrack {
 
     // Level 1
@@ -42,8 +44,8 @@ public enum NPCTrack {
             + "feststellen können das wir keine weitere Dame mehr platzieren "
             + "können, ohne das sie bedroht wird, aber auch kein unbedrohtes Feld "
             + "übrig bleibt."
-            + "Hierbei handelt es sich um das sogenannte N-Damen-Problem. Eine "
-            + "Herausforderung, bei der N Damen auf einem N x N Schachbrett "
+            + "Hierbei handelt es sich um das sogenannte N-Damen-Problem."
+            + "Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett "
             + "platziert werden müssen, ohne dass sich zwei Damen gegenseitig "
             + "angreifen."
             + "Und wie du auch gesehen hast haben wir das Problem soeben gelöst. "
@@ -64,7 +66,7 @@ public enum NPCTrack {
     // Level 3
     NPC_301_INTRO(Sound.ENTITY_AXOLOTL_HURT,
             "Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. "
-            + "Setzte vier Damen so, dass keine eine andere bedroht. "),
+            + "setze vier Damen so, dass keine eine andere bedroht. "),
     NPC_302_DIFFERENT_SOLUTIONS(Sound.ENTITY_AXOLOTL_IDLE_AIR,
             "Aber es hätte auch eine andere Lösung gegeben. Bestimme wie die "
             + "Lösungen auf diesen beiden Brettern sich unterscheiden. "),
@@ -162,24 +164,30 @@ public enum NPCTrack {
             + "und der Lösung durch die Anwendung des Backtracking-Algorithmus "
             + "geholfen hat, und ich wünsche dir weiterhin viel Erfolg. "),
     // Positive Response
-    NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT, "Richtig!"),
-    NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT, "Korrekt!"),
-    NPC_POSITIVE_3(Sound.ENTITY_CAMEL_SADDLE, "Ganz genau!"),
-    NPC_POSITIVE_4(Sound.ENTITY_CAMEL_SIT, "Genau so!"),
-    NPC_POSITIVE_5(Sound.ENTITY_CAMEL_STAND, "Ich hätte es selber nicht besser machen können!"),
-    NPC_POSITIVE_6(Sound.ENTITY_CAMEL_STEP, "Hervorragend!"),
+    NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT, "Richtig!", NamedTextColor.GREEN),
+    NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT, "Korrekt!", NamedTextColor.GREEN),
+    NPC_POSITIVE_3(Sound.ENTITY_CAMEL_SADDLE, "Ganz genau!", NamedTextColor.GREEN),
+    NPC_POSITIVE_4(Sound.ENTITY_CAMEL_SIT, "Genau so!", NamedTextColor.GREEN),
+    NPC_POSITIVE_5(Sound.ENTITY_CAMEL_STAND, "Ich hätte es selber nicht besser machen können!", NamedTextColor.GREEN),
+    NPC_POSITIVE_6(Sound.ENTITY_CAMEL_STEP, "Hervorragend!", NamedTextColor.GREEN),
     // Negative Response
-    NPC_NEGATIVE_1(Sound.ENTITY_ELDER_GUARDIAN_CURSE, "Nicht so."),
-    NPC_NEGATIVE_2(Sound.ENTITY_ELDER_GUARDIAN_DEATH, "Schaue es dir nochmal an."),
-    NPC_NEGATIVE_3(Sound.ENTITY_ELDER_GUARDIAN_DEATH_LAND, "Versuch es nochmal."),
-    NPC_NEGATIVE_4(Sound.ENTITY_ELDER_GUARDIAN_FLOP, "So ist das leider nicht richtig."),
-    NPC_NEGATIVE_5(Sound.ENTITY_ELDER_GUARDIAN_HURT, "Du findest bestimmt die richtige Lösung.");
+    NPC_NEGATIVE_1(Sound.ENTITY_ELDER_GUARDIAN_CURSE, "Nicht so.", NamedTextColor.RED),
+    NPC_NEGATIVE_2(Sound.ENTITY_ELDER_GUARDIAN_DEATH, "Schaue es dir nochmal an.", NamedTextColor.RED),
+    NPC_NEGATIVE_3(Sound.ENTITY_ELDER_GUARDIAN_DEATH_LAND, "Versuch es nochmal.", NamedTextColor.RED),
+    NPC_NEGATIVE_4(Sound.ENTITY_ELDER_GUARDIAN_FLOP, "So ist das leider nicht richtig.", NamedTextColor.RED),
+    NPC_NEGATIVE_5(Sound.ENTITY_ELDER_GUARDIAN_HURT, "Du findest bestimmt die richtige Lösung.", NamedTextColor.RED);
+
     private final Sound sound;
     private final String text;
+    private final NamedTextColor color;
 
     NPCTrack(Sound sound, String text) {
+        this(sound, text, null);
+    }
+    NPCTrack(Sound sound, String text, NamedTextColor color) {
         this.sound = sound;
         this.text = text;
+        this.color = color;
     }
 
     public Sound getSound() {
@@ -188,6 +196,10 @@ public enum NPCTrack {
 
     public String getText() {
         return insertLineBreaks(text);
+    }
+
+    public NamedTextColor getColor() {
+        return this.color;
     }
 
     public static String insertLineBreaks(String input) {

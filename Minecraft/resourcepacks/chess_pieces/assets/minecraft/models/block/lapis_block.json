@@ -8,6 +8,7 @@
 		"upper_top": "block/quartz_block_bottom",
 		"upper_west": "block/quartz_block_bottom",
 		"interior": "block/quartz_block_bottom"
+		"particle": "block/quartz_block_bottom"
 	},
 	"elements": [
 		{

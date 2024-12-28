@@ -9,11 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
-
 import com.destroystokyo.paper.entity.Pathfinder;
 import de.hsmw.algDatDamen.AlgDatDamen;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class NPC implements Listener {
+  
     private Location location;
     private Villager villager;
     private boolean console;
@@ -65,7 +67,9 @@ public void playTrack(NPCTrack track) {
 
     // Spieler im Nachrichtenradius informieren
     location.getNearbyPlayers(messageRadius).forEach(p -> {
-        p.sendMessage(track.getText());
+        NamedTextColor color = track.getColor();
+        if(color == null) p.sendMessage(Component.text(track.getText()));
+        else p.sendMessage(Component.text(track.getText(), color));
         p.sendMessage("\n\n");
     });
 
