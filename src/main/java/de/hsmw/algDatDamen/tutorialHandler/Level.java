@@ -267,8 +267,14 @@ public abstract class Level implements Listener {
                 nextStep();
                 break;
             case NEXT_LEVEL:
-                if (    (teleporter.isTeleportBlock(event.getClickedBlock()) || 
-                        (player.getLocation().distance(teleporter.getLocation()) <= 2)) 
+                boolean fireClicked = false;
+                if(event.getClickedBlock() != null){
+                    if (teleporter.isTeleportBlock(event.getClickedBlock())){
+                        fireClicked = true;
+                    }
+                }
+
+                if ( ((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3)) 
                     && teleporter.isEnabled() 
                     && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
