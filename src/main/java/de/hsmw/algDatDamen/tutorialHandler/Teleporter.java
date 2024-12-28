@@ -2,17 +2,20 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Campfire;
-
+import org.bukkit.entity.Player;
 public class Teleporter {
     private Material teleporterMaterial = Material.SOUL_CAMPFIRE;
     private Location teleporterLocation;
     private boolean enabled = false;
+    private Player player;
 
-    public Teleporter(Location teleporterLocation) {
+    public Teleporter(Location teleporterLocation, Player player) {
         this.teleporterLocation = teleporterLocation;
+        this.player = player;
         setEnabled(enabled);
     }
 
@@ -29,6 +32,13 @@ public class Teleporter {
                 campfire.setLit(enabled);
 
                 block.setBlockData(campfire);
+
+                if (enabled) {
+                    player.playSound(teleporterLocation, Sound.ITEM_FIRECHARGE_USE, 2, 1);
+                } else {
+                    player.playSound(teleporterLocation, Sound.BLOCK_FIRE_EXTINGUISH, 2, 1);
+                }
+                
             }
         }
     }

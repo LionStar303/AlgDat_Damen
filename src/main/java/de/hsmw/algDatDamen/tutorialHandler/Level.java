@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor; 
 import org.bukkit.boss.BarStyle; 
 import org.bukkit.boss.BossBar; 
-import org.bukkit.plugin.java.JavaPlugin; 
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
@@ -59,7 +58,7 @@ public abstract class Level implements Listener {
         this.startLocation = startLocation;
         this.completed = completed;
         this.parentTutorial = parent;
-        this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0));
+        this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0), player);
         this.npc = new NPC(startLocation, console);
         this.currentCBID = 0;
         this.cooldownMillis = 0;
