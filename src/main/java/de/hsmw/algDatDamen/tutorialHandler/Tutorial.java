@@ -58,10 +58,11 @@ public class Tutorial {
     }
 
     public void start() {
-        if(console) System.out.println("Tutorial: starte Tutorial");
+        if (console)
+            System.out.println("Tutorial: starte Tutorial");
         currentLevel.start();
         // Progress Bar auf Level 1 setzen
-        getPlayer().setLevel(progress);
+        getPlayer().setLevel(progress + 1);
         getPlayer().setExp(0);
     }
 
@@ -83,7 +84,7 @@ public class Tutorial {
 
     public void incProgress() {
         progress++;
-        getPlayer().setLevel(progress);
+        getPlayer().setLevel(progress + 1);
         getPlayer().setExp(0);
         currentLevel = levels.get(progress);
     }

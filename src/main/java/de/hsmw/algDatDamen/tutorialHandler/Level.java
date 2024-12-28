@@ -6,10 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.Bukkit; 
-import org.bukkit.boss.BarColor; 
-import org.bukkit.boss.BarStyle; 
-import org.bukkit.boss.BossBar; 
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
@@ -45,7 +45,7 @@ public abstract class Level implements Listener {
     public long cooldownMillis;
     public int currentCBID;
     protected boolean bbisRunning;
-    protected BukkitRunnable bossBarTask; 
+    protected BukkitRunnable bossBarTask;
     protected BossBar bossBar;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
@@ -70,7 +70,7 @@ public abstract class Level implements Listener {
     // Abstrakte Methoden
     protected abstract void configureChessBoards();
 
-    protected void initBossBar(){
+    protected void initBossBar() {
         this.bossBar = Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID);
         bossBar.setVisible(false);
         bossBar.addPlayer(player);
@@ -143,7 +143,10 @@ public abstract class Level implements Listener {
         if (console)
             System.out.printf("[AlgDat_Damen] Step ID: %d of %d\n", currentStepID, stepCount);
         if (currentStepID <= stepCount) {
-            player.setExp((float) currentStepID / stepCount);
+            player.setExp((float) currentStepID / (stepCount - 1));
+            if (currentStepID == stepCount - 1) {
+                player.setExp(0.9999f);
+            }
         }
 
         currentStep = currentStep.getNext();
@@ -161,7 +164,10 @@ public abstract class Level implements Listener {
         }
 
         if (currentStepID <= stepCount) {
-            player.setExp((float) currentStepID / stepCount);
+            player.setExp((float) currentStepID / (stepCount - 1));
+            if (currentStepID == stepCount - 1) {
+                player.setExp(0.9999f);
+            }
         }
 
         resetStep();
@@ -183,7 +189,8 @@ public abstract class Level implements Listener {
     private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
         for (MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
-            if(clickedBlock == null)continue;
+            if (clickedBlock == null)
+                continue;
             Location clickedLocation = clickedBlock.getLocation();
             if (console)
                 System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
@@ -208,7 +215,8 @@ public abstract class Level implements Listener {
     private void tryPlacePiece(PlayerInteractEvent event, boolean exploding, Piece p) {
         for (MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
-            if(clickedBlock == null)continue;
+            if (clickedBlock == null)
+                continue;
             Location clickedLocation = clickedBlock.getLocation();
             if (console)
                 System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
@@ -267,15 +275,15 @@ public abstract class Level implements Listener {
                 break;
             case NEXT_LEVEL:
                 boolean fireClicked = false;
-                if(event.getClickedBlock() != null){
-                    if (teleporter.isTeleportBlock(event.getClickedBlock())){
+                if (event.getClickedBlock() != null) {
+                    if (teleporter.isTeleportBlock(event.getClickedBlock())) {
                         fireClicked = true;
                     }
                 }
 
-                if ( ((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3)) 
-                    && teleporter.isEnabled() 
-                    && currentStep.getNext() == null) {
+                if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3))
+                        && teleporter.isEnabled()
+                        && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
                     startNextLevel();
                 } else {
@@ -297,33 +305,35 @@ public abstract class Level implements Listener {
                 tryPlacePiece(event, false, new Superqueen());
                 break;
             case BACKTRACKING_FORWARD_Q:
-                if(chessBoards[currentCBID].getPieces().size() != 0)chessBoards[currentCBID].verfyPieces(new Queen());
+                if (chessBoards[currentCBID].getPieces().size() != 0)
+                    chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextField(new Queen());
                 }
                 break;
             case BACKTRACKING_FORWARDFAST_Q:
-                if(chessBoards[currentCBID].getPieces().size() != 0)chessBoards[currentCBID].verfyPieces(new Queen());
+                if (chessBoards[currentCBID].getPieces().size() != 0)
+                    chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextPiece(new Queen());
                 }
                 break;
 
             case BACKTRACKING_BACKWARD_Q:
-                //chessBoards[currentCBID].verfyPieces(new Queen());
+                // chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
                 }
                 break;
-            
-                case BACKTRACKING_BACKWARDFAST_Q:
+
+            case BACKTRACKING_BACKWARDFAST_Q:
                 chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
                 }
                 break;
             case SHOW_CARPET:
-                if(chessBoards[currentCBID].isCollisionCarpets()){
+                if (chessBoards[currentCBID].isCollisionCarpets()) {
                     chessBoards[currentCBID].setCollisionCarpets(false);
                 } else {
                     chessBoards[currentCBID].setCollisionCarpets(true);
@@ -357,18 +367,18 @@ public abstract class Level implements Listener {
         return startLocation;
     }
 
-    protected  void startBossBarTimer(int minutes, String title) {
+    protected void startBossBarTimer(int minutes, String title) {
         bbisRunning = true;
-    
+
         if (bossBarTask != null && !bossBarTask.isCancelled()) {
             bossBarTask.cancel();
         }
-    
+
         bossBar.setVisible(true);
-    
+
         bossBarTask = new BukkitRunnable() {
             private int time = minutes * 60; // Minuten in Sekunden
-    
+
             @Override
             public void run() {
                 if (time <= 0) {
@@ -379,19 +389,24 @@ public abstract class Level implements Listener {
                     int minutesLeft = time / 60;
                     int secondsLeft = time % 60;
                     bossBar.setTitle(title + " " + minutesLeft + "m " + secondsLeft + "s");
-    
+
                     double progress = (double) time / (minutes * 60);
                     bossBar.setProgress(progress);
-    
+
                     time--;
                 }
             }
         };
-    
+
         bossBarTask.runTaskTimer(AlgDatDamen.getInstance(), 0L, 20L); // 20 Ticks = 1 Sekunde
     }
-    
-    
-    protected void stopBossBar() { if (bossBarTask != null) { bossBarTask.cancel(); } bossBar.setVisible(false); bbisRunning = false; }
+
+    protected void stopBossBar() {
+        if (bossBarTask != null) {
+            bossBarTask.cancel();
+        }
+        bossBar.setVisible(false);
+        bbisRunning = false;
+    }
 
 }
