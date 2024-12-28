@@ -68,6 +68,7 @@ public class Level3 extends Level {
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
                 },
                 () -> {
                     // Schachbrett leeren

@@ -825,9 +825,6 @@ public class MChessBoard extends ChessBoard {
         // Remove all queens from the chessboard
         despawnAllPieces();
 
-        // Disable collision carpets to ensure they are not displayed
-        this.collisionCarpets = false;
-
         // Remove any remaining collision carpets from the board
         despawnCollisionCarpets();
 
