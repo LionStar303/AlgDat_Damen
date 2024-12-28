@@ -7,11 +7,17 @@ import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.util.Vector;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -99,6 +105,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         player.setInvulnerable(true);
         player.setHealth(20);
         player.setFoodLevel(20);
+        spawnStartMessage(player);
     }
 
     /**
@@ -129,6 +136,34 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 return;
             }
         }
+    }
+
+    public void spawnStartMessage(Player player) {
+        Location location = new Location(player.getWorld(), -3, -44.5, 166);
+        ArrayList<ArmorStand> stands = new ArrayList<ArmorStand>();
+
+        // stands spawnen
+        ArmorStand stand1 = (ArmorStand) player.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+        ArmorStand stand2 = (ArmorStand) player.getWorld().spawnEntity(location.clone().add(new Vector(0, -0.5, 0)),
+                EntityType.ARMOR_STAND);
+        ArmorStand stand3 = (ArmorStand) player.getWorld().spawnEntity(location.clone().add(new Vector(0, -1, 0)),
+                EntityType.ARMOR_STAND);
+
+        // Text setzen
+        stand1.customName(Component.text("Öffne den Chat mit der Taste t", NamedTextColor.AQUA));
+        stand2.customName(Component.text("und starte das Tutorial mit \"/starttutorial\".", NamedTextColor.AQUA));
+        stand3.customName(Component.text("Du kannst das Tutorial jederzeit neustarten!", NamedTextColor.AQUA));
+
+        // Standeigenschaften setzen
+        stands.add(stand1);
+        stands.add(stand2);
+        stands.add(stand3);
+        stands.forEach((stand) -> {
+            stand.setAI(false);
+            stand.setGravity(false);
+            stand.setInvisible(true);
+            stand.setCustomNameVisible(true);
+        });
     }
 
     public static AlgDatDamen getInstance() {
