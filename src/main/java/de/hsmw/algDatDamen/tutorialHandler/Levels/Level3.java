@@ -123,6 +123,8 @@ public class Level3 extends Level {
             },
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
+                if (latestPlayerInput == null)
+                    return false;
                 if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
