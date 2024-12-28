@@ -9,6 +9,7 @@ import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -73,6 +74,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        player.getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
 
         saveManager.getTutorialList().forEach((tutorial) -> {
             if (tutorial.getPlayer().equals(player))
