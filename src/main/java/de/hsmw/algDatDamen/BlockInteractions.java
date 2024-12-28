@@ -1,6 +1,5 @@
 package de.hsmw.algDatDamen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
