@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -464,7 +465,7 @@ public class MChessBoard extends ChessBoard {
             }
         }
 
-        return correct ? true : false;
+        return correct;
     }
 
     /**
@@ -790,7 +791,7 @@ public class MChessBoard extends ChessBoard {
         }
 
         // Remove existing carpet if it's a valid move
-        if (l.getY() == originCorner.getY() + 1) {
+        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
             l.getBlock().setType(Material.AIR);
             return;
         }
@@ -952,12 +953,13 @@ public class MChessBoard extends ChessBoard {
         // Zeige nächstes Fel
         if (stateX + 1 <= size && stateY + 1 <= size) {
             Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
-            originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
+                    originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
-            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
+            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
+                    && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
                 block.setType(Material.BLUE_CARPET);
             }
-            
+
         }
 
         return false;

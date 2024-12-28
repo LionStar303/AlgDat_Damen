@@ -22,6 +22,8 @@ public enum NPCTrack {
     NPC_104_EXPLAIN_THREATS(Sound.ENTITY_ARMADILLO_HURT,
             "Wenn sich eine andere Figur im Bewegungsbereich befindet, ist sie "
             + "bedroht und kann von der sich bewegenden Figur geschlagen werden. "),
+    NPC_105_MOVEMENT_MARKING(Sound.BLOCK_ANVIL_FALL,
+            "Nun versuche selbst das Bewegungsmuster der Dame einzuzeichen. "),
     // Level 2
     NPC_201_INTRO(Sound.ENTITY_ARMADILLO_HURT_REDUCED,
             "Jetzt will ich dir zeigen wie ich ein 8x8 Feld fülle ohne das sich "
