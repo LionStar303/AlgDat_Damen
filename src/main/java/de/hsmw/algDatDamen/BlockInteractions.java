@@ -1,6 +1,5 @@
 package de.hsmw.algDatDamen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -22,35 +21,40 @@ public class BlockInteractions implements Listener {
         ItemStack itemInHand = event.getItem();
         Block block = event.getClickedBlock();
 
-        // Tag, Abend, Nacht Setzen
-        if (block.getType() == Material.POLISHED_BLACKSTONE_BUTTON && block.getLocation().getBlockX() == 9
-                && block.getLocation().getBlockY() == -44) {
+        // Sicherheitsprüfung: Ist der Block null?
+        if (block != null) {
 
-            World world = event.getPlayer().getWorld();
+            // Tag, Abend, Nacht Setzen
+            if (block.getType() == Material.POLISHED_BLACKSTONE_BUTTON && block.getLocation().getBlockX() == 9
+                    && block.getLocation().getBlockY() == -44) {
 
-            // case für z-koordinate
-            switch (block.getLocation().getBlockZ()) {
-                // Tag
-                case 175:
-                    world.setTime(2000);
-                    break;
+                World world = event.getPlayer().getWorld();
 
-                // Abend
-                case 176:
-                    world.setTime(13000);
-                    break;
+                // case für z-koordinate
+                switch (block.getLocation().getBlockZ()) {
+                    // Tag
+                    case 175:
+                        world.setTime(2000);
+                        break;
 
-                // Nacht
-                case 177:
-                    world.setTime(18000);
-                    break;
-                default:
-                    break;
+                    // Abend
+                    case 176:
+                        world.setTime(13000);
+                        break;
+
+                    // Nacht
+                    case 177:
+                        world.setTime(18000);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        if (itemInHand == null)
+        if (itemInHand == null) {
             return;
+        }
 
         Material itemInHandType = itemInHand.getType();
 

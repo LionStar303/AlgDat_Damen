@@ -89,6 +89,7 @@ public class Level4 extends Level {
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
                     startBossBarTimer(3, "Überspringen verfügbar in:");
                 },
                 () -> {
@@ -127,6 +128,7 @@ public class Level4 extends Level {
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setActive(false); // TODO mode
+                    player.getInventory().setItem(0, ControlItem.SHOW_CARPET.getItemStack());
                     chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
                 },
                 () -> {
@@ -134,6 +136,7 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].stopCurrentAnimation();
+                    setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -174,6 +177,7 @@ public class Level4 extends Level {
                 },
                 () -> {
                     chessBoards[0].setActive(false); // TODO mode
+                    setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 

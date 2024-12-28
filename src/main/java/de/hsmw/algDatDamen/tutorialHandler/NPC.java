@@ -15,7 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class NPC implements Listener {
-  
+
     private Location location;
     private Villager villager;
     private boolean console;
@@ -32,8 +32,9 @@ public class NPC implements Listener {
     }
 
     public void setSlowness(boolean slowness) {
-        if(slowness) {
-            villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 9999, 9999, false, false));
+        if (slowness) {
+            villager.addPotionEffect(
+                    new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
         } else {
             villager.clearActivePotionEffects();
         }
@@ -57,30 +58,32 @@ public class NPC implements Listener {
     }
 
     /**
- * Spielt den Track für Spieler in der Nähe der Location ab.
- *
- * @param track der Track, der abgespielt wird
- */
-public void playTrack(NPCTrack track) {
-    // Radius für Nachrichten
-    int messageRadius = 100;
+     * Spielt den Track für Spieler in der Nähe der Location ab.
+     *
+     * @param track der Track, der abgespielt wird
+     */
+    public void playTrack(NPCTrack track) {
+        // Radius für Nachrichten
+        int messageRadius = 100;
 
-    // Spieler im Nachrichtenradius informieren
-    location.getNearbyPlayers(messageRadius).forEach(p -> {
-        NamedTextColor color = track.getColor();
-        if(color == null) p.sendMessage(Component.text(track.getText()));
-        else p.sendMessage(Component.text(track.getText(), color));
-        p.sendMessage("\n\n");
-    });
+        // Spieler im Nachrichtenradius informieren
+        location.getNearbyPlayers(messageRadius).forEach(p -> {
+            NamedTextColor color = track.getColor();
+            if (color == null)
+                p.sendMessage(Component.text(track.getText()));
+            else
+                p.sendMessage(Component.text(track.getText(), color));
+            p.sendMessage("\n\n");
+        });
 
-    // Sound für Spieler im erweiterten Soundradius abspielen
-    location.getNearbyPlayers(messageRadius).forEach(p -> 
-        p.playSound(location, track.getSound(), SoundCategory.MASTER, 1.0f, 1.0f)
-    );
+        // Sound für Spieler im erweiterten Soundradius abspielen
+        location.getNearbyPlayers(messageRadius)
+                .forEach(p -> p.playSound(location, track.getSound(), SoundCategory.MASTER, 1.0f, 1.0f));
 
-    if (console) System.out.println("Track abgespielt");
-}
-    
+        if (console)
+            System.out.println("Track abgespielt");
+    }
+
     /**
      * spielt einen zufälligen positiven Track ab
      */
@@ -90,23 +93,29 @@ public void playTrack(NPCTrack track) {
 
     /**
      * spielt einen zufälligen positiven Track ab
+     * 
      * @return {@link NPCTrack}
      */
     public NPCTrack getTrackPositive() {
         int n = (int) Math.round((Math.random() * 6d));
-        if(console)System.out.println("playTrackPositive: " + n);
+        if (console)
+            System.out.println("playTrackPositive: " + n);
         switch (n) {
-            case 0: return NPCTrack.NPC_POSITIVE_1;
-            case 1: return NPCTrack.NPC_POSITIVE_2;
-            case 2: return NPCTrack.NPC_POSITIVE_3;
-            case 3: return NPCTrack.NPC_POSITIVE_4;
-            case 4: return NPCTrack.NPC_POSITIVE_5;
-            default: return NPCTrack.NPC_POSITIVE_6;
+            case 0:
+                return NPCTrack.NPC_POSITIVE_1;
+            case 1:
+                return NPCTrack.NPC_POSITIVE_2;
+            case 2:
+                return NPCTrack.NPC_POSITIVE_3;
+            case 3:
+                return NPCTrack.NPC_POSITIVE_4;
+            case 4:
+                return NPCTrack.NPC_POSITIVE_5;
+            default:
+                return NPCTrack.NPC_POSITIVE_6;
         }
     }
 
-
-    
     /**
      * spielt einen zufälligen negativen Track ab
      */
@@ -114,25 +123,33 @@ public void playTrack(NPCTrack track) {
         playTrack(getTrackNegative());
     }
 
-     /**
+    /**
      * spielt einen zufälligen negativen Track ab
+     * 
      * @return {@link NPCTrack}
      */
     public NPCTrack getTrackNegative() {
         int n = (int) Math.round((Math.random() * 5d));
-        if(console)System.out.println("playTrackNegative: " + n);
+        if (console)
+            System.out.println("playTrackNegative: " + n);
         switch (n) {
-            case 0: return NPCTrack.NPC_NEGATIVE_1;
-            case 1: return NPCTrack.NPC_NEGATIVE_2;
-            case 2: return NPCTrack.NPC_NEGATIVE_3;
-            case 3: return NPCTrack.NPC_NEGATIVE_4;
-            default: return NPCTrack.NPC_NEGATIVE_5;
+            case 0:
+                return NPCTrack.NPC_NEGATIVE_1;
+            case 1:
+                return NPCTrack.NPC_NEGATIVE_2;
+            case 2:
+                return NPCTrack.NPC_NEGATIVE_3;
+            case 3:
+                return NPCTrack.NPC_NEGATIVE_4;
+            default:
+                return NPCTrack.NPC_NEGATIVE_5;
         }
     }
 
     public void stopSound() {
         location.getWorld().getNearbyPlayers(location, 50).forEach(p -> p.stopAllSounds());
-        if(console) System.out.println("Sounds gestoppt");
+        if (console)
+            System.out.println("Sounds gestoppt");
     }
 
     /**
@@ -149,25 +166,27 @@ public void playTrack(NPCTrack track) {
     public void moveVillagerWithPathfinding(Location target, double speed) {
         setSlowness(false);
         // Get the NMS Villager entity
-        //net.minecraft.world.entity.npc.Villager nmsVillager = ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
+        // net.minecraft.world.entity.npc.Villager nmsVillager =
+        // ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
 
         // Access the Villager's navigation system
-        //PathNavigation navigation = nmsVillager.getNavigation();
+        // PathNavigation navigation = nmsVillager.getNavigation();
 
         // Generate a path to the target
-        //Path path = navigation.createPath(target.getX(), target.getY(), target.getZ(), 2);
+        // Path path = navigation.createPath(target.getX(), target.getY(),
+        // target.getZ(), 2);
 
         Pathfinder villagerPathfinder = villager.getPathfinder();
 
         boolean result = villagerPathfinder.moveTo(target);
 
-        if(/* path == null || */ !result) {
+        if (/* path == null || */ !result) {
             System.out.println("Kein Pfad gefunden. Teleportiere Villager");
             // Villager in die Nähe teleportieren
             villager.teleport(target);
             setSlowness(true);
         }
-        
+
         if (villagerPathfinder.hasPath()) {
             System.out.println("Villager bewegt sich.");
 
@@ -181,7 +200,7 @@ public void playTrack(NPCTrack track) {
             }, 0L, 3L);
             System.out.println("Task gestartet: " + villagerTask[0].toString());
 
-            int delay = 3;  // Sekunden
+            int delay = 3; // Sekunden
 
             villagerTask[1] = Bukkit.getScheduler().runTaskLater(AlgDatDamen.getInstance(), () -> {
                 if (!villagerTask[0].isCancelled()) {
@@ -192,6 +211,6 @@ public void playTrack(NPCTrack track) {
                 }
                 villagerTask[1].cancel();
             }, 20L * delay);
-        }      
+        }
     }
 }
