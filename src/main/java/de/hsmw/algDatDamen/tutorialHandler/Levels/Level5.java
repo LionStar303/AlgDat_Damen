@@ -84,19 +84,14 @@ public class Level5 extends Level{
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                    chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[0].despawnChessBoard();
+                    chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[1].spawnChessBoard();
-                    chessBoards[1].setActive(true);
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
-                    chessBoards[0].spawnChessBoard();
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setCollisionCarpets(true);
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
-                    player.getInventory().setItem(1, ControlItem.PLACE_KNIGHT.getItemStack());
                 },
                 () -> {
                     // Chessboard despawnen
@@ -115,12 +110,11 @@ public class Level5 extends Level{
         // Löschen des Schachbretts
         setupStep.setNext(new Step(
             () -> {
-                // Inventar leeren
-                setInventory();
                 chessBoards[1].despawnChessBoard();
                 // teleport item geben
                 teleporter.setEnabled(true);
-                // teleport item geben
+                // Inventar leeren und teleport item geben
+                setInventory();
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {

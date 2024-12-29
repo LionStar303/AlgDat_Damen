@@ -1,7 +1,6 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -15,7 +14,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
-import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
@@ -184,49 +182,17 @@ public abstract class Level implements Listener {
         parentTutorial.getCurrentLevel().start();
     }
 
-    private void tryPlaceQueen(PlayerInteractEvent event, boolean exploding) {
+    private void tryPlacePiece(PlayerInteractEvent event, Piece p) {
         for (MChessBoard cb : chessBoards) {
             Block clickedBlock = event.getClickedBlock();
             if (clickedBlock == null)
                 continue;
             Location clickedLocation = clickedBlock.getLocation();
-            if (console)
-                System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
-            if (cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
-                Piece existingQueen = cb.getPieceAt(clickedLocation);
-                if (existingQueen != null)
-                    cb.removePiece(existingQueen);
-                else {
-                    cb.addPiece(clickedLocation, new Queen());
-                }
-                // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                currentStep.checkForCompletion();
-                cb.updatePieces();
-                cb.updateCollisionCarpets();
-            }
-        }
-    }
+            if (console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            cb.addPiece(clickedLocation, p.clone());
 
-    private void tryPlacePiece(PlayerInteractEvent event, boolean exploding, Piece p) {
-        for (MChessBoard cb : chessBoards) {
-            Block clickedBlock = event.getClickedBlock();
-            if (clickedBlock == null)
-                continue;
-            Location clickedLocation = clickedBlock.getLocation();
-            if (console)
-                System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
-            if (cb.isActive() && cb.isPartOfBoard(clickedLocation) && clickedBlock.getType() != Material.AIR) {
-                Piece existingQueen = cb.getPieceAt(clickedLocation);
-                if (existingQueen != null)
-                    cb.removePiece(existingQueen);
-                else {
-                        cb.addPiece(clickedLocation, p.clone());
-                }
-                // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-                currentStep.checkForCompletion();
-                cb.updatePieces();
-                cb.updateCollisionCarpets();
-            }
+            // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
+            if(!currentStep.completed) currentStep.checkForCompletion();
         }
     }
 
@@ -239,7 +205,7 @@ public abstract class Level implements Listener {
         this.latestPlayerInput = PlainTextComponentSerializer.plainText().serialize(event.message());
         if (console)
             System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
-        currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
+        if(!currentStep.completed) currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
         event.setCancelled(true);
     }
 
@@ -252,8 +218,7 @@ public abstract class Level implements Listener {
      *              ausgeführt
      */
     public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
-        if (System.currentTimeMillis() < cooldownMillis)
-            return;
+        if (System.currentTimeMillis() < cooldownMillis) return;
         cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
             case PREVIOUS_STEP:
@@ -285,16 +250,13 @@ public abstract class Level implements Listener {
                 }
                 break;
             case PLACE_QUEEN:
-                tryPlacePiece(event, false, new Queen());
-                break;
-            case PLACE_EXPLODING_QUEEN:
-                tryPlacePiece(event, true, new Queen());
+                tryPlacePiece(event, new Queen());
                 break;
             case PLACE_KNIGHT:
-                tryPlacePiece(event, false, new Knight());
+                tryPlacePiece(event, new Knight());
                 break;
             case PLACE_SUPERQUEEN:
-                tryPlacePiece(event, false, new Superqueen());
+                tryPlacePiece(event, new Superqueen());
                 break;
             case BACKTRACKING_FORWARD_Q:
                 if (chessBoards[currentCBID].getPieces().size() != 0)
@@ -338,10 +300,7 @@ public abstract class Level implements Listener {
                 chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
                 currentStep.checkForCompletion();
                 break;
-
-            default:
-                player.sendMessage("Fehler beim Teleport.", "Event Item: " + event.getItem(), "Control Item: " + item);
-                break;
+            default: break;
         }
         event.setCancelled(true);
     }

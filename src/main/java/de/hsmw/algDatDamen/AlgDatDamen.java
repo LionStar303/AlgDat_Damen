@@ -101,7 +101,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
         // saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(),
         // saveManager.getProgress(event.getPlayer())));
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 6)); // <- nur zum testen
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 2)); // <- nur zum testen
         Location startLocation = new Location(event.getPlayer().getWorld(), 0, -45, 170);
         event.getPlayer().teleport(startLocation);
         event.getPlayer().setGameMode(org.bukkit.GameMode.SURVIVAL);

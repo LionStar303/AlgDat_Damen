@@ -2,12 +2,6 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
@@ -27,8 +21,6 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 */
 // TODO muss getestet werden
 public class Level4 extends Level {
-
-    private long cooldownMillisStep = 0;
 
     private final static String LEVEL_NAME = "Level 4 - Erster versuch:";
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
@@ -72,8 +64,6 @@ public class Level4 extends Level {
         Step setupStep = currentStep;
 
         // Setzen aller Damen ohne Lösung des Problems durch Computer
-        this.cooldownMillisStep = System.currentTimeMillis();
-
         setupStep.setNext(new Step(
                 () -> {
                     // Erklärung des Levelabschnitts und des Problems mit großen Schachbrettern
