@@ -11,3 +11,8 @@ commands:
     description: 'startet das Tutorial für den Spieler'
     usage: '/startTutorial'
     aliases: []
+    permission: algodat.start
+permissions:
+  algodat.start:
+    description: Allows the use of /startTutorial.
+    default: true

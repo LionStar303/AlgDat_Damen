@@ -88,13 +88,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
 
         saveManager.getTutorialList().forEach((tutorial) -> {
             if (tutorial.getPlayer().equals(player))
-                /*
-                 * TODO handling wenn der Spieler den Server verlässt und neu betritt
-                 * beim Verlassen muss das aktuelle Level "gestoppt" werden,
-                 * je nachdem wie viele Probleme das bereitet mittem im Level aufzuhören
-                 * beim Einloggen muss wieder an der gleichen Stelle weitergemacht werden
-                 * muss beim Testen ermittelt werden welche Sonderfälle beachtet werden müssen
-                 */
                 return;
         });
 
