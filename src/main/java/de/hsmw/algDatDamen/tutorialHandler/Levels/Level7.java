@@ -3,6 +3,16 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import static de.hsmw.algDatDamen.AlgDatDamen.getInstance;
+
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
@@ -17,21 +27,22 @@ import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
 /* 
-### Level 4 - _erster versuch_:
-- Startpunkt `-127 -8 -68`
-- Schachbrett `10x10 -128 -8 -98` - wofür ist die Insel da?
-- Teleporter `-`
-*/
+### Level 7- Eiskönigin:
+- Startpunkt `-127 -7 -66, 180 -15`
+- Schachbrett `10x10 -192 -8 -98`
+- Teleporter -- (sollte noch einer hin für die Sandbox Insel)
+ */
 // TODO muss getestet werden
 public class Level7 extends Level {
 
     // TODO LEVEL_NAME & LEVEL_DESCRIPTION
-    private final static String LEVEL_NAME = "Level 7 - TODO:";
-    private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
+    private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
+    private final static String LEVEL_DESCRIPTION = "TODO Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
 
+    protected BukkitTask animation = null;
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -7, -68),
-                new Location(player.getWorld(), -114, -7, -89), parent);
+        this(console, player, new Location(player.getWorld(), -127, -7, -66),
+                new Location(player.getWorld(), -127, -7, -64), parent);
     }
 
     public Level7(boolean console, Player player, Location startLocation, Location teleporterLocation,
@@ -48,7 +59,7 @@ public class Level7 extends Level {
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[1];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -128, -8, -98), 10, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -129, -8, -98), 10, player);
     }
 
     @Override
@@ -134,11 +145,13 @@ public class Level7 extends Level {
                 unused -> {
                     int Kcount = 0;
                     int Qcount = 0;
-                    if (console)
+                    if (console) {
                         System.out.println("Condition: chessBoards[0].getPieces().size() = "
                                 + chessBoards[0].getPieces().size() + " < 2");
-                    if (chessBoards[0].getPieces().size() < 2)
+                    }
+                    if (chessBoards[0].getPieces().size() < 2) {
                         return false;
+                    }
                     for (Piece p : chessBoards[0].getPieces()) {
                         if (chessBoards[0].checkCollision(p)) {
                             if (console) {
@@ -147,10 +160,12 @@ public class Level7 extends Level {
 
                             return false;
                         }
-                        if (p.getLetter() == 'K')
+                        if (p.getLetter() == 'K') {
                             Kcount++;
-                        if (p.getLetter() == 'Q')
+                        }
+                        if (p.getLetter() == 'Q') {
                             Qcount++;
+                        }
                         if (console) {
                             System.out.println("K piece found. Updated Kcount: " + Kcount);
                             System.out.println("Q piece found. Updated Qcount: " + Qcount);
@@ -229,42 +244,64 @@ public class Level7 extends Level {
                 () -> {
                     setInventory();
                     chessBoards[0].removeAllPieces();
+                    if (animation != null) animation.cancel();
                 }));
         setupStep = setupStep.getNext();
 
-        setupStep.setNext(new Step(
+        setupStep.setNext(new Step(() -> {
+            npc.playTrack(NPCTrack.NPC_709_SUPERQUEEN_MOVE_2);
+            chessBoards[0].removeAllPieces();
+            chessBoards[0].setCollisionCarpets(true);
+            chessBoards[0].updateBoard();
+
+            chessBoards[0].setMode(MChessBoardMode.NORMAL);
+            chessBoards[0].setActive(true); // TODO: An Modus anpassen
+
+            chessBoards[0].setStateX(0);
+            chessBoards[0].setStateY(0);
+
+            // BukkitRunnable für die Animation verwenden
+            animation = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (chessBoards[0].getPieces().size() >= 3) {
+                        this.cancel(); // Stoppt den Runnable, wenn genug Figuren gesetzt sind
+                        chessBoards[0].updateBoard();
+                        setInventory();
+                        player.getInventory().setItem(0, ControlItem.PLACE_SUPERQUEEN.getItemStack());
+                        player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
+                        return;
+                    }
+                    chessBoards[0].animationStepToNextField(new Superqueen());
+                }
+            }.runTaskTimer(AlgDatDamen.getInstance(), 0, 10L); // 10L = 10 Ticks = 0.5 Sekunden
+
+        },
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_709_SUPERQUEEN_MOVE_2);
+                    if (animation != null) animation.cancel();
+                    chessBoards[0].stopCurrentAnimation();
+                    setInventory();
+                    chessBoards[0].setMode(MChessBoardMode.EXPLODING);
+                    chessBoards[0].setActive(false); // TODO an mode anpassen
+
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateBoard();
-
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(true); // TODO an mode anpassen
-
-                    setInventory();
-                    player.getInventory().setItem(0, ControlItem.PLACE_SUPERQUEEN.getItemStack());
-                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
-
-                    setInventory();
-                },
-                () -> {
-                    setInventory();
-                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                    chessBoards[0].setActive(false); // TODO an mode anpassen
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
                 unused -> {
                     MChessBoard cb = chessBoards[0].clone();
                     cb.verfyPieces(new Superqueen());
-                    if (cb.getPieces().size() > 3) {
-                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
-                        chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                        chessBoards[0].setActive(false); // TODO an mode anpassen
-                    }
 
                     if (chessBoards[0].isSolved()) {
                         return true;
+                    }
+
+                    if (cb.getPieces().size() > 7) {
+                        npc.playTrackPositive();
+                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
+                        chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                        chessBoards[0].setActive(false); // TODO an mode anpassen
                     }
                     return false;
                 }));
@@ -272,6 +309,8 @@ public class Level7 extends Level {
 
         setupStep.setNext(new Step(
                 () -> {
+                    chessBoards[0].stopCurrentAnimation();
+                    if (animation != null) animation.cancel();
                     npc.playTrack(NPCTrack.NPC_710_END);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();

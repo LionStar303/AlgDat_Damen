@@ -160,7 +160,6 @@ public class Level3 extends Level {
 
                 // zweites chessboard für spieler interaktion vorbereiten
                 chessBoards[1].setMode(MChessBoardMode.NORMAL); 
-                chessBoards[1].setActive(true);
                 chessBoards[1].setCollisionCarpets(false);
                 npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
                 npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 81), 1);
@@ -170,11 +169,10 @@ public class Level3 extends Level {
             },
             () -> {
                 // Schachbrett leeren
-                chessBoards[1].setActive(false);
                 chessBoards[1].setMode(MChessBoardMode.INACTIVE); 
                 
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].updateBoard();
+                chessBoards[0].spawnChessBoard();
                 // Inventar auf Urspungszustand zurücksetzen
                 setInventory();
             },
