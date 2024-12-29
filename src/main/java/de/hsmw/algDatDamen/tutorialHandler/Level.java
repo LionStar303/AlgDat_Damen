@@ -10,6 +10,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
@@ -46,6 +47,7 @@ public abstract class Level implements Listener {
     protected boolean bbisRunning;
     protected BukkitRunnable bossBarTask;
     protected BossBar bossBar;
+    protected BukkitTask animation;
 
     public Level(boolean console, String name, String description, Player player, Location startLocation,
             Location teleporterLocation, boolean completed, Tutorial parent) {
@@ -64,6 +66,7 @@ public abstract class Level implements Listener {
         this.bbisRunning = false;
         this.bossBarTask = null;
         this.bossBar = null;
+        this.animation = null;
     }
 
     // Abstrakte Methoden
@@ -196,6 +199,10 @@ public abstract class Level implements Listener {
         }
     }
 
+    protected void currentStepcheckForCompletion(){
+        if(!currentStep.completed) currentStep.checkForCompletion();
+    }
+
     /**
      * AsyncChatEvent behandeln
      * 
@@ -263,6 +270,8 @@ public abstract class Level implements Listener {
                     chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextField(new Queen());
+                } else {
+                    currentStepcheckForCompletion();
                 }
                 break;
             case BACKTRACKING_FORWARDFAST_Q:
@@ -270,7 +279,10 @@ public abstract class Level implements Listener {
                     chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
                     chessBoards[currentCBID].animationStepToNextPiece(new Queen());
+                }else {
+                    currentStepcheckForCompletion();
                 }
+
                 break;
 
             case BACKTRACKING_BACKWARD_Q:
@@ -278,12 +290,18 @@ public abstract class Level implements Listener {
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
                 }
+                if(chessBoards[currentCBID].isSolved()){
+                    currentStepcheckForCompletion();
+                }
                 break;
 
             case BACKTRACKING_BACKWARDFAST_Q:
                 chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
+                }
+                if(chessBoards[currentCBID].isSolved()){
+                    currentStepcheckForCompletion();
                 }
                 break;
             case SHOW_CARPET:
@@ -341,6 +359,7 @@ public abstract class Level implements Listener {
                 if (time <= 0) {
                     bossBar.setVisible(false);
                     bbisRunning = false;
+                    currentStepcheckForCompletion();
                     cancel();
                 } else {
                     int minutesLeft = time / 60;

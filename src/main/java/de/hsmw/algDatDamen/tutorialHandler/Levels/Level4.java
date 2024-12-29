@@ -1,12 +1,16 @@
 package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
+import static de.hsmw.algDatDamen.AlgDatDamen.chessBoards;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -18,7 +22,7 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 - Startpunkt `-106 -25 83`
 - Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
 - Teleporter `-143 -24 62`
-*/
+ */
 // TODO muss getestet werden
 public class Level4 extends Level {
 
@@ -75,7 +79,7 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
                     stopBossBar();
                     chessBoards[0].updateBoard();
-                    chessBoards[0].setCollisionCarpets(true); 
+                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(true); // TODO an mode anpassen
 
@@ -83,7 +87,7 @@ public class Level4 extends Level {
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                     player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
-                    startBossBarTimer(3, "Überspringen verfügbar in:");
+                    startBossBarTimer(1, "Überspringen verfügbar in:"); //TODO change to 3 minutes
                 },
                 () -> {
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
@@ -107,7 +111,6 @@ public class Level4 extends Level {
                         return false;
                     }
                 }
-
         ));
 
         setupStep = setupStep.getNext();
@@ -121,13 +124,24 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].setActive(false); // TODO mode
                     player.getInventory().setItem(0, ControlItem.SHOW_CARPET.getItemStack());
-                    chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
+                    animation = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (chessBoards[0].isSolved()) {
+                                this.cancel(); // Stoppt den Runnable, wenn genug Figuren gesetzt sind
+                                currentStepcheckForCompletion();
+                                return;
+                            }
+                            chessBoards[0].animationStepToNextPiece(new Queen());
+                        }
+                    }.runTaskTimer(AlgDatDamen.getInstance(), 0, 8L); // 10L = 10 Ticks = 0.5 Sekunden
                 },
                 () -> {
                     // Chessboard leeren und Animation stoppen
+                    if (animation != null) animation.cancel();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].stopCurrentAnimation();
