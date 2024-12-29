@@ -85,7 +85,7 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
                     stopBossBar();
                     chessBoards[0].updateBoard();
-                    chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setCollisionCarpets(true); 
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(true); // TODO an mode anpassen
 

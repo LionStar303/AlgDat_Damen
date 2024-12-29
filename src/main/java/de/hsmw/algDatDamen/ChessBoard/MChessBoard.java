@@ -366,6 +366,32 @@ public class MChessBoard extends ChessBoard {
 
     // --- Override --
 
+    @Override
+    public MChessBoard clone() {
+    // Klonen der ursprünglichen MChessBoard-Attribute
+    MChessBoard clonedBoard = new MChessBoard(
+            this.originCorner.clone(), // Klone die Location
+            this.size,
+            null, // Spieler wird nicht kopiert, da es kein direkter Bezug ist
+            this.whiteFieldMaterial,
+            this.blackFieldMaterial,
+            false // spawnInDirection wird hier auf einen Standardwert gesetzt
+    );
+
+    // Kopiere weitere Attribute
+    clonedBoard.isOriginCornerWhite = this.isOriginCornerWhite;
+    clonedBoard.collisionCarpets = this.collisionCarpets;
+    clonedBoard.isAnimationRunning = this.isAnimationRunning;
+    clonedBoard.active = this.active;
+    clonedBoard.savedBlocks = new HashMap<>(this.savedBlocks); // Tiefenkopie der Map
+    clonedBoard.mode = this.mode;
+
+    // Klone alle Pieces (falls die Liste kopierbar ist)
+    clonedBoard.pieces = new ArrayList<>(this.pieces); // Seichte Kopie der Liste
+    return clonedBoard;
+}
+
+
     // --- Update ---
 
     /**
