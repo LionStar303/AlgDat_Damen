@@ -336,6 +336,7 @@ public abstract class Level implements Listener {
                 if (event.getClickedBlock() == null)
                     return;
                 chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
+                currentStep.checkForCompletion();
                 break;
 
             default:

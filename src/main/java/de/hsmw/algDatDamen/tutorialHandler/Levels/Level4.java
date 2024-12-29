@@ -2,15 +2,16 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.Bukkit; 
-import org.bukkit.boss.BarColor; 
-import org.bukkit.boss.BarStyle; 
-import org.bukkit.boss.BossBar; 
-import org.bukkit.plugin.java.JavaPlugin; 
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
@@ -26,9 +27,8 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 */
 // TODO muss getestet werden
 public class Level4 extends Level {
-    
+
     private long cooldownMillisStep = 0;
-   
 
     private final static String LEVEL_NAME = "Level 4 - Erster versuch:";
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
@@ -65,7 +65,7 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_401_INTRO);
                 },
                 () -> {
-                    
+
                 });
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
         // verknüpft
@@ -76,14 +76,17 @@ public class Level4 extends Level {
 
         setupStep.setNext(new Step(
                 () -> {
-                    // Erklärung des Levelabschnitts und des Problems mit großen Schachbrettern durch NPC
-                    /* TODO neuer Text
+                    // Erklärung des Levelabschnitts und des Problems mit großen Schachbrettern
+                    // durch NPC
+                    /*
+                     * TODO neuer Text
                      * 
                      */
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
                     stopBossBar();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(true); // TODO an mode anpassen
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
@@ -93,6 +96,7 @@ public class Level4 extends Level {
                     startBossBarTimer(3, "Überspringen verfügbar in:");
                 },
                 () -> {
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(false); // TODO mode
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].despawnChessBoard();
@@ -107,7 +111,7 @@ public class Level4 extends Level {
                         // Easteregg
                         npc.playTrackPositive();
                         return true;
-                    } else if(!bbisRunning) {
+                    } else if (!bbisRunning) {
                         return true;
                     } else {
                         return false;
@@ -127,6 +131,7 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(false); // TODO mode
                     player.getInventory().setItem(0, ControlItem.SHOW_CARPET.getItemStack());
                     chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
@@ -144,7 +149,7 @@ public class Level4 extends Level {
                     if (chessBoards[0].isSolved()) {
                         return true;
                     } else {
-                        
+
                         player.sendMessage(
                                 "Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
                         return false;
@@ -162,7 +167,9 @@ public class Level4 extends Level {
                     chessBoards[0].updateBoard();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setStateX(0); chessBoards[0].setStateY(0);
+                    chessBoards[0].setStateX(0);
+                    chessBoards[0].setStateY(0);
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(true); // TODO mode
                     this.currentCBID = 0;
                     setInventory();
@@ -176,6 +183,7 @@ public class Level4 extends Level {
                     player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
                 },
                 () -> {
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
                     chessBoards[0].setActive(false); // TODO mode
                     setInventory();
                 },
@@ -185,7 +193,7 @@ public class Level4 extends Level {
                     if (chessBoards[0].isSolved()) {
                         return true;
                     } else {
-                        
+
                         player.sendMessage(
                                 "Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
                         return false;
@@ -194,7 +202,6 @@ public class Level4 extends Level {
 
         // Lernenden
         setupStep = setupStep.getNext();
-
 
         setupStep.setNext(new Step(
                 () -> {
