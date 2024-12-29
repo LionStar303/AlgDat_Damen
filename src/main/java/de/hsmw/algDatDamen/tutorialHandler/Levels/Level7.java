@@ -3,17 +3,7 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import static de.hsmw.algDatDamen.AlgDatDamen.getInstance;
-
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import de.hsmw.algDatDamen.AlgDatDamen;
-import de.hsmw.algDatDamen.ChessBoard.ChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
