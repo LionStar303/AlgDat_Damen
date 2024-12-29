@@ -267,6 +267,7 @@ public class Level7 extends Level {
                 public void run() {
                     if (chessBoards[0].getPieces().size() >= 3) {
                         this.cancel(); // Stoppt den Runnable, wenn genug Figuren gesetzt sind
+                        chessBoards[0].updateBoard();
                         setInventory();
                         player.getInventory().setItem(0, ControlItem.PLACE_SUPERQUEEN.getItemStack());
                         player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
@@ -279,8 +280,9 @@ public class Level7 extends Level {
         },
                 () -> {
                     if (animation != null) animation.cancel();
+                    chessBoards[0].stopCurrentAnimation();
                     setInventory();
-                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].setMode(MChessBoardMode.EXPLODING);
                     chessBoards[0].setActive(false); // TODO an mode anpassen
 
                     chessBoards[0].removeAllPieces();
@@ -291,15 +293,16 @@ public class Level7 extends Level {
                 unused -> {
                     MChessBoard cb = chessBoards[0].clone();
                     cb.verfyPieces(new Superqueen());
-                    if (cb.getPieces().size() > 6) {
+
+                    if (chessBoards[0].isSolved()) {
+                        return true;
+                    }
+
+                    if (cb.getPieces().size() > 7) {
                         npc.playTrackPositive();
                         chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                         chessBoards[0].setActive(false); // TODO an mode anpassen
-                    }
-
-                    if (chessBoards[0].isSolved()) {
-                        return true;
                     }
                     return false;
                 }));
@@ -307,6 +310,7 @@ public class Level7 extends Level {
 
         setupStep.setNext(new Step(
                 () -> {
+                    chessBoards[0].stopCurrentAnimation();
                     if (animation != null) animation.cancel();
                     npc.playTrack(NPCTrack.NPC_710_END);
                     chessBoards[0].removeAllPieces();
