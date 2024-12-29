@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.kyori.adventure.text.Component;
 
+
 public enum ControlItem {
 
     PREVIOUS_STEP(Material.RED_DYE, Component.text("zurück")),
@@ -16,7 +17,7 @@ public enum ControlItem {
     PLACE_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame")),
     PLACE_EXPLODING_QUEEN(Material.YELLOW_DYE, Component.text("Dame ")),
     PLACE_EXPLODING_KNIGHT(Material.ORANGE_DYE, Component.text("Springer ")),
-    PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame ")),
+    PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame")),
     BACKTRACKING_FORWARD_Q(Material.LIME_DYE, Component.text("weiter")),
     BACKTRACKING_BACKWARD_Q(Material.PINK_DYE, Component.text("zurück")),
     BACKTRACKING_FORWARDFAST_Q(Material.LIGHT_GRAY_DYE, Component.text("schnell weiter")),

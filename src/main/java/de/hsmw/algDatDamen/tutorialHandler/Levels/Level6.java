@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
@@ -57,7 +58,7 @@ public class Level6 extends Level {
                     npc.playTrack(NPCTrack.NPC_602_EXPLAIN_2);
                     chessBoards[0].solveBacktrackToRow(new Queen(), 5);
                     chessBoards[0].updateBoard();
-                    //chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
+                    chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -67,7 +68,7 @@ public class Level6 extends Level {
                     setInventory();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].despawnChessBoard();
-                    //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 },
                 unused -> {
                     if(chessBoards[0].isSolved()) {
@@ -88,7 +89,7 @@ public class Level6 extends Level {
                 chessBoards[0].removeAllPieces();
                 chessBoards[0].solveBacktrackToRow(new Queen(), 5);
                 chessBoards[0].updateBoard();
-                //chessBoards[0].setMode(MChessBoardMode.LEVEL6_2);
+                chessBoards[0].setMode(MChessBoardMode.LEVEL6_2);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
                 player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -97,7 +98,7 @@ public class Level6 extends Level {
                 // Chessboard leeren
                 chessBoards[0].removeAllPieces();
                 chessBoards[0].updateBoard();
-                //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
             },
             unused -> {
                 if(chessBoards[0].isSolved()) {
@@ -113,7 +114,7 @@ public class Level6 extends Level {
             () -> {
                 // Inventar leeren
                 setInventory();
-                //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 chessBoards[0].playBacktrack(new Queen());
             },
             () -> {
@@ -128,7 +129,7 @@ public class Level6 extends Level {
             () -> {
                 // Inventar leeren
                 setInventory();
-                //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 chessBoards[0].removeAllPieces();
                 chessBoards[0].despawnChessBoard();
             },

@@ -33,6 +33,7 @@ public class MChessBoard extends ChessBoard {
     private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
+    private MChessBoardMode mode;
 
     // ----------- Constructors -----------
 
@@ -90,9 +91,7 @@ public class MChessBoard extends ChessBoard {
         this.stateY = 0;
         this.isAnimationRunning = false;
         this.active = false;
-        if (spawnInDirection) {
-            updateOriginCorner(this.getBoardDirection(player));
-        }
+        this.mode = MChessBoardMode.INACTIVE;
     }
 
     // ----------- Getters and Setters -----------
@@ -246,6 +245,10 @@ public class MChessBoard extends ChessBoard {
 
     // --- extension getter / setter ---
 
+    public MChessBoardMode getMode() {
+        return this.mode;
+    }
+
     /**
      * Retrieves the chess piece at a specific location on the board.
      *
@@ -315,6 +318,17 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    public void setMode(MChessBoardMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * setzt den <code>mode</code> auf <code>INACTIVE</code> zurück
+     */
+    public void resetMode() {
+        this.mode = MChessBoardMode.INACTIVE;
+    }
+
     /**
      * Updates the origin corner of the chessboard based on the player's facing
      * direction.
@@ -352,6 +366,32 @@ public class MChessBoard extends ChessBoard {
 
     // --- Override --
 
+    @Override
+    public MChessBoard clone() {
+    // Klonen der ursprünglichen MChessBoard-Attribute
+    MChessBoard clonedBoard = new MChessBoard(
+            this.originCorner.clone(), // Klone die Location
+            this.size,
+            null, // Spieler wird nicht kopiert, da es kein direkter Bezug ist
+            this.whiteFieldMaterial,
+            this.blackFieldMaterial,
+            false // spawnInDirection wird hier auf einen Standardwert gesetzt
+    );
+
+    // Kopiere weitere Attribute
+    clonedBoard.isOriginCornerWhite = this.isOriginCornerWhite;
+    clonedBoard.collisionCarpets = this.collisionCarpets;
+    clonedBoard.isAnimationRunning = this.isAnimationRunning;
+    clonedBoard.active = this.active;
+    clonedBoard.savedBlocks = new HashMap<>(this.savedBlocks); // Tiefenkopie der Map
+    clonedBoard.mode = this.mode;
+
+    // Klone alle Pieces (falls die Liste kopierbar ist)
+    clonedBoard.pieces = new ArrayList<>(this.pieces); // Seichte Kopie der Liste
+    return clonedBoard;
+}
+
+
     // --- Update ---
 
     /**
@@ -360,12 +400,10 @@ public class MChessBoard extends ChessBoard {
      * Otherwise, any existing carpets are removed.
      */
     public void updateCollisionCarpets() {
-        if (this.collisionCarpets) {
-            despawnCollisionCarpets(); // Remove existing carpets
-            spawnCollisionCarpets(); // Spawn new carpets
-        } else {
-            despawnCollisionCarpets(); // Remove carpets if disabled
-        }
+        // Teppiche entfernen
+        despawnCollisionCarpets();
+        // wieder spawnen falls enabled
+        if (this.collisionCarpets) spawnCollisionCarpets();
     }
 
     public void updateBoard() {
@@ -505,85 +543,113 @@ public class MChessBoard extends ChessBoard {
     // --- add and remove ---
 
     /**
-     * Adds a chess piece to the board at a specific location.
+     * Handles a player interaction depending on the current {@link MChessBoardMode}
      *
-     * @param l The {@link Location} on the board to place the piece.
+     * @param l The clicked {@link Location}
      * @param p The {@link Piece} to be added.
-     * @return True if the piece was successfully added, false otherwise.
+     * @return True if the piece was placed, false otherwise
      */
     public boolean addPiece(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
+        // check if location is part of the chessboard and chessboard allows player interaction
+        if (!isPartOfBoard(l)) return false;
 
+        // get local coordinates
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
-
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
 
-        addPiece(p);
-        spawnPiece(p);
-        updateCollisionCarpets();
-        return true;
+        Piece existingPiece = this.getPieceAt(l);
+        switch (mode) {
+            // keine Interaktion
+            case INACTIVE: return false;
+            // jede Dame wird gesetzt
+            case NORMAL:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // nur nicht bedrohte Damen werden gesetzt
+            case TESTED:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // wie TESTED, nur falsche Damen explodieren
+            case EXPLODING:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                playExplosionAnimation(l);
+                return false;
+            case TUTORIAL:
+                /* TODO verhalten im Tutorial Mode hinzufügen
+                 * Das Schachbrett zeigt mit blauen Teppichen an, wo der Algorithmus das nächste Piece platzieren würde
+                 * Spieler kann das zuletzt platzierte Piece entfernen, um einen Schritt zurück zu gehen
+                 * Ansonsten kann er das Piece nur an der markierten Position platzieren
+                 */
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    // Spieler kann nur das zuletzt gesetzte Piece entfernen
+                    if(!existingPiece.equals(pieces.get(pieces.size()-2))) return false;
+                    this.removePiece(existingPiece);
+                    this.verfyPieces(p); //geht schöner passt so könnte stateX und stateY auf Location setzen
+                    return false;
+                }
+
+                
+                /* siehe pseudocode
+                if(Piece Location != Backtrack Location) {
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                */
+                if(existingPiece == null){
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                
+
+                /* siehe pseudocode
+                addPiece(p);
+                spawnPiece(p);
+                playBacktrack einen Schritt weiter
+                */
+                spawnAllPieces(); //wenn schöner spawnPiece(pieces.getLast());
+                playBacktrackToNextPiece(p);
+                return true; // wenn Piece richtig gesetzt wurde
+            default: return false;
+        }
     }
 
     /**
-     * Adds a piece to the board only if it passes additional validation.
-     *
-     * @param l The {@link Location} on the board.
-     * @param p The {@link Piece} to add.
-     * @return True if the piece was added successfully, false otherwise.
+     * spielt an der übergebenen {@link Location} eine Explosions Animation ab
+     * @param l Location für die Animation
      */
-    public boolean addTestedQueen(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
-        int minX = originCorner.getBlockX();
-        int minZ = originCorner.getBlockZ();
-
-        p.setX(l.getBlockX() - minX);
-        p.setY(l.getBlockZ() - minZ);
-
-        if (!addTestedPiece(p)) {
-            return false;
-        }
-        spawnPiece(p);
-
-        return true;
-    }
-
-    /**
-     * Adds a piece to the board only if it passes additional validation.
-     * wenn nicht, wird ein explosionsähnlicher Partikeleffekt erzeugt
-     * 
-     * @param l The {@link Location} on the board.
-     * @param p The {@link Piece} to add.
-     * @return True if the piece was added successfully, false otherwise.
-     */
-    public boolean addExplodingPiece(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
-        int minX = originCorner.getBlockX();
-        int minZ = originCorner.getBlockZ();
-
-        p.setX(l.getBlockX() - minX);
-        p.setY(l.getBlockZ() - minZ);
-
-        if (!addTestedPiece(p)) {
-            // TODO Animation verfeinern
-            l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
-            l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
-            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
-            l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
-            return false;
-        }
-        spawnPiece(p);
-
-        return true;
+    private void playExplosionAnimation(Location l) {
+        // TODO Animation verfeinern
+        l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
+        l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
     }
 
     /**
@@ -594,7 +660,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
-        updateBoard();
+        updateCollisionCarpets();
     }
 
     /**
@@ -765,9 +831,9 @@ public class MChessBoard extends ChessBoard {
 
                 Block block = location.getBlock();
 
-                // Skip blocks where there is no collision or where a queen's bottom part is
+                // Skip blocks where there is collision or where a queen's bottom part is
                 // present
-                if (!checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                if (checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
                         || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
@@ -1249,7 +1315,4 @@ public class MChessBoard extends ChessBoard {
             originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
         }
     }
-
-    // --- Tutorial Command ---
-
 }

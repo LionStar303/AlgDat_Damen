@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
@@ -20,14 +21,17 @@ public class Level3 extends Level {
     private final static String LEVEL_DESCRIPTION = "Lösung mit und ohne Hilfestellung, sowie Vorgabe und Vergleich mehrerer Lösungsmöglichkeiten";
 
     public Level3(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -76, -32, 103, 180, 0), new Location(player.getWorld(), -88, -32, 83), parent);
+        this(console, player, new Location(player.getWorld(), -76, -32, 103, 180, 0),
+                new Location(player.getWorld(), -88, -32, 83), parent);
     }
 
-    public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {
+    public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation,
+            Tutorial parent) {
         this(console, player, startLocation, teleporterLocation, false, parent);
     }
 
-    public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
+    public Level3(boolean console, Player player, Location startLocation, Location teleporterLocation,
+            boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
     }
@@ -64,6 +68,7 @@ public class Level3 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL); 
                     chessBoards[0].setActive(true);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
@@ -73,6 +78,7 @@ public class Level3 extends Level {
                 () -> {
                     // Schachbrett leeren
                     chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
                     chessBoards[0].setActive(false);
                     chessBoards[0].removeAllPieces();
                     // Inventar auf Urspungszustand zurücksetzen
@@ -98,7 +104,8 @@ public class Level3 extends Level {
                 // PLACE_QUEEN item wegnehmen
                 setInventory();
                 // Schachbrett zurücksetzen und zweites spawnen
-                chessBoards[0].setActive(false);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
+    	        chessBoards[0].setActive(false);
                 chessBoards[0].setCollisionCarpets(false);
                 chessBoards[0].removeAllPieces();
                 chessBoards[1].spawnChessBoard();
@@ -123,8 +130,6 @@ public class Level3 extends Level {
             },
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if (latestPlayerInput == null)
-                    return false;
                 if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
@@ -143,12 +148,15 @@ public class Level3 extends Level {
         setupStep.setNext(new Step(
             () -> {
                 // erstes chessboard despawnen und beide leeren
-                chessBoards[0].despawnChessBoard();
                 chessBoards[0].removeAllPieces();
+                chessBoards[0].updateBoard();
                 chessBoards[1].removeAllPieces();
+                chessBoards[1].updateBoard();
+
                 // zweites chessboard für spieler interaktion vorbereiten
+                chessBoards[1].setMode(MChessBoardMode.NORMAL); 
                 chessBoards[1].setActive(true);
-                chessBoards[0].setCollisionCarpets(false);
+                chessBoards[1].setCollisionCarpets(false);
                 npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
@@ -157,8 +165,10 @@ public class Level3 extends Level {
             () -> {
                 // Schachbrett leeren
                 chessBoards[1].setActive(false);
-                chessBoards[1].removeAllPieces();
-                chessBoards[0].spawnChessBoard();
+                chessBoards[1].setMode(MChessBoardMode.INACTIVE); 
+                
+                chessBoards[0].removeAllPieces();
+                chessBoards[0].updateBoard();
                 // Inventar auf Urspungszustand zurücksetzen
                 setInventory();
             },
@@ -193,5 +203,5 @@ public class Level3 extends Level {
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
     }
-    
+
 }

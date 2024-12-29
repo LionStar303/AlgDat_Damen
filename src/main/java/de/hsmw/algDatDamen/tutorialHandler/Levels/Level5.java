@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -59,7 +60,7 @@ public class Level5 extends Level{
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].spawnChessBoard();
-                    //chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
+                    chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -68,7 +69,7 @@ public class Level5 extends Level{
                     // Inventar leeren & Chessboard despawnen
                     setInventory();
                     chessBoards[0].despawnChessBoard();
-                    //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 },
                 unused -> {
                     if(chessBoards[0].isSolved()) {
@@ -82,21 +83,25 @@ public class Level5 extends Level{
 
         setupStep.setNext(new Step(
                 () -> {
-                    //chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                    //chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[0].despawnChessBoard();
                     chessBoards[1].spawnChessBoard();
                     chessBoards[1].setActive(true);
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
+                    chessBoards[0].spawnChessBoard();
+                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
+                    chessBoards[0].setCollisionCarpets(true);
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.PLACE_KNIGHT.getItemStack());
                 },
                 () -> {
                     // Chessboard despawnen
                     chessBoards[1].despawnChessBoard();
-                    //chessBoards[1].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[1].setMode(MChessBoardMode.INACTIVE);
                 },
                 unused -> {
                     if(chessBoards[1].isSolved()) {

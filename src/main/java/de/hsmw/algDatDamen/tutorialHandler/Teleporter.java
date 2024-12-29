@@ -35,6 +35,7 @@ public class Teleporter {
 
                 if (enabled) {
                     player.playSound(teleporterLocation, Sound.ITEM_FIRECHARGE_USE, 2, 1);
+                    player.getWorld().strikeLightning(teleporterLocation.clone().add(0.5, 0, 0.5));
                 } else {
                     player.playSound(teleporterLocation, Sound.BLOCK_FIRE_EXTINGUISH, 2, 1);
                 }

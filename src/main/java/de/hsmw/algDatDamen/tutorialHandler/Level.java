@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
@@ -102,9 +103,6 @@ public abstract class Level implements Listener {
         setInventory();
         // ersten Schritt starten
         currentStep.start();
-
-        // TODO Logik einbauen wenn Level beendet wird parentTutorial.incProgress()
-        // aufrufen
     }
 
     protected void setInventory() {
@@ -199,10 +197,7 @@ public abstract class Level implements Listener {
                 if (existingQueen != null)
                     cb.removePiece(existingQueen);
                 else {
-                    if (exploding)
-                        cb.addExplodingPiece(clickedLocation, new Queen());
-                    else
-                        cb.addPiece(clickedLocation, new Queen());
+                    cb.addPiece(clickedLocation, new Queen());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
                 currentStep.checkForCompletion();
@@ -225,9 +220,6 @@ public abstract class Level implements Listener {
                 if (existingQueen != null)
                     cb.removePiece(existingQueen);
                 else {
-                    if (exploding)
-                        cb.addExplodingPiece(clickedLocation, p.clone());
-                    else
                         cb.addPiece(clickedLocation, p.clone());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
@@ -344,6 +336,7 @@ public abstract class Level implements Listener {
                 if (event.getClickedBlock() == null)
                     return;
                 chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
+                currentStep.checkForCompletion();
                 break;
 
             default:
