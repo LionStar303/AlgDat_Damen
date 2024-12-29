@@ -1,11 +1,9 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.google.gson.annotations.Expose;
@@ -47,16 +45,6 @@ public class Tutorial {
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
-
-        // töte alle Entities, welche sich im Spiel befinden
-        List<Entity> entities = getPlayer().getWorld().getEntities();
-
-        for (Entity entity : entities) {
-            if (!(entity instanceof Player)) {
-                System.out.println("Killed Entity " + entity.toString());
-                entity.remove();
-            }
-        }
     }
 
     public void start() {

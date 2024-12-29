@@ -56,6 +56,7 @@ public abstract class Level implements Listener {
         this.player = player;
         this.startLocation = startLocation;
         this.completed = completed;
+        this.active = false;
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0), player);
         this.npc = new NPC(startLocation, console);
@@ -94,7 +95,7 @@ public abstract class Level implements Listener {
         countSteps();
         currentStepID = 0;
 
-        player.setRespawnLocation(startLocation);
+        player.setRespawnLocation(startLocation, true);
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_DESCRIPTION));
         player.sendMessage("\n\n");
@@ -188,11 +189,13 @@ public abstract class Level implements Listener {
             if (clickedBlock == null)
                 continue;
             Location clickedLocation = clickedBlock.getLocation();
-            if (console) System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
+            if (console)
+                System.out.println(player.getName() + " clicked on " + clickedLocation.toString());
             cb.addPiece(clickedLocation, p.clone());
 
             // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
-            if(!currentStep.completed) currentStep.checkForCompletion();
+            if (!currentStep.completed)
+                currentStep.checkForCompletion();
         }
     }
 
@@ -205,7 +208,8 @@ public abstract class Level implements Listener {
         this.latestPlayerInput = PlainTextComponentSerializer.plainText().serialize(event.message());
         if (console)
             System.out.println(event.getPlayer() + " (Chat): " + latestPlayerInput);
-        if(!currentStep.completed) currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
+        if (!currentStep.completed)
+            currentStep.checkForCompletion(); // prüfen, ob Eingabe den Step beendet
         event.setCancelled(true);
     }
 
@@ -218,7 +222,8 @@ public abstract class Level implements Listener {
      *              ausgeführt
      */
     public void handleInteractionEvent(ControlItem item, PlayerInteractEvent event) {
-        if (System.currentTimeMillis() < cooldownMillis) return;
+        if (System.currentTimeMillis() < cooldownMillis)
+            return;
         cooldownMillis = System.currentTimeMillis() + 100;
         switch (item) {
             case PREVIOUS_STEP:
@@ -300,7 +305,8 @@ public abstract class Level implements Listener {
                 chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
                 currentStep.checkForCompletion();
                 break;
-            default: break;
+            default:
+                break;
         }
         event.setCancelled(true);
     }
@@ -322,6 +328,10 @@ public abstract class Level implements Listener {
 
     public Location getStartLocation() {
         return startLocation;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     protected void startBossBarTimer(int minutes, String title) {
