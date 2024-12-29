@@ -26,7 +26,7 @@ public class Level4 extends Level {
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
 
     public Level4(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -106, -25, 83),
+        this(console, player, new Location(player.getWorld(), -106, -25, 83, 90, 0),
                 new Location(player.getWorld(), -143, -24, 62), parent);
     }
 
@@ -55,6 +55,7 @@ public class Level4 extends Level {
         currentStep = new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_401_INTRO);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -129, -24, 83), 1);
                 },
                 () -> {
 
@@ -200,6 +201,7 @@ public class Level4 extends Level {
                     teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -144, -24, 64), 1);
                 },
                 () -> {
                     setInventory();

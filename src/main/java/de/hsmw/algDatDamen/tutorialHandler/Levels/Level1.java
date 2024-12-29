@@ -87,7 +87,6 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 1);
                 },
                 () -> {
                     chessBoards[0].despawnCollisionCarpets();
@@ -117,6 +116,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_104_EXPLAIN_THREATS);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -24, -44, 139), 1);
                 },
                 () -> {
                     chessBoards[0].despawnCollisionCarpets();

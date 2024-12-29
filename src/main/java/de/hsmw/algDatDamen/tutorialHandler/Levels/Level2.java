@@ -46,7 +46,8 @@ public class Level2 extends Level {
         // Erklärung des N-Damen-Problems durch NPC
         currentStep = new Step(
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_201_INTRO);
+                    npc.playTrack(NPCTrack.NPC_201_INTRO);  
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -66, -35, 138), 1);
                 },
                 () -> {}
                 );
@@ -215,6 +216,7 @@ public class Level2 extends Level {
                     teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -73, -35, 122), 1);
                 },
                 () -> {
                     setInventory();

@@ -53,6 +53,7 @@ public class Level3 extends Level {
             () -> {
                 npc.playTrack(NPCTrack.NPC_301_INTRO);
                 chessBoards[0].spawnChessBoard();
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 93), 1);
             },
             () -> {
                 // Chessboard despawnen
@@ -105,6 +106,7 @@ public class Level3 extends Level {
                 // PLACE_QUEEN item wegnehmen
                 setInventory();
                 // Schachbrett zurücksetzen und zweites spawnen
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 87), 1);
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
     	        chessBoards[0].setActive(false);
                 chessBoards[0].setCollisionCarpets(false);
@@ -161,6 +163,7 @@ public class Level3 extends Level {
                 chessBoards[1].setActive(true);
                 chessBoards[1].setCollisionCarpets(false);
                 npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 81), 1);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
                 player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -194,6 +197,7 @@ public class Level3 extends Level {
                 teleporter.setEnabled(true, true);
                 // teleport item geben
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -86, -31, 85), 1);
             },
             () -> {
                 // Schachbrett wieder spawnen
