@@ -1,6 +1,7 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -15,6 +16,7 @@ import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -195,10 +197,7 @@ public abstract class Level implements Listener {
                 if (existingQueen != null)
                     cb.removePiece(existingQueen);
                 else {
-                    if (exploding)
-                        cb.addExplodingPiece(clickedLocation, new Queen());
-                    else
-                        cb.addPiece(clickedLocation, new Queen());
+                    cb.addPiece(clickedLocation, new Queen());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte
                 currentStep.checkForCompletion();
@@ -221,9 +220,6 @@ public abstract class Level implements Listener {
                 if (existingQueen != null)
                     cb.removePiece(existingQueen);
                 else {
-                    if (exploding)
-                        cb.addExplodingPiece(clickedLocation, p.clone());
-                    else
                         cb.addPiece(clickedLocation, p.clone());
                 }
                 // completion prüfen, falls der Step nach Damen-Aktion beendet sein könnte

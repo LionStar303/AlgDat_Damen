@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.kyori.adventure.text.Component;
 
+
 public enum ControlItem {
 
     PREVIOUS_STEP(Material.RED_DYE, Component.text("zurück")),
@@ -14,18 +15,13 @@ public enum ControlItem {
     PLACE_QUEEN(Material.YELLOW_DYE, Component.text("Dame")),
     PLACE_KNIGHT(Material.ORANGE_DYE, Component.text("Springer")),
     PLACE_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame")),
-<<<<<<< HEAD
-    BACKTRACKING_FORWARD(Material.LIME_DYE, Component.text("weiter")),
-    BACKTRACKING_BACKWARD(Material.PINK_DYE, Component.text("zurück")),
-=======
     PLACE_EXPLODING_QUEEN(Material.YELLOW_DYE, Component.text("Dame ")),
     PLACE_EXPLODING_KNIGHT(Material.ORANGE_DYE, Component.text("Springer ")),
-    PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame ")),
+    PLACE_EXPLODING_SUPERQUEEN(Material.LIGHT_BLUE_DYE, Component.text("Superdame")),
     BACKTRACKING_FORWARD_Q(Material.LIME_DYE, Component.text("weiter")),
     BACKTRACKING_BACKWARD_Q(Material.PINK_DYE, Component.text("zurück")),
     BACKTRACKING_FORWARDFAST_Q(Material.LIGHT_GRAY_DYE, Component.text("schnell weiter")),
     BACKTRACKING_BACKWARDFAST_Q(Material.GUNPOWDER, Component.text("schnell zurück")),
->>>>>>> tutorialHandler
     NEXT_LEVEL(Material.WHITE_DYE, Component.text("Flohpulver")),
     SPAWN_CARPET(Material.MAGENTA_DYE, Component.text("Bewegung markieren")),
     SHOW_CARPET(Material.BROWN_DYE, Component.text("Bedrohungen anzeigen")),
