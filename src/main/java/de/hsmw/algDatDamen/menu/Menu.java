@@ -15,25 +15,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.*;
 
 public class Menu implements Listener {
-    private final Inventory inventory;
-    private final Map<Integer, CommandData> commandsMap = new HashMap<>();
-    private PlayerInteractEvent event;
-    private final int size;
+        private final Inventory inventory;
+        private final Map<Integer, CommandData> commandsMap = new HashMap<>();
+        private PlayerInteractEvent event;
+        private final int size;
 
-    /**
-     * Generates an Inventory Menu with size 27 (3x9)
-     */
-    public Menu() {
-        this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
-        this.size = 27;
-    }
+        /**
+         * Generates an Inventory Menu with size 27 (3x9)
+         */
+        public Menu() {
+                this.inventory = Bukkit.createInventory(null, 27, Component.text("Schach Menü"));
+                this.size = 27;
+        }
 
     /**
      * Generates an inventory menu with the given size.
@@ -61,43 +60,47 @@ public class Menu implements Listener {
         this.event = event;
     }
 
-    private record CommandData(String command, Integer[] arguments) {
-    }
+        private record CommandData(String command, Integer[] arguments) {
+        }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        // For Development Menu
-        if (event.getClickedInventory() == null || !event.getView().title().equals(Component.text("Schach Menü")))
-            return;
-        event.setCancelled(true);
+        @EventHandler
+        public void onInventoryClick(InventoryClickEvent event) {
+                // For Development Menu
+                if (event.getClickedInventory() == null
+                                || !event.getView().title().equals(Component.text("Schach Menü")))
+                        return;
+                event.setCancelled(true);
 
         int slot = event.getSlot();
-        System.out.println("Slot: " + slot);
+        //System.out.println("Slot: " + slot);
 
-        // Get assigned function and execute it
-        if (commandsMap.containsKey(slot)) {
-            CommandData commandData = commandsMap.get(slot);
-            try {
-                // Get class
-                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.menu.DevelopmentHandles");
-                Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
+                // Get assigned function and execute it
+                if (commandsMap.containsKey(slot)) {
+                        CommandData commandData = commandsMap.get(slot);
+                        try {
+                                // Get class
+                                Class<?> externalClass = Class.forName("de.hsmw.algDatDamen.menu.DevelopmentHandles");
+                                Object instance = Bukkit.getPluginManager().getPlugin("AlgDatDamen");
 
-                System.out.println(commandData.command());
-                System.out.println(Arrays.toString(commandData.arguments()));
+                //System.out.println(commandData.command());
+                //System.out.println(Arrays.toString(commandData.arguments()));
 
-                // Get method and invoke it with given arguments.
-                // It automatically adds the event as the first argument.
-                if (commandData.arguments.length == 0) {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class);
-                    method.invoke(instance, this.event);
-                } else if (commandData.arguments.length == 1) {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, PlayerInteractEvent.class,
-                            Integer.class);
-                    method.invoke(instance, this.event, commandData.arguments[0]);
-                } else {
-                    Method method = externalClass.getDeclaredMethod(commandData.command, Integer[].class);
-                    method.invoke(instance, (Object) commandData.arguments);
-                }
+                                // Get method and invoke it with given arguments.
+                                // It automatically adds the event as the first argument.
+                                if (commandData.arguments.length == 0) {
+                                        Method method = externalClass.getDeclaredMethod(commandData.command,
+                                                        PlayerInteractEvent.class);
+                                        method.invoke(instance, this.event);
+                                } else if (commandData.arguments.length == 1) {
+                                        Method method = externalClass.getDeclaredMethod(commandData.command,
+                                                        PlayerInteractEvent.class,
+                                                        Integer.class);
+                                        method.invoke(instance, this.event, commandData.arguments[0]);
+                                } else {
+                                        Method method = externalClass.getDeclaredMethod(commandData.command,
+                                                        Integer[].class);
+                                        method.invoke(instance, (Object) commandData.arguments);
+                                }
 
                 if (slot == MenuSlots.BACKTRACK_ROW.slot || slot == MenuSlots.BOARD_SIZE.slot
                         || inventory.getItem(slot).getType() == Material.LIGHT_BLUE_STAINED_GLASS_PANE
@@ -107,11 +110,11 @@ public class Menu implements Listener {
                     inventory.close();
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                        }
+                }
         }
-    }
 
     public void init(Integer boardSize) {
         // - Chess Board Functions
@@ -123,26 +126,26 @@ public class Menu implements Listener {
                 "increaseBoardSize");
         this.addMenuItem(Material.RED_CARPET, "Zeige Teppiche", MenuSlots.CARPETS,
                 "handleCollisionCarpets");
-        this.addMenuItem(Material.CYAN_CARPET, "Damen Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
+        this.addMenuItem(Material.CYAN_CARPET, "Movement Carpets checken", MenuSlots.CHECK_USER_CARPETS,
                 "checkUserCarpets");
-        this.addMenuItem(Material.PURPLE_CARPET, "Damen Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
+        this.addMenuItem(Material.PURPLE_CARPET, "Movement Carpet setzen", MenuSlots.PLACE_USER_CARPET,
                 "placeUserCarpet");
 
         this.addMenuItem(Material.GREEN_CARPET, "Movement Lösung anzeigen", MenuSlots.MOVEMENT_SOLUTION,
                 "showMovementSolution");
 
         // - Queen Functions
-        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne Königin", MenuSlots.SPAWN_QUEEN,
+        this.addMenuItem(Material.IRON_HELMET, "Spawne/Entferne: " + p.getName(), MenuSlots.SPAWN_QUEEN,
                 "placeQueen");
-        this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete Königin", MenuSlots.TESTED_QUEEN,
+        this.addMenuItem(Material.GOLDEN_HELMET, "Spawne getestete: " + p.getName(), MenuSlots.TESTED_QUEEN,
                 "placeTestedQueen");
-        this.addMenuItem(Material.TNT, "Entferne alle Königinnen", MenuSlots.REMOVE_ALL_QUEENS,
+        this.addMenuItem(Material.TNT, "Entferne alle: "  + p.getName(), MenuSlots.REMOVE_ALL_QUEENS,
                 "removeAllQueens");
-        this.addMenuItem(Material.COMPASS, "Rotiere Königinnen", MenuSlots.ROTATE_QUEENS,
+        this.addMenuItem(Material.COMPASS, "Rotiere: " + p.getName(), MenuSlots.ROTATE_QUEENS,
                 "rotateQueens");
         this.addMenuItem(Material.IRON_BLOCK, "Aktuelle Figur: " + p.getName(), MenuSlots.PIECE,
                 "changePiece");
-        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces" + p.getName(), MenuSlots.UPDATED_PIECE,
+        this.addMenuItem(Material.END_CRYSTAL, "Update Pieces", MenuSlots.UPDATED_PIECE,
                 "updatePieces");
 
         // - Backtrack Functions
@@ -171,55 +174,55 @@ public class Menu implements Listener {
         this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
                 "changeBlackFieldMaterial");
 
-        this.fillEmptySlots();
-    }
+                this.fillEmptySlots();
+        }
 
-    /**
-     * Adds a new Item to the menu.
-     * 
-     * @param material    The item to be shown.
-     * @param displayName The display name of the item.
-     * @param slot        The slot number.
-     * @param function    The name of the function to be executed. The function has
-     *                    to be in DevelopmentHandles class.
-     * @param arguments   Arguments for the given function. It automatically adds
-     *                    the PlayerInteractEvent as first argument.
-     *                    The other arguments need to be Integers.
-     */
-    public void addMenuItem(Material material, String displayName, MenuSlots slot, String function,
-            Integer... arguments) {
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(Component.text(displayName));
-        item.setItemMeta(meta);
+        /**
+         * Adds a new Item to the menu.
+         * 
+         * @param material    The item to be shown.
+         * @param displayName The display name of the item.
+         * @param slot        The slot number.
+         * @param function    The name of the function to be executed. The function has
+         *                    to be in DevelopmentHandles class.
+         * @param arguments   Arguments for the given function. It automatically adds
+         *                    the PlayerInteractEvent as first argument.
+         *                    The other arguments need to be Integers.
+         */
+        public void addMenuItem(Material material, String displayName, MenuSlots slot, String function,
+                        Integer... arguments) {
+                ItemStack item = new ItemStack(material);
+                ItemMeta meta = item.getItemMeta();
+                meta.displayName(Component.text(displayName));
+                item.setItemMeta(meta);
 
-        // Füge das Item ins Inventar ein
-        inventory.setItem(slot.getSlot(), item);
+                // Füge das Item ins Inventar ein
+                inventory.setItem(slot.getSlot(), item);
 
-        // Speichere den Befehl und die Argumente in der Map
-        commandsMap.put(slot.getSlot(), new CommandData(function, arguments));
-    }
+                // Speichere den Befehl und die Argumente in der Map
+                commandsMap.put(slot.getSlot(), new CommandData(function, arguments));
+        }
 
-    /**
-     * Updates the name of the item in the given slot.
-     * 
-     * @param slot        The MenuSlot.
-     * @param displayName New display name.
-     */
-    public void updateItemName(MenuSlots slot, String displayName) {
-        ItemStack item = inventory.getItem(slot.getSlot());
-        ItemMeta itemMeta = item.getItemMeta();
+        /**
+         * Updates the name of the item in the given slot.
+         * 
+         * @param slot        The MenuSlot.
+         * @param displayName New display name.
+         */
+        public void updateItemName(MenuSlots slot, String displayName) {
+                ItemStack item = inventory.getItem(slot.getSlot());
+                ItemMeta itemMeta = item.getItemMeta();
 
-        if (itemMeta == null)
-            return;
+                if (itemMeta == null)
+                        return;
 
-        itemMeta.displayName(Component.text(displayName));
-        item.setItemMeta(itemMeta);
-    }
+                itemMeta.displayName(Component.text(displayName));
+                item.setItemMeta(itemMeta);
+        }
 
-    public void updateItemMaterial(MenuSlots slot, Material material) {
-        inventory.setItem(slot.getSlot(), new ItemStack(material));
-    }
+        public void updateItemMaterial(MenuSlots slot, Material material) {
+                inventory.setItem(slot.getSlot(), new ItemStack(material));
+        }
 
     public void fillEmptySlots() {
         ItemStack filler = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);

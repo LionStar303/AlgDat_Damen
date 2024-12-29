@@ -1,20 +1,25 @@
 package de.hsmw.algDatDamen.ChessBoard;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
 
+@SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
 
     // ----------- Attributes -----------
@@ -25,10 +30,42 @@ public class MChessBoard extends ChessBoard {
     private Material whiteFieldMaterial; // Material used for white fields on the board
     private Material blackFieldMaterial; // Material used for black fields on the board
     private boolean isAnimationRunning;
+    private boolean active; // true wenn der Spieler Pieces setzen darf, false wenn nicht
     private BukkitRunnable currentAnimationTask = null;
     private Map<Location, Material> savedBlocks;
+    private MChessBoardMode mode;
 
     // ----------- Constructors -----------
+
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     * Use this Constructor for Level Creation
+     * 
+     * @param originCorner Starting location for the chessboard.
+     * @param size         The size of the chessboard.
+     *                     he player for determining the board direction.
+     */
+    public MChessBoard(Location originCorner, int size, Player player) {
+        this(originCorner, size, player, false);
+    }
+
+    /**
+     * Constructor to create a chessboard with specific parameters and default field
+     * materials.
+     *
+     * @param originCorner     Starting location for the chessboard.
+     * @param size             The size of the chessboard.
+     *                         he player for determining the board direction.
+     * @param spawnInDirection board will be spawned in the direction of the player
+     *                         + no NPC will be spawned, SET FALSE IF USED IN LEVEL
+     *                         CONFIG
+     */
+    public MChessBoard(Location originCorner, int size, Player player, boolean spawnInDirection) {
+        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE, spawnInDirection); // Default
+                                                                                                             // materials:
+                                                                                                             // wool
+    }
 
     /**
      * Constructor to create a chessboard with specific parameters.
@@ -38,34 +75,23 @@ public class MChessBoard extends ChessBoard {
      * @param player             The player for determining the board direction.
      * @param whiteFieldMaterial Material used for the white fields.
      * @param blackFieldMaterial Material used for the black fields.
+     * @param spawnInDirection   board will be spawned in the direction of the playe
+     *                           + no NPC will be spawned
      */
     public MChessBoard(Location originCorner, int size, Player player, Material whiteFieldMaterial,
-            Material blackFieldMaterial) {
+            Material blackFieldMaterial, boolean spawnInDirection) {
         this.size = size;
         this.pieces = new ArrayList<>();
         this.console = false;
         this.originCorner = originCorner;
-        // updateOriginCorner(this.getBoardDirection(player));
-        this.isOriginCornerWhite = (originCorner.getBlock().getType() == Material.WHITE_CONCRETE);
+        this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
-        spawnChessBoard();
-
-    }
-
-    /**
-     * Constructor to create a chessboard with specific parameters and default field
-     * materials.
-     *
-     * @param originCorner Starting location for the chessboard.
-     * @param size         The size of the chessboard.
-     * @param player       The player for determining the board direction.
-     */
-    public MChessBoard(Location originCorner, int size, Player player) {
-        this(originCorner, size, player, Material.WHITE_CONCRETE, Material.GRAY_CONCRETE); // Default materials: wool
+        this.active = false;
+        this.mode = MChessBoardMode.INACTIVE;
     }
 
     // ----------- Getters and Setters -----------
@@ -174,6 +200,13 @@ public class MChessBoard extends ChessBoard {
     }
 
     /**
+     * @return True wenn Spieler Pieces setzen darf, sonst false
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
      * Sets whether an animation is currently running on the chessboard.
      *
      * @param isAnimationRunning True to indicate that an animation is running,
@@ -181,6 +214,13 @@ public class MChessBoard extends ChessBoard {
      */
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
+    }
+
+    /**
+     * @param active wenn Spieler Pieces setzen darf, sonst false
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /**
@@ -204,6 +244,10 @@ public class MChessBoard extends ChessBoard {
     // ----------- Functional Methods -----------
 
     // --- extension getter / setter ---
+
+    public MChessBoardMode getMode() {
+        return this.mode;
+    }
 
     /**
      * Retrieves the chess piece at a specific location on the board.
@@ -274,12 +318,25 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    public void setMode(MChessBoardMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * setzt den <code>mode</code> auf <code>INACTIVE</code> zurück
+     */
+    public void resetMode() {
+        this.mode = MChessBoardMode.INACTIVE;
+    }
+
     /**
      * Updates the origin corner of the chessboard based on the player's facing
      * direction.
      * The origin corner is adjusted to ensure the chessboard's orientation aligns
      * with the player's view
      * and also takes the size of the board into account.
+     * 
+     * @return The location where the NPC should spawn.
      */
     private void setOriginCorner(Vector direction) {
         // Determine direction modifiers based on boardDirection
@@ -309,6 +366,32 @@ public class MChessBoard extends ChessBoard {
 
     // --- Override --
 
+    @Override
+    public MChessBoard clone() {
+    // Klonen der ursprünglichen MChessBoard-Attribute
+    MChessBoard clonedBoard = new MChessBoard(
+            this.originCorner.clone(), // Klone die Location
+            this.size,
+            null, // Spieler wird nicht kopiert, da es kein direkter Bezug ist
+            this.whiteFieldMaterial,
+            this.blackFieldMaterial,
+            false // spawnInDirection wird hier auf einen Standardwert gesetzt
+    );
+
+    // Kopiere weitere Attribute
+    clonedBoard.isOriginCornerWhite = this.isOriginCornerWhite;
+    clonedBoard.collisionCarpets = this.collisionCarpets;
+    clonedBoard.isAnimationRunning = this.isAnimationRunning;
+    clonedBoard.active = this.active;
+    clonedBoard.savedBlocks = new HashMap<>(this.savedBlocks); // Tiefenkopie der Map
+    clonedBoard.mode = this.mode;
+
+    // Klone alle Pieces (falls die Liste kopierbar ist)
+    clonedBoard.pieces = new ArrayList<>(this.pieces); // Seichte Kopie der Liste
+    return clonedBoard;
+}
+
+
     // --- Update ---
 
     /**
@@ -317,12 +400,10 @@ public class MChessBoard extends ChessBoard {
      * Otherwise, any existing carpets are removed.
      */
     public void updateCollisionCarpets() {
-        if (this.collisionCarpets) {
-            despawnCollisionCarpets(); // Remove existing carpets
-            spawnCollisionCarpets(); // Spawn new carpets
-        } else {
-            despawnCollisionCarpets(); // Remove carpets if disabled
-        }
+        // Teppiche entfernen
+        despawnCollisionCarpets();
+        // wieder spawnen falls enabled
+        if (this.collisionCarpets) spawnCollisionCarpets();
     }
 
     public void updateBoard() {
@@ -422,7 +503,7 @@ public class MChessBoard extends ChessBoard {
             }
         }
 
-        return correct ? true : false;
+        return correct;
     }
 
     /**
@@ -462,53 +543,113 @@ public class MChessBoard extends ChessBoard {
     // --- add and remove ---
 
     /**
-     * Adds a chess piece to the board at a specific location.
+     * Handles a player interaction depending on the current {@link MChessBoardMode}
      *
-     * @param l The {@link Location} on the board to place the piece.
+     * @param l The clicked {@link Location}
      * @param p The {@link Piece} to be added.
-     * @return True if the piece was successfully added, false otherwise.
+     * @return True if the piece was placed, false otherwise
      */
     public boolean addPiece(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
+        // check if location is part of the chessboard and chessboard allows player interaction
+        if (!isPartOfBoard(l)) return false;
 
+        // get local coordinates
         int minX = originCorner.getBlockX();
         int minZ = originCorner.getBlockZ();
-
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
 
-        addPiece(p);
-        spawnPiece(p);
+        Piece existingPiece = this.getPieceAt(l);
+        switch (mode) {
+            // keine Interaktion
+            case INACTIVE: return false;
+            // jede Dame wird gesetzt
+            case NORMAL:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // nur nicht bedrohte Damen werden gesetzt
+            case TESTED:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                else return false;
+            // wie TESTED, nur falsche Damen explodieren
+            case EXPLODING:
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    this.removePiece(existingPiece);
+                    return false;
+                }
+                if(addTestedPiece(p)) {
+                    spawnPiece(p);
+                    return true;
+                }
+                playExplosionAnimation(l);
+                return false;
+            case TUTORIAL:
+                /* TODO verhalten im Tutorial Mode hinzufügen
+                 * Das Schachbrett zeigt mit blauen Teppichen an, wo der Algorithmus das nächste Piece platzieren würde
+                 * Spieler kann das zuletzt platzierte Piece entfernen, um einen Schritt zurück zu gehen
+                 * Ansonsten kann er das Piece nur an der markierten Position platzieren
+                 */
+                // remove existing piece if location is already occupied
+                if(existingPiece != null) {
+                    // Spieler kann nur das zuletzt gesetzte Piece entfernen
+                    if(!existingPiece.equals(pieces.get(pieces.size()-2))) return false;
+                    this.removePiece(existingPiece);
+                    this.verfyPieces(p); //geht schöner passt so könnte stateX und stateY auf Location setzen
+                    return false;
+                }
 
-        return true;
+                
+                /* siehe pseudocode
+                if(Piece Location != Backtrack Location) {
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                */
+                if(existingPiece == null){
+                    playExplosionAnimation(l);
+                    return false;
+                }
+                
+
+                /* siehe pseudocode
+                addPiece(p);
+                spawnPiece(p);
+                playBacktrack einen Schritt weiter
+                */
+                spawnAllPieces(); //wenn schöner spawnPiece(pieces.getLast());
+                playBacktrackToNextPiece(p);
+                return true; // wenn Piece richtig gesetzt wurde
+            default: return false;
+        }
     }
 
     /**
-     * Adds a piece to the board only if it passes additional validation.
-     *
-     * @param l The {@link Location} on the board.
-     * @param p The {@link Piece} to add.
-     * @return True if the piece was added successfully, false otherwise.
+     * spielt an der übergebenen {@link Location} eine Explosions Animation ab
+     * @param l Location für die Animation
      */
-    public boolean addTestedQueen(Location l, Piece p) {
-        if (!isPartOfBoard(l)) {
-            return false;
-        }
-
-        int minX = originCorner.getBlockX();
-        int minZ = originCorner.getBlockZ();
-
-        p.setX(l.getBlockX() - minX);
-        p.setY(l.getBlockZ() - minZ);
-
-        if (!addTestedPiece(p)) {
-            return false;
-        }
-        spawnPiece(p);
-
-        return true;
+    private void playExplosionAnimation(Location l) {
+        // TODO Animation verfeinern
+        l.getWorld().spawnParticle(Particle.LAVA, l, 20, 0, 1, 0);
+        l.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 10, 0, 1, 0);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1);
+        l.getWorld().playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1);
     }
 
     /**
@@ -519,6 +660,7 @@ public class MChessBoard extends ChessBoard {
     public void removePiece(Piece p) {
         despawnPiece(p); // Visual removal from the board
         pieces.remove(p);
+        updateCollisionCarpets();
     }
 
     /**
@@ -561,10 +703,12 @@ public class MChessBoard extends ChessBoard {
     public boolean spawnPiece(Piece p) {
         int x = p.getX();
         int y = p.getY();
+        System.out.println("spawning Piece " + p.getLetter() + " at " + x + ", " + y);
 
         Location pieceLocation = originCorner.clone().add(x, 2, y);
 
         if (pieceLocation.getBlock().getType() != Material.AIR) {
+            System.out.println("could not Spawn Piece at non air block");
             return false;
         }
 
@@ -586,6 +730,11 @@ public class MChessBoard extends ChessBoard {
         }
 
         updateCollisionCarpets();
+        if (console) {
+            printBoard(true);
+            System.out.println("successfully spawned Piece");
+        }
+
         return true;
     }
 
@@ -597,8 +746,20 @@ public class MChessBoard extends ChessBoard {
      * @param bottomBlockType The material type for the bottom block.
      */
     private void placePieceBlocks(Location location, Material topBlockType, Material bottomBlockType) {
+
+        // Set the top block
         location.getBlock().setType(topBlockType);
+
+        // Check and set the bottom block
         location.getBlock().getRelative(BlockFace.DOWN).setType(bottomBlockType);
+
+        if (console) {
+            System.out.println("Placing top block: " + topBlockType + " at " + location);
+            System.out.println("Placing bottom block: " + bottomBlockType + " at "
+                    + location.getBlock().getRelative(BlockFace.DOWN).getLocation());
+            System.out
+                    .println("Current bottom block type: " + location.getBlock().getRelative(BlockFace.DOWN).getType());
+        }
     }
 
     /**
@@ -661,7 +822,7 @@ public class MChessBoard extends ChessBoard {
     public void despawnCollisionCarpets() {
         for (int x = 0; x < size; x++) { // Iterate through the board's X-axis
             for (int y = 0; y < size; y++) { // Iterate through the board's Y-axis
-                // Calculate the location of the current square
+
                 Location location = new Location(
                         originCorner.getWorld(),
                         originCorner.getX() + x,
@@ -670,8 +831,10 @@ public class MChessBoard extends ChessBoard {
 
                 Block block = location.getBlock();
 
-                // Skip blocks occupied by the bottom part of a queen
-                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM) {
+                // Skip blocks where there is collision or where a queen's bottom part is
+                // present
+                if (checkCollision(x, y) || block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM
+                        || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
                     continue;
                 }
 
@@ -694,7 +857,7 @@ public class MChessBoard extends ChessBoard {
         }
 
         // Remove existing carpet if it's a valid move
-        if (l.getY() == originCorner.getY() + 1) {
+        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
             l.getBlock().setType(Material.AIR);
             return;
         }
@@ -725,20 +888,15 @@ public class MChessBoard extends ChessBoard {
      * - Respawns the board layout with the cleared state.
      */
     public void despawnChessBoard() {
-        // Reset the field materials to the original blocks
-        restoreBlocks();
-
-        // Disable collision carpets to ensure they are not displayed
-        this.collisionCarpets = false;
-
-        // Remove any remaining collision carpets from the board
-        despawnCollisionCarpets();
 
         // Remove all queens from the chessboard
         despawnAllPieces();
 
-        // Respawn the board layout to reflect the cleared state
-        // spawnChessBoard();
+        // Remove any remaining collision carpets from the board
+        despawnCollisionCarpets();
+
+        // Reset the field materials to the original blocks
+        restoreBlocks();
     }
 
     /**
@@ -858,12 +1016,16 @@ public class MChessBoard extends ChessBoard {
             return true;
         }
 
-        // Zeige nächstes Feld
+        // Zeige nächstes Fel
         if (stateX + 1 <= size && stateY + 1 <= size) {
             Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
                     originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
-            block.setType(Material.BLUE_CARPET);
+            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
+                    && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
+                block.setType(Material.BLUE_CARPET);
+            }
+
         }
 
         return false;
@@ -1119,4 +1281,38 @@ public class MChessBoard extends ChessBoard {
         }
     }
 
+    /**
+     * Updates the origin corner of the chessboard based on the player's facing
+     * direction.
+     * The origin corner is adjusted to ensure the chessboard's orientation aligns
+     * with the player's view
+     * and also takes the size of the board into account.
+     * 
+     * @return The location where the NPC should spawn.
+     */
+    private void updateOriginCorner(Vector direction) {
+        // Determine direction modifiers based on boardDirection
+        int xMod = (int) direction.getX(); // East/West orientation modifier
+        int zMod = (int) direction.getZ(); // North/South orientation modifier
+
+        // Current origin corner coordinates
+        int x = originCorner.getBlockX();
+        int z = originCorner.getBlockZ();
+
+        // Adjust origin corner based on player's facing direction
+        if (xMod > 0 && zMod > 0) {
+            // Facing East and South: Set origin at the bottom-left corner
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod > 0) {
+            // Facing West and South: Shift origin to the right
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(), z);
+        } else if (xMod < 0 && zMod < 0) {
+            // Facing West and North: Shift origin both right and up
+            originCorner = new Location(originCorner.getWorld(), x - (size - 1), originCorner.getBlockY(),
+                    z - (size - 1));
+        } else if (xMod > 0 && zMod < 0) {
+            // Facing East and North: Shift origin up
+            originCorner = new Location(originCorner.getWorld(), x, originCorner.getBlockY(), z - (size - 1));
+        }
+    }
 }

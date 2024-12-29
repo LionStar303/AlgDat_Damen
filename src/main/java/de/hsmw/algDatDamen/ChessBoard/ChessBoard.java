@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.ChessBoard;
 
 import java.util.ArrayList;
 
+
 /**
  * Represents a chessboard for solving the Queen's problem.
  * Allows placing pieces, checking for conflicts, and solving using
@@ -22,7 +23,7 @@ public class ChessBoard {
     public ChessBoard(int boardSize) {
         this.size = boardSize;
         this.pieces = new ArrayList<Piece>();
-        this.console = true;
+        this.console = false;
         this.stateX = 0;
         this.stateY = 0;
     }
@@ -101,6 +102,7 @@ public class ChessBoard {
 
     // --- Adding/Removing Pieces ---
     public boolean addPiece(Piece pnew) {
+        pnew = pnew.clone();
         if (pnew.getX() >= size || pnew.getY() >= size) {
             return false;
         } // end of if
@@ -393,6 +395,7 @@ public class ChessBoard {
             } // end of if-else
         } // end of if
 
+        solveOutOfRange(p);
         if (stateY == size - 1 && stateX == pieces.size() - 1) {
             stateY = 0;
             stateX++;
@@ -412,8 +415,10 @@ public class ChessBoard {
             if (console) {
                 printBoard(true);
             }
-            stateY = getLastPiece().getY();
-            removeLastPiece();
+            if (pieces.size() > 0) {
+             stateY = getLastPiece().getY();
+            removeLastPiece(); 
+            } // end of if
         }
         stateY++;
         return false;
@@ -429,10 +434,6 @@ public class ChessBoard {
      *         possible), false otherwise.
      */
     public boolean reverseBackStep(Piece p) {
-        if (p.getLetter() == 'K') {
-      return false;    
-        } // end of if
-           
         // Check for null input and handle it gracefully
         if (p == null) {
             if (console) {
@@ -440,6 +441,8 @@ public class ChessBoard {
             }
             return false; // Treat as no-op
         }
+
+        if (p.getLetter() == 'K') return false;
 
         // Log the current state if console messages are enabled
         if (console) {
@@ -450,6 +453,8 @@ public class ChessBoard {
         if (isReverseBackStepFinished()) {
             return true;
         }
+
+        solveOutOfRange(p);
 
         // Retrieve the last placed piece on the board
         Piece lastP = getLastPiece();
@@ -544,21 +549,22 @@ public class ChessBoard {
         } // end of if
         playBacktrack(p);
         sortPiecesByX();
-        for (int i = 0; i <= x; i++) {
+        while (x != pieces.size()) {
             removeLastPiece();
         }
         return true;
     }
 
     public boolean playBacktrackToNextPiece(Piece p) {
-        int numQ = pieces.size() + 1;
-        while (!(numQ == pieces.size())) {
+        int numP = pieces.size();
+        while (numP == pieces.size()) {
             stepBacktrack(p);
         } // end of while
         return isSolved();
     }
 
     public void verfyPieces(Piece p) {
+       
         for (Piece plist : pieces) {
             if (!(plist.getLetter() == p.getLetter())) {
                 pieces.remove(p);
@@ -597,6 +603,12 @@ public class ChessBoard {
             System.out.println("StateX = " + stateX + "StateY" + stateY);
         } // end of if
 
+    }
+
+    public void solveOutOfRange(Piece p){
+        if(stateX > size || stateY > size || stateX < 0 || stateY < 0){
+            verfyPieces(p);
+        }
     }
 
     public void rotatePieces(int rotations) {

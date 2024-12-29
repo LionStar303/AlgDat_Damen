@@ -10,6 +10,15 @@
   - [Git-Richtlinien](#git-richtlinien)
   - [Minecraft Server Setup](#minecraft-server-setup)
   - [Übersicht Funktionen:](#übersicht-funktionen)
+  - [Übersicht Level:](#übersicht-level)
+  - [Level Koordinaten](#level-koordinaten)
+    - [Level 1 - Einführung:](#level-1---einführung)
+    - [Level 2 - Bootcamp:](#level-2---bootcamp)
+    - [Level 3 - Scandi Zwilling:](#level-3---scandi-zwilling)
+    - [Level 4 - _erster versuch_:](#level-4---erster-versuch)
+    - [Level 5 - Amazonas:](#level-5---amazonas)
+    - [Level 6- Boreal:](#level-6--boreal)
+    - [Level 7- Eiskönigin:](#level-7--eiskönigin)
   - [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
     - [Schachfelder und Level](#schachfelder-und-level)
     - [Simulation des Algorithmus](#simulation-des-algorithmus)
@@ -89,7 +98,39 @@ Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
 | `placeUserCarpet()`                   | Damen Movement Carpet setzen   |                        |   ja    |
 
 ---
-
+## Übersicht Level:
+## Level Koordinaten
+- Spawn `0 -45 170`
+- Teleporter `0 -46 170`
+### Level 1 - Einführung:
+- Startpunkt `-17 -44 144, 150 0`
+- Schachbrett `8x8 -28 -45 130`
+- Teleporter `-38 -43 140`
+### Level 2 - Bootcamp:
+- Startpunkt `-56 -37 139, 90 -15`
+- Schachbrett `4x4 -69 -36 140`, `8x8 -74 -36 128`
+- Teleporter `-76 -36 119`
+### Level 3 - Scandi Zwilling:
+- Startpunkt `-75 -33 103, 180 0`
+- Schachbrett `4x4 -76 -32 81`, `4x4 -76 -32 89`
+- Teleporter `-88 -32 83`
+### Level 4 - _erster versuch_:
+- Startpunkt `-106 -25 83, 100 -5`
+- Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
+- Teleporter `-143 -24 62`
+### Level 5 - Amazonas:
+- Startpunkt `-153 -19 45, 140 -10`
+- Schachbrett `4x4 -171 -19 25`, `8x8 -187 -19 14`
+- Teleporter `-188 -20 -7`
+### Level 6- Boreal:
+- Startpunkt `-182 -12 -20, 180 -5`
+- Schachbrett `8x8 -185 -14 -46`
+- Teleporter `-164 -12 -59`
+### Level 7- Eiskönigin:
+- Startpunkt `-127 -7 -66, 180 -15`
+- Schachbrett `10x10 -192 -8 -98`
+- Teleporter -- (sollte noch einer hin für die Sandbox Insel)
+---
 ## Konzept: Damenproblem Tutorial in Minecraft
 
 ### Schachfelder und Level

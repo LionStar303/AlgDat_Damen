@@ -1,18 +1,22 @@
 package de.hsmw.algDatDamen.menu;
 
-import de.hsmw.algDatDamen.ChessBoard.*;
-import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
-import de.hsmw.algDatDamen.ChessBoard.Piece;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import de.hsmw.algDatDamen.AlgDatDamen;
-
+import de.hsmw.algDatDamen.ChessBoard.Knight;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.Piece;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.ChessBoard.Superqueen;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import static de.hsmw.algDatDamen.AlgDatDamen.*;
+import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 
+@SuppressWarnings("deprecation")
 /**
  * Class that contains development handles for managing chess boards and related
  * interactions.
@@ -42,9 +46,9 @@ public class DevelopmentHandles {
             return;
         }
 
-        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, customWhiteFieldMaterial,
-                customBlackFieldMaterial);
-        saveManager.getCbList().add(cb);
+        MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, true);
+        AlgDatDamen.chessBoards.add(cb);
+        cb.spawnChessBoard();
     }
 
     /**
@@ -61,7 +65,7 @@ public class DevelopmentHandles {
         ;
         MChessBoard mcB = getClickedMCB(event);
         mcB.despawnChessBoard();
-        saveManager.getCbList().remove(mcB);
+        AlgDatDamen.chessBoards.remove(mcB);
         event.setCancelled(true);
     }
 
@@ -91,18 +95,6 @@ public class DevelopmentHandles {
         } else {
             mcB.addPiece(clickedBlock.getLocation(), p);
         }
-        event.setCancelled(true);
-    }
-
-    /**
-     * Like <code>placeQueen</code> but with a check, if the queen is allowed on
-     * this field of the board.
-     * 
-     * @param event Triggering event.
-     */
-    public static void placeTestedQueen(PlayerInteractEvent event) {
-        MChessBoard mcB = getClickedMCB(event);
-        mcB.addTestedQueen(event.getClickedBlock().getLocation(), p);
         event.setCancelled(true);
     }
 
@@ -213,8 +205,7 @@ public class DevelopmentHandles {
         if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
             return null;
         }
-
-        for (MChessBoard mcB : saveManager.getCbList()) {
+        for (MChessBoard mcB : AlgDatDamen.chessBoards) {
             if (mcB.isPartOfBoard(clickedBlock.getLocation())) {
                 return mcB;
             }
@@ -264,13 +255,21 @@ public class DevelopmentHandles {
      */
     public static void handleBacktrack(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolve(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationSolve(p);
+        }
         event.setCancelled(true);
     }
 
     public static void handleBacktrackToRow(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationSolveToRow(p, backtrackRow);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationSolveToRow(p, backtrackRow);
+        }
         event.setCancelled(true);
     }
 
@@ -287,19 +286,34 @@ public class DevelopmentHandles {
      */
     public static void handleReverse(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReverseField2Field(AlgDatDamen.getInstance(), 5, p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReverseField2Field(AlgDatDamen.getInstance(), 5, p);
+        }
+
         event.setCancelled(true);
     }
 
     public static void handleReverseFast(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReversePiece2Piece(AlgDatDamen.getInstance(), 5, p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReversePiece2Piece(AlgDatDamen.getInstance(), 5, p);
+        }
+
         event.setCancelled(true);
     }
 
     public static void handleReverseStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
-        mcB.animationReverseStepToNextField(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationReverseStepToNextField(p);
+        }
+
         event.setCancelled(true);
     }
 
@@ -311,7 +325,11 @@ public class DevelopmentHandles {
     public static void handleBacktrackStep(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         System.out.println(mcB.toString());
-        mcB.animationStepToNextField(p);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+        } else {
+            mcB.animationStepToNextField(p);
+        }
         event.setCancelled(true);
     }
 
@@ -342,26 +360,26 @@ public class DevelopmentHandles {
     }
 
     public static void changePiece(PlayerInteractEvent event) {
-        switch (p.getLetter()){
-        case 'Q':
-            p = new Superqueen();
-            devMenu.updateItemMaterial(MenuSlots.PIECE, SUPERQUEEN_BLOCK_TOP);
-            break;
-        case 'S':
-            p = new Knight();
-            devMenu.updateItemMaterial(MenuSlots.PIECE, KNIGHT_BLOCK_TOP);
-            break;
-        case 'K':
-            p = new Queen();
-            devMenu.updateItemMaterial(MenuSlots.PIECE, QUEEN_BLOCK_TOP);
-            break;
-        default:
+        switch (p.getLetter()) {
+            case 'Q':
+                p = new Superqueen();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, SUPERQUEEN_BLOCK_TOP);
+                break;
+            case 'S':
+                p = new Knight();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, KNIGHT_BLOCK_TOP);
+                break;
+            case 'K':
+                p = new Queen();
+                devMenu.updateItemMaterial(MenuSlots.PIECE, QUEEN_BLOCK_TOP);
+                break;
+            default:
 
-            p = new Queen();
-            System.out.println("Default");
-        break;
+                p = new Queen();
+                System.out.println("Default");
+                break;
+        }
+        devMenu.updateItemName(MenuSlots.PIECE, ("Aktuelle Figur: " + p.getName()));
     }
-    devMenu.updateItemName(MenuSlots.PIECE, ("Aktuelle Figur: " + p.getName()));
-}
 
 }

@@ -7,3 +7,12 @@ commands:
     description: 'Öffnet das Schachmenü'
     usage: '/schachmenu'
     aliases: [sm, cb]
+  startTutorial:
+    description: 'startet das Tutorial für den Spieler'
+    usage: '/startTutorial'
+    aliases: []
+    permission: algodat.start
+permissions:
+  algodat.start:
+    description: Allows the use of /startTutorial.
+    default: true

@@ -1,5 +1,10 @@
+<<<<<<<< HEAD:src/main/java/de/hsmw/algDatDamen/ChessBoard/MChessBoard.java
+package de.hsmw.algDatDamen.ChessBoard;
+
+========
 
 
+>>>>>>>> main:src/main/java/de/hsmw/algDatDamen/ChessBoard/MChessboard_backup
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +18,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import de.hsmw.algDatDamen.AlgDatDamen;
 
 public class MChessBoard extends ChessBoard {
 
@@ -46,7 +53,11 @@ public class MChessBoard extends ChessBoard {
         this.stateX = 0;
         this.stateY = 0;
         this.isAnimationRunning = false;
+<<<<<<<< HEAD:src/main/java/de/hsmw/algDatDamen/ChessBoard/MChessBoard.java
+        // spawnChessBoard();
+========
         spawnChessBoard();
+>>>>>>>> main:src/main/java/de/hsmw/algDatDamen/ChessBoard/MChessboard_backup
     }
 
     /**
