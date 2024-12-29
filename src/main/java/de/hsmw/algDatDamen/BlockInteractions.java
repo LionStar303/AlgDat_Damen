@@ -16,6 +16,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class BlockInteractions implements Listener {
 
     @EventHandler
+    public void onBlockBreak(PlayerInteractEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack itemInHand = event.getItem();
@@ -78,6 +83,7 @@ public class BlockInteractions implements Listener {
                 }
             });
         }
+        event.setCancelled(true);
     }
 
 }

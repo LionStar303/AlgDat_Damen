@@ -1,256 +1,262 @@
-{"entity.armadillo.ambient": {
+{
+  "entity.armadillo.ambient": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_AMBIENT"}]
+    "sounds": [{"name": "entity_armadillo_ambient"}]
   },
   "entity.armadillo.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_HURT"}]
+    "sounds": [{"name": "entity_armadillo_hurt"}]
   },
   "entity.armadillo.brush": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_BRUSH"}]
+    "sounds": [{"name": "entity_armadillo_brush"}]
   },
   "entity.armadillo.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_DEATH"}]
+    "sounds": [{"name": "entity_armadillo_death"}]
   },
   "entity.armadillo.eat": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_EAT"}]
+    "sounds": [{"name": "entity_armadillo_eat"}]
   },
-  "entity.armadillo.hurt.reduced": {
+  "entity.armadillo.hurt_reduced": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_HURT_REDUCED"}]
+    "sounds": [{"name": "entity_armadillo_hurt_reduced"}]
   },
   "entity.armadillo.land": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_LAND"}]
+    "sounds": [{"name": "entity_armadillo_land"}]
   },
   "entity.armadillo.peek": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_PEEK"}]
+    "sounds": [{"name": "entity_armadillo_peek"}]
   },
   "entity.armadillo.roll": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_ROLL"}]
+    "sounds": [{"name": "entity_armadillo_roll"}]
   },
   "entity.armadillo.scute_drop": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_SCUTE_DROP"}]
+    "sounds": [{"name": "entity_armadillo_scute_drop"}]
   },
   "entity.armadillo.step": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_STEP"}]
+    "sounds": [{"name": "entity_armadillo_step"}]
   },
   "entity.armadillo.unroll_finish": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_UNROLL_FINISH"}]
+    "sounds": [{"name": "entity_armadillo_unroll_finish"}]
   },
   "entity.armadillo.unroll_start": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ARMADILLO_UNROLL_START"}]
+    "sounds": [{"name": "entity_armadillo_unroll_start"}]
   },
   "entity.axolotl.attack": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_ATTACK"}]
+    "sounds": [{"name": "entity_axolotl_attack"}]
   },
   "entity.axolotl.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_DEATH"}]
+    "sounds": [{"name": "entity_axolotl_death"}]
   },
   "entity.axolotl.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_HURT"}]
+    "sounds": [{"name": "entity_axolotl_hurt"}]
   },
   "entity.axolotl.idle_air": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_IDLE_AIR"}]
+    "sounds": [{"name": "entity_axolotl_idle_air"}]
   },
   "entity.axolotl.idle_water": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_IDLE_WATER"}]
+    "sounds": [{"name": "entity_axolotl_idle_water"}]
+  },
+  "entity.pig.ambient": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "entity_pig_ambient"}]
   },
   "entity.axolotl.splash": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_SPLASH"}]
+    "sounds": [{"name": "entity_axolotl_splash"}]
   },
   "entity.axolotl.swim": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_AXOLOTL_SWIM"}]
+    "sounds": [{"name": "entity_axolotl_swim"}]
   },
   "entity.bat.ambient": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BAT_AMBIENT"}]
+    "sounds": [{"name": "entity_bat_ambient"}]
   },
   "entity.bat.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BAT_DEATH"}]
+    "sounds": [{"name": "entity_bat_death"}]
   },
   "entity.bat.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BAT_HURT"}]
+    "sounds": [{"name": "entity_bat_hurt"}]
   },
   "entity.bat.loop": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BAT_LOOP"}]
+    "sounds": [{"name": "entity_bat_loop"}]
   },
-   "entity.bat.takeoff": {
+  "entity.bat.takeoff": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BAT_TAKEOFF"}]
+    "sounds": [{"name": "entity_bat_takeoff"}]
   },
-  "entity.bee.death": {
+   "entity.bee.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_DEATH"}]
+    "sounds": [{"name": "entity_bee_death"}]
   },
   "entity.bee.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_HURT"}]
+    "sounds": [{"name": "entity_bee_hurt"}]
   },
   "entity.bee.loop": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_LOOP"}]
+    "sounds": [{"name": "entity_bee_loop"}]
   },
   "entity.bee.loop_aggressive": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_LOOP_AGGRESSIVE"}]
+    "sounds": [{"name": "entity_bee_loop_aggressive"}]
   },
   "entity.bee.pollinate": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_POLLINATE"}]
+    "sounds": [{"name": "entity_bee_pollinate"}]
   },
   "entity.bee.sting": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BEE_STING"}]
+    "sounds": [{"name": "entity_bee_sting"}]
   },
   "entity.blaze.ambient": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BLAZE_AMBIENT"}]
+    "sounds": [{"name": "entity_blaze_ambient"}]
   },
   "entity.blaze.burn": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BLAZE_BURN"}]
+    "sounds": [{"name": "entity_blaze_burn"}]
   },
   "entity.blaze.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BLAZE_DEATH"}]
+    "sounds": [{"name": "entity_blaze_death"}]
   },
   "entity.blaze.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BLAZE_HURT"}]
+    "sounds": [{"name": "entity_blaze_hurt"}]
   },
   "entity.blaze.shoot": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_BLAZE_SHOOT"}]
+    "sounds": [{"name": "entity_blaze_shoot"}]
   },
   "entity.camel.ambient": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_AMBIENT"}]
+    "sounds": [{"name": "entity_camel_ambient"}]
   },
   "entity.camel.dash": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_DASH"}]
+    "sounds": [{"name": "entity_camel_dash"}]
   },
   "entity.camel.dash_ready": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_DASH_READY"}]
+    "sounds": [{"name": "entity_camel_dash_ready"}]
   },
   "entity.camel.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_DEATH"}]
+    "sounds": [{"name": "entity_camel_death"}]
   },
   "entity.camel.eat": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_EAT"}]
+    "sounds": [{"name": "entity_camel_eat"}]
   },
   "entity.camel.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_HURT"}]
+    "sounds": [{"name": "entity_camel_hurt"}]
   },
   "entity.camel.saddle": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_SADDLE"}]
+    "sounds": [{"name": "entity_camel_saddle"}]
   },
   "entity.camel.sit": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_SIT"}]
+    "sounds": [{"name": "entity_camel_sit"}]
   },
   "entity.camel.stand": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_STAND"}]
+    "sounds": [{"name": "entity_camel_stand"}]
   },
   "entity.camel.step": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_CAMEL_STEP"}]
+    "sounds": [{"name": "entity_camel_step"}]
   },
   "entity.elder_guardian.curse": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_CURSE"}]
+    "sounds": [{"name": "entity_elder_guardian_curse"}]
   },
   "entity.elder_guardian.death": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_DEATH"}]
+    "sounds": [{"name": "entity_elder_guardian_death"}]
   },
   "entity.elder_guardian.death_land": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_DEATH_LAND"}]
+    "sounds": [{"name": "entity_elder_guardian_death_land"}]
   },
-   "entity.elder_guardian.flop": {
+  "entity.elder_guardian.flop": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_FLOP"}]
+    "sounds": [{"name": "entity_elder_guardian_flop"}]
   },
   "entity.elder_guardian.hurt": {
     "replace": true,
     "subtitle": "",
-    "sounds": [{"name": "ENTITY_ELDER_GUARDIAN_HURT"}]
+    "sounds": [{"name": "entity_elder_guardian_hurt"}]
   }
 }

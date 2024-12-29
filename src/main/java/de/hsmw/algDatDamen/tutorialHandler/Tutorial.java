@@ -44,6 +44,7 @@ public class Tutorial {
         levels.add(new Level5(console, getPlayer(), this));
         levels.add(new Level6(console, getPlayer(), this));
         levels.add(new Level7(console, getPlayer(), this));
+        levels.add(new Level8(console, getPlayer(), this));
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
