@@ -16,10 +16,15 @@ public class Teleporter {
     public Teleporter(Location teleporterLocation, Player player) {
         this.teleporterLocation = teleporterLocation;
         this.player = player;
-        setEnabled(enabled);
+        setEnabled(enabled, false);
     }
 
-    public void setEnabled(boolean enabled) {
+    /**
+     * Aktiviert oder Deaktiviert das Lagerfeuer.
+     * @param enabled Ob das Lagerfeuer an oder aus sein soll.
+     * @param playSound Ob ein Ton abgespielt werden soll, wenn das Lagerfeuer verändert wird.
+     */
+    public void setEnabled(boolean enabled, boolean playSound) {
         this.enabled = enabled;
         Block block = teleporterLocation.getBlock();
 
@@ -34,10 +39,10 @@ public class Teleporter {
                 block.setBlockData(campfire);
 
                 if (enabled) {
-                    player.playSound(teleporterLocation, Sound.ITEM_FIRECHARGE_USE, 2, 1);
+                    if (playSound) player.playSound(teleporterLocation, Sound.ITEM_FIRECHARGE_USE, 2, 1);
                     player.getWorld().strikeLightning(teleporterLocation.clone().add(0.5, 0, 0.5));
                 } else {
-                    player.playSound(teleporterLocation, Sound.BLOCK_FIRE_EXTINGUISH, 2, 1);
+                    if (playSound) player.playSound(teleporterLocation, Sound.BLOCK_FIRE_EXTINGUISH, 2, 1);
                 }
                 
             }
@@ -58,9 +63,9 @@ public class Teleporter {
     public void spawnTeleporter() {
         teleporterLocation.getBlock().setType(teleporterMaterial);
         if (enabled) {
-            this.setEnabled(enabled);
+            this.setEnabled(enabled, false);
         } else {
-            this.setEnabled(false);
+            this.setEnabled(false, false);
         }
     }
 

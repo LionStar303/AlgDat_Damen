@@ -187,14 +187,14 @@ public class Level3 extends Level {
                 // Inventar leeren
                 setInventory();
                 chessBoards[1].despawnChessBoard();
-                teleporter.setEnabled(true);
+                teleporter.setEnabled(true, true);
                 // teleport item geben
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {
                 // Schachbrett wieder spawnen
                 setInventory();
-                teleporter.setEnabled(false);
+                teleporter.setEnabled(false, true);
                 chessBoards[1].spawnChessBoard();
             }
             ));

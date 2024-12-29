@@ -197,13 +197,13 @@ public class Level4 extends Level {
                 () -> {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                 },
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
                 }));
         setupStep = setupStep.getNext();
 

@@ -153,7 +153,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].despawnAllPieces();
                     chessBoards[0].despawnChessBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                     npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -33, -42, 137), 1);
@@ -161,7 +161,7 @@ public class Level1 extends Level {
                 // alle Figuren spawnen
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].spawnAllPieces();
                 }));
