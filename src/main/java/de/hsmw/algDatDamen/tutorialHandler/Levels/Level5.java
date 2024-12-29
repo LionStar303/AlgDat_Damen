@@ -48,6 +48,7 @@ public class Level5 extends Level{
         currentStep = new Step(
             () -> {
                 npc.playTrack(NPCTrack.NPC_501_INTRO);
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -170, -18, 23), 1);
             },
             () -> {}
         );

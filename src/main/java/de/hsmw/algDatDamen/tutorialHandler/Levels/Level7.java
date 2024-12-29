@@ -3,13 +3,6 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import static de.hsmw.algDatDamen.AlgDatDamen.getInstance;
-
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -41,7 +34,7 @@ public class Level7 extends Level {
 
     protected BukkitTask animation = null;
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -7, -66),
+        this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
                 new Location(player.getWorld(), -127, -7, -64), parent);
     }
 
