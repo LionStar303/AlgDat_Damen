@@ -19,6 +19,7 @@ public class NPC implements Listener {
     private Location location;
     private Villager villager;
     private boolean console;
+    private final Component EMPTY_LINE = Component.text("----", NamedTextColor.AQUA);
 
     /**
      * Creates a new NPC object at the given location.
@@ -73,7 +74,7 @@ public class NPC implements Listener {
                 p.sendMessage(Component.text(track.getText()));
             else
                 p.sendMessage(Component.text(track.getText(), color));
-            p.sendMessage("\n\n");
+            p.sendMessage(EMPTY_LINE);
         });
 
         // Sound für Spieler im erweiterten Soundradius abspielen
