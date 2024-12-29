@@ -35,9 +35,9 @@ settings:
   player-shuffle: 0
   netty-threads: 4
 advancements:
-  disable-saving: false
+  disable-saving: true
   disabled:
-  - minecraft:story/disabled
+  - '*'
 commands:
   tab-complete: 0
   send-namespaced: true

@@ -1,9 +1,11 @@
 package de.hsmw.algDatDamen.tutorialHandler;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.google.gson.annotations.Expose;
@@ -38,18 +40,30 @@ public class Tutorial {
         levels.add(new Level1(console, getPlayer(), this));
         levels.add(new Level2(console, getPlayer(), this));
         levels.add(new Level3(console, getPlayer(), this));
-        //levels.add(new Level4(console, getPlayer(), this));
+        levels.add(new Level4(console, getPlayer(), this));
         levels.add(new Level5(console, getPlayer(), this));
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
+
+        // töte alle Entities, welche sich im Spiel befinden
+        List<Entity> entities = getPlayer().getWorld().getEntities();
+
+        for (Entity entity : entities) {
+            if (!(entity instanceof Player)) {
+                System.out.println("Killed Entity " + entity.toString());
+                entity.remove();
+            }
+        }
     }
 
     public void start() {
-        if(console) System.out.println("Tutorial: starte Tutorial");
+        if (console)
+            System.out.println("Tutorial: starte Tutorial");
         currentLevel.start();
         // Progress Bar auf Level 1 setzen
-        getPlayer().setLevel(progress);
+        getPlayer().setLevel(progress + 1);
+        getPlayer().setExp(0);
     }
 
     public Level getCurrentLevel() {
@@ -70,7 +84,8 @@ public class Tutorial {
 
     public void incProgress() {
         progress++;
-        Bukkit.getPlayer(playerUUID).setLevel(progress);
+        getPlayer().setLevel(progress + 1);
+        getPlayer().setExp(0);
         currentLevel = levels.get(progress);
     }
 }

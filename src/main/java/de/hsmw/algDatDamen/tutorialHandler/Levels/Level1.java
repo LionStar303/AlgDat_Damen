@@ -11,20 +11,24 @@ import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
+// TODO testen
 public class Level1 extends Level {
 
     private final static String LEVEL_NAME = "Level 1 - Einführung";
     private final static String LEVEL_DESCRIPTION = "Erklärung des Aufbaus eines Schachbretts, sowie der Damenfigur und deren Bewegungsmuster";
 
     public Level1(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -17, -44, 144, 150, 0), new Location(player.getWorld(), -38, -43, 140), parent);
+        this(console, player, new Location(player.getWorld(), -17, -44, 144, 150, 0),
+                new Location(player.getWorld(), -38, -43, 140), parent);
     }
 
-    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation, Tutorial parent) {
+    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation,
+            Tutorial parent) {
         this(console, player, startLocation, teleporterLocation, false, parent);
     }
 
-    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
+    public Level1(boolean console, Player player, Location startLocation, Location teleporterLocation,
+            boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
     }
@@ -43,12 +47,13 @@ public class Level1 extends Level {
     @Override
     public void initializeSteps() {
         // TODO alle Steps: NPC laufen lassen
-        
+
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {
                     chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 1);
                 },
                 () -> {
                     chessBoards[0].despawnChessBoard();
@@ -63,7 +68,8 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // spawne Queen auf Feld (3,2)
-                    if (console) System.out.println("setze Dame auf 3, 2");
+                    if (console)
+                        System.out.println("setze Dame auf 3, 2");
                     chessBoards[0].addPiece(new Queen(3, 2));
                     chessBoards[0].updatePieces();
                     npc.playTrack(NPCTrack.NPC_102_EXPLAIN_QUEEN);
@@ -81,6 +87,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 1);
                 },
                 () -> {
                     chessBoards[0].despawnCollisionCarpets();
@@ -116,6 +123,30 @@ public class Level1 extends Level {
                 }));
         setupStep = setupStep.getNext();
 
+        // markieren des Bewegungsmusters der Dame
+        setupStep.setNext(new Step(
+                () -> {
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].addPiece(new Queen(2, 0));
+                    chessBoards[0].updatePieces();
+                    setInventory();
+                    player.getInventory().setItem(1, ControlItem.SPAWN_CARPET.getItemStack());
+                    npc.playTrack(NPCTrack.NPC_105_MOVEMENT_MARKING);
+                },
+                () -> {
+                    setInventory();
+                    chessBoards[0].removeLastQueen();
+                    chessBoards[0].updatePieces();
+                },
+                unused -> {
+                    if (chessBoards[0].checkUserCarpets()) {
+                        npc.playTrackPositive();
+                        return true;
+                    } else
+                        return false;
+                }));
+        setupStep = setupStep.getNext();
+
         // Löschen aller Damen von Schachbrett
         setupStep.setNext(new Step(
                 // alle Figuren entfernen
@@ -125,6 +156,7 @@ public class Level1 extends Level {
                     teleporter.setEnabled(true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -33, -42, 137), 1);
                 },
                 // alle Figuren spawnen
                 () -> {

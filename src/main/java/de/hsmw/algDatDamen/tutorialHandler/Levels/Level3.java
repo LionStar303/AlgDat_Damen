@@ -13,6 +13,7 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+// TODO testen
 public class Level3 extends Level {
 
     private final static String LEVEL_NAME = "Level 3 - Scandi Zwilling";
@@ -34,8 +35,8 @@ public class Level3 extends Level {
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[2];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -76, -32, 81), 4, player);
-        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -76, -32, 89), 4, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -76, -32, 89), 4, player);
+        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -76, -32, 81), 4, player);
     }
 
     @Override
@@ -67,6 +68,7 @@ public class Level3 extends Level {
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
                 },
                 () -> {
                     // Schachbrett leeren
@@ -77,7 +79,12 @@ public class Level3 extends Level {
                     setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
-                unused -> chessBoards[0].isSolved()
+                unused -> {
+                    if(chessBoards[0].isSolved()) {
+                        npc.playTrackPositive();
+                        return true;
+                    } else return false;
+                }
                 ));
         setupStep = setupStep.getNext();
 
@@ -114,9 +121,11 @@ public class Level3 extends Level {
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].despawnChessBoard();
             },
-            // Step ist complete wenn Eingabe "gespiegelt" kam
+            // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if(latestPlayerInput.equals("gespiegelt")) {
+                if (latestPlayerInput == null)
+                    return false;
+                if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
@@ -154,7 +163,12 @@ public class Level3 extends Level {
                 setInventory();
             },
             // Step ist complete wenn das Schachbrett gelöst ist
-            unused -> chessBoards[1].isSolved()
+            unused -> {
+                if(chessBoards[1].isSolved()) {
+                    npc.playTrackPositive();
+                    return true;
+                } else return false;
+            }
             ));
         setupStep = setupStep.getNext();
 
@@ -164,9 +178,8 @@ public class Level3 extends Level {
                 // Inventar leeren
                 setInventory();
                 chessBoards[1].despawnChessBoard();
-                // teleport item geben
                 teleporter.setEnabled(true);
-                setInventory();
+                // teleport item geben
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {

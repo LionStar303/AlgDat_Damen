@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    //id("io.papermc.paperweight.userdev") version "1.7.7"
 }
 
 group = 'de.hsmw'
@@ -19,6 +20,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    //paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 
 def targetJavaVersion = 21
@@ -38,6 +40,10 @@ tasks.withType(JavaCompile).configureEach {
         options.release.set(targetJavaVersion)
     }
 }
+
+/* tasks.assemble {
+    dependsOn(tasks.reobfJar)
+} */
 
 processResources {
     def props = [version: version]

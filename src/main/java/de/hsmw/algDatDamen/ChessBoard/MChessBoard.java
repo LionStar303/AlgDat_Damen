@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -17,7 +18,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
-import de.hsmw.algDatDamen.NPC;
 
 @SuppressWarnings("unused")
 public class MChessBoard extends ChessBoard {
@@ -84,7 +84,6 @@ public class MChessBoard extends ChessBoard {
         this.pieces = new ArrayList<>();
         this.console = false;
         this.originCorner = originCorner;
-        // updateOriginCorner(this.getBoardDirection(player));
         this.isOriginCornerWhite = (originCorner.getBlock().getType() == whiteFieldMaterial);
         this.whiteFieldMaterial = whiteFieldMaterial;
         this.blackFieldMaterial = blackFieldMaterial;
@@ -216,7 +215,7 @@ public class MChessBoard extends ChessBoard {
     public void setAnimationRunning(boolean isAnimationRunning) {
         this.isAnimationRunning = isAnimationRunning;
     }
-    
+
     /**
      * @param active wenn Spieler Pieces setzen darf, sonst false
      */
@@ -478,7 +477,7 @@ public class MChessBoard extends ChessBoard {
             }
         }
 
-        return correct ? true : false;
+        return correct;
     }
 
     /**
@@ -709,7 +708,7 @@ public class MChessBoard extends ChessBoard {
             printBoard(true);
             System.out.println("successfully spawned Piece");
         }
-        
+
         return true;
     }
 
@@ -727,7 +726,7 @@ public class MChessBoard extends ChessBoard {
 
         // Check and set the bottom block
         location.getBlock().getRelative(BlockFace.DOWN).setType(bottomBlockType);
-        
+
         if (console) {
             System.out.println("Placing top block: " + topBlockType + " at " + location);
             System.out.println("Placing bottom block: " + bottomBlockType + " at "
@@ -813,8 +812,6 @@ public class MChessBoard extends ChessBoard {
                     continue;
                 }
 
-               
-
                 // Clear the block by setting it to air
                 block.setType(Material.AIR);
             }
@@ -834,7 +831,7 @@ public class MChessBoard extends ChessBoard {
         }
 
         // Remove existing carpet if it's a valid move
-        if (l.getY() == originCorner.getY() + 1) {
+        if (l.getY() == originCorner.getY() + 1 && l.getBlock().getType() == carpMaterial) {
             l.getBlock().setType(Material.AIR);
             return;
         }
@@ -868,9 +865,6 @@ public class MChessBoard extends ChessBoard {
 
         // Remove all queens from the chessboard
         despawnAllPieces();
-
-        // Disable collision carpets to ensure they are not displayed
-        this.collisionCarpets = false;
 
         // Remove any remaining collision carpets from the board
         despawnCollisionCarpets();
@@ -996,12 +990,16 @@ public class MChessBoard extends ChessBoard {
             return true;
         }
 
-        // Zeige nächstes Feld
+        // Zeige nächstes Fel
         if (stateX + 1 <= size && stateY + 1 <= size) {
             Location location = new Location(originCorner.getWorld(), originCorner.getX() + stateX,
                     originCorner.getY() + 1, originCorner.getZ() + stateY); // Y-coordinate can be adjusted as needed
             Block block = location.getBlock();
-            block.setType(Material.BLUE_CARPET);
+            if (!(block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM)
+                    && !(block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM)) {
+                block.setType(Material.BLUE_CARPET);
+            }
+
         }
 
         return false;
