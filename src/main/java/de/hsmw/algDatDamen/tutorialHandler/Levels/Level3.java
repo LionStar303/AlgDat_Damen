@@ -67,6 +67,8 @@ public class Level3 extends Level {
         // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
         setupStep.setNext(new Step(
                 () -> {
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[1].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setMode(MChessBoardMode.NORMAL); 
                     chessBoards[0].setActive(true);
@@ -148,6 +150,8 @@ public class Level3 extends Level {
             () -> {
                 // erstes chessboard despawnen und beide leeren
                 chessBoards[0].removeAllPieces();
+                chessBoards[0].setActive(false);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 chessBoards[0].updateBoard();
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].updateBoard();
