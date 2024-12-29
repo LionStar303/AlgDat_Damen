@@ -122,7 +122,7 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
-        currentStep.checkForCompletion();
+        // currentStep.checkForCompletion(); -> wird gescrappt, gibt sonst Probleme
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {

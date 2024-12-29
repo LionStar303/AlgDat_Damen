@@ -148,13 +148,12 @@ public class Level3 extends Level {
             () -> {
                 // erstes chessboard despawnen und beide leeren
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].updateBoard();
+                chessBoards[0].despawnChessBoard();
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].updateBoard();
 
                 // zweites chessboard für spieler interaktion vorbereiten
                 chessBoards[1].setMode(MChessBoardMode.NORMAL); 
-                chessBoards[1].setActive(true);
                 chessBoards[1].setCollisionCarpets(false);
                 npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
@@ -163,11 +162,10 @@ public class Level3 extends Level {
             },
             () -> {
                 // Schachbrett leeren
-                chessBoards[1].setActive(false);
                 chessBoards[1].setMode(MChessBoardMode.INACTIVE); 
                 
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].updateBoard();
+                chessBoards[0].spawnChessBoard();
                 // Inventar auf Urspungszustand zurücksetzen
                 setInventory();
             },
