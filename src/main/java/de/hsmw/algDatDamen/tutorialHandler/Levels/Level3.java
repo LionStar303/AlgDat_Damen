@@ -155,9 +155,9 @@ public class Level3 extends Level {
             () -> {
                 // erstes chessboard despawnen und beide leeren
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].setActive(false);
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                chessBoards[0].updateBoard();
+                chessBoards[0].despawnAllPieces();
+                chessBoards[0].despawnChessBoard();
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].updateBoard();
 
