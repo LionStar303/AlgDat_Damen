@@ -623,7 +623,9 @@ public class MChessBoard extends ChessBoard {
                  * Ansonsten kann er das Piece nur an der markierten Position platzieren
                  */
                 // remove existing piece if location is already occupied
-                
+                if(isSolved()){
+                    return false;
+                }
                 
                 if(pieces.size() == 0){
                     if(stateX == p.getX() && stateY == p.getY()){

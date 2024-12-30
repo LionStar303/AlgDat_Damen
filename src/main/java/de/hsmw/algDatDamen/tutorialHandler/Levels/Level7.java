@@ -356,7 +356,7 @@ public class Level7 extends Level {
 
                 for (int i = 0; i < positions.length; i++) {
 
-                    if (ticks >= 30 * 20) { // 30 Sekunden (20 Ticks pro Sekunde)
+                    if (ticks >= 60 * 20) { // 60 Sekunden (20 Ticks pro Sekunde)
                         cancel();
                         return;
                     }

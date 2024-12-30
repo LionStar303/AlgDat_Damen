@@ -65,6 +65,7 @@ public class Level6 extends Level {
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
                 },
                 () -> {
                     // Inventar leeren & Chessboard despawnen
@@ -111,45 +112,37 @@ public class Level6 extends Level {
                     }
 
                     if (chessBoards[0].getPieces().size() > 2) {
+                        setInventory();
                         npc.playTrackPositive();
-                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Queen());
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                        chessBoards[0].setActive(false); // TODO an mode anpassen
+                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Queen());
                     }
                     return false;
 
                 }));
         setupStep = setupStep.getNext();
 
-        // Lösen des restlichen Problems durch Computer
         setupStep.setNext(new Step(
-            () -> {
-                // Inventar leeren
-                setInventory();
-                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                setInventory();
-                player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
-            },
-            () -> {
-                
-            }
-            ));
+                () -> {
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].despawnAllPieces();
+                    chessBoards[0].despawnChessBoard();
+                    teleporter.setEnabled(true, true);
+                    setInventory();
+                    player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                },
+                () -> {
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].updateBoard();
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    setInventory();
+                    teleporter.setEnabled(false, true);
+                }));
         setupStep = setupStep.getNext();
 
-        // Löschen aller Damen und Löschen des Schachbretts
-        setupStep.setNext(new Step(
-            () -> {
-                // Inventar leeren
-                setInventory();
-                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                chessBoards[0].removeAllPieces();
-                chessBoards[0].despawnChessBoard();
-            },
-            () -> {}
-            ));
-
-            // alle Steps in beide Richtungen miteinander verknüpfen
-            currentStep.backLink();
+        // alle Steps in beide Richtungen miteinander verknüpfen
+        currentStep.backLink();
     }
 
 }

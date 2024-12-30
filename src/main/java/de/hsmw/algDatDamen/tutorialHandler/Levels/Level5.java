@@ -107,8 +107,12 @@ public class Level5 extends Level{
                 },
                 () -> {
                     // Chessboard despawnen
+                    chessBoards[1].removeAllPieces();
                     chessBoards[1].despawnChessBoard();
                     chessBoards[1].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].despawnChessBoard();
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 },
                 unused -> {
                     if(chessBoards[1].isSolved()) {
@@ -122,7 +126,12 @@ public class Level5 extends Level{
         // Löschen des Schachbretts
         setupStep.setNext(new Step(
             () -> {
+                chessBoards[1].removeAllPieces();
                 chessBoards[1].despawnChessBoard();
+                chessBoards[1].setMode(MChessBoardMode.INACTIVE);
+                chessBoards[0].removeAllPieces();
+                chessBoards[0].despawnChessBoard();
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 // teleport item geben
                 teleporter.setEnabled(true, true);
                 // Inventar leeren und teleport item geben
