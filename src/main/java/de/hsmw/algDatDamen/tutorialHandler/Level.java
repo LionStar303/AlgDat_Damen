@@ -129,9 +129,10 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
-        
-        if(chessBoards[currentCBID].isSolved()){
-             currentStepcheckForCompletion();
+        if (chessBoards[currentCBID] != null) {
+            if(chessBoards[currentCBID].isSolved()){
+                currentStepcheckForCompletion();
+           }
         }
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
