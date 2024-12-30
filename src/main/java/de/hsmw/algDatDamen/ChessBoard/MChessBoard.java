@@ -1184,12 +1184,7 @@ public class MChessBoard extends ChessBoard {
     }
 
     public boolean animationStepBongo(Piece p) {
-        if (isAnimationRunning) {
-            if (console) {
-                System.out.println("Eine Animation läuft bereits! Die neue Animation wird nicht gestartet.");
-            }
-            return false;
-        }
+        
         bongoStep(p);
         updatePieces();
         updateCollisionCarpets();

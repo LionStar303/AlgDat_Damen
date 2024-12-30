@@ -8,13 +8,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
+import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Piece;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import static de.hsmw.algDatDamen.AlgDatDamen.*;
-import static de.hsmw.algDatDamen.AlgDatDamen.devMenu;
 
 @SuppressWarnings("deprecation")
 /**
@@ -47,6 +47,8 @@ public class DevelopmentHandles {
         }
 
         MChessBoard cb = new MChessBoard(clickedBlock.getLocation(), boardSize, player, true);
+        cb.setWhiteFieldMaterial(customWhiteFieldMaterial);
+        cb.setBlackFieldMaterial(customBlackFieldMaterial);
         AlgDatDamen.chessBoards.add(cb);
         cb.spawnChessBoard();
     }
@@ -77,6 +79,37 @@ public class DevelopmentHandles {
      */
     public static void placeQueen(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
+        mcB.setMode(MChessBoardMode.NORMAL);
+        if (mcB == null) {
+            event.getPlayer().sendMessage(Component.text("Kein gültiges Schachbrett gefunden!", NamedTextColor.RED));
+            return;
+        }
+
+        Block clickedBlock = event.getClickedBlock();
+        if (clickedBlock == null || clickedBlock.getType() == Material.AIR) {
+            event.getPlayer()
+                    .sendMessage(Component.text("Bitte klicke auf ein gültiges Schachfeld!", NamedTextColor.RED));
+            return;
+        }
+
+        Piece existingQueen = mcB.getPieceAt(clickedBlock.getLocation());
+        if (existingQueen != null) {
+            mcB.removePiece(existingQueen);
+        } else {
+            mcB.addPiece(clickedBlock.getLocation(), p);
+        }
+        event.setCancelled(true);
+    }
+
+    /**
+     * Places a queen on the clicked block. Removes the existing queen if already
+     * present.
+     * 
+     * @param event Triggering event.
+     */
+    public static void placeTestedQueen(PlayerInteractEvent event) {
+        MChessBoard mcB = getClickedMCB(event);
+        mcB.setMode(MChessBoardMode.TESTED);
         if (mcB == null) {
             event.getPlayer().sendMessage(Component.text("Kein gültiges Schachbrett gefunden!", NamedTextColor.RED));
             return;
@@ -263,7 +296,7 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-    public static void handleBacktrackToRow(PlayerInteractEvent event) {
+    public static void handleBacktrackSolveToRow(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
@@ -273,7 +306,7 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
-    public static void handlePlayBacktrackStepsToRow(PlayerInteractEvent event) {
+    public static void handleBacktrackStepsToRow(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
             event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
                     "welches bis zur gegebenen Reihe gelöst werden soll!", NamedTextColor.RED));
@@ -284,10 +317,8 @@ public class DevelopmentHandles {
 
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
-            event.getPlayer().sendMessage(Component.text("Animation gestoppt."));
         } else {
-            mcB.animationSolveToRow(p, backtrackRow);
-            event.getPlayer().sendMessage(Component.text("Animation gestartet."));
+            mcB.animationStepToRow(p, backtrackRow);
         }
     }
 
@@ -329,7 +360,13 @@ public class DevelopmentHandles {
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
         } else {
-            mcB.animationReverseStepToNextField(p);
+            if(mcB.getPieces().size() == 0){
+                mcB.setStateX(0);
+                mcB.setStateX(0);
+            } else{
+                mcB.animationReverseStepToNextField(p);
+            }
+            
         }
 
         event.setCancelled(true);
@@ -346,6 +383,11 @@ public class DevelopmentHandles {
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
         } else {
+            mcB.verfyPieces(p);
+            if(mcB.getPieces().size() == 0){
+                mcB.setStateX(0);
+                mcB.setStateX(0);
+            } 
             mcB.animationStepToNextField(p);
         }
         event.setCancelled(true);
@@ -406,28 +448,14 @@ public class DevelopmentHandles {
                     "welches mit Bongo-Sort gelöst werden soll!", NamedTextColor.RED));
             return;
         }
-        
         MChessBoard mcB = getClickedMCB(event);
         if (mcB.isAnimationRunning()) {
             mcB.stopCurrentAnimation();
             event.getPlayer().sendMessage(Component.text("Animation gestoppt."));
         } else {
-            mcB.BongoSolveAnimation(getInstance(), 10, p);
+            mcB.BongoSolveAnimation(AlgDatDamen.getInstance(), 10, p);
         }
         
-    }
-
-    public static void handlePlayBongoAnimationStep(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
-            event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
-                    "welches mit Bongo-Sort gelöst werden soll!", NamedTextColor.RED));
-            return;
-        }
-        
-        MChessBoard mcB = getClickedMCB(event);
-        boolean result = mcB.animationStepBongo(p);
-        if (result) event.getPlayer().sendMessage(Component.text("Das Schachbrett wurde gelöst!")); 
-        else event.getPlayer().sendMessage(Component.text("Das Schachbrett wurde gelöst!"));
     }
 
 }
