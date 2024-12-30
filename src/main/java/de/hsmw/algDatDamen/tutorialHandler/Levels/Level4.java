@@ -56,6 +56,7 @@ public class Level4 extends Level {
         currentStep = new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_401_INTRO);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -129, -24, 83), 1);
                 },
                 () -> {
 
@@ -200,13 +201,14 @@ public class Level4 extends Level {
                 () -> {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -144, -24, 64), 1);
                 },
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
                 }));
         setupStep = setupStep.getNext();
 

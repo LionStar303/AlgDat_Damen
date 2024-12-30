@@ -40,7 +40,7 @@ public class Level7 extends Level {
 
     
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -7, -66),
+        this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
                 new Location(player.getWorld(), -127, -7, -64), parent);
     }
 
@@ -313,7 +313,7 @@ public class Level7 extends Level {
                     npc.playTrack(NPCTrack.NPC_710_END);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
                     int[][] positions = {
                         {-126, 10, -141},
                         {-90, 10, -86},
@@ -327,7 +327,7 @@ public class Level7 extends Level {
                 },
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
                     if (animation != null) animation.cancel();
                 }));
         setupStep = setupStep.getNext();
