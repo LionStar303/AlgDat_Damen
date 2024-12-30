@@ -245,6 +245,17 @@ public class MChessBoard extends ChessBoard {
 
     // --- extension getter / setter ---
 
+    public Location getLocation(Piece p){
+        for(Piece exp : pieces){
+            if(exp.equals(p)){
+                Location l = new Location(originCorner.getWorld(), originCorner.getX()+p.getX(), originCorner.getY()+1, originCorner.getZ()+p.getY());
+                return l;
+            }
+        }
+        if(console)System.out.println("Piece ist nicht in auf dem Schachbrett");
+        return null;
+    }
+
     public MChessBoardMode getMode() {
         return this.mode;
     }
@@ -622,11 +633,26 @@ public class MChessBoard extends ChessBoard {
                     return false;
                 }
                 */
-                if(existingPiece == null){
+                verfyPieces(p);
+                playBacktrackToNextPiece(p);
+                int x = pieces.getLast().getX();
+                int y = pieces.getLast().getX();
+                removeLastPiece();
+                
+                
+                if(existingPiece == null && p.getX() == x && p.getY() == y){
+                    if(addPiece(p)) {
+                        spawnPiece(p);
+                        return true;
+                    }
+                } else {
                     playExplosionAnimation(l);
                     return false;
                 }
-                
+                verfyPieces(p);
+                playBacktrackToNextPiece(p);
+                getLocation(p).getBlock().setType(Material.BLUE_CARPET);
+                removeLastPiece();
 
                 /* siehe pseudocode
                 addPiece(p);
@@ -634,7 +660,7 @@ public class MChessBoard extends ChessBoard {
                 playBacktrack einen Schritt weiter
                 */
                 spawnAllPieces(); //wenn schöner spawnPiece(pieces.getLast());
-                playBacktrackToNextPiece(p);
+                
                 return true; // wenn Piece richtig gesetzt wurde
             default: return false;
         }
