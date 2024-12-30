@@ -39,7 +39,7 @@ public class Level7 extends Level {
 
     public Level7(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
-                new Location(player.getWorld(), -127, -7, -64), parent);
+                new Location(player.getWorld(), -127, -8, -64), parent);
     }
 
     public Level7(boolean console, Player player, Location startLocation, Location teleporterLocation,

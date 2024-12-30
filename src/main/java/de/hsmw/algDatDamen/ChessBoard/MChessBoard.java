@@ -710,7 +710,7 @@ public class MChessBoard extends ChessBoard {
                         if(console)System.out.println("ADD Removed last du HUSO!");
                         addPiece(removed);
                         spawnPiece(removed);
-                        getLocation(removed).getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.UP).setType(Material.BLUE_CARPET);
+                        getLocation(removed).getBlock().getRelative(BlockFace.UP).setType(Material.END_STONE);
                         updateCollisionCarpets();
                         this.stateX = OldstateX;
                         this.stateY = OldstateY;
@@ -1031,7 +1031,7 @@ public class MChessBoard extends ChessBoard {
         if (p != null) {
             Location queenLocation = getLocationofPiece(p);
             if (queenLocation != null) {
-                queenLocation.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);  // Remove Carpets
+                //queenLocation.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);  // Remove Carpets
                 queenLocation.getBlock().setType(Material.AIR); // Remove top block
                 queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
             }
@@ -1042,7 +1042,7 @@ public class MChessBoard extends ChessBoard {
         // clear all blocks above the board
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-                for (int y = 3; y >= 1; y--) {
+                for (int y = 2; y >= 1; y--) {
                     Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
                             originCorner.getY() + y, originCorner.getZ() + z);
                     location.getBlock().setType(Material.AIR);

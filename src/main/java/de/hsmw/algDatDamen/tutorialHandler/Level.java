@@ -2,9 +2,13 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -83,6 +87,10 @@ public abstract class Level implements Listener {
 
     // Standardmethoden
     public void start() {
+        // töte alle Entities, welche sich im Spiel befinden
+        List<Entity> entities = player.getWorld().getEntities();
+        for (Entity entity : entities) if (!(entity instanceof Player)) entity.remove();
+        
         // Spieler wird immer zum Start teleportiert, auch wenn das Level schon läuft
         teleportToStart();
 
@@ -129,19 +137,16 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
-        
-            
-        if(!currentStep.completed) currentStep.checkForCompletion();
-        /*if(chessBoards[currentCBID].isSolved()){
-             currentStepcheckForCompletion();
-        }*/
+        currentStepcheckForCompletion();
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
+            if(player == null)return;
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
             return;
         }
         if (currentStep.getNext() == null) {
+            if(player == null)return;
             player.sendMessage(Component.text("Du kannst ins nächste Level vorrücken.", NamedTextColor.RED));
             return;
         }
@@ -279,6 +284,7 @@ public abstract class Level implements Listener {
                 tryPlacePiece(event, new Superqueen());
                 break;
             case BACKTRACKING_FORWARD_Q:
+                if(chessBoards[currentCBID] == null)return;
                 if (chessBoards[currentCBID].getPieces().size() != 0)
                     chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
@@ -288,6 +294,7 @@ public abstract class Level implements Listener {
                 }
                 break;
             case BACKTRACKING_FORWARDFAST_Q:
+                if(chessBoards[currentCBID] == null)return;
                 if (chessBoards[currentCBID].getPieces().size() != 0)
                     chessBoards[currentCBID].verfyPieces(new Queen());
                 if (!chessBoards[currentCBID].isSolved()) {
@@ -300,6 +307,7 @@ public abstract class Level implements Listener {
 
             case BACKTRACKING_BACKWARD_Q:
                 // chessBoards[currentCBID].verfyPieces(new Queen());
+                if(chessBoards[currentCBID] == null)return;
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextField(new Queen());
                 }
@@ -309,6 +317,7 @@ public abstract class Level implements Listener {
                 break;
 
             case BACKTRACKING_BACKWARDFAST_Q:
+                if(chessBoards[currentCBID] == null)return;
                 chessBoards[currentCBID].verfyPieces(new Queen());
                 if (chessBoards[currentCBID].getPieces().size() != 0) {
                     chessBoards[currentCBID].animationReverseStepToNextPiece(new Queen());
@@ -318,6 +327,7 @@ public abstract class Level implements Listener {
                 }
                 break;
             case SHOW_CARPET:
+                if(chessBoards[currentCBID] == null)return;
                 chessBoards[currentCBID].setCollisionCarpets(!chessBoards[currentCBID].isCollisionCarpets());
                 System.out.println("collision carpets " + chessBoards[currentCBID].isCollisionCarpets());
                 chessBoards[currentCBID].updateCollisionCarpets();
@@ -326,6 +336,7 @@ public abstract class Level implements Listener {
             case SPAWN_CARPET:
                 if (event.getClickedBlock() == null)
                     return;
+                if(chessBoards[currentCBID] == null)return;
                 chessBoards[currentCBID].spawnUserCarpet(event.getClickedBlock().getLocation());
                 currentStep.checkForCompletion();
                 break;

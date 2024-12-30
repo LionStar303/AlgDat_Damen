@@ -6,11 +6,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum NPCTrack {
 
+    
     // INTRO
     NPC_001_INTRO(Sound.ENTITY_ARMADILLO_AMBIENT,
-            "Ah willkommen, du möchtest wissen, wie man am besten N Damen mit Hilfe "
-            + "des Backtracking-Algorithmus löst? Lass mich dir erklären, wie man ein "
-            + "Schachspiel Feld mit Damen ausfüllt, ohne dass sie sich gegenseitig schlagen."),
+            "Hallo, heute wollen wir uns ansehen, wie man N-Damen mit Hilfe des Backtracking"
+            + "Algorithmus löst. Lass mich dir erklären, wie man ein Schachspielfeld mit Damen ausfüllt,"
+            + "ohne dass sie sich gegenseitig schlagen können. In deiner Menüleiste hast du dafür"
+            + "verschiedene Items, mit denen du mit dem Tutorial interagieren kannst."),
 
     // Level 1
     NPC_101_EXPLAIN_CHESSBOARD(Sound.ENTITY_ARMADILLO_BRUSH,
@@ -52,11 +54,11 @@ public enum NPCTrack {
             "Wenn du jetzt selbst einen Blick auf das Feld wirfst, solltest du "
             + "feststellen können, dass wir keine weitere Dame mehr platzieren "
             + "können, ohne dass sie bedroht wird, aber auch kein unbedrohtes Feld "
-            + "übrig bleibt.\r\n"
+            + "übrig bleibt."
             + "Hierbei handelt es sich um das sogenannte N-Damen-Problem. "
             + "Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett "
             + "platziert werden müssen, ohne dass sich zwei Damen gegenseitig "
-            + "schlagen.\r\n"
+            + "schlagen."
             + "Und wie du auch gesehen hast, haben wir das Problem soeben gelöst. "
             + "Also lass uns nun dazu übergehen wie das passiert ist. "),
     NPC_207_EXPLAIN_3X3_1(Sound.ENTITY_ARMADILLO_STEP,
@@ -221,5 +223,5 @@ public enum NPCTrack {
         }
         formattedString.append(input.substring(i));
         return formattedString.toString();
-    }
+        }
 }
