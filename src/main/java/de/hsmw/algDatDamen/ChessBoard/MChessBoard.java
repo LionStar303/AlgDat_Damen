@@ -737,16 +737,21 @@ public class MChessBoard extends ChessBoard {
      */
     public void spawnChessBoard() {
         saveBlocks();
-        for (int x = 0; x < size; x++) {
-            for (int z = 0; z < size; z++) {
-                boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
-                Material material = isWhite ? whiteFieldMaterial : blackFieldMaterial;
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < size; x++) {
+                for (int z = 0; z < size; z++) {
+                    Material material = Material.AIR;
+                    if (y == 0) {
+                        boolean isWhite = ((x + z) % 2 == 0) == this.isOriginCornerWhite;
+                        material = isWhite ? whiteFieldMaterial : blackFieldMaterial;
+                    }
 
-                Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
-                        originCorner.getBlockX() + x,
-                        originCorner.getBlockY(),
-                        originCorner.getBlockZ() + z);
-                currentBlock.setType(material);
+                    Block currentBlock = originCorner.getBlock().getWorld().getBlockAt(
+                            originCorner.getBlockX() + x,
+                            originCorner.getBlockY() + y,
+                            originCorner.getBlockZ() + z);
+                    currentBlock.setType(material);
+                }
             }
         }
         updateCollisionCarpets();
@@ -962,12 +967,14 @@ public class MChessBoard extends ChessBoard {
      */
     public void saveBlocks() {
         this.savedBlocks = new HashMap<>();
-        for (int x = 0; x < size; x++) {
-            for (int z = 0; z < size; z++) {
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
-                        originCorner.getY(), originCorner.getZ() + z);
-                Material block = location.getBlock().getType();
-                savedBlocks.put(location, block);
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < size; x++) {
+                for (int z = 0; z < size; z++) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + y, originCorner.getZ() + z);
+                    Material block = location.getBlock().getType();
+                    savedBlocks.put(location, block);
+                }
             }
         }
     }
@@ -980,11 +987,13 @@ public class MChessBoard extends ChessBoard {
             System.out.println("Fehler beim Laden der originalen Blöcke.");
             return;
         }
-        for (int x = 0; x < size; x++) {
-            for (int z = 0; z < size; z++) {
-                Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
-                        originCorner.getY(), originCorner.getZ() + z);
-                location.getBlock().setType(savedBlocks.get(location));
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < size; x++) {
+                for (int z = 0; z < size; z++) {
+                    Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
+                            originCorner.getY() + y, originCorner.getZ() + z);
+                    location.getBlock().setType(savedBlocks.get(location));
+                }
             }
         }
     }
