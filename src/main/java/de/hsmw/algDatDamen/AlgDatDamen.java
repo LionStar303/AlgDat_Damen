@@ -84,7 +84,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5,-90f, 0f);
+        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
 
         // töte alle Entities, welche sich im Spiel befinden
         List<Entity> entities = player.getWorld().getEntities();
@@ -125,7 +125,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         startLocation = new Location(event.getPlayer().getWorld(), 0, -45, 170);
         event.getPlayer().teleport(startLocation);
         event.getPlayer().setGameMode(org.bukkit.GameMode.SURVIVAL);
-        event.getPlayer().setRespawnLocation(startLocation);
+        event.getPlayer().setRespawnLocation(startLocation, true);
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
     }
