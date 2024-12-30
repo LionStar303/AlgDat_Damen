@@ -51,12 +51,13 @@ public class Step {
         onReset.run();
         completed = false;
     };
-    public void checkForCompletion() {
+    public boolean checkForCompletion() {
         // wenn kein checkCompletion definiert wurde, ist der step automatisch completed
         if(checkCompletion == null) {
             this.completed = true;
-            return;
+            return true;
         }
         completed = checkCompletion.test(null);
+        return completed;
     }
 }
