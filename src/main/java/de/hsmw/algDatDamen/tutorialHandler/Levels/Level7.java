@@ -66,6 +66,7 @@ public class Level7 extends Level {
         currentStep = new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -130, -7, -88), 0.5);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(false);

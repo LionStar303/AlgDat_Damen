@@ -201,7 +201,7 @@ public class NPC implements Listener {
             }, 0L, 3L);
             System.out.println("Task gestartet: " + villagerTask[0].toString());
 
-            int delay = 3; // Sekunden
+            int delay = 5; // Sekunden
 
             villagerTask[1] = Bukkit.getScheduler().runTaskLater(AlgDatDamen.getInstance(), () -> {
                 if (!villagerTask[0].isCancelled()) {

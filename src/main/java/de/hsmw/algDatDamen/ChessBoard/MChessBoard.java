@@ -35,6 +35,8 @@ public class MChessBoard extends ChessBoard {
     private Map<Location, Material> savedBlocks;
     private MChessBoardMode mode;
 
+    private final static Material USER_CARPET_MATERIAL = Material.LIME_CARPET;
+
     // ----------- Constructors -----------
 
     /**
@@ -466,6 +468,38 @@ public class MChessBoard extends ChessBoard {
      */
     public boolean checkUserCarpets() {
 
+        for (int x = 0; x < size; x++) { // Iterate through the board's X-axis
+            for (int y = 0; y < size; y++) { // Iterate through the board's Y-axis
+                // Calculate the location of the current carpet
+                Location location = new Location(
+                        originCorner.getWorld(),
+                        originCorner.getX() + x,
+                        originCorner.getY() + 1,
+                        originCorner.getZ() + y);
+
+                Block block = location.getBlock();
+
+                // Skip blocks where a queen's bottom part is present
+                if (block.getType() == AlgDatDamen.QUEEN_BLOCK_BOTTOM || block.getType() == AlgDatDamen.KNIGHT_BLOCK_BOTTOM) {
+                    continue;
+                }
+
+                // keine Kollision aber Carpet
+                if(!checkCollision(x, y) && block.getType() == USER_CARPET_MATERIAL) {
+                    System.out.println("keine Kollision" + x + "," + y);
+                    return false;
+                }
+                // Kollision aber kein Carpet
+                if(checkCollision(x, y) && block.getType() != USER_CARPET_MATERIAL) {
+                    System.out.println("kein carpet" + x + "," + y);
+                    return false;
+                }
+            }
+        }
+        // true wenn keine Fehler
+        return true;
+
+        /*
         // return false if there are no pieces on the board
         if (this.pieces.size() == 0) {
             return false;
@@ -513,6 +547,7 @@ public class MChessBoard extends ChessBoard {
         }
 
         return correct;
+        */
     }
 
     /**
@@ -910,7 +945,7 @@ public class MChessBoard extends ChessBoard {
      * @param l
      */
     public void spawnUserCarpet(Location l) {
-        Material carpMaterial = Material.LIME_CARPET;
+        Material carpMaterial = USER_CARPET_MATERIAL;
         if (!isPartOfBoard(l)) {
             return;
         }

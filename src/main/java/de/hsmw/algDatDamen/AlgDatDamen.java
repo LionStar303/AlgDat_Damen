@@ -4,6 +4,8 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.menu.MenuCommand;
 import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
+import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -11,7 +13,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,7 +29,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
@@ -85,6 +85,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
+        NPC startMessageNPC = new NPC(startLocation, false);
+        startMessageNPC.playTrack(NPCTrack.NPC_001_INTRO);
 
         player.teleport(startLocation);
         player.setRespawnLocation(startLocation, true);

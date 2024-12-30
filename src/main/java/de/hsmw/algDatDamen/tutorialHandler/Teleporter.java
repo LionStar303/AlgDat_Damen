@@ -70,6 +70,7 @@ public class Teleporter {
     }
 
     public boolean isTeleportBlock(Block block) {
+        if(block == null) return false;
         Location blockLocation = block.getLocation();
         Material material = block.getType();
 

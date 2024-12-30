@@ -6,11 +6,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum NPCTrack {
 
+    
     // INTRO
     NPC_001_INTRO(Sound.ENTITY_ARMADILLO_AMBIENT,
-            "Ah willkommen, du möchtest wissen, wie man am besten N Damen mit Hilfe "
-            + "des Backtracking-Algorithmus löst? Lass mich dir erklären, wie man ein "
-            + "Schachspiel Feld mit Damen ausfüllt, ohne dass sie sich gegenseitig schlagen."),
+            "Hallo, heute wollen wir uns ansehen, wie man N-Damen mit Hilfe des Backtracking "
+            + "Algorithmus löst. Lass mich dir erklären, wie man ein Schachspielfeld mit Damen ausfüllt, "
+            + "ohne dass sie sich gegenseitig schlagen können. In deiner Menüleiste hast du dafür "
+            + "verschiedene Items, mit denen du mit dem Tutorial interagieren kannst."),
 
     // Level 1
     NPC_101_EXPLAIN_CHESSBOARD(Sound.ENTITY_ARMADILLO_BRUSH,
@@ -220,6 +222,6 @@ public enum NPCTrack {
             }
         }
         formattedString.append(input.substring(i));
-        return formattedString.toString();
-    }
+                return formattedString.toString();
+        }
 }
