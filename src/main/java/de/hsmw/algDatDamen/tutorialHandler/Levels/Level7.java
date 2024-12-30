@@ -88,8 +88,8 @@ public class Level7 extends Level {
                 () -> {
                     npc.playTrack(NPCTrack.NPC_703_KNIGHT_2); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].updateBoard();
                     chessBoards[0].spawnPiece(new Knight(5, 5));
                     setInventory();
                 },
@@ -254,7 +254,7 @@ public class Level7 extends Level {
             chessBoards[0].setCollisionCarpets(true);
             chessBoards[0].updateBoard();
 
-            chessBoards[0].setMode(MChessBoardMode.NORMAL);
+            chessBoards[0].setMode(MChessBoardMode.INACTIVE);
             chessBoards[0].setActive(true); // TODO: An Modus anpassen
 
             chessBoards[0].setStateX(0);
@@ -267,9 +267,11 @@ public class Level7 extends Level {
                     if (chessBoards[0].getPieces().size() >= 3) {
                         this.cancel(); // Stoppt den Runnable, wenn genug Figuren gesetzt sind
                         chessBoards[0].updateBoard();
+                        chessBoards[0].setMode(MChessBoardMode.EXPLODING);
                         setInventory();
                         player.getInventory().setItem(0, ControlItem.PLACE_SUPERQUEEN.getItemStack());
                         player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
+                        currentStepcheckForCompletion();
                         return;
                     }
                     chessBoards[0].animationStepToNextField(new Superqueen());
@@ -281,12 +283,10 @@ public class Level7 extends Level {
                     if (animation != null) animation.cancel();
                     chessBoards[0].stopCurrentAnimation();
                     setInventory();
-                    chessBoards[0].setMode(MChessBoardMode.EXPLODING);
-                    chessBoards[0].setActive(false); // TODO an mode anpassen
-
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateBoard();
+                    
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
                 unused -> {
@@ -297,7 +297,7 @@ public class Level7 extends Level {
                         return true;
                     }
 
-                    if (cb.getPieces().size() > 7) {
+                    if (cb.getPieces().size() > 6) {
                         npc.playTrackPositive();
                         chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);

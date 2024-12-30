@@ -126,6 +126,10 @@ public class Level4 extends Level {
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].setActive(false); // TODO mode
+
+                    chessBoards[0].setStateX(0);
+                    chessBoards[0].setStateY(0);
+                    
                     player.getInventory().setItem(0, ControlItem.SHOW_CARPET.getItemStack());
                     animation = new BukkitRunnable() {
                         @Override
