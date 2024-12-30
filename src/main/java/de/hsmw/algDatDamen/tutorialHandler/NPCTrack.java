@@ -9,9 +9,9 @@ public enum NPCTrack {
     
     // INTRO
     NPC_001_INTRO(Sound.ENTITY_ARMADILLO_AMBIENT,
-            "Hallo, heute wollen wir uns ansehen, wie man N-Damen mit Hilfe des Backtracking"
-            + "Algorithmus löst. Lass mich dir erklären, wie man ein Schachspielfeld mit Damen ausfüllt,"
-            + "ohne dass sie sich gegenseitig schlagen können. In deiner Menüleiste hast du dafür"
+            "Hallo, heute wollen wir uns ansehen, wie man N-Damen mit Hilfe des Backtracking "
+            + "Algorithmus löst. Lass mich dir erklären, wie man ein Schachspielfeld mit Damen ausfüllt, "
+            + "ohne dass sie sich gegenseitig schlagen können. In deiner Menüleiste hast du dafür "
             + "verschiedene Items, mit denen du mit dem Tutorial interagieren kannst."),
 
     // Level 1
@@ -222,6 +222,6 @@ public enum NPCTrack {
             }
         }
         formattedString.append(input.substring(i));
-        return formattedString.toString();
+                return formattedString.toString();
         }
 }
