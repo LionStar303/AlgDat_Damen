@@ -273,6 +273,24 @@ public class DevelopmentHandles {
         event.setCancelled(true);
     }
 
+    public static void handlePlayBacktrackStepsToRow(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
+                    "welches bis zur gegebenen Reihe gelöst werden soll!", NamedTextColor.RED));
+            return;
+        }
+
+        MChessBoard mcB = getClickedMCB(event);
+
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+            event.getPlayer().sendMessage(Component.text("Animation gestoppt."));
+        } else {
+            mcB.animationSolveToRow(p, backtrackRow);
+            event.getPlayer().sendMessage(Component.text("Animation gestartet."));
+        }
+    }
+
     public static void updatePieces(PlayerInteractEvent event) {
         MChessBoard mcB = getClickedMCB(event);
         mcB.updatePieces();
@@ -380,6 +398,36 @@ public class DevelopmentHandles {
                 break;
         }
         devMenu.updateItemName(MenuSlots.PIECE, ("Aktuelle Figur: " + p.getName()));
+    }
+
+    public static void handlePlayBongoAnimation(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
+                    "welches mit Bongo-Sort gelöst werden soll!", NamedTextColor.RED));
+            return;
+        }
+        
+        MChessBoard mcB = getClickedMCB(event);
+        if (mcB.isAnimationRunning()) {
+            mcB.stopCurrentAnimation();
+            event.getPlayer().sendMessage(Component.text("Animation gestoppt."));
+        } else {
+            mcB.BongoSolveAnimation(getInstance(), 10, p);
+        }
+        
+    }
+
+    public static void handlePlayBongoAnimationStep(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) {
+            event.getPlayer().sendMessage(Component.text("Du musst einen Block des Schachbrettes anklicken, " +
+                    "welches mit Bongo-Sort gelöst werden soll!", NamedTextColor.RED));
+            return;
+        }
+        
+        MChessBoard mcB = getClickedMCB(event);
+        boolean result = mcB.animationStepBongo(p);
+        if (result) event.getPlayer().sendMessage(Component.text("Das Schachbrett wurde gelöst!")); 
+        else event.getPlayer().sendMessage(Component.text("Das Schachbrett wurde gelöst!"));
     }
 
 }

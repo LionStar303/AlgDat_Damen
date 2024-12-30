@@ -54,6 +54,7 @@ public class Level3 extends Level {
             () -> {
                 npc.playTrack(NPCTrack.NPC_301_INTRO);
                 chessBoards[0].spawnChessBoard();
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 93), 1);
             },
             () -> {
                 // Chessboard despawnen
@@ -68,6 +69,8 @@ public class Level3 extends Level {
         // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
         setupStep.setNext(new Step(
                 () -> {
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[1].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setMode(MChessBoardMode.NORMAL); 
                     chessBoards[0].setActive(true);
@@ -104,6 +107,7 @@ public class Level3 extends Level {
                 // PLACE_QUEEN item wegnehmen
                 setInventory();
                 // Schachbrett zurücksetzen und zweites spawnen
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 87), 1);
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
     	        chessBoards[0].setActive(false);
                 chessBoards[0].setCollisionCarpets(false);
@@ -130,7 +134,7 @@ public class Level3 extends Level {
             },
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if(latestPlayerInput.toLowerCase().contains("gespiegel")) {
+                if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
@@ -151,7 +155,9 @@ public class Level3 extends Level {
             () -> {
                 // erstes chessboard despawnen und beide leeren
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].despawnChessBoard();
+                chessBoards[0].setActive(false);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                chessBoards[0].updateBoard();
                 chessBoards[1].removeAllPieces();
                 chessBoards[1].updateBoard();
 
@@ -159,6 +165,7 @@ public class Level3 extends Level {
                 chessBoards[1].setMode(MChessBoardMode.NORMAL); 
                 chessBoards[1].setCollisionCarpets(false);
                 npc.playTrack(NPCTrack.NPC_303_SECOND_TASK);
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 81), 1);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
                 player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -188,14 +195,15 @@ public class Level3 extends Level {
                 // Inventar leeren
                 setInventory();
                 chessBoards[1].despawnChessBoard();
-                teleporter.setEnabled(true);
+                teleporter.setEnabled(true, true);
                 // teleport item geben
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -86, -31, 85), 1);
             },
             () -> {
                 // Schachbrett wieder spawnen
                 setInventory();
-                teleporter.setEnabled(false);
+                teleporter.setEnabled(false, true);
                 chessBoards[1].spawnChessBoard();
             }
             ));

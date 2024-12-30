@@ -34,6 +34,7 @@ public enum MenuSlots {
     BACKTRACK_UNTIL(35),
     BACKTRACK_ANIMATION(41), // Erweiterung im 27-Slot-Inventar
     BACKTRACK_ANIMATION_FAST(42), // Erweiterung im 27-Slot-Inventar
+    BACKTRACK_ANIMATION_ROW(44),
 
     // Rückschritte
     REVERSE_STEP(34),
@@ -42,6 +43,7 @@ public enum MenuSlots {
 
     // Spezialaktionen
     MOVEMENT_SOLUTION(21),
+    BONGO_SOLVE_STEP(29),
     BONGO_SOLVE(38); // Für eine gute Gruppierung;
 
     public final int slot;

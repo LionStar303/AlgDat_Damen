@@ -1,17 +1,15 @@
 package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
+import java.util.Random;
+
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-
-import static de.hsmw.algDatDamen.AlgDatDamen.getInstance;
-
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.Knight;
@@ -37,11 +35,10 @@ public class Level7 extends Level {
 
     // TODO LEVEL_NAME & LEVEL_DESCRIPTION
     private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
-    private final static String LEVEL_DESCRIPTION = "TODO Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
+    private final static String LEVEL_DESCRIPTION = "Einführung und Anwendung der Springerfigur und der Superdame";
 
-    
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -7, -66),
+        this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
                 new Location(player.getWorld(), -127, -7, -64), parent);
     }
 
@@ -68,8 +65,7 @@ public class Level7 extends Level {
         // Erzeugung eines 8x8 Schachbretts
         currentStep = new Step(
                 () -> {
-                    // TODO playTrack anpassen nach anpassung
-                    npc.playTrack(NPCTrack.NPC_701_OLD); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
+                    npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(false);
@@ -96,6 +92,7 @@ public class Level7 extends Level {
                 () -> {
                     setInventory();
                 }
+        // TODO
         // Step ist complete wenn das Schachbrett gelöst ist, oder 3 min abgelaufen
         // sind.
 
@@ -244,7 +241,8 @@ public class Level7 extends Level {
                 () -> {
                     setInventory();
                     chessBoards[0].removeAllPieces();
-                    if (animation != null) animation.cancel();
+                    if (animation != null)
+                        animation.cancel();
                 }));
         setupStep = setupStep.getNext();
 
@@ -280,13 +278,14 @@ public class Level7 extends Level {
 
         },
                 () -> {
-                    if (animation != null) animation.cancel();
+                    if (animation != null)
+                        animation.cancel();
                     chessBoards[0].stopCurrentAnimation();
                     setInventory();
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateBoard();
-                    
+
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
                 unused -> {
@@ -310,22 +309,102 @@ public class Level7 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].stopCurrentAnimation();
-                    if (animation != null) animation.cancel();
+                    if (animation != null)
+                        animation.cancel();
                     npc.playTrack(NPCTrack.NPC_710_END);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
+                    int[][] positions = {
+                            { -126, 10, -141 },
+                            { -90, 10, -86 },
+                            { -93, 10, -113 },
+                            { -162, 10, -113 },
+                            { -162, 10, -93 }
+                    };
+                    startFireworkShow(player.getWorld(), positions);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
                 },
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
+                    if (animation != null)
+                        animation.cancel();
                 }));
         setupStep = setupStep.getNext();
 
         // alle Steps in beide Richtungen miteinander verknüpfen
         currentStep.backLink();
+    }
+
+    public void startFireworkShow(World world, int[][] positions) {
+        if (world == null) {
+            return;
+        }
+
+        if (animation != null) {
+            animation.cancel();
+            animation = null;
+        }
+
+        Random random = new Random();
+
+        // Startet die Animation
+        animation = new BukkitRunnable() {
+            int ticks = 0;
+
+            @Override
+            public void run() {
+
+                for (int i = 0; i < positions.length; i++) {
+
+                    if (ticks >= 30 * 20) { // 30 Sekunden (20 Ticks pro Sekunde)
+                        cancel();
+                        return;
+                    }
+
+                    // Zufällige Offsets für X und Z innerhalb eines Radius von 5 Blöcken
+                    int offsetX = random.nextInt(11) - 5; // Werte von -5 bis +5
+                    int offsetZ = random.nextInt(11) - 5; // Werte von -5 bis +5
+
+                    // Neue zufällige Position für das Feuerwerk
+                    Location location = new Location(world, positions[i][0] + offsetX, positions[i][1],
+                            positions[i][2] + offsetZ);
+
+                    // Spawnt ein Feuerwerk an der zufälligen Position
+                    Firework firework = world.spawn(location, Firework.class);
+                    FireworkMeta meta = firework.getFireworkMeta();
+
+                    // Zufällige Farben
+                    Color[] colors = {
+                            Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
+                            Color.PURPLE, Color.ORANGE, Color.WHITE
+                    };
+                    Color primary = colors[random.nextInt(colors.length)];
+                    Color fade = colors[random.nextInt(colors.length)];
+
+                    // Zufällige Explosionseffekte
+                    FireworkEffect.Type type = FireworkEffect.Type.values()[random
+                            .nextInt(FireworkEffect.Type.values().length)];
+
+                    // Erstellen des Effekts
+                    FireworkEffect effect = FireworkEffect.builder()
+                            .withColor(primary)
+                            .withFade(fade)
+                            .flicker(random.nextBoolean())
+                            .trail(true)
+                            .with(type)
+                            .build();
+
+                    meta.addEffect(effect);
+                    meta.setPower(random.nextInt(3) + 1); // Flugzeit zwischen 1 und 3
+                    firework.setFireworkMeta(meta);
+
+                    ticks += 10; // Alle 10 Ticks (0,5 Sekunden) ein Feuerwerk
+                }
+            }
+        }.runTaskTimer(AlgDatDamen.getInstance(), 0L, 10L); // Start sofort, Wiederholung alle 10 Ticks
     }
 
 }

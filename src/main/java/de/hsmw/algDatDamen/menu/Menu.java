@@ -161,6 +161,8 @@ public class Menu implements Listener {
                 "handleBacktrackAnimation");
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
                 "handleBacktrackAnimationQueenStep");
+        this.addMenuItem(Material.IRON_AXE, "Backtracking Animation bis...", MenuSlots.BACKTRACK_ANIMATION_ROW,
+                "handlePlayBacktrackStepsToRow");
 
         this.addMenuItem(Material.GOLDEN_PICKAXE, "Rückschritt", MenuSlots.REVERSE_STEP,
                 "handleReverseStep");
@@ -174,7 +176,12 @@ public class Menu implements Listener {
         this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
                 "changeBlackFieldMaterial");
 
-                this.fillEmptySlots();
+        this.addMenuItem(Material.WHITE_GLAZED_TERRACOTTA, "Lösung mit Bongo-Sort", MenuSlots.BONGO_SOLVE,
+                "handlePlayBongoAnimation");
+        this.addMenuItem(Material.ORANGE_GLAZED_TERRACOTTA, "Zufall mit Bongo-Sort", MenuSlots.BONGO_SOLVE_STEP,
+                "handlePlayBongoAnimationStep");
+
+        this.fillEmptySlots();
         }
 
         /**

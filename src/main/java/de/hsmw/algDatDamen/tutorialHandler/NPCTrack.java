@@ -45,11 +45,11 @@ public enum NPCTrack {
             "Wenn du jetzt selbst einen Blick auf das Feld wirfst solltest du "
             + "feststellen können das wir keine weitere Dame mehr platzieren "
             + "können, ohne das sie bedroht wird, aber auch kein unbedrohtes Feld "
-            + "übrig bleibt."
-            + "Hierbei handelt es sich um das sogenannte N-Damen-Problem."
+            + "übrig bleibt.\r\n"
+            + "Hierbei handelt es sich um das sogenannte N-Damen-Problem. "
             + "Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett "
             + "platziert werden müssen, ohne dass sich zwei Damen gegenseitig "
-            + "angreifen."
+            + "angreifen.\r\n"
             + "Und wie du auch gesehen hast haben wir das Problem soeben gelöst. "
             + "Also lass mich nun dazu über gehen wie das passiert ist. "),
     NPC_207_EXPLAIN_3X3_1(Sound.ENTITY_ARMADILLO_STEP,
@@ -76,25 +76,8 @@ public enum NPCTrack {
             "Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber "
             + "diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen "
             + "so setzt, dass sie sich nicht gegenseitig schlagen. "),
-    /*
-     * TODO
-     * Diese Texte müssen nochmal eingesprochen werden:
-     * NPC_401_INTRO -> ENTITY_PIG_AMBIENT
-     * Lass uns nun das Ganze nochmal auf einem größeren Feld betrachten.
-     * 
-     * NPC_402_EXPLAIN_PROBLEM -> ENTITY_AXOLOTL_SPLASH
-     * Löse nun das Schachbrett! Du wirst feststellen, dass es nicht so einfach ist.
-     * Ich glaube aber, dass du es schaffen kannst. Falls du es nicht schaffst, ist
-     * das auch nicht schlimm. Nach einiger Zeit kannst du einfach weiterklicken.
-     * 
-     * NPC_404_STEP_BY_STEP -> Sound.ENTITY_BAT_AMBIENT ist unwichtig
-     * --> man könnte folgende Variationen tauschen:
-     * -> NPC_401_INTRO -> ENTITY_AXOLOTL_SPLASH
-     * -> NPC_402_EXPLAIN_PROBLEM -> ENTITY_AXOLOTL_SWIM
-     * -> NPC_403_EXPLAIN_BACKTRACKING_1 -> ENTITY_BAT_AMBIENT
-     * -> NPC_404_EXPLAIN_BACKTRACKING_2 -> ENTITY_BAT_DEATH
-     * Ich habe es schon im Quelltext hier drunter angepasst.
-     */
+    NPC_304_INTERACTION(Sound.BLOCK_AZALEA_FALL,
+            "Gib nun deine Lösung in das Textfeld ein. Um das Textfeld zu öffnen, drücke die T-Taste."),
     NPC_401_INTRO(Sound.ENTITY_AXOLOTL_SPLASH,
             "Lass uns nun das Ganze nochmal auf einem größeren Feld betrachten. "),
     NPC_402_EXPLAIN_PROBLEM(Sound.ENTITY_AXOLOTL_SWIM,
@@ -137,15 +120,14 @@ public enum NPCTrack {
     @Deprecated // die fliegt raus
     NPC_605_EXPLAIN_4(Sound.ENTITY_BEE_LOOP, "Hier sind zwei 8x8 Felder, eins ist gelöst, das andere "
             + "nicht. Welches ist welches? "),
+    NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE, "Aber fühl dich nicht allzu eingeschüchtert. Du musst nur "
+        + "sechs der zehn Damen setzen. "),
     // Level 7
     NPC_701_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE, "Jetzt werden wir das N-Damen-Problem auf einem noch größeren "
             + "Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen "
             + "mit der Größe des Schachbretts ändern. "),
-    NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE, "Aber fühl dich nicht allzu eingeschüchtert. Du musst nur "
-            + "sechs der zehn Damen setzen. "),
-    // TODO NPC_701_OLD mit NPC_702_KNIGHT_1 zusammenfassen
-    NPC_701_OLD(Sound.ENTITY_BEE_STING, "Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen. "),
-    NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT, "Der Springer bewegt sich in einem L-förmigen Muster. Er kann "
+    NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT, "Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen."
+            + "Der Springer bewegt sich in einem L-förmigen Muster. Er kann "
             + "zwei Felder in eine Richtung und dann ein Feld in eine senkrechte "
             + "Richtung springen oder umgekehrt. "),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN, "Ziemlich genauso würde das dann aussehen. "),
@@ -165,6 +147,8 @@ public enum NPCTrack {
     NPC_710_END(Sound.ENTITY_CAMEL_DEATH, "Ich hoffe, dass dir dies beim Verstehen des N-Damen-Problems "
             + "und der Lösung durch die Anwendung des Backtracking-Algorithmus "
             + "geholfen hat, und ich wünsche dir weiterhin viel Erfolg. "),
+    NPC_801_INTRO(Sound.BLOCK_AZALEA_HIT, "Glückwunsch; du hast das Ende erreicht, nun kannst du dich selbst nach Belieben am N-Damen Problem ausprobieren."
+            + "Nutze dazu das DevMenu, auf das du nun Zugriff hast. Viel Spaß"),"
     // Positive Response
     NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT, "Richtig!", NamedTextColor.GREEN),
     NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT, "Korrekt!", NamedTextColor.GREEN),
@@ -230,3 +214,5 @@ public enum NPCTrack {
     }
     
 }
+
+

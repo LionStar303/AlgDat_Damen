@@ -53,7 +53,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 1);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 0.5);
                 },
                 () -> {
                     chessBoards[0].despawnChessBoard();
@@ -68,8 +68,6 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     // spawne Queen auf Feld (3,2)
-                    if (console)
-                        System.out.println("setze Dame auf 3, 2");
                     chessBoards[0].addPiece(new Queen(3, 2));
                     chessBoards[0].updatePieces();
                     npc.playTrack(NPCTrack.NPC_102_EXPLAIN_QUEEN);
@@ -85,41 +83,32 @@ public class Level1 extends Level {
         // Erklärung der Bewegungsmuster durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnCollisionCarpets();
+                    chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].updateCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_103_EXPLAIN_MOVEMENT);
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 1);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 0.5);
                 },
                 () -> {
-                    chessBoards[0].despawnCollisionCarpets();
+                    chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].updateCollisionCarpets();
                 }));
         setupStep = setupStep.getNext();
 
         // Setzen einer weiteren Dame durch Computer
-        setupStep.setNext(new Step(
-                () -> {
-                    // Bewegungsmuster entfernen (wird im nächsten Schritt wieder erzeugt)
-                    chessBoards[0].despawnCollisionCarpets();
-                    // spawne Queen auf Feld (5,3)
-                    chessBoards[0].addPiece(new Queen(5, 3));
-                    chessBoards[0].updatePieces();
-                },
-                () -> {
-                    // entferne zuletzt gesetzte Dame von Feld (5,3)
-                    chessBoards[0].removeLastQueen();
-                    chessBoards[0].updatePieces();
-                    chessBoards[0].spawnCollisionCarpets();
-                }));
-        setupStep = setupStep.getNext();
-
         // Anzeigen der Bedrohungen der Damen
         // Erklärung der Bedrohungen durch NPC
         setupStep.setNext(new Step(
                 () -> {
-                    chessBoards[0].spawnCollisionCarpets();
                     npc.playTrack(NPCTrack.NPC_104_EXPLAIN_THREATS);
+                    // spawne Queen auf Feld (6,5)
+                    chessBoards[0].addPiece(new Queen(6, 5));
+                    chessBoards[0].updateBoard();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -24, -44, 139), 0.5);
                 },
                 () -> {
-                    chessBoards[0].despawnCollisionCarpets();
+                    // entferne zuletzt gesetzte Dame von Feld (6,5)
+                    chessBoards[0].removeLastQueen();
+                    chessBoards[0].updateBoard();
                 }));
         setupStep = setupStep.getNext();
 
@@ -127,8 +116,9 @@ public class Level1 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].removeAllPieces();
+                    chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].addPiece(new Queen(2, 0));
-                    chessBoards[0].updatePieces();
+                    chessBoards[0].updateBoard();
                     setInventory();
                     player.getInventory().setItem(1, ControlItem.SPAWN_CARPET.getItemStack());
                     npc.playTrack(NPCTrack.NPC_105_MOVEMENT_MARKING);
@@ -136,7 +126,11 @@ public class Level1 extends Level {
                 () -> {
                     setInventory();
                     chessBoards[0].removeLastQueen();
-                    chessBoards[0].updatePieces();
+                    chessBoards[0].setCollisionCarpets(true);
+                    // spawne Queen auf Feld (6,5) und Feld(3,2)
+                    chessBoards[0].addPiece(new Queen(6, 5));
+                    chessBoards[0].addPiece(new Queen(3, 2));
+                    chessBoards[0].updateBoard();
                 },
                 unused -> {
                     if (chessBoards[0].checkUserCarpets()) {
@@ -153,15 +147,15 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].despawnAllPieces();
                     chessBoards[0].despawnChessBoard();
-                    teleporter.setEnabled(true);
+                    teleporter.setEnabled(true, true);
                     setInventory();
                     player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -33, -42, 137), 1);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -33, -42, 137), 0.5);
                 },
                 // alle Figuren spawnen
                 () -> {
                     setInventory();
-                    teleporter.setEnabled(false);
+                    teleporter.setEnabled(false, true);
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].spawnAllPieces();
                 }));

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
+import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -30,10 +31,10 @@ public class Level5 extends Level{
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[2];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -186, -19, 15), 6, player);
         chessBoards[0].setCollisionCarpets(false);
 
-        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
+        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -186, -19, 15), 6, player);
         chessBoards[1].setWhiteFieldMaterial(Material.BLUE_CONCRETE);
         chessBoards[1].setBlackFieldMaterial(Material.YELLOW_CONCRETE);
         chessBoards[1].setCollisionCarpets(false);
@@ -48,6 +49,7 @@ public class Level5 extends Level{
         currentStep = new Step(
             () -> {
                 npc.playTrack(NPCTrack.NPC_501_INTRO);
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -170, -18, 23), 1);
             },
             () -> {}
         );
@@ -61,6 +63,10 @@ public class Level5 extends Level{
                 () -> {
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].addPiece(new Queen(0,0));
+                    chessBoards[0].updateBoard();
+                    chessBoards[0].verfyPieces(new Queen());
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -86,7 +92,10 @@ public class Level5 extends Level{
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].despawnChessBoard();
                     chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
-                    chessBoards[1].spawnChessBoard();
+                    chessBoards[1].removeAllPieces();
+                    chessBoards[1].addPiece(new Queen(0,0));
+                    chessBoards[1].updateBoard();
+                    chessBoards[1].verfyPieces(new Queen());
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
@@ -112,7 +121,7 @@ public class Level5 extends Level{
             () -> {
                 chessBoards[1].despawnChessBoard();
                 // teleport item geben
-                teleporter.setEnabled(true);
+                teleporter.setEnabled(true, true);
                 // Inventar leeren und teleport item geben
                 setInventory();
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
@@ -120,7 +129,7 @@ public class Level5 extends Level{
             () -> {
                 // Schachbrett wieder spawnen
                 setInventory();
-                teleporter.setEnabled(false);
+                teleporter.setEnabled(false, true);
             }
             ));
 
