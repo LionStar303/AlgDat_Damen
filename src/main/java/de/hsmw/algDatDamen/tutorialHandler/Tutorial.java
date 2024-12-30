@@ -40,8 +40,8 @@ public class Tutorial {
         levels.add(new Level2(console, getPlayer(), this));
         levels.add(new Level3(console, getPlayer(), this));
         levels.add(new Level4(console, getPlayer(), this));
-        levels.add(new Level5(console, getPlayer(), this));
-        levels.add(new Level6(console, getPlayer(), this));
+        // levels.add(new Level5(console, getPlayer(), this));
+        // levels.add(new Level6(console, getPlayer(), this));
         levels.add(new Level7(console, getPlayer(), this));
         levels.add(new Level8(console, getPlayer(), this));
 
