@@ -83,10 +83,13 @@ public abstract class Level implements Listener {
 
     // Standardmethoden
     public void start() {
-        if (console)
-            System.out.println("Level: starte level");
-        active = true;
+        // Spieler wird immer zum Start teleportiert, auch wenn das Level schon läuft
         teleportToStart();
+
+        // Abbruch, wenn das Level schon läuft
+        if(active) return;
+        if (console) System.out.println("Level: starte level");
+        active = true;
 
         configureChessBoards();
 
@@ -185,6 +188,7 @@ public abstract class Level implements Listener {
     }
 
     private void startNextLevel() {
+        active = false;
         parentTutorial.incProgress();
         parentTutorial.getCurrentLevel().start();
     }
@@ -253,9 +257,9 @@ public abstract class Level implements Listener {
                     }
                 }
 
-                if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3))
-                        && teleporter.isEnabled()
-                        && currentStep.getNext() == null) {
+                // TODO mal gucken ob Moritz damit glücklich ist
+                // if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3))
+                if ((fireClicked) && teleporter.isEnabled() && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
                     startNextLevel();
                 } else {
