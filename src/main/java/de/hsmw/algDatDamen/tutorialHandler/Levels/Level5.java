@@ -49,7 +49,7 @@ public class Level5 extends Level{
         currentStep = new Step(
             () -> {
                 npc.playTrack(NPCTrack.NPC_501_INTRO);
-                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -170, -18, 23), 1);
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -180, -18, 21), 0.5);
             },
             () -> {}
         );
@@ -128,6 +128,7 @@ public class Level5 extends Level{
                 // Inventar leeren und teleport item geben
                 setInventory();
                 player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -187, -19, -5), 0.5);
             },
             () -> {
                 // Schachbrett wieder spawnen

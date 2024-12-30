@@ -2,9 +2,13 @@ package de.hsmw.algDatDamen.tutorialHandler;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -86,6 +90,11 @@ public abstract class Level implements Listener {
         if (console)
             System.out.println("Level: starte level");
         active = true;
+
+        // töte alle Entities, welche sich im Spiel befinden
+        List<Entity> entities = player.getWorld().getEntities();
+        for (Entity entity : entities) if (!(entity instanceof Player)) entity.remove();
+
         teleportToStart();
 
         configureChessBoards();

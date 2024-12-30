@@ -86,14 +86,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5,-90f, 0f);
 
-        // töte alle Entities, welche sich im Spiel befinden
-        List<Entity> entities = player.getWorld().getEntities();
-        for (Entity entity : entities) {
-            if (!(entity instanceof Player)) {
-                entity.remove();
-            }
-        }
-
         player.teleport(startLocation);
         player.setRespawnLocation(startLocation, true);
 
