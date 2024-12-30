@@ -620,6 +620,12 @@ public class MChessBoard extends ChessBoard {
                 // remove existing piece if location is already occupied
                 if(existingPiece != null) {
                     // Spieler kann nur das zuletzt gesetzte Piece entfernen
+                    if(pieces.size() <= 1 ){
+                        this.removePiece(existingPiece);
+                        this.verfyPieces(p); 
+                        return false;  
+                    }
+
                     if(!existingPiece.equals(pieces.get(pieces.size()-2))) return false;
                     this.removePiece(existingPiece);
                     this.verfyPieces(p); //geht schöner passt so könnte stateX und stateY auf Location setzen
@@ -633,6 +639,7 @@ public class MChessBoard extends ChessBoard {
                     return false;
                 }
                 */
+                this.console = true;
                 verfyPieces(p);
                 playBacktrackToNextPiece(p);
                 int x = pieces.getLast().getX();
@@ -640,13 +647,31 @@ public class MChessBoard extends ChessBoard {
                 getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
                 removeLastPiece();
                 
+                if (console) {
+                    System.out.println("Position der letzten Spielfigur: x = " + x + ", y = " + y);
+                    System.out.println("Prüfung: existingPiece == "+ existingPiece.toString() + " und p.getX() == " + x + " && p.getY() == " + y);
+                }
                 
-                if(existingPiece == null && p.getX() == x && p.getY() == y){
-                    if(addPiece(p.clone())) {
+                if (p.getX() == x && p.getY() == y) {
+                    // Wenn ein neues Stück hinzugefügt wird
+                    if (console) {
+                        System.out.println("Füge neues Stück hinzu: " + p.clone());
+                    }
+            
+                    if (addPiece(p.clone())) {
                         updateBoard();
+                        if (console) {
+                            System.out.println("Brett wurde aktualisiert.");
+                        }
                     }
                 } else {
+                    // Explosion abspielen, wenn die Bedingungen nicht erfüllt sind
                     playExplosionAnimation(l);
+            
+                    if (console) {
+                        System.out.println("Bedingungen für das Hinzufügen des Stücks nicht erfüllt. Explosion wird gespielt.");
+                    }
+            
                     return false;
                 }
 
