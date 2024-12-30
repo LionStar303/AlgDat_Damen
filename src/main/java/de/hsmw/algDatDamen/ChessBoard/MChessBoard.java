@@ -637,21 +637,21 @@ public class MChessBoard extends ChessBoard {
                 playBacktrackToNextPiece(p);
                 int x = pieces.getLast().getX();
                 int y = pieces.getLast().getX();
+                getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
                 removeLastPiece();
                 
                 
                 if(existingPiece == null && p.getX() == x && p.getY() == y){
-                    if(addPiece(p)) {
-                        spawnPiece(p);
-                        return true;
+                    if(addPiece(p.clone())) {
+                        updateBoard();
                     }
                 } else {
                     playExplosionAnimation(l);
                     return false;
                 }
-                verfyPieces(p);
+
                 playBacktrackToNextPiece(p);
-                getLocation(p).getBlock().setType(Material.BLUE_CARPET);
+                getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
                 removeLastPiece();
 
                 /* siehe pseudocode
