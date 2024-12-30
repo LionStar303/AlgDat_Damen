@@ -221,5 +221,5 @@ public enum NPCTrack {
         }
         formattedString.append(input.substring(i));
         return formattedString.toString();
-    }
+        }
 }
