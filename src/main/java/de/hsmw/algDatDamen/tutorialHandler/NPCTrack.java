@@ -118,12 +118,12 @@ public enum NPCTrack {
     @Deprecated // die fliegt raus
     NPC_605_EXPLAIN_4(Sound.ENTITY_BEE_LOOP, "Hier sind zwei 8x8 Felder, eins ist gelöst, das andere "
             + "nicht. Welches ist welches? "),
+    NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE, "Aber fühl dich nicht allzu eingeschüchtert. Du musst nur "
+        + "sechs der zehn Damen setzen. "),
     // Level 7
     NPC_701_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE, "Jetzt werden wir das N-Damen-Problem auf einem noch größeren "
             + "Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen "
             + "mit der Größe des Schachbretts ändern. "),
-    NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE, "Aber fühl dich nicht allzu eingeschüchtert. Du musst nur "
-            + "sechs der zehn Damen setzen. "),
     // TODO NPC_701_OLD mit NPC_702_KNIGHT_1 zusammenfassen
     NPC_701_OLD(Sound.ENTITY_BEE_STING, "Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen. "),
     NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT, "Der Springer bewegt sich in einem L-förmigen Muster. Er kann "
