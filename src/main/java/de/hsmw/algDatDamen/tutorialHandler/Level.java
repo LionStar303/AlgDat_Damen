@@ -308,12 +308,10 @@ public abstract class Level implements Listener {
                 }
                 break;
             case SHOW_CARPET:
-                if (chessBoards[currentCBID].isCollisionCarpets()) {
-                    chessBoards[currentCBID].setCollisionCarpets(false);
-                } else {
-                    chessBoards[currentCBID].setCollisionCarpets(true);
-                }
+                chessBoards[currentCBID].setCollisionCarpets(!chessBoards[currentCBID].isCollisionCarpets());
+                System.out.println("collision carpets " + chessBoards[currentCBID].isCollisionCarpets());
                 chessBoards[currentCBID].updateCollisionCarpets();
+                System.out.println("collision carpets " + chessBoards[currentCBID].isCollisionCarpets());
                 break;
             case SPAWN_CARPET:
                 if (event.getClickedBlock() == null)
