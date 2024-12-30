@@ -11,7 +11,6 @@ import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
-// TODO testen
 public class Level1 extends Level {
 
     private final static String LEVEL_NAME = "Level 1 - Einführung";
@@ -46,8 +45,6 @@ public class Level1 extends Level {
 
     @Override
     public void initializeSteps() {
-        // TODO alle Steps: NPC laufen lassen
-
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {

@@ -7,7 +7,6 @@ import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
-import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -37,8 +36,6 @@ public class Level6 extends Level {
 
     @Override
     protected void initializeSteps() {
-        // TODO alle Steps: NPC laufen lassen
-        
         currentStep = new Step(
             () -> {
                 npc.playTrack(NPCTrack.NPC_601_INTRO);

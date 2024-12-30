@@ -14,13 +14,6 @@ import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
-/* 
-### Level 4 - _erster versuch_:
-- Startpunkt `-106 -25 83`
-- Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
-- Teleporter `-143 -24 62`
- */
-// TODO muss getestet werden
 public class Level4 extends Level {
 
     private final static String LEVEL_NAME = "Level 4 - Erster versuch:";
@@ -70,10 +63,6 @@ public class Level4 extends Level {
                 () -> {
                     // Erklärung des Levelabschnitts und des Problems mit großen Schachbrettern
                     // durch NPC
-                    /*
-                     * TODO neuer Text
-                     * 
-                     */
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
                     stopBossBar();
                     chessBoards[0].updateBoard();
@@ -84,7 +73,7 @@ public class Level4 extends Level {
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                     player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
-                    startBossBarTimer(1, "Überspringen verfügbar in:"); //TODO change to 3 minutes
+                    startBossBarTimer(3, "Überspringen verfügbar in:");
                 },
                 () -> {
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);

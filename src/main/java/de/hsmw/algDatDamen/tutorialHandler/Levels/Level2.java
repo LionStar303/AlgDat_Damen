@@ -11,7 +11,6 @@ import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
-// TODO testen
 public class Level2 extends Level {
 
     private final static String LEVEL_NAME = "Level 2 - Boot Camp";
@@ -41,8 +40,6 @@ public class Level2 extends Level {
 
     @Override
     protected void initializeSteps() {
-        // TODO alle Steps: NPC laufen lassen
-
         // Erklärung des N-Damen-Problems durch NPC
         currentStep = new Step(
                 () -> {

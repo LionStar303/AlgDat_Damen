@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
-import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -42,8 +41,6 @@ public class Level5 extends Level{
 
     @Override
     protected void initializeSteps() {
-        // TODO alle Steps: NPC laufen lassen
-        
         // Erzeugung eines 4x4 Schachbretts
         // Erklärung des Levelabschnitts durch NPC
         currentStep = new Step(

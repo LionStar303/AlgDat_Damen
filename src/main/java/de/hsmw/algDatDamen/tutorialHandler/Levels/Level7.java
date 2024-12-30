@@ -24,16 +24,9 @@ import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 
-/* 
-### Level 7- Eiskönigin:
-- Startpunkt `-127 -7 -66, 180 -15`
-- Schachbrett `10x10 -192 -8 -98`
-- Teleporter -- (sollte noch einer hin für die Sandbox Insel)
- */
 // TODO muss getestet werden
 public class Level7 extends Level {
 
-    // TODO LEVEL_NAME & LEVEL_DESCRIPTION
     private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
     private final static String LEVEL_DESCRIPTION = "Erweiterung des Problems mit Einführung und Anwendung der Springerfigur und der Superdame.";
 
@@ -93,9 +86,6 @@ public class Level7 extends Level {
                 () -> {
                     setInventory();
                 }
-        // TODO
-        // Step ist complete wenn das Schachbrett gelöst ist, oder 3 min abgelaufen
-        // sind.
 
         ));
 
@@ -124,7 +114,6 @@ public class Level7 extends Level {
                     chessBoards[0].updateBoard();
 
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(true); // TODO an mode anpassen
 
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -136,7 +125,6 @@ public class Level7 extends Level {
                     setInventory();
 
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                    chessBoards[0].setActive(false); // TODO an mode anpassen
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -251,7 +239,6 @@ public class Level7 extends Level {
             chessBoards[0].updateBoard();
 
             chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-            chessBoards[0].setActive(true); // TODO: An Modus anpassen
 
             chessBoards[0].setStateX(0);
             chessBoards[0].setStateY(0);
@@ -298,7 +285,6 @@ public class Level7 extends Level {
                         npc.playTrackPositive();
                         chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                        chessBoards[0].setActive(false); // TODO an mode anpassen
                     }
                     return false;
                 }));

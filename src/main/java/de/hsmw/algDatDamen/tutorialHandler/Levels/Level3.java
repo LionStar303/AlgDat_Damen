@@ -14,7 +14,6 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-// TODO testen
 public class Level3 extends Level {
 
     private final static String LEVEL_NAME = "Level 3 - Scandi Zwilling";
@@ -46,8 +45,6 @@ public class Level3 extends Level {
 
     @Override
     protected void initializeSteps() {
-        // TODO alle Steps: NPC laufen lassen
-        
         // Erzeugung eines 4x4 Schachbretts
         // Erklärung des Levelabschnitts durch NPC
         currentStep = new Step(
