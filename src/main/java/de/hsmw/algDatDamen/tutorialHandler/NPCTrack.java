@@ -6,6 +6,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum NPCTrack {
 
+    // INTRO
+    NPC_001_INTRO(Sound.ENTITY_ARMADILLO_AMBIENT,
+            "Ah willkommen, du möchtest wissen, wie man am besten N Damen mit Hilfe"
+            + "des Backtracking-Algorithmus löst? Lass mich dir erklären, wie man ein"
+            + "Schachspiel Feld mit Damen ausfüllt, ohne dass sie sich gegenseitig schlagen."),
+
     // Level 1
     NPC_101_EXPLAIN_CHESSBOARD(Sound.ENTITY_ARMADILLO_BRUSH,
             "Aber was soll das heißen fragst du? Nun gut zuerst, hier ist ein "
@@ -68,58 +74,55 @@ public enum NPCTrack {
     // Level 3
     NPC_301_INTRO(Sound.ENTITY_AXOLOTL_HURT,
             "Aber jetzt sollst du mal dich versuchen. Hier ist ein 4x4 Brett. "
-            + "setze vier Damen so, dass keine eine andere bedroht. "),
+            + "Setze vier Damen so, dass keine eine andere bedroht. "),
     NPC_302_DIFFERENT_SOLUTIONS(Sound.ENTITY_AXOLOTL_IDLE_AIR,
             "Aber es hätte auch eine andere Lösung gegeben. Bestimme wie die "
-            + "Lösungen auf diesen beiden Brettern sich unterscheiden. "),
+            + "Lösungen auf diesen beiden Brettern sich unterscheiden. "
+            + "Gib nun deine Lösung in das Textfeld ein. "
+            + "Um das Textfeld zu öffnen, drücke die T-Taste."),
     NPC_303_SECOND_TASK(Sound.ENTITY_AXOLOTL_IDLE_WATER,
             "Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber "
             + "diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen "
             + "so setzt, dass sie sich nicht gegenseitig schlagen. "),
-    NPC_304_INTERACTION(Sound.BLOCK_AZALEA_FALL,
-            "Gib nun deine Lösung in das Textfeld ein. Um das Textfeld zu öffnen, drücke die T-Taste."),
-    NPC_401_INTRO(Sound.ENTITY_AXOLOTL_SPLASH,
+
+    // Level 4
+    NPC_401_INTRO(Sound.ENTITY_PIG_AMBIENT,
             "Lass uns nun das Ganze nochmal auf einem größeren Feld betrachten. "),
-    NPC_402_EXPLAIN_PROBLEM(Sound.ENTITY_AXOLOTL_SWIM,
+    NPC_402_EXPLAIN_PROBLEM(Sound.ENTITY_AXOLOTL_SPLASH,
             "Löse nun das Schachbrett! "
             + "Du wirst feststellen, dass es nicht so einfach ist. Ich glaube aber, "
             + "dass du es schaffen kannst. "
-            + "Falls du es nicht schaffst, ist das auch nicht schlimm. Nach einiger "
+            + "Falls du es nicht schaffst, ist das auch nicht so schlimm. Nach einiger "
             + "Zeit kannst du einfach weiterklicken. "),
-    NPC_403_EXPLAIN_BACKTRACKING_1(Sound.ENTITY_BAT_AMBIENT,
+    NPC_403_EXPLAIN_BACKTRACKING_1(Sound.ENTITY_AXOLOTL_SWIM,
             "Der Backtracking-Algorithmus ist eine Methode, um Lösungen für "
             + "Probleme zu finden, "
             + "indem man systematisch alle möglichen Optionen ausprobiert und "
             + "zurückgeht, wenn man auf eine Sackgasse stößt. "
-            + "Lass mich dir zeigen, wie das funktioniert. "),
-    @Deprecated
-    NPC_404_STEP_BY_STEP(Sound.ENTITY_BAT_AMBIENT, "Lass uns den Algorithmus nun Schritt für Schritt durchlaufen. "),
+            + "Lass mich dir zeigen, wie das funktioniert."),
     NPC_405_EXPLAIN_BACKTRACKING_2(Sound.ENTITY_BAT_DEATH,
             "Jedes Mal, wenn eine Dame platziert wird, prüfen wir, ob diese "
             + "Position es erlaubt, eine weitere zu stellen. "
             + "Ansonsten nehmen wir die Dame wieder vom Brett und versuchen sie an "
             + "einer anderen Stelle zu platzieren, wo wir dann wieder prüfen, ob sie "
-            + "gültig ist. "),
+            + "gültig ist."),
     // Level 5
-    // TODO für sechs Damen anpassen
     NPC_501_INTRO(Sound.ENTITY_BAT_HURT, "Prüfe nun wieder selbst, ob du den Algorithmus anwenden kannst. "
             + "Setze die sechs Damen wieder auf dem Brett nach den bekannten "
             + "Vorgaben, aber nutze diesmal dein Wissen über den Backtracking-Algorithmus. "),
     NPC_502_EXPLAIN_1(Sound.ENTITY_BAT_LOOP, "Schaffst du es auch, wenn wir die Farben tauschen? "),
     // Level 6
-    // TODO Intro für Level 6
-    NPC_601_INTRO(Sound.ENTITY_BAT_TAKEOFF, "Das ging ja schneller als gedacht, hier darfst du dich an einem "
+    NPC_601_INTRO(Sound.ENTITY_BAT_TAKEOFF, "Das ging schneller als gedacht, hier darfst du dich an einem "
             + "richtigen Schachbrett versuchen. "),
-    // TODO NPC_602_HELP und NPC_603_EXPLAIN_2 zusammenfassen (ENTITY_BAT_TAKEOFF wird für Intro verwendet)
-    // NPC_602_HELP(Sound.ENTITY_BAT_TAKEOFF ,""),
+            // TODO diesbezüglich
     NPC_602_EXPLAIN_2(Sound.ENTITY_BEE_DEATH, "Versuch jetzt das Brett zu vervollständigen. Aber keine Panik "
             + "(diesbezüglich), ich gebe dir etwas Hilfestellung. "),
-    // TODO abgeänderter Text wenn genug Zeit ist
     NPC_603_EXPLAIN_3(Sound.ENTITY_BEE_HURT, "Jetzt musst du noch den Anfang versuchen, setze nur die "
             + "ersten drei Damen. "),
     @Deprecated // die fliegt raus
     NPC_605_EXPLAIN_4(Sound.ENTITY_BEE_LOOP, "Hier sind zwei 8x8 Felder, eins ist gelöst, das andere "
             + "nicht. Welches ist welches? "),
+    @Deprecated // die auch
     NPC_606_EXPLAIN(Sound.ENTITY_BEE_POLLINATE, "Aber fühl dich nicht allzu eingeschüchtert. Du musst nur "
         + "sechs der zehn Damen setzen. "),
     // Level 7
@@ -131,6 +134,7 @@ public enum NPCTrack {
             + "zwei Felder in eine Richtung und dann ein Feld in eine senkrechte "
             + "Richtung springen oder umgekehrt. "),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN, "Ziemlich genauso würde das dann aussehen. "),
+    // TODO huh?
     NPC_704_KNIGHT_AND_QUEEN_1(Sound.ENTITY_BLAZE_DEATH, "Jetzt wollen wir beide kombinieren. Platziere Damen und "
             + "Springer so, dass sich niemand gegenseitig schlägt. "),
     NPC_705_KNIGHT_AND_QUEEN_2(Sound.ENTITY_BLAZE_HURT, "Ich habe vollstes Vertrauen, dass du diese Herausforderung "
@@ -138,7 +142,7 @@ public enum NPCTrack {
     NPC_706_SUPERQUEEN_INTRO(Sound.ENTITY_BLAZE_SHOOT, "Und da du das nun verstanden hast, kommen wir zum letzten "
             + "Punkt, den ich dir zeigen möchte."),
     NPC_707_SUPERQUEEN_EXPLAIN(Sound.ENTITY_CAMEL_AMBIENT, "Wenn wir die Eigenschaften von Dame und Springer vereinen, "
-            + "haben wir eine neue Figur die wir Superdame nennen wollen. "),
+            + "haben wir eine neue Figur, die wir Superdame nennen wollen. "),
     NPC_708_SUPERQUEEN_MOVE_1(Sound.ENTITY_CAMEL_DASH, "Hier siehst du, wie sich die Superdame auf dem Schachbrett "
             + "bewegen kann. Beachte die Vielzahl an Möglichkeiten, die sie hat. "),
     NPC_709_SUPERQUEEN_MOVE_2(Sound.ENTITY_CAMEL_DASH_READY, "Wie die Dame bewegt sich die Superdame also in alle Graden "
@@ -146,7 +150,7 @@ public enum NPCTrack {
             + "Versuche nun dieses Brett mit Superdamen zu füllen. "),
     NPC_710_END(Sound.ENTITY_CAMEL_DEATH, "Ich hoffe, dass dir dies beim Verstehen des N-Damen-Problems "
             + "und der Lösung durch die Anwendung des Backtracking-Algorithmus "
-            + "geholfen hat, und ich wünsche dir weiterhin viel Erfolg. "),
+            + "geholfen hat, und ich wünsche noch viel Erfolg. "),
     NPC_801_INTRO(Sound.BLOCK_AZALEA_HIT, "Glückwunsch; du hast das Ende erreicht, nun kannst du dich selbst nach Belieben am N-Damen Problem ausprobieren."
             + "Nutze dazu das DevMenu, auf das du nun Zugriff hast. Viel Spaß"),
     // Positive Response

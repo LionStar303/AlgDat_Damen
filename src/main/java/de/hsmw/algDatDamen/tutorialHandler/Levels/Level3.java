@@ -114,7 +114,6 @@ public class Level3 extends Level {
                 chessBoards[0].removeAllPieces();
                 chessBoards[1].spawnChessBoard();
                 npc.playTrack(NPCTrack.NPC_302_DIFFERENT_SOLUTIONS);
-                npc.playTrack(NPCTrack.NPC_304_INTERACTION);
                 // gespiegelte Lösungen spawnen
                 chessBoards[0].addPiece(new Queen(0, 1));
                 chessBoards[0].addPiece(new Queen(1, 3));
