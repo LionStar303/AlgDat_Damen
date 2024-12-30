@@ -29,7 +29,7 @@ public class BlockInteractions implements Listener {
         // Sicherheitsprüfung: Ist der Block null?
         if (block != null) {
 
-            // Tag, Abend, Nacht Setzen
+            // Tag, Nacht Setzen
             if (block.getType() == Material.POLISHED_BLACKSTONE_BUTTON && block.getLocation().getBlockX() == 9
                     && block.getLocation().getBlockY() == -44) {
 
@@ -42,9 +42,9 @@ public class BlockInteractions implements Listener {
                         world.setTime(2000);
                         break;
 
-                    // Abend
+                    // Tutorial starten
                     case 176:
-                        world.setTime(13000);
+                        event.getPlayer().performCommand("starttutorial");
                         break;
 
                     // Nacht

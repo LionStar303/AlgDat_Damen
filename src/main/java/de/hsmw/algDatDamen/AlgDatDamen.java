@@ -11,10 +11,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +28,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import static de.hsmw.algDatDamen.menu.DevelopmentHandles.boardSize;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class AlgDatDamen extends JavaPlugin implements Listener {
 
@@ -81,14 +84,38 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5,-90f, 0f);
+
+        // töte alle Entities, welche sich im Spiel befinden
+        List<Entity> entities = player.getWorld().getEntities();
+        for (Entity entity : entities) {
+            if (!(entity instanceof Player)) {
+                entity.remove();
+            }
+        }
+
+        player.teleport(startLocation);
+        player.setRespawnLocation(startLocation, true);
+
+        player.setInvulnerable(true);
+        player.setHealth(20);
+        player.setFoodLevel(20);
         player.getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         player.getWorld().setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         player.getWorld().setGameRule(GameRule.DO_WEATHER_CYCLE, false);
         player.getWorld().setDifficulty(Difficulty.PEACEFUL);
+        player.setGameMode(GameMode.SURVIVAL);
+        player.getInventory().clear();
+        player.setFlying(false);
 
+        spawnStartMessage(player);
+
+        // Tutorial initialisieren falls es schon existiert
         saveManager.getTutorialList().forEach((tutorial) -> {
-            if (tutorial.getPlayer().equals(player))
+            if (tutorial.getPlayer().equals(player)) {
+                tutorial.initialize();
                 return;
+            }
         });
 
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
@@ -101,11 +128,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         event.getPlayer().setRespawnLocation(startLocation);
         event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
-
-        player.setInvulnerable(true);
-        player.setHealth(20);
-        player.setFoodLevel(20);
-        spawnStartMessage(player);
     }
 
     /**
@@ -117,12 +139,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Location location = player.getLocation();
         if (location.getY() <= MIN_HEIGHT) {
-            for (Tutorial t : saveManager.getTutorialList()) {
-                if (t.getPlayer().equals(player)) {
-                    player.teleport(t.getCurrentLevel().getStartLocation());
-                    return;
-                }
-            }
             player.teleport(player.getRespawnLocation());
         }
     }
