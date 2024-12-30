@@ -64,6 +64,7 @@ public class Level8 extends Level {
 
                     player.getInventory().addItem(emerald);
                     npc.playTrack(NPCTrack.NPC_801_INTRO);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 0.5);
                 },
                 () -> {
                     setInventory();
