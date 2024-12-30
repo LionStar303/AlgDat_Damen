@@ -3,9 +3,11 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
+import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
@@ -30,7 +32,7 @@ public class Level6 extends Level {
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[1];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -185, -14, -46), 8, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -184, -14, -45), 8, player);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class Level6 extends Level {
                     npc.playTrack(NPCTrack.NPC_602_EXPLAIN_2);
                     chessBoards[0].solveBacktrackToRow(new Queen(), 5);
                     chessBoards[0].updateBoard();
+                    chessBoards[0].verfyPieces(new Queen());
                     chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
@@ -87,9 +90,11 @@ public class Level6 extends Level {
             () -> {
                 npc.playTrack(NPCTrack.NPC_603_EXPLAIN_3);
                 chessBoards[0].removeAllPieces();
-                chessBoards[0].solveBacktrackToRow(new Queen(), 5);
+                chessBoards[0].removeAllPieces();
                 chessBoards[0].updateBoard();
-                chessBoards[0].setMode(MChessBoardMode.LEVEL6_2);
+                chessBoards[0].setStateX(0);
+                chessBoards[0].setStateY(0);
+                chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                 // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                 setInventory();
                 player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -101,12 +106,19 @@ public class Level6 extends Level {
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE);
             },
             unused -> {
-                if(chessBoards[0].isSolved()) {
-                    npc.playTrackPositive();
-                    return true;
-                } else return false;
-            }
-            ));
+                    if (chessBoards[0].isSolved()) {
+                        return true;
+                    }
+
+                    if (chessBoards[0].getPieces().size() > 2) {
+                        npc.playTrackPositive();
+                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Queen());
+                        chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                        chessBoards[0].setActive(false); // TODO an mode anpassen
+                    }
+                    return false;
+
+                }));
         setupStep = setupStep.getNext();
 
         // Lösen des restlichen Problems durch Computer
@@ -115,11 +127,11 @@ public class Level6 extends Level {
                 // Inventar leeren
                 setInventory();
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE);
-                chessBoards[0].playBacktrack(new Queen());
+                setInventory();
+                player.getInventory().setItem(4, ControlItem.NEXT_LEVEL.getItemStack());
             },
             () -> {
-                chessBoards[0].removeAllPieces();
-                chessBoards[0].solveBacktrackToRow(new Queen(), 5);
+                
             }
             ));
         setupStep = setupStep.getNext();

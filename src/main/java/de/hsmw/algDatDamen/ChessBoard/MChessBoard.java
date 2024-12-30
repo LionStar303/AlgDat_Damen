@@ -682,7 +682,6 @@ public class MChessBoard extends ChessBoard {
                     
                 }
 
-
                 return true; // wenn Piece richtig gesetzt wurde
             default:
                 return false;

@@ -217,9 +217,6 @@ public class Level7 extends Level {
                     chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateBoard();
                     chessBoards[0].spawnPiece(new Superqueen(5, 5));
-
-                    // player.getWorld().strikeLightning(new Location(player.getWorld(), -123, -8,
-                    // -93));
                     player.getWorld().strikeLightning(chessBoards[0].getOriginCorner().clone().add(5.5, 0, 5.5));
                     setInventory();
                 },
