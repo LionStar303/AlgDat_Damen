@@ -52,11 +52,11 @@ public enum NPCTrack {
             "Wenn du jetzt selbst einen Blick auf das Feld wirfst, solltest du "
             + "feststellen können, dass wir keine weitere Dame mehr platzieren "
             + "können, ohne dass sie bedroht wird, aber auch kein unbedrohtes Feld "
-            + "übrig bleibt.\r\n"
+            + "übrig bleibt."
             + "Hierbei handelt es sich um das sogenannte N-Damen-Problem. "
             + "Eine Herausforderung, bei der N Damen auf einem N x N Schachbrett "
             + "platziert werden müssen, ohne dass sich zwei Damen gegenseitig "
-            + "schlagen.\r\n"
+            + "schlagen."
             + "Und wie du auch gesehen hast, haben wir das Problem soeben gelöst. "
             + "Also lass uns nun dazu übergehen wie das passiert ist. "),
     NPC_207_EXPLAIN_3X3_1(Sound.ENTITY_ARMADILLO_STEP,
