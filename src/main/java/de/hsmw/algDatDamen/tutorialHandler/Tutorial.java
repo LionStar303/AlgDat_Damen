@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.google.gson.annotations.Expose;
 
+import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.tutorialHandler.Levels.*;
 
 public class Tutorial {
@@ -42,6 +43,13 @@ public class Tutorial {
         levels.add(new Level5(console, getPlayer(), this));
         levels.add(new Level6(console, getPlayer(), this));
         levels.add(new Level7(console, getPlayer(), this));
+
+        // level zurücksetzen
+        for (Level level : levels) {
+            for (MChessBoard board : level.getChessBoards()) {
+                board.despawnChessBoard();
+            }
+        }
 
         // aktuelles Level basierend auf dem gespeicherten Progress setzen
         currentLevel = levels.get(progress);
