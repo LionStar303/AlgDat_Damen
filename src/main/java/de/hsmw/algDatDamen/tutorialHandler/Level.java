@@ -142,12 +142,12 @@ public abstract class Level implements Listener {
         if (console)
             System.out.println("running next step");
 
-        if (!currentStep.completed)
-            currentStep.checkForCompletion();
-        else {
-            // negativen Track abspielen wenn der Schritt noch nicht abgeschlossen ist
-            npc.playTrackNegative();
-            return;
+        if(!currentStep.completed) {
+            if(!currentStep.checkForCompletion()) {
+                // negativen Track abspielen wenn der Schritt noch nicht abgeschlossen ist
+                npc.playTrackNegative();
+                return;
+            }
         }
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
