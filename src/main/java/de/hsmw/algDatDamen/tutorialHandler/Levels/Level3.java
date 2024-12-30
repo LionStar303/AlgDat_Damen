@@ -135,11 +135,13 @@ public class Level3 extends Level {
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
                 if(latestPlayerInput.toLowerCase().contains("spiegel")) {
-                    player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
+                    npc.playTrackPositive();
+                    player.sendMessage(Component.text("Die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
                     wrongCount++;
-                    if(wrongCount % 3 == 0) player.sendMessage(Component.text("Versuche es mal mit gleich, gespiegelt, rotiert oder verschieden.", NamedTextColor.RED));
+                    npc.playTrackNegative();
+                    if(wrongCount % 3 == 0) player.sendMessage(Component.text("Versuche es mal mit gleich, gespiegelt,\nrotiert oder verschieden.", NamedTextColor.RED));
                     else player.sendMessage(Component.text("Das ist leider die falsche Antwort.", NamedTextColor.RED));
                     return false;
                 }

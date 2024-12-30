@@ -35,7 +35,7 @@ public class Level7 extends Level {
 
     // TODO LEVEL_NAME & LEVEL_DESCRIPTION
     private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
-    private final static String LEVEL_DESCRIPTION = "Einführung und Anwendung der Springerfigur und der Superdame";
+    private final static String LEVEL_DESCRIPTION = "Erweiterung des Problems mit Einführung und Anwendung der Springerfigur und der Superdame.";
 
     public Level7(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
