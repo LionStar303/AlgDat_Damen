@@ -130,9 +130,11 @@ public abstract class Level implements Listener {
         if (console)
             System.out.println("running next step");
         
-        if(chessBoards[currentCBID].isSolved()){
+            
+        if(!currentStep.completed) currentStep.checkForCompletion();
+        /*if(chessBoards[currentCBID].isSolved()){
              currentStepcheckForCompletion();
-        }
+        }*/
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
         if (!currentStep.completed()) {
@@ -208,7 +210,7 @@ public abstract class Level implements Listener {
                 currentStep.checkForCompletion();
         }
     }
-
+    
     protected void currentStepcheckForCompletion(){
         if(!currentStep.completed) currentStep.checkForCompletion();
     }
@@ -257,9 +259,8 @@ public abstract class Level implements Listener {
                     }
                 }
 
-                // TODO mal gucken ob Moritz damit glücklich ist
-                // if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 3))
-                if ((fireClicked) && teleporter.isEnabled() && currentStep.getNext() == null) {
+                if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 2))
+                    && teleporter.isEnabled() && currentStep.getNext() == null) {
                     player.sendMessage("Teleport zu nächstem Level");
                     startNextLevel();
                 } else {
