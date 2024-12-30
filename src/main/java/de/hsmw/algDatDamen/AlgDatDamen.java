@@ -4,6 +4,8 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.menu.Menu;
 import de.hsmw.algDatDamen.menu.MenuCommand;
 import de.hsmw.algDatDamen.saveManager.TutorialSaveManager;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
+import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import de.hsmw.algDatDamen.tutorialHandler.TutorialCommand;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -83,6 +85,8 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
+        NPC startMessageNPC = new NPC(startLocation, false);
+        startMessageNPC.playTrack(NPCTrack.NPC_001_INTRO);
 
         player.teleport(startLocation);
         player.setRespawnLocation(startLocation, true);
@@ -111,7 +115,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
         // saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(),
         // saveManager.getProgress(event.getPlayer())));
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 0)); // <- nur zum testen
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 3)); // <- nur zum testen
         saveManager.getTutorialList().getLast().initialize();
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
+import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -76,20 +77,23 @@ public class BlockInteractions implements Listener {
             event.setCancelled(true);
         }
 
-        // nach Control Item aus Tutorial suchen
+        // Prüfen, ob das Item ein ControlItem ist
         ControlItem controlItem = ControlItem.fromItem(event.getItem());
-        if (controlItem != null) {
-            // nach passendem Tutorial suchen
-            AlgDatDamen.saveManager.getTutorialList().forEach((t) -> {
-                if (t.getPlayer().equals(player)) {
-                    // Event an Tutorial des Spielers übergeben
-                    t.getCurrentLevel().handleInteractionEvent(controlItem, event);
-                    event.setCancelled(true);
-                    return;
-                }
-            });
+        if (controlItem == null) {
+            return; // Kein gültiges ControlItem, nichts weiter tun
         }
-        event.setCancelled(true);
+
+        // Passendes Tutorial für den Spieler finden
+        Tutorial playerTutorial = AlgDatDamen.saveManager.getTutorialList().stream()
+                .filter(t -> t.getPlayer().equals(player))
+                .findFirst()
+                .orElse(null);
+
+        if (playerTutorial != null) {
+            // Event an das aktuelle Level des Tutorials übergeben
+            playerTutorial.getCurrentLevel().handleInteractionEvent(controlItem, event);
+            event.setCancelled(true); // Nur abbrechen, wenn etwas verarbeitet wurde
+        }
     }
 
 }

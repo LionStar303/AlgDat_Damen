@@ -35,7 +35,7 @@ public class Level7 extends Level {
 
     // TODO LEVEL_NAME & LEVEL_DESCRIPTION
     private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
-    private final static String LEVEL_DESCRIPTION = "Einführung und Anwendung der Springerfigur und der Superdame";
+    private final static String LEVEL_DESCRIPTION = "Erweiterung des Problems mit Einführung und Anwendung der Springerfigur und der Superdame.";
 
     public Level7(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -127, -8, -67, 180, 0),
@@ -66,6 +66,7 @@ public class Level7 extends Level {
         currentStep = new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -130, -7, -88), 0.5);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(false);
@@ -356,7 +357,7 @@ public class Level7 extends Level {
 
                 for (int i = 0; i < positions.length; i++) {
 
-                    if (ticks >= 30 * 20) { // 30 Sekunden (20 Ticks pro Sekunde)
+                    if (ticks >= 60 * 20) { // 60 Sekunden (20 Ticks pro Sekunde)
                         cancel();
                         return;
                     }

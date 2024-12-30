@@ -268,10 +268,8 @@ public class ChessBoard {
 
         // Check if the number of pieces matches the required board size
         if (pieces.size() == size) {
-            if (console) {
-                System.out.println("The number of pieces matches the board size: " + pieces.size());
-            }
-
+            if (console) System.out.println("The number of pieces matches the board size: " + pieces.size());
+            
             // Check for collisions between pieces
             for (Piece p : pieces) {
                 if (checkCollision(p)) {
@@ -556,6 +554,8 @@ public class ChessBoard {
     }
 
     public boolean playBacktrackToNextPiece(Piece p) {
+        if(isSolved())return true;
+
         int numP = pieces.size();
         while (numP == pieces.size()) {
             stepBacktrack(p);
