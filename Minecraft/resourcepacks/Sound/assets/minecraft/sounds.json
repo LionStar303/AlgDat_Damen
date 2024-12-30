@@ -1,4 +1,14 @@
 {
+ "block.azalea.fall": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "block_azalea_fall"}]
+  },
+ "block.azalea.hit": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "block_azalea_hit"}]
+  },
   "block.anvil.fall": {
     "replace": true,
     "subtitle": "",
