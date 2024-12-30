@@ -18,9 +18,9 @@ Minecraft/logs/*
 Minecraft/mods/*
 Minecraft/config/*
 Minecraft/downloads/*
+Minecraft/versions/*
 Minecraft/server.dat
 Minecraft/server.dat_old
-
 
 
 ##Server Ordner
