@@ -335,7 +335,7 @@ public abstract class Level implements Listener {
     }
 
     public MChessBoard[] getChessBoards() {
-        return (MChessBoard[]) chessBoards;
+        return chessBoards;
     }
 
     protected void startBossBarTimer(int minutes, String title) {

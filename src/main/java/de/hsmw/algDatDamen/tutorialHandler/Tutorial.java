@@ -46,8 +46,10 @@ public class Tutorial {
 
         // level zurücksetzen
         for (Level level : levels) {
-            for (MChessBoard board : level.getChessBoards()) {
-                board.despawnChessBoard();
+            if (level.getChessBoards() != null) {
+                for (MChessBoard board : level.getChessBoards()) {
+                    board.despawnChessBoard();
+                }
             }
         }
 
