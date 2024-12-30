@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 import net.kyori.adventure.text.Component;
@@ -18,7 +19,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class Level8 extends Level {
 
     private final static String LEVEL_NAME = "Level 8 - Freies Spiel";
-    private final static String LEVEL_DESCRIPTION = "mit dem Debug Menü kannst du jetzt frei spielen, beachte aber, das ab hier nichts mehr getestet ist, es kann also zu Fehlern kommen";
+    private final static String LEVEL_DESCRIPTION = "Beachte das dieses Level nicht mehr Teil des eigentlichen Tutorials ist und somit nicht umfassend getestet wurde, es kann also zu Fehlern kommen";
 
     public Level8(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -17, -44, 144, 150, 0),
@@ -62,6 +63,7 @@ public class Level8 extends Level {
                     }
 
                     player.getInventory().addItem(emerald);
+                    npc.playTrack(NPCTrack.NPC_801_INTRO);
                 },
                 () -> {
                     setInventory();
@@ -72,10 +74,8 @@ public class Level8 extends Level {
 
         setupStep.setNext(new Step(
                 () -> {
-                    player.sendMessage(Component.text("Viel Spaß beim freien Spiel!", NamedTextColor.GREEN));
                 },
                 () -> {
-                    player.sendMessage(Component.text("Viel Spaß beim freien Spiel!", NamedTextColor.GREEN));
                 }));
 
         currentStep.backLink();

@@ -148,7 +148,7 @@ public enum NPCTrack {
             + "und der Lösung durch die Anwendung des Backtracking-Algorithmus "
             + "geholfen hat, und ich wünsche dir weiterhin viel Erfolg. "),
     NPC_801_INTRO(Sound.BLOCK_AZALEA_HIT, "Glückwunsch; du hast das Ende erreicht, nun kannst du dich selbst nach Belieben am N-Damen Problem ausprobieren."
-            + "Nutze dazu das DevMenu, auf das du nun Zugriff hast. Viel Spaß"),"
+            + "Nutze dazu das DevMenu, auf das du nun Zugriff hast. Viel Spaß"),
     // Positive Response
     NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT, "Richtig!", NamedTextColor.GREEN),
     NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT, "Korrekt!", NamedTextColor.GREEN),
@@ -209,10 +209,6 @@ public enum NPCTrack {
             }
         }
         formattedString.append(input.substring(i));
-    
         return formattedString.toString();
     }
-    
 }
-
-
