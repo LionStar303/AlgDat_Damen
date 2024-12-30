@@ -1,4 +1,9 @@
 {
+  "block.anvil.fall": {
+    "replace": true,
+    "subtitle": "",
+    "sounds": [{"name": "block_anvil_fall"}]
+  },
   "entity.armadillo.ambient": {
     "replace": true,
     "subtitle": "",
