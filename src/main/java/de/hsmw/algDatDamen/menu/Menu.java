@@ -153,16 +153,16 @@ public class Menu implements Listener {
                 "handleBacktrack");
         this.addMenuItem(Material.IRON_PICKAXE, "Backtracking nächster Schritt", MenuSlots.BACKTRACK_STEP,
                 "handleBacktrackStep");
-        this.addMenuItem(Material.GOLDEN_SWORD, "Backtrack bis...", MenuSlots.BACKTRACK_UNTIL,
-                "handleBacktrackToRow");
+        this.addMenuItem(Material.GOLDEN_SWORD, "Solve bis...", MenuSlots.BACKTRACK_UNTIL,
+                "handleBacktrackSolveToRow");
         this.addMenuItem(Material.EMERALD, "Backtrack Zeile: " + backtrackRow, MenuSlots.BACKTRACK_ROW,
                 "increaseBacktrackRow");
         this.addMenuItem(Material.DIAMOND_AXE, "Backtracking Animation", MenuSlots.BACKTRACK_ANIMATION,
                 "handleBacktrackAnimation");
         this.addMenuItem(Material.GOLDEN_AXE, "Backtracking Animation schnell", MenuSlots.BACKTRACK_ANIMATION_FAST,
                 "handleBacktrackAnimationQueenStep");
-        this.addMenuItem(Material.IRON_AXE, "Backtracking Animation bis...", MenuSlots.BACKTRACK_ANIMATION_ROW,
-                "handlePlayBacktrackStepsToRow");
+        this.addMenuItem(Material.IRON_AXE, "Backtracking bis...", MenuSlots.BACKTRACK_ANIMATION_ROW,
+                "handleBacktrackStepsToRow");
 
         this.addMenuItem(Material.GOLDEN_PICKAXE, "Rückschritt", MenuSlots.REVERSE_STEP,
                 "handleReverseStep");
@@ -176,10 +176,9 @@ public class Menu implements Listener {
         this.addMenuItem(customBlackFieldMaterial, "Ändere Schwarze Blöcke", MenuSlots.BLACK_FIELD_MATERIAL,
                 "changeBlackFieldMaterial");
 
-        this.addMenuItem(Material.WHITE_GLAZED_TERRACOTTA, "Lösung mit Bongo-Sort", MenuSlots.BONGO_SOLVE,
+        this.addMenuItem(Material.WHITE_GLAZED_TERRACOTTA, "Bongo-Sort Animation", MenuSlots.BONGO_SOLVE,
                 "handlePlayBongoAnimation");
-        this.addMenuItem(Material.ORANGE_GLAZED_TERRACOTTA, "Zufall mit Bongo-Sort", MenuSlots.BONGO_SOLVE_STEP,
-                "handlePlayBongoAnimationStep");
+
 
         this.fillEmptySlots();
         }
