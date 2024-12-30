@@ -210,6 +210,7 @@ public class NPC implements Listener {
                     setSlowness(true);
                     villagerTask[0].cancel();
                 }
+                location = villager.getLocation();
                 villagerTask[1].cancel();
             }, 20L * delay);
         }
