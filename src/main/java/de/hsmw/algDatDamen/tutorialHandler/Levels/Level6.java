@@ -58,6 +58,7 @@ public class Level6 extends Level {
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_602_EXPLAIN_2);
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -185, -13, -37), 0.5);
                     chessBoards[0].solveBacktrackToRow(new Queen(), 5);
                     chessBoards[0].updateBoard();
                     chessBoards[0].verfyPieces(new Queen());
@@ -144,6 +145,7 @@ public class Level6 extends Level {
                 chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                 chessBoards[0].removeAllPieces();
                 chessBoards[0].despawnChessBoard();
+                npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -165, -11, -56), 0.5);
             },
             () -> {}
             ));
