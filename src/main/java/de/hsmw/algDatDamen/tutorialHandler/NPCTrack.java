@@ -124,9 +124,8 @@ public enum NPCTrack {
     NPC_701_INTRO(Sound.ENTITY_BEE_LOOP_AGGRESSIVE, "Jetzt werden wir das N-Damen-Problem auf einem noch größeren "
             + "Schachbrett betrachten. Du wirst sehen, wie sich die Herausforderungen "
             + "mit der Größe des Schachbretts ändern. "),
-    // TODO NPC_701_OLD mit NPC_702_KNIGHT_1 zusammenfassen
-    NPC_701_OLD(Sound.ENTITY_BEE_STING, "Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen. "),
-    NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT, "Der Springer bewegt sich in einem L-förmigen Muster. Er kann "
+    NPC_702_KNIGHT_1(Sound.ENTITY_BLAZE_AMBIENT, "Kommen wir nun zur zweiten Figur, die wir hier nutzen wollen."
+            + "Der Springer bewegt sich in einem L-förmigen Muster. Er kann "
             + "zwei Felder in eine Richtung und dann ein Feld in eine senkrechte "
             + "Richtung springen oder umgekehrt. "),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN, "Ziemlich genauso würde das dann aussehen. "),
@@ -211,3 +210,5 @@ public enum NPCTrack {
     }
     
 }
+
+

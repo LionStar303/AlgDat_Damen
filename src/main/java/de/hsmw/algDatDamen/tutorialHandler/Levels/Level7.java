@@ -65,8 +65,7 @@ public class Level7 extends Level {
         // Erzeugung eines 8x8 Schachbretts
         currentStep = new Step(
                 () -> {
-                    // TODO playTrack anpassen nach anpassung
-                    npc.playTrack(NPCTrack.NPC_701_OLD); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
+                    npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(false);
