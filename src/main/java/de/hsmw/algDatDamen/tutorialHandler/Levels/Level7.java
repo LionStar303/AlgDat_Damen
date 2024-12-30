@@ -36,7 +36,7 @@ public class Level7 extends Level {
 
     // TODO LEVEL_NAME & LEVEL_DESCRIPTION
     private final static String LEVEL_NAME = "Level 7 - Eiskönigin";
-    private final static String LEVEL_DESCRIPTION = "TODO Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
+    private final static String LEVEL_DESCRIPTION = "Einführung und Anwendung der Springerfigur und der Superdame";
 
     
     public Level7(boolean console, Player player, Tutorial parent) {

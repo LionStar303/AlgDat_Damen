@@ -63,8 +63,8 @@ public class Level5 extends Level{
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].updateBoard();
                     chessBoards[0].addPiece(new Queen(0,0));
+                    chessBoards[0].updateBoard();
                     chessBoards[0].verfyPieces(new Queen());
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
@@ -92,8 +92,8 @@ public class Level5 extends Level{
                     chessBoards[0].despawnChessBoard();
                     chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[1].removeAllPieces();
-                    chessBoards[1].updateBoard();
                     chessBoards[1].addPiece(new Queen(0,0));
+                    chessBoards[1].updateBoard();
                     chessBoards[1].verfyPieces(new Queen());
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
 

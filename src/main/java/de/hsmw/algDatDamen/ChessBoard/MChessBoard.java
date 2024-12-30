@@ -573,6 +573,8 @@ public class MChessBoard extends ChessBoard {
         int minZ = originCorner.getBlockZ();
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
+        console = true;
+        if(console)System.out.println("Prüfung: p.getX() == " + p.getX() + " && p.getY() == " + p.getY());
 
         Piece existingPiece = this.getPieceAt(l);
         switch (mode) {
@@ -626,6 +628,60 @@ public class MChessBoard extends ChessBoard {
                  * Ansonsten kann er das Piece nur an der markierten Position platzieren
                  */
                 // remove existing piece if location is already occupied
+                
+                
+                if(pieces.size() == 0){
+                    if(console) System.out.println("Du Huso eine Dame muss drauf!");
+                    return false;
+                }
+                int oldsize = pieces.size();
+                Piece removed = pieces.getLast();
+                int OldstateX = stateX;
+                int OldstateY = stateY;
+                playBacktrackToNextPiece(p.clone());
+                if(pieces.size() > oldsize){
+                    // Figur wurde hinzugefügt
+                    if (console) {
+                        System.out.println("Figur wurde hinzugefügt");
+                        System.out.println("Position der letzten Spielfigur: x = " + pieces.getLast().getX() + ", y = " + pieces.getLast().getY());
+                        System.out.println("Prüfung: p.getX() == " + p.getX() + " && p.getY() == " + p.getY());
+                        printBoard(true);
+                    }
+                    updatePieces();
+                    if (pieces.getLast().getX() != p.getX() || pieces.getLast().getY() != p.getY()){
+                        if(console)System.out.println("Remove last du HUSO!");
+                        despawnPiece(pieces.getLast());
+                        getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
+                        removeLastPiece();
+                        this.stateX = OldstateX;
+                        this.stateY = OldstateY;
+                        playExplosionAnimation(l);
+                    }
+                    
+                } else {
+                    // Figur wurde gelöscht
+                    if (console) {
+                        System.out.println("Figur wurde gelöscht");
+                        System.out.println("Position der letzten Spielfigur: x = " + removed.getX() + ", y = " + removed.getY());
+                        System.out.println("Prüfung: p.getX() == " + p.getX() + " && p.getY() == " + p.getY());
+                        printBoard(true);
+                    }
+                    updatePieces();
+                    if (removed.getX() != p.getX() || removed.getY() != p.getY()){
+                        if(console)System.out.println("ADD Removed last du HUSO!");
+                        addPiece(removed);
+                        spawnPiece(removed);
+                        getLocation(removed).getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.UP).setType(Material.BLUE_CARPET);
+                        this.stateX = OldstateX;
+                        this.stateY = OldstateY;
+                        playExplosionAnimation(l);
+                    }
+                    
+                }
+
+
+
+                /* 
                 if (existingPiece != null) {
                     // Spieler kann nur das zuletzt gesetzte Piece entfernen
                     if (pieces.size() <= 1) {
@@ -640,6 +696,7 @@ public class MChessBoard extends ChessBoard {
                     this.verfyPieces(p); // geht schöner passt so könnte stateX und stateY auf Location setzen
                     return false;
                 }
+
 
                 this.console = true;
                 int num = pieces.size();
@@ -666,8 +723,7 @@ public class MChessBoard extends ChessBoard {
                             removeLastPiece();
                         } else {
                             addPiece(oldLast);
-                            stateX = oldLast.getX();
-                            stateY = oldLast.getY();
+                            verfyPieces(p);
                         }
 
                         // Explosion abspielen, wenn die Bedingungen nicht erfüllt sind
@@ -688,9 +744,9 @@ public class MChessBoard extends ChessBoard {
                         removeLastPiece();
                     } else {
                         addPiece(oldLast);
-                        stateX = oldLast.getX();
-                        stateY = oldLast.getY();
+                        verfyPieces(p);
                     }
+                    */
                 return true; // wenn Piece richtig gesetzt wurde
             default:
                 return false;
