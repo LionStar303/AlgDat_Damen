@@ -84,7 +84,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5,-90f, 0f);
+        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
 
         // töte alle Entities, welche sich im Spiel befinden
         List<Entity> entities = player.getWorld().getEntities();
@@ -122,11 +122,6 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
         // saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(),
         // saveManager.getProgress(event.getPlayer())));
         saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 0)); // <- nur zum testen
-        startLocation = new Location(event.getPlayer().getWorld(), 0, -45, 170);
-        event.getPlayer().teleport(startLocation);
-        event.getPlayer().setGameMode(org.bukkit.GameMode.SURVIVAL);
-        event.getPlayer().setRespawnLocation(startLocation);
-        event.getPlayer().setFlying(false);
         saveManager.getTutorialList().getLast().initialize();
     }
 
@@ -155,7 +150,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     }
 
     public void spawnStartMessage(Player player) {
-        Location location = new Location(player.getWorld(), -3, -44.5, 166);
+        Location location = new Location(player.getWorld(), -3, -43.5, 166);
         ArrayList<ArmorStand> stands = new ArrayList<ArmorStand>();
 
         // stands spawnen
@@ -164,16 +159,20 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
                 EntityType.ARMOR_STAND);
         ArmorStand stand3 = (ArmorStand) player.getWorld().spawnEntity(location.clone().add(new Vector(0, -1, 0)),
                 EntityType.ARMOR_STAND);
+        ArmorStand stand4 = (ArmorStand) player.getWorld().spawnEntity(location.clone().add(new Vector(0, -1.5, 0)),
+                EntityType.ARMOR_STAND);
 
         // Text setzen
         stand1.customName(Component.text("Öffne den Chat mit der Taste t", NamedTextColor.AQUA));
         stand2.customName(Component.text("und starte das Tutorial mit \"/starttutorial\".", NamedTextColor.AQUA));
-        stand3.customName(Component.text("Du kannst das Tutorial jederzeit neustarten!", NamedTextColor.AQUA));
+        stand3.customName(Component.text("Oder benutze ganz einfach den Knopf hinter dir.", NamedTextColor.AQUA));
+        stand4.customName(Component.text("Du kannst das Tutorial jederzeit neustarten!", NamedTextColor.AQUA));
 
         // Standeigenschaften setzen
         stands.add(stand1);
         stands.add(stand2);
         stands.add(stand3);
+        stands.add(stand4);
         stands.forEach((stand) -> {
             stand.setAI(false);
             stand.setGravity(false);
