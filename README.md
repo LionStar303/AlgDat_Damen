@@ -129,7 +129,7 @@ Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
 ### Level 7- Eiskönigin:
 - Startpunkt `-127 -7 -66, 180 -15`
 - Schachbrett `10x10 -192 -8 -98`
-- Teleporter -- (sollte noch einer hin für die Sandbox Insel)
+- Teleporter -- `-127 -8 -67`
 ---
 ## Konzept: Damenproblem Tutorial in Minecraft
 

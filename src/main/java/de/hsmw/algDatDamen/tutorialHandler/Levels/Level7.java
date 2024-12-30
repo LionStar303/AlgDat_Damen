@@ -38,7 +38,7 @@ public class Level7 extends Level {
     private final static String LEVEL_DESCRIPTION = "Einführung und Anwendung der Springerfigur und der Superdame";
 
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -7, -66, 180, 0),
+        this(console, player, new Location(player.getWorld(), -127, -8, -67, 180, 0),
                 new Location(player.getWorld(), -127, -8, -64), parent);
     }
 

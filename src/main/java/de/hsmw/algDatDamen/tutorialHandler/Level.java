@@ -110,7 +110,7 @@ public abstract class Level implements Listener {
         currentStepID = 0;
 
         player.setRespawnLocation(startLocation, true);
-        player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_NAME));
+        player.sendMessage(Component.textOfChildren(LEVEL_NAME));
         player.sendMessage(Component.textOfChildren(EMPTY_LINE, LEVEL_DESCRIPTION));
         player.sendMessage("\n\n");
         setInventory();
@@ -137,14 +137,20 @@ public abstract class Level implements Listener {
     private void nextStep() {
         if (console)
             System.out.println("running next step");
-        currentStepcheckForCompletion();
+            
+        if(!currentStep.completed) currentStep.checkForCompletion();
+        else {
+            // negativen Track abspielen wenn der Schritt noch nicht abgeschlossen ist
+            npc.playTrackNegative();
+            return;
+        }
 
         // return wenn currentStep noch nicht abgeschlossen oder letzter Step
-        if (!currentStep.completed()) {
+        /*if (!currentStep.completed()) {
             if(player == null)return;
             player.sendMessage(Component.text("Du musst den aktuellen Schritt erst abschließen.", NamedTextColor.RED));
             return;
-        }
+        }*/
         if (currentStep.getNext() == null) {
             if(player == null)return;
             player.sendMessage(Component.text("Du kannst ins nächste Level vorrücken.", NamedTextColor.RED));
@@ -258,21 +264,10 @@ public abstract class Level implements Listener {
                 break;
             case NEXT_LEVEL:
                 boolean fireClicked = false;
-                if (event.getClickedBlock() != null) {
-                    if (teleporter.isTeleportBlock(event.getClickedBlock())) {
-                        fireClicked = true;
-                    }
-                }
+                if (event.getClickedBlock() != null) fireClicked = teleporter.isTeleportBlock(event.getClickedBlock());
 
                 if (((fireClicked) || (player.getLocation().distance(teleporter.getLocation()) <= 2))
-                    && teleporter.isEnabled() && currentStep.getNext() == null) {
-                    player.sendMessage("Teleport zu nächstem Level");
-                    startNextLevel();
-                } else {
-                    player.sendMessage("Irgendwas hat hier noch nicht geklappt");
-                    player.sendMessage("Aktiv: " + teleporter.isEnabled(), "Next Step: ",
-                            "Block: " + teleporter.isTeleportBlock(event.getClickedBlock()));
-                }
+                    && teleporter.isEnabled() && currentStep.getNext() == null) startNextLevel();
                 break;
             case PLACE_QUEEN:
                 tryPlacePiece(event, new Queen());
