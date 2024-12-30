@@ -92,6 +92,9 @@ public class MChessBoard extends ChessBoard {
         this.isAnimationRunning = false;
         this.active = false;
         this.mode = MChessBoardMode.INACTIVE;
+        if (spawnInDirection) {
+            updateOriginCorner(getBoardDirection(player));
+        }
     }
 
     // ----------- Getters and Setters -----------
