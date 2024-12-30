@@ -246,16 +246,9 @@ public class MChessBoard extends ChessBoard {
     // --- extension getter / setter ---
 
     public Location getLocation(Piece p) {
-        for (Piece exp : pieces) {
-            if (exp.equals(p)) {
-                Location l = new Location(originCorner.getWorld(), originCorner.getX() + p.getX(),
-                        originCorner.getY() + 1, originCorner.getZ() + p.getY());
-                return l;
-            }
-        }
-        if (console)
-            System.out.println("Piece ist nicht in auf dem Schachbrett");
-        return null;
+        Location l = new Location(originCorner.getWorld(), originCorner.getX() + p.getX(),
+        originCorner.getY() + 1, originCorner.getZ() + p.getY());
+        return l;
     }
 
     public MChessBoardMode getMode() {
@@ -573,7 +566,6 @@ public class MChessBoard extends ChessBoard {
         int minZ = originCorner.getBlockZ();
         p.setX(l.getBlockX() - minX);
         p.setY(l.getBlockZ() - minZ);
-        console = true;
         if(console)System.out.println("Prüfung: p.getX() == " + p.getX() + " && p.getY() == " + p.getY());
 
         Piece existingPiece = this.getPieceAt(l);
@@ -631,9 +623,15 @@ public class MChessBoard extends ChessBoard {
                 
                 
                 if(pieces.size() == 0){
-                    if(console) System.out.println("Du Huso eine Dame muss drauf!");
+                    if(stateX == p.getX() && stateY == p.getY()){
+                        addPiece(p);
+                        spawnPiece(p);
+                        return true;
+                    }
+                    getLocation(new Piece(stateX, stateY)).getBlock().setType(Material.BLUE_CARPET);
                     return false;
                 }
+
                 int oldsize = pieces.size();
                 Piece removed = pieces.getLast();
                 int OldstateX = stateX;
@@ -651,11 +649,14 @@ public class MChessBoard extends ChessBoard {
                     if (pieces.getLast().getX() != p.getX() || pieces.getLast().getY() != p.getY()){
                         if(console)System.out.println("Remove last du HUSO!");
                         despawnPiece(pieces.getLast());
-                        getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
+                        Block b = getLocation(pieces.getLast()).getBlock();
                         removeLastPiece();
+                        updateCollisionCarpets();
+                        b.setType(Material.BLUE_CARPET);
                         this.stateX = OldstateX;
                         this.stateY = OldstateY;
                         playExplosionAnimation(l);
+                        return false;
                     }
                     
                 } else {
@@ -672,81 +673,16 @@ public class MChessBoard extends ChessBoard {
                         addPiece(removed);
                         spawnPiece(removed);
                         getLocation(removed).getBlock().getRelative(BlockFace.UP).getRelative(BlockFace.UP).setType(Material.BLUE_CARPET);
+                        updateCollisionCarpets();
                         this.stateX = OldstateX;
                         this.stateY = OldstateY;
                         playExplosionAnimation(l);
+                        return false;
                     }
                     
                 }
 
 
-
-                /* 
-                if (existingPiece != null) {
-                    // Spieler kann nur das zuletzt gesetzte Piece entfernen
-                    if (pieces.size() <= 1) {
-                        this.removePiece(existingPiece);
-                        this.verfyPieces(p);
-                        return false;
-                    }
-
-                    if (!existingPiece.equals(pieces.get(pieces.size() - 2)))
-                        return false;
-                    this.removePiece(existingPiece);
-                    this.verfyPieces(p); // geht schöner passt so könnte stateX und stateY auf Location setzen
-                    return false;
-                }
-
-
-                this.console = true;
-                int num = pieces.size();
-                    Piece oldLast = pieces.getLast();
-                    playBacktrackToNextPiece(p);
-                
-                    int x = pieces.getLast().getX();
-                    int y = pieces.getLast().getY();
-                    getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
-
-                    if (console) {
-                        System.out.println("Position der letzten Spielfigur: x = " + x + ", y = " + y);
-                        System.out.println("Prüfung: p.getX() == " + p.getX() + " && p.getY() == " + p.getY());
-                    }
-
-                    if (p.getX() == x && p.getY() == y) {
-                        // Wenn ein neues Stück hinzugefügt wird
-                        if (console) {
-                            System.out.println("Füge neues Stück hinzu: " + p.clone());
-                        }
-                        updatePieces();
-                    } else {
-                        if (pieces.size() > num) {
-                            removeLastPiece();
-                        } else {
-                            addPiece(oldLast);
-                            verfyPieces(p);
-                        }
-
-                        // Explosion abspielen, wenn die Bedingungen nicht erfüllt sind
-                        playExplosionAnimation(l);
-                        if (console) {
-                            System.out.println(
-                                    "Bedingungen für das Hinzufügen des Stücks nicht erfüllt. Explosion wird gespielt.");
-                        }
-
-                        return false;
-                    }
-
-                    oldLast = pieces.getLast();
-                    num = pieces.size();
-                    playBacktrackToNextPiece(p);
-                    getLocation(pieces.getLast()).getBlock().setType(Material.BLUE_CARPET);
-                    if (pieces.size() > num) {
-                        removeLastPiece();
-                    } else {
-                        addPiece(oldLast);
-                        verfyPieces(p);
-                    }
-                    */
                 return true; // wenn Piece richtig gesetzt wurde
             default:
                 return false;
@@ -1049,8 +985,9 @@ public class MChessBoard extends ChessBoard {
         if (p != null) {
             Location queenLocation = getLocationofPiece(p);
             if (queenLocation != null) {
+                queenLocation.getBlock().getRelative(BlockFace.UP).setType(Material.AIR);  // Remove Carpets
                 queenLocation.getBlock().setType(Material.AIR); // Remove top block
-                queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR); // Remove bottom block
+                queenLocation.getBlock().getRelative(BlockFace.DOWN).setType(Material.AIR);
             }
         }
     }
@@ -1059,7 +996,7 @@ public class MChessBoard extends ChessBoard {
         // clear all blocks above the board
         for (int x = 0; x < size; x++) {
             for (int z = 0; z < size; z++) {
-                for (int y = 1; y <= 2; y++) {
+                for (int y = 3; y >= 1; y--) {
                     Location location = new Location(originCorner.getWorld(), originCorner.getX() + x,
                             originCorner.getY() + y, originCorner.getZ() + z);
                     location.getBlock().setType(Material.AIR);

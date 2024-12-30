@@ -35,8 +35,8 @@ public class Level5 extends Level{
         chessBoards[0].setCollisionCarpets(false);
 
         chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -186, -19, 15), 6, player);
-        chessBoards[1].setWhiteFieldMaterial(Material.BLUE_CONCRETE);
-        chessBoards[1].setBlackFieldMaterial(Material.YELLOW_CONCRETE);
+        chessBoards[1].setWhiteFieldMaterial(Material.DEEPSLATE_BRICKS);
+        chessBoards[1].setBlackFieldMaterial(Material.STONE_BRICKS);
         chessBoards[1].setCollisionCarpets(false);
     }
 
@@ -64,9 +64,10 @@ public class Level5 extends Level{
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].addPiece(new Queen(0,0));
                     chessBoards[0].updateBoard();
-                    chessBoards[0].verfyPieces(new Queen());
+                    chessBoards[0].setStateX(0);
+                    chessBoards[0].setStateY(0);
+                    chessBoards[0].setCollisionCarpets(true);
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
@@ -91,11 +92,13 @@ public class Level5 extends Level{
                 () -> {
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].despawnChessBoard();
+                    chessBoards[1].spawnChessBoard();
                     chessBoards[1].setMode(MChessBoardMode.TUTORIAL);
                     chessBoards[1].removeAllPieces();
-                    chessBoards[1].addPiece(new Queen(0,0));
                     chessBoards[1].updateBoard();
-                    chessBoards[1].verfyPieces(new Queen());
+                    chessBoards[1].setStateX(0);
+                    chessBoards[1].setStateY(0);
+                    chessBoards[1].setCollisionCarpets(false);
                     npc.playTrack(NPCTrack.NPC_502_EXPLAIN_1);
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
