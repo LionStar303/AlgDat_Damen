@@ -10,6 +10,7 @@ import com.google.gson.annotations.Expose;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.tutorialHandler.Levels.*;
+import net.kyori.adventure.sound.SoundStop;
 
 public class Tutorial {
 
@@ -59,12 +60,12 @@ public class Tutorial {
     }
 
     public void start() {
-        if (console)
-            System.out.println("Tutorial: starte Tutorial");
-        currentLevel.start();
+        if (console) System.out.println("Tutorial: starte Tutorial");
         // Progress Bar auf Level 1 setzen
         getPlayer().setLevel(progress + 1);
         getPlayer().setExp(0);
+        getPlayer().getWorld().stopSound(SoundStop.all());
+        currentLevel.start();
     }
 
     public Level getCurrentLevel() {

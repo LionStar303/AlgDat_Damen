@@ -31,8 +31,8 @@ public class Level7 extends Level {
     private final static String LEVEL_DESCRIPTION = "Erweiterung des Problems mit Einführung und Anwendung der Springerfigur und der Superdame.";
 
     public Level7(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -127, -8, -67, 180, 0),
-                new Location(player.getWorld(), -127, -8, -64), parent);
+        this(console, player, new Location(player.getWorld(), -127, -7, -68, 180, 0),
+                new Location(player.getWorld(), -127, -8, -67), parent);
     }
 
     public Level7(boolean console, Player player, Location startLocation, Location teleporterLocation,
@@ -56,75 +56,66 @@ public class Level7 extends Level {
     protected void initializeSteps() {
 
         // Erzeugung eines 8x8 Schachbretts
+        // Springer spawnen
         currentStep = new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
                     npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -130, -7, -88), 0.5);
-                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].addPiece(new Knight(5, 5));
                     chessBoards[0].updateBoard();
-                    chessBoards[0].setCollisionCarpets(false);
-
-                    chessBoards[0].spawnPiece(new Knight(5, 5));
-                    setInventory();
                 },
-                () -> {
-                    setInventory();
-                });
+                () -> {}
+        );
+
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
         // verknüpft
         Step setupStep = currentStep;
 
+        // collision carpets spawnen
         setupStep.setNext(new Step(
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_703_KNIGHT_2); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
-                    chessBoards[0].removeAllPieces();
+                    npc.playTrack(NPCTrack.NPC_703_KNIGHT_2);
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].updateBoard();
-                    chessBoards[0].spawnPiece(new Knight(5, 5));
-                    setInventory();
                 },
                 () -> {
-                    setInventory();
+                    chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].updateBoard();
                 }
-
         ));
-
         setupStep = setupStep.getNext();
 
+        // Dame Spawnen
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_704_KNIGHT_AND_QUEEN_1);
-                    chessBoards[0].removeAllPieces();
-                    chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].addPiece(new Knight(5, 5));
                     chessBoards[0].addPiece(new Queen(4, 3));
                     chessBoards[0].updateBoard();
-                    setInventory();
                 },
                 () -> {
-                    setInventory();
+                    chessBoards[0].removeLastPiece();
+                    chessBoards[0].updateBoard();
                 }));
         setupStep = setupStep.getNext();
 
+        // Spieler muss Dame und Springer selber setzen
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_705_KNIGHT_AND_QUEEN_2);
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateBoard();
-
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
 
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                     player.getInventory().setItem(1, ControlItem.PLACE_KNIGHT.getItemStack());
                     player.getInventory().setItem(2, ControlItem.SHOW_CARPET.getItemStack());
-
                 },
                 () -> {
                     setInventory();
-
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                    chessBoards[0].setCollisionCarpets(true);
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 
@@ -162,76 +153,66 @@ public class Level7 extends Level {
                         return true;
                     }
                     return false;
-                }));
-
+                }
+        ));
         setupStep = setupStep.getNext();
 
+        // Dame spawnen
         setupStep.setNext(new Step(
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_706_SUPERQUEEN_INTRO); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
+                    npc.playTrack(NPCTrack.NPC_706_SUPERQUEEN_INTRO);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].addPiece(new Queen(5, 5));
                     chessBoards[0].updateBoard();
-                    chessBoards[0].spawnPiece(new Queen(5, 5));
 
+                    // Inventar leeren
                     setInventory();
                 },
                 () -> {
-                    setInventory();
                     chessBoards[0].removeAllPieces();
-                }));
-
-        // Lernenden
+                }
+        ));
         setupStep = setupStep.getNext();
 
+        // Superdame erklären
         setupStep.setNext(new Step(
-                () -> {
-                    npc.playTrack(NPCTrack.NPC_707_SUPERQUEEN_EXPLAIN); // npc.playTrack(NPCTrack.NPC_702_KNIGHT_1);
-                    chessBoards[0].removeAllPieces();
-                    chessBoards[0].setCollisionCarpets(false);
-                    chessBoards[0].updateBoard();
-                    chessBoards[0].spawnPiece(new Queen(5, 5));
-
-                    setInventory();
-                },
-                () -> {
-                    setInventory();
-                    chessBoards[0].removeAllPieces();
-                }));
+                () -> npc.playTrack(NPCTrack.NPC_707_SUPERQUEEN_EXPLAIN),
+                () -> {}
+        ));
         setupStep = setupStep.getNext();
 
+        // Superdame erzeugen
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].addPiece(new Superqueen(5, 5));
                     chessBoards[0].updateBoard();
-                    chessBoards[0].spawnPiece(new Superqueen(5, 5));
                     player.getWorld().strikeLightning(chessBoards[0].getOriginCorner().clone().add(5.5, 0, 5.5));
-                    setInventory();
                 },
                 () -> {
-                    setInventory();
                     chessBoards[0].removeAllPieces();
+                    chessBoards[0].addPiece(new Queen(5, 5));
+                    chessBoards[0].updateBoard();
                 }));
         setupStep = setupStep.getNext();
 
+        // Bewegungen anzeigen
         setupStep.setNext(new Step(
                 () -> {
                     npc.playTrack(NPCTrack.NPC_708_SUPERQUEEN_MOVE_1);
-                    chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].addPiece(new Superqueen(5, 5));
                     chessBoards[0].updateBoard();
-                    setInventory();
                 },
                 () -> {
-                    setInventory();
-                    chessBoards[0].removeAllPieces();
-                    if (animation != null)
-                        animation.cancel();
+                    chessBoards[0].setCollisionCarpets(false);
+                    chessBoards[0].updateBoard();
                 }));
         setupStep = setupStep.getNext();
 
+        // drei Damen durch Algorithmus setzen lassen
+        // Spieler muss bis Dame 8 setzen (nach Backtracking Algorithmus)
+        // Ab da übernimmt der Algorithmus
         setupStep.setNext(new Step(() -> {
             npc.playTrack(NPCTrack.NPC_709_SUPERQUEEN_MOVE_2);
             chessBoards[0].removeAllPieces();
@@ -281,15 +262,16 @@ public class Level7 extends Level {
                         return true;
                     }
 
-                    if (cb.getPieces().size() > 6) {
+                    if (cb.getPieces().size() > 7) {
                         npc.playTrackPositive();
-                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+                        chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Superqueen());
                     }
                     return false;
                 }));
         setupStep = setupStep.getNext();
 
+        // Feuerwerksanimation abspielen
         setupStep.setNext(new Step(
                 () -> {
                     chessBoards[0].stopCurrentAnimation();

@@ -166,6 +166,10 @@ public class NPC implements Listener {
 
     public void moveVillagerWithPathfinding(Location target, double speed) {
         setSlowness(false);
+
+        // location aktualisieren
+        this.location = target.clone();
+        
         // Get the NMS Villager entity
         // net.minecraft.world.entity.npc.Villager nmsVillager =
         // ((org.bukkit.craftbukkit.entity.CraftVillager) villager).getHandle();
@@ -210,7 +214,6 @@ public class NPC implements Listener {
                     setSlowness(true);
                     villagerTask[0].cancel();
                 }
-                location = villager.getLocation();
                 villagerTask[1].cancel();
             }, 20L * delay);
         }
