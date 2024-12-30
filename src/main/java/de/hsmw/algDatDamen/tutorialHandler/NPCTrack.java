@@ -76,6 +76,8 @@ public enum NPCTrack {
             "Jetzt wirst du erneut versuchen, vier Damen zu platzieren, aber "
             + "diesmal ohne bedrohte Felder. Achte wieder darauf, dass du die Damen "
             + "so setzt, dass sie sich nicht gegenseitig schlagen. "),
+    NPC_304_INTERACTION(Sound.BLOCK_AZALEA_FALL,
+            "Gib nun deine Lösung in das Textfeld ein. Um das Textfeld zu öffnen, drücke die T-Taste."),
     NPC_401_INTRO(Sound.ENTITY_AXOLOTL_SPLASH,
             "Lass uns nun das Ganze nochmal auf einem größeren Feld betrachten. "),
     NPC_402_EXPLAIN_PROBLEM(Sound.ENTITY_AXOLOTL_SWIM,
@@ -145,6 +147,8 @@ public enum NPCTrack {
     NPC_710_END(Sound.ENTITY_CAMEL_DEATH, "Ich hoffe, dass dir dies beim Verstehen des N-Damen-Problems "
             + "und der Lösung durch die Anwendung des Backtracking-Algorithmus "
             + "geholfen hat, und ich wünsche dir weiterhin viel Erfolg. "),
+    NPC_801_INTRO(Sound.BLOCK_AZALEA_HIT, "Glückwunsch; du hast das Ende erreicht, nun kannst du dich selbst nach Belieben am N-Damen Problem ausprobieren."
+            + "Nutze dazu das DevMenu, auf das du nun Zugriff hast. Viel Spaß"),"
     // Positive Response
     NPC_POSITIVE_1(Sound.ENTITY_CAMEL_EAT, "Richtig!", NamedTextColor.GREEN),
     NPC_POSITIVE_2(Sound.ENTITY_CAMEL_HURT, "Korrekt!", NamedTextColor.GREEN),
