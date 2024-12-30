@@ -30,10 +30,10 @@ public class Level5 extends Level{
     @Override
     protected void configureChessBoards() {
         chessBoards = new MChessBoard[2];
-        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
+        chessBoards[0] = new MChessBoard(new Location(player.getWorld(), -186, -19, 15), 6, player);
         chessBoards[0].setCollisionCarpets(false);
 
-        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -171, -19, 25), 4, player);
+        chessBoards[1] = new MChessBoard(new Location(player.getWorld(), -186, -19, 15), 6, player);
         chessBoards[1].setWhiteFieldMaterial(Material.BLUE_CONCRETE);
         chessBoards[1].setBlackFieldMaterial(Material.YELLOW_CONCRETE);
         chessBoards[1].setCollisionCarpets(false);

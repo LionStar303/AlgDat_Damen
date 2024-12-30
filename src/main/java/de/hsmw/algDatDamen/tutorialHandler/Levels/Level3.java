@@ -19,6 +19,7 @@ public class Level3 extends Level {
 
     private final static String LEVEL_NAME = "Level 3 - Scandi Zwilling";
     private final static String LEVEL_DESCRIPTION = "Lösung mit und ohne Hilfestellung, sowie Vorgabe und Vergleich mehrerer Lösungsmöglichkeiten";
+    private int wrongCount = 0;
 
     public Level3(boolean console, Player player, Tutorial parent) {
         this(console, player, new Location(player.getWorld(), -76, -32, 103, 180, 0),
@@ -133,11 +134,13 @@ public class Level3 extends Level {
             },
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
-                if(latestPlayerInput.toLowerCase().contains("gespiegel")) {
+                if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("richtig, die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
-                    player.sendMessage(Component.text("das ist leider die falsche Antwort", NamedTextColor.RED));
+                    wrongCount++;
+                    if(wrongCount % 3 == 0) player.sendMessage(Component.text("Versuche es mal mit gleich, gespiegelt, rotiert oder verschieden.", NamedTextColor.RED));
+                    else player.sendMessage(Component.text("Das ist leider die falsche Antwort.", NamedTextColor.RED));
                     return false;
                 }
             }

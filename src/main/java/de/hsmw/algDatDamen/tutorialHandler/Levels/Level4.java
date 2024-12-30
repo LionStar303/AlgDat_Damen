@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
@@ -18,7 +19,7 @@ import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
 - Startpunkt `-106 -25 83`
 - Schachbrett `8x8 -132 -25 75` - wofür ist die Insel da?
 - Teleporter `-143 -24 62`
-*/
+ */
 // TODO muss getestet werden
 public class Level4 extends Level {
 
@@ -26,7 +27,7 @@ public class Level4 extends Level {
     private final static String LEVEL_DESCRIPTION = "Zeigen der Schwierigkeit auf einem großen Schachbrett, sowie Zeigen von verschiedenen Algorithmen zu Lösungserleichterung und Zeigen der Schrittfolge des Backtracking-Algorithmus";
 
     public Level4(boolean console, Player player, Tutorial parent) {
-        this(console, player, new Location(player.getWorld(), -106, -25, 83, 90, 0),
+        this(console, player, new Location(player.getWorld(), -106, -25, 83, 100, -5),
                 new Location(player.getWorld(), -143, -24, 62), parent);
     }
 
@@ -76,19 +77,17 @@ public class Level4 extends Level {
                     npc.playTrack(NPCTrack.NPC_402_EXPLAIN_PROBLEM);
                     stopBossBar();
                     chessBoards[0].updateBoard();
-                    chessBoards[0].setCollisionCarpets(true); 
+                    chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(true); // TODO an mode anpassen
 
                     // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
                     setInventory();
                     player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
                     player.getInventory().setItem(1, ControlItem.SHOW_CARPET.getItemStack());
-                    startBossBarTimer(3, "Überspringen verfügbar in:");
+                    startBossBarTimer(1, "Überspringen verfügbar in:"); //TODO change to 3 minutes
                 },
                 () -> {
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(false); // TODO mode
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].despawnChessBoard();
                     // Inventar auf Urspungszustand zurücksetzen
@@ -102,13 +101,8 @@ public class Level4 extends Level {
                         // Easteregg
                         npc.playTrackPositive();
                         return true;
-                    } else if (!bbisRunning) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    } else return !bbisRunning;
                 }
-
         ));
 
         setupStep = setupStep.getNext();
@@ -122,16 +116,30 @@ public class Level4 extends Level {
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].updateBoard();
                     chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(false); // TODO mode
+                    chessBoards[0].setMode(MChessBoardMode.INACTIVE);
+
+                    chessBoards[0].setStateX(0);
+                    chessBoards[0].setStateY(0);
+                    
                     player.getInventory().setItem(0, ControlItem.SHOW_CARPET.getItemStack());
-                    chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 8, new Queen()); // <-- später 8
+                    animation = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (chessBoards[0].isSolved()) {
+                                this.cancel(); // Stoppt den Runnable, wenn genug Figuren gesetzt sind
+                                currentStepcheckForCompletion();
+                                return;
+                            }
+                            chessBoards[0].animationStepToNextPiece(new Queen());
+                        }
+                    }.runTaskTimer(AlgDatDamen.getInstance(), 0, 8L); // 10L = 10 Ticks = 0.5 Sekunden
                 },
                 () -> {
                     // Chessboard leeren und Animation stoppen
+                    if (animation != null) animation.cancel();
                     chessBoards[0].removeAllPieces();
-                    chessBoards[0].updateBoard();
                     chessBoards[0].stopCurrentAnimation();
+                    chessBoards[0].updateBoard();
                     setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
@@ -140,9 +148,7 @@ public class Level4 extends Level {
                     if (chessBoards[0].isSolved()) {
                         return true;
                     } else {
-
-                        player.sendMessage(
-                                "Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
+                        player.sendMessage("Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
                         return false;
 
                     }
@@ -160,22 +166,21 @@ public class Level4 extends Level {
                     chessBoards[0].setCollisionCarpets(true);
                     chessBoards[0].setStateX(0);
                     chessBoards[0].setStateY(0);
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(true); // TODO mode
                     this.currentCBID = 0;
                     setInventory();
                     // Löschen und Neusetzen von Damen bis zur richtigen Lösung unter Zuhilfenahme
                     // des Backtracking-Algorithmus mit NPC-Interaktion, Hilfestellung und
                     // Möglichkeiten vor- und zurückzuspringen
-                    player.getInventory().setItem(0, ControlItem.BACKTRACKING_FORWARD_Q.getItemStack());
-                    player.getInventory().setItem(1, ControlItem.BACKTRACKING_FORWARDFAST_Q.getItemStack());
+                    player.getInventory().setItem(0, ControlItem.BACKTRACKING_FORWARDFAST_Q.getItemStack());
+                    player.getInventory().setItem(1, ControlItem.BACKTRACKING_FORWARD_Q.getItemStack());
                     player.getInventory().setItem(2, ControlItem.SHOW_CARPET.getItemStack());
                     player.getInventory().setItem(3, ControlItem.BACKTRACKING_BACKWARD_Q.getItemStack());
                     player.getInventory().setItem(4, ControlItem.BACKTRACKING_BACKWARDFAST_Q.getItemStack());
                 },
                 () -> {
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL);
-                    chessBoards[0].setActive(false); // TODO mode
+                    chessBoards[0].removeAllPieces();
+                    chessBoards[0].stopCurrentAnimation();
+                    chessBoards[0].updateBoard();
                     setInventory();
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
@@ -184,9 +189,7 @@ public class Level4 extends Level {
                     if (chessBoards[0].isSolved()) {
                         return true;
                     } else {
-
-                        player.sendMessage(
-                                "Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
+                        player.sendMessage("Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");
                         return false;
                     }
                 }));
