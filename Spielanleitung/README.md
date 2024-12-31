@@ -150,7 +150,7 @@
 
 ### Keine Verbindung zum Server
 - Stelle sicher, dass du den richtigen Server auswählst.
-  - *(Screenshot einfügen.)* <!-- TODO: Screenshot einfügen -->
+  - siehe [Server starten](#server-starten)
 
 ### Spiel hängt oder läuft langsam
 - Nutze `AlgDat_Start_Low.bat` für eine ressourcenschonende Version.
