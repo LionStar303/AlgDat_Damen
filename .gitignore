@@ -6,6 +6,23 @@
 *.class
 *.~ava
 
+
+##Minecraft Datein
+
+Minecraft/.fabric
+Minecraft/assets/*
+Minecraft/bin/*
+Minecraft/jvm/*
+Minecraft/libraries/*
+Minecraft/logs/*
+Minecraft/mods/*
+Minecraft/config/*
+Minecraft/downloads/*
+Minecraft/versions/*
+Minecraft/server.dat
+Minecraft/server.dat_old
+
+
 ##Server Ordner
 Server/*.log
 Server/logs/
