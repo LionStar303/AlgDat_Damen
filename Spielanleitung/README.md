@@ -37,11 +37,11 @@
 ### Schritt-für-Schritt-Anleitung
 
 #### Download
-- Lade die neueste Version des Tutrials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases/new) herunter.
+- Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases/new) herunter.
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
-2. **Falls dein PC langsam ist**, benutze die Datei `AlgDat_Start_Low.bat`.
+2. **Falls dein PC weniger leistungsstark ist**, benutze die Datei `AlgDat_Start_Low.bat`.
 3. **Wenn Java nicht installiert ist**:
    - Öffne den Ordner `Java`.
    - Führe die Datei `javaInstaller.bat` aus.
@@ -61,11 +61,12 @@
 ## Minecraft-Steuerung
 
 ### Wichtige Befehle
-- **Laufen:** `W`, `A`, `S`, `D`-Tasten.
-- **Umschauen:** Mausbewegen.
-- **Springen:** `Leertaste`.
-- **Rechtsklick:** Nutze Items oder aktiviere Objekte.
-- **Inventar öffnen:** `E`-Taste.
+- **Laufen:** `W`, `A`, `S`, `D`-Tasten
+- **Umschauen:** Mausbewegen
+- **Springen:** `Leertaste`
+- **Mausklick:** Nutze Items oder aktiviere Objekte
+- **Inventar schließen:** `E`-Taste
+- **Item in linke Hand legen:** `F`-Taste
 
 ---
 
@@ -81,21 +82,21 @@
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
 - Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen.
-- **NPCs erklären die Aufgaben in jedem Level.**
+- **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
-- **Weiter (blauer Farbstoff):** Führt den Ablauf des Tutorials fort.
-- **Wiederholen (grüner Farbstoff):** Wiederholt die aktuelle Aufgabe.
-- **Zurück (roter Farbstoff):** Setzt Schritte innerhalb eines Levels zurück.
+- **Weiter:** Führt den Ablauf des Tutorials fort.
+- **Wiederholen:** Wiederholt die aktuelle Aufgabe.
+- **Zurück:** geht zum vorherigen Schritt zurück, **ACHTUNG:** dieser muss dann wiederholt werden.
 
 ### Abschluss eines Levels
 - **Bei erfolgreichem Abschluss:**
   - Ein Blitz schlägt am Ausgangstor ein.
   - Ein blaues Feuer erscheint.
 
-**Um ins nächste Level zu gelangen:**
-- **Flohpulver in der Luft verwenden** oder
-- **Rechtsklick auf das blaue Feuer mit dem Flohpulver.**
+- **Um ins nächste Level zu gelangen:**
+  - **Flohpulver** in der Luft verwenden oder
+  - Rechtsklick auf das blaue Feuer mit dem **Flohpulver**.
 
 ---
 
