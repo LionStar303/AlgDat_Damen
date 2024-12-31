@@ -32,6 +32,7 @@
 
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
+- Internetverbindung
 - Ein leistungsfähiger PC wird empfohlen.
 
 ### Schritt-für-Schritt-Anleitung
