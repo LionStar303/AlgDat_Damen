@@ -28,6 +28,7 @@
     - [Minecraft öffnet sich nicht](#minecraft-öffnet-sich-nicht)
     - [Keine Verbindung zum Server](#keine-verbindung-zum-server)
     - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
+  - [Kontakt und Support](#Kontakt-und-Support)
 
 ## Installation und Start
 ### Voraussetzungen
@@ -82,7 +83,7 @@
 2. Nutze die Buttons oder Schilder:
    - **Tag/Nacht wechseln**.
    - **Tutorial starten**.
-![Startinsel](./bilder/startinsel.png)
+   ![Startinsel](./bilder/startinsel.png)
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
@@ -90,7 +91,9 @@
 - **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
-Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt werden. Für das voranschreiten Im level hat man immer die Folgenden 3 Items im Inventar. Wenn man diese rechtsklickt, dann aktiviert man deren Funktion.
+Mit dem `Mausrad` kann das Element welches der Spieler in der Hand hat gewechselt werden. Für das voranschreiten Im Level hat man immer die Folgenden 3 Items im Inventar. Wenn man diese rechtsklickt, dann aktiviert man deren Funktion.
+
+In der grünen Zeile darüber wird das aktuelle Level und dessen Fortschritt angezeigt.
 
 - **Weiter:** Führt den Ablauf des Tutorials fort.
 - **Wiederholen:** Wiederholt die aktuelle Aufgabe.
@@ -171,6 +174,16 @@ In der Überschrift des Menüs wird angezeigt, ob ein Schachbrett angeklickt wur
 
 ### Spiel hängt oder läuft langsam
 - Nutze `AlgDat_Start_Low.bat` für eine ressourcenschonende Version.
+
+---
+
+### Kontakt und Support
+
+Sollten Probleme auftreten, welche in dieser Anleitung nicht behandelt wurden, sind wir jederzeit per E-Mail oder Discord kontaktierbar. Wir kümmern uns schnellstmöglich darum!
+
+**Discord (empfohlen):** `boettgi`, `setblockmaster`, `lionstar303`, `._.yukio`, `mok0644`, `phoenix2557`, `_yape_`
+
+**E-Mail:** lseidel2@hs-mittweida.de oder moritz.kockert@gmx.de
 
 ---
 
