@@ -91,6 +91,7 @@
 - **Weiter:** Führt den Ablauf des Tutorials fort.
 - **Wiederholen:** Wiederholt die aktuelle Aufgabe.
 - **Zurück:** geht zum vorherigen Schritt zurück, **ACHTUNG:** dieser muss dann wiederholt werden.
+![Inventarleiste](./bilder/items.png)
 
 ### Abschluss eines Levels
 - **Bei erfolgreichem Abschluss:**
