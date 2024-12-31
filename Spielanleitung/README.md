@@ -95,7 +95,7 @@
   - Ein blaues Feuer erscheint.
 
 - **Um ins nächste Level zu gelangen:**
-  - **Flohpulver** in der Luft verwenden oder
+  - Auf das blaue Feuer stellen und **Flohpulver** in der Luft verwenden oder
   - Rechtsklick auf das blaue Feuer mit dem **Flohpulver**.
 
 ---
