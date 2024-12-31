@@ -38,6 +38,9 @@ public class Level8 extends Level {
     }
 
     @Override
+    protected void spawnVillager() {}
+
+    @Override
     /*
      * erstellt alle für das Level benötigten Schachbretter und speichert diese in
      * chessBoards

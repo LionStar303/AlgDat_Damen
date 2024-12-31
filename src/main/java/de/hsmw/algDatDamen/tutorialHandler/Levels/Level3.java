@@ -2,12 +2,14 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -34,6 +36,13 @@ public class Level3 extends Level {
             boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
+    }
+
+    @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -77, -31, 99), console);
+        this.npc.setType(Villager.Type.SAVANNA);
+        this.npc.spawn();
     }
 
     @Override

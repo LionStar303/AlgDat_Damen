@@ -65,7 +65,6 @@ public abstract class Level implements Listener {
         this.active = false;
         this.parentTutorial = parent;
         this.teleporter = new Teleporter(teleporterLocation.add(0, 1, 0), player);
-        this.npc = new NPC(startLocation, console);
         this.currentCBID = 0;
         this.cooldownMillis = 0;
         this.bbisRunning = false;
@@ -75,15 +74,15 @@ public abstract class Level implements Listener {
     }
 
     // Abstrakte Methoden
+    protected abstract void spawnVillager();
     protected abstract void configureChessBoards();
+    protected abstract void initializeSteps();
 
     protected void initBossBar() {
         this.bossBar = Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID);
         bossBar.setVisible(false);
         bossBar.addPlayer(player);
     }
-
-    protected abstract void initializeSteps();
 
     // Standardmethoden
     public void start() {
@@ -106,7 +105,7 @@ public abstract class Level implements Listener {
         configureChessBoards();
 
         teleporter.spawnTeleporter();
-        npc.spawn();
+        spawnVillager();
 
         // alle Schritte erzeugen
         initializeSteps();
