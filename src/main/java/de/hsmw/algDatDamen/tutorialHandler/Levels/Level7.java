@@ -116,6 +116,8 @@ public class Level7 extends Level {
                     setInventory();
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].addPiece(new Knight(5, 5));
+                    chessBoards[0].addPiece(new Queen(4, 3));
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 

@@ -111,7 +111,7 @@ public class Level6 extends Level {
 
                     if (chessBoards[0].getPieces().size() > 2) {
                         setInventory();
-                        npc.playTrackPositive();
+                        if(!chessBoards[0].isAnimationRunning()) npc.playTrackPositive();
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                         chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Queen());
                     }

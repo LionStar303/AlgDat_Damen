@@ -31,7 +31,6 @@ public class TutorialCommand implements CommandExecutor {
                         } else {
                             t.start();
                         }
-                        sender.sendMessage("Tutorial erfolgreich gestartet.");
                         return true;
                     }
                     return false;

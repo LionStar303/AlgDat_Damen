@@ -122,19 +122,18 @@ public class Level1 extends Level {
                 },
                 () -> {
                     setInventory();
-                    chessBoards[0].removeLastQueen();
+                    chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     // spawne Queen auf Feld (6,5) und Feld(3,2)
-                    chessBoards[0].addPiece(new Queen(6, 5));
                     chessBoards[0].addPiece(new Queen(3, 2));
+                    chessBoards[0].addPiece(new Queen(6, 5));
                     chessBoards[0].updateBoard();
                 },
                 unused -> {
                     if (chessBoards[0].checkUserCarpets()) {
                         npc.playTrackPositive();
                         return true;
-                    } else
-                        return false;
+                    } else return false;
                 }));
         setupStep = setupStep.getNext();
 
