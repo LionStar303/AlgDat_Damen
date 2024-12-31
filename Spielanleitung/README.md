@@ -57,7 +57,9 @@
 **Falls dies nicht funktioniert:**
 - Gehe über das Minecraft-Hauptmenü:
   - **Multiplayer > Wähle den ersten Server in der Liste aus und klicke doppelt darauf.**
+  
   ![Serverliste](./bilder/menu_multiplayer.png)
+
   ![Serverliste](./bilder/menu_server.png)
   
 ---
