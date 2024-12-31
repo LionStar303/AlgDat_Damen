@@ -9,7 +9,6 @@
     - [Wie man es löst](#wie-man-es-löst)
   - [Git-Richtlinien](#git-richtlinien)
   - [Minecraft Server Setup](#minecraft-server-setup)
-  - [Übersicht Funktionen:](#übersicht-funktionen)
   - [Übersicht Level:](#übersicht-level)
   - [Level Koordinaten](#level-koordinaten)
     - [Level 1 - Einführung:](#level-1---einführung)
@@ -19,11 +18,6 @@
     - [Level 5 - Amazonas:](#level-5---amazonas)
     - [Level 6- Boreal:](#level-6--boreal)
     - [Level 7- Eiskönigin:](#level-7--eiskönigin)
-  - [Konzept: Damenproblem Tutorial in Minecraft](#konzept-damenproblem-tutorial-in-minecraft)
-    - [Schachfelder und Level](#schachfelder-und-level)
-    - [Simulation des Algorithmus](#simulation-des-algorithmus)
-    - [Interaktive Button-Steuerung](#interaktive-button-steuerung)
-    - [Manuelles Lösen des Problems](#manuelles-lösen-des-problems)
 
 ---
 
@@ -72,32 +66,12 @@ Beim Arbeiten am Projekt sollten folgende Git-Richtlinien beachtet werden:
 
 ## Minecraft Server Setup
 
-Um das Damenproblem spielerisch zu verstehen, haben wir einen **Minecraft-Server** eingerichtet.
-Dieser wird lokal gehostet, was durch entsprechende Skripte vereinfacht wird.
+Um das Damenproblem spielerisch zu verstehen, haben wir einen **Minecraft-Server** eingerichtet. Der Server wird entweder über die Datei **`AlgDat_Start.bat`** oder für leistungsschwächere PCs über **`AlgDat_Start_Low.bat`** gestartet. Beim Starten wird automatisch der Minecraft-Launcher geöffnet, und du wirst mit dem Server verbunden, auf dem du das Tutorial spielen kannst.
+
+Nachdem du auf die entsprechende Batch-Datei doppelklickst, kann es einen Moment dauern, bis alles heruntergeladen und gestartet ist. Bitte habe etwas Geduld, falls es nicht sofort losgeht.
 
 ---
 
-## Übersicht Funktionen:
-
-Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
-
-| Name                                  | Funktion                       | Item                   | in Menü |
-| :------------------------------------ | :----------------------------- | :--------------------- | :-----: |
-| `handleBoardCreation()`               | Spawne Schachbrett             | Material.GREY_CONCRETE |   ja    |
-| `removeChessBoardFromGame()`          | Entferne Schachbrett           |                        |   ja    |
-| `handleCollisionCarpets()`            | Zeige Teppiche                 |                        |   ja    |
-| `placeQueen()`                        | Spawne/Entferne Königin        |                        |   ja    |
-| `removeAllQueens()`                   | Entferne alle Königinnen       |                        |   ja    |
-| `placeTestedQueen()`                  | Spawne getestete Königin       |                        |   ja    |
-| `rotateQueens()`                      | Rotiere Königinnen             |                        |   ja    |
-| `handleBacktrack()`                   | Löse Schachbrett               |                        |   ja    |
-| `handleBacktrackStep()`               | Backtracking nächster Schritt  |                        |   ja    |
-| `handleBacktrackAnimation()`          | Backtracking Animation         |                        |   ja    |
-| `handleBacktrackAnimationQueenStep()` | Backtracking Animation schnell |                        |   ja    |
-| `checkUserCarpets()`                  | Damen Movement Carpets checken |                        |   ja    |
-| `placeUserCarpet()`                   | Damen Movement Carpet setzen   |                        |   ja    |
-
----
 ## Übersicht Level:
 ## Level Koordinaten
 - Spawn `0 -45 170`
@@ -131,26 +105,3 @@ Hier sind alle aktuell vorhandenen (Entwickler-) Funktionen aufgelistet
 - Schachbrett `10x10 -192 -8 -98`
 - Teleporter -- `-127 -8 -67`
 ---
-## Konzept: Damenproblem Tutorial in Minecraft
-
-### Schachfelder und Level
-
-In Minecraft werden verschieden große **Schachfelder** als verschiedene Level gebaut. Diese Schachfelder dienen als visuelle und interaktive Darstellung des Damenproblems. Spieler können anhand dieser Felder und eines **Buches** das Problem durchspielen und die Funktionsweise des Algorithmus nachvollziehen.
-
-![Schachfelder](/Bilder/Konzept/Schachfelder.png)
-
-### Simulation des Algorithmus
-
-Es gibt die Möglichkeit, eine **automatische Simulation** des Backtracking-Algorithmus über die Schachfelder laufen zu lassen. In dieser Simulation können die Spieler anhand der markierten Felder und platzierten Figuren beobachten, wie der Algorithmus vorgeht und Lösungen findet.
-
-![Simulation](/Bilder/Konzept/Simulation.png)
-
-### Interaktive Button-Steuerung
-
-Alternativ kann der Spieler den Algorithmus auch **schrittweise** durch das Klicken auf **Buttons** durchlaufen lassen. So kann jeder Schritt des Algorithmus nachvollzogen werden, indem der Spieler den Prozess manuell steuert und die Positionen der Damen auf dem Brett verfolgt.
-
-![Buttons](/Bilder/Konzept/Buttons.png)
-
-### Manuelles Lösen des Problems
-
-Schließlich gibt es die Möglichkeit, dass der Spieler die Damen **manuell** auf das Schachbrett setzt. Hierbei können die Spieler die Positionen in **Kisten** oder **Blättern** speichern, um am Ende die maximale Anzahl von Damen zu bestimmen, die sicher auf dem Schachbrett platziert werden können.
