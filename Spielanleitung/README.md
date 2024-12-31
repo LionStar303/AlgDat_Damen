@@ -65,7 +65,7 @@
 ## Minecraft-Steuerung
 
 - **Laufen:** `W`, `A`, `S`, `D`-Tasten
-- **Umschauen:** Mausbewegen
+- **Umschauen:** Mausbewegung
 - **Springen:** `Leertaste`
 - **Mausklick:** Nutze Items oder aktiviere Objekte
 - **Inventar schließen:** `E`-Taste
