@@ -1,7 +1,8 @@
-# Spielanleitung für das Minecraft-Plugin "AlgDat Damen"
+# Anleitung für das Minecraft-Tutorial zum N-Damenproblem
 
-## Installation und Start
-- [Spielanleitung für das Minecraft-Plugin "AlgDat Damen"](#spielanleitung-für-das-minecraft-plugin-algdat-damen)
+## Inhaltsverzeichnis
+- [Anleitung für das Minecraft-Tutorial zum N-Damenproblem](#anleitung-für-das-minecraft-tutorial-zum-n-damenproblem)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
   - [Installation und Start](#installation-und-start)
     - [Voraussetzungen](#voraussetzungen)
     - [Schritt-für-Schritt-Anleitung](#schritt-für-schritt-anleitung)
@@ -29,6 +30,7 @@
     - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
   - [Kontakt und Support](#kontakt-und-support)
 
+## Installation und Start
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
 - Internetverbindung
