@@ -28,7 +28,6 @@
     - [Minecraft öffnet sich nicht](#minecraft-öffnet-sich-nicht)
     - [Keine Verbindung zum Server](#keine-verbindung-zum-server)
     - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
-  - [Häufige Probleme und Lösungen](#häufige-probleme-und-lösungen-1)
 
 ## Installation und Start
 ### Voraussetzungen
@@ -40,7 +39,7 @@
 
 #### Download
 - Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases) herunter.
-- Entpacke die Datei in einen beliebigen Ordner
+- Entpacke die Datei in einen beliebigen Ordner (`Rechtsklick -> Alle extrahieren`)
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
@@ -165,24 +164,11 @@ In der Überschrift des Menüs wird angezeigt, ob ein Schachbrett angeklickt wur
 ### Keine Verbindung zum Server
 - Stelle sicher, dass du den richtigen Server auswählst.
   - siehe [Server starten](#server-starten)
+  ![Serverliste](./bilder/menu_server.png)
 
 ### Spiel hängt oder läuft langsam
 - Nutze `AlgDat_Start_Low.bat` für eine ressourcenschonende Version.
 
----
-
-## Häufige Probleme und Lösungen
-**Minecraft öffnet sich nicht:**
-- Stelle sicher, dass Java 21 korrekt installiert ist.
-
-- Prüfe, ob die .bat-Datei mit Administratorrechten ausgeführt wurde.
-
-**Keine Verbindung zum Server:**
-
-- Stelle sicher, dass du den richtigen Server auswählst. ![Serverliste](./bilder/menu_server.png)
-
-**Spiel hängt oder läuft langsam:**
-- Nutze AlgDat_Start_Low.bat für eine ressourcenschonende Version.
 ---
 
 **Viel Spaß beim Lösen des n-Damen-Problems!**
