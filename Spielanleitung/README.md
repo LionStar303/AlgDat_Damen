@@ -9,7 +9,6 @@
       - [Ausführen](#ausführen)
       - [Server starten](#server-starten)
   - [Minecraft-Steuerung](#minecraft-steuerung)
-    - [Wichtige Befehle](#wichtige-befehle)
   - [Tutorialübersicht](#tutorialübersicht)
     - [Einstieg ins Tutorial](#einstieg-ins-tutorial)
     - [Navigation im Tutorial](#navigation-im-tutorial)
@@ -62,7 +61,6 @@
 
 ## Minecraft-Steuerung
 
-### Wichtige Befehle
 - **Laufen:** `W`, `A`, `S`, `D`-Tasten
 - **Umschauen:** Mausbewegen
 - **Springen:** `Leertaste`
