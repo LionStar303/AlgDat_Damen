@@ -97,6 +97,7 @@ Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt 
 ![Inventarleiste](./bilder/items.png)
 
 ### Abschluss eines Levels
+![Startinsel](./bilder/teleporter.png)
 - **Bei erfolgreichem Abschluss:**
   - Ein Blitz schlägt am Ausgangstor ein.
   - Ein blaues Feuer erscheint.
