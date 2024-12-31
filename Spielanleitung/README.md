@@ -32,7 +32,7 @@
 
 ## Installation und Start
 ### Voraussetzungen
-- **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
+- **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt - [siehe 3.](#ausführen)).
 - Internetverbindung
 - Ein PC mit Windows 10 oder höher wird empfohlen.
 
@@ -40,6 +40,7 @@
 
 #### Download
 - Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases) herunter.
+- Entpacke die Datei in einen beliebigen Ordner
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
@@ -50,7 +51,7 @@
    - Starte anschließend die `.bat`-Datei wie oben beschrieben.
 
 #### Server starten
-1. Zwei Terminal-Fenster öffnen sich automatisch und laden die notwendigen Dateien.
+1. Zwei Terminal-Fenster öffnen sich automatisch und laden die notwendigen Dateien. **Diese Fenster müssen während des Tutorials geöffnet bleiben**
 2. Nach kurzer Zeit sollte Minecraft starten, und du wirst automatisch auf den Server verbunden.
 
 **Falls dies nicht funktioniert:**
@@ -83,7 +84,7 @@
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
-- Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen.
+- Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen. Folge einfach dem NPC.
 - **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
