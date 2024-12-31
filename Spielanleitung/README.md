@@ -124,25 +124,33 @@ Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt 
 
 ### Funktionen des Dev-Menüs
 
+![Developer-Menü](./bilder/dev-menu.png)
+
 #### Schachbrett-Optionen
+In der Überschrift des Menüs wird angezeigt, ob ein Schachbrett angeklickt wurde oder nicht.
 - **Spawne Schachbrett (Diamant):** Erstellt ein neues Schachbrett in der aktuellen Größe.
 - **Entferne Schachbrett (Barrier):** Löscht das aktuelle Schachbrett.
 - **Größe ändern (Redstone-Fackel):** Erhöht oder verringert die Größe des nächsten zu spawnenden Schachbretts.
 - **Teppiche anzeigen (Roter Teppich):** Schaltet die Anzeige der Bedrohungszonen auf dem Brett ein oder aus.
+- **Bewegungs Teppiche (lila, türkis, grün):** Zum Setzen und Checken von eigens gesetzten Teppichen zum Markieren von Laufwegen.
 
 #### Figuren-Optionen
 - **Spawne Dame (Eisenhelm):** Setzt oder entfernt eine Dame auf dem Brett.
 - **Rotiere Figuren (Kompass):** Rotiert die Figuren auf dem Brett, um ihre Bewegungsmöglichkeiten zu analysieren.
 - **Entferne alle Figuren (TNT):** Löscht alle Figuren vom Schachbrett.
+- **Figuren Neuladen (End-Kristall)**: Lädt bei Fehlern die Figuren neu.
 
 #### Backtracking-Optionen
-- **Backtracking starten (Diamantschwert):** Startet das Backtracking, um das Brett zu lösen.
+- **Backtracking Animation starten (Diamantschwert):** Startet das Backtracking, um das Brett zu lösen.
 - **Nächster Schritt (Eisenpickel):** Führt den nächsten Schritt des Backtracking-Algorithmus aus.
 - **Schritt zurück (Goldene Hacke):** Geht einen Schritt im Algorithmus zurück.
 - **Backtracking Animation (Diamantaxt):** Löst das Brett schrittweise, wobei die Animation alle Bewegungen zeigt.
+- **Backtracking ausführen (Goldschwert):** Startet das Backtracking und löst das Brett ohne Animation.
+- **Backtrack Animation zurück (Diamant- und Goldharke):** Animation des Algorithmus rückwärts.
+- **Zufällige Lösung per Bongosort (Weißglasierte Terrakotta)**
 
 #### Ästhetische Anpassungen
-- **Ändere weiße Blöcke (Weißglasierte Terrakotta):** Ändert das Aussehen der weißen Felder.
+- **Ändere weiße Blöcke (Weiße Blöcke):** Ändert das Aussehen der weißen Felder.
 - **Ändere schwarze Blöcke (Schwarze Blöcke):** Passt das Aussehen der schwarzen Felder an.
 
 ---
