@@ -84,7 +84,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
+        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, -5f);
         NPC startMessageNPC = new NPC(startLocation, false);
 
         // Spieler erst teleportieren, damit er das Audio hört

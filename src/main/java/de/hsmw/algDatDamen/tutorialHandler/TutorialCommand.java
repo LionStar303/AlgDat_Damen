@@ -34,10 +34,8 @@ public class TutorialCommand implements CommandExecutor {
                         sender.sendMessage("Tutorial erfolgreich gestartet.");
                         return true;
                     }
-                    sender.sendMessage("Tutorial existiert nicht.");
                     return false;
                 }
-                sender.sendMessage("keine Tutorials vorhanden.");
                 return false;
             } else {
                 // Fehlermeldung, falls der Sender kein Spieler ist
