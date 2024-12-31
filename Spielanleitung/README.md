@@ -37,7 +37,7 @@
 ### Schritt-für-Schritt-Anleitung
 
 #### Download
-- Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases/new) herunter.
+- Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases) herunter.
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
