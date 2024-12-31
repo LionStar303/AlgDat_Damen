@@ -69,6 +69,9 @@
 - **Mausklick:** Nutze Items oder aktiviere Objekte
 - **Inventar schließen:** `E`-Taste
 - **Item in linke Hand legen:** `F`-Taste
+- **Chat öffnen:** `T`-Taste
+  - **Nachricht senden:** Mit `Enter`-Taste bestätigen
+- **Fenster, Chat oder Spiel schließen:** `ESC`-Taste
 
 ---
 
@@ -110,13 +113,13 @@ Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt 
 ## Zusätzliche Tutorial-Funktionen
 
 ### Figuren setzen
-- **Dame setzen (gelber Farbstoff).**
-- **Springer setzen (orangener Farbstoff).**
-- **Superdame setzen (hellblauer Farbstoff).**
+- **Dame setzen (gelber Farbstoff / Krone).**
+- **Springer setzen (orangener Farbstoff / Springer).**
+- **Superdame setzen (hellblauer Farbstoff / Krone).**
 
 ### Bewegungen und Bedrohungen
-- **Bewegung markieren (magentafarbener Farbstoff).**
-- **Bedrohungen anzeigen (brauner Farbstoff).**
+- **Bewegung markieren (magentafarbener Farbstoff / Teppich).**
+- **Bedrohungen anzeigen (brauner Farbstoff / Lupe).**
 
 ---
 
