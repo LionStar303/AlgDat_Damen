@@ -52,47 +52,35 @@ public class Level3 extends Level {
                 npc.playTrack(NPCTrack.NPC_301_INTRO);
                 chessBoards[0].spawnChessBoard();
                 npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -78, -31, 93), 1);
+
+                chessBoards[0].removeAllPieces();
+                chessBoards[1].removeAllPieces();
+                chessBoards[0].setCollisionCarpets(true);
+                chessBoards[0].setMode(MChessBoardMode.NORMAL); 
+                chessBoards[0].setActive(true);
+                // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
+                setInventory();
+                player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
             },
             () -> {
-                // Chessboard despawnen
-                chessBoards[0].despawnChessBoard();
+                // Schachbrett leeren
+                chessBoards[0].setCollisionCarpets(false);
+                chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
+                chessBoards[0].setActive(false);
+                chessBoards[0].removeAllPieces();
+                // Inventar auf Urspungszustand zurücksetzen
+                setInventory();
+            }, unused -> {
+                if(chessBoards[0].isSolved()) {
+                    npc.playTrackPositive();
+                    return true;
+                } else return false;
             }
         );
 
         // setupStep wird bis zum Ende durchgegeben und jeweils mit dem vorherigen
         // verknüpft
         Step setupStep = currentStep;
-
-        // Setzen von 4 richtigen Damen mit bedrohten Feldern durch Lernenden
-        setupStep.setNext(new Step(
-                () -> {
-                    chessBoards[0].removeAllPieces();
-                    chessBoards[1].removeAllPieces();
-                    chessBoards[0].setCollisionCarpets(true);
-                    chessBoards[0].setMode(MChessBoardMode.NORMAL); 
-                    chessBoards[0].setActive(true);
-                    // Inventar leeren und neu füllen, falls Spieler Items vertauscht hat
-                    setInventory();
-                    player.getInventory().setItem(0, ControlItem.PLACE_QUEEN.getItemStack());
-                },
-                () -> {
-                    // Schachbrett leeren
-                    chessBoards[0].setCollisionCarpets(false);
-                    chessBoards[0].setMode(MChessBoardMode.INACTIVE); 
-                    chessBoards[0].setActive(false);
-                    chessBoards[0].removeAllPieces();
-                    // Inventar auf Urspungszustand zurücksetzen
-                    setInventory();
-                },
-                // Step ist complete wenn das Schachbrett gelöst ist
-                unused -> {
-                    if(chessBoards[0].isSolved()) {
-                        npc.playTrackPositive();
-                        return true;
-                    } else return false;
-                }
-                ));
-        setupStep = setupStep.getNext();
 
         // Löschen aller Damen von Schachbrett
         // Erzeugung zweier 4x4 Schachbretter
@@ -131,12 +119,13 @@ public class Level3 extends Level {
             },
             // Step ist complete wenn Eingabe "spiegel" enthält
             unused -> {
+                if(latestPlayerInput == null)return false;
                 if(latestPlayerInput.toLowerCase().contains("spiegel")) {
                     player.sendMessage(Component.text("Die beiden Lösungen unterscheiden sich durch ihre Spiegelung", NamedTextColor.GREEN));
                     return true;
                 } else {
                     wrongCount++;
-                    if(wrongCount % 3 == 0) player.sendMessage(Component.text("Versuche es mal mit gleich, gespiegelt,\nrotiert oder verschieden.", NamedTextColor.RED));
+                    if(wrongCount % 2 == 0) player.sendMessage(Component.text("Versuche es mal mit gleich, gespiegelt,\nrotiert oder verschieden.", NamedTextColor.BLUE));
                     else player.sendMessage(Component.text("Das ist leider die falsche Antwort.", NamedTextColor.RED));
                     return false;
                 }
