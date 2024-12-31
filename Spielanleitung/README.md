@@ -33,7 +33,7 @@
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
 - Internetverbindung
-- Ein leistungsfähiger PC wird empfohlen.
+- Ein Windows 10 oder höher wird empfohlen.
 
 ### Schritt-für-Schritt-Anleitung
 
@@ -78,7 +78,7 @@
 2. Nutze die Buttons oder Schilder:
    - **Tag/Nacht wechseln**.
    - **Tutorial starten**.
-   - *(Ein Screenshot wird hier eingefügt.)* <!-- TODO: Screenshot einfügen -->
+ - ![Startinsel](./bilder/startinsel.png)
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
