@@ -135,6 +135,7 @@ public class Level4 extends Level {
 
                 unused -> {
                     if (chessBoards[0].isSolved()) {
+                        animation.cancel();
                         return true;
                     } else {
                         player.sendMessage("Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");

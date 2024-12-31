@@ -9,7 +9,6 @@
       - [Ausführen](#ausführen)
       - [Server starten](#server-starten)
   - [Minecraft-Steuerung](#minecraft-steuerung)
-    - [Wichtige Befehle](#wichtige-befehle)
   - [Tutorialübersicht](#tutorialübersicht)
     - [Einstieg ins Tutorial](#einstieg-ins-tutorial)
     - [Navigation im Tutorial](#navigation-im-tutorial)
@@ -32,16 +31,17 @@
 
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
-- Ein leistungsfähiger PC wird empfohlen.
+- Internetverbindung
+- Ein PC mit Windows 10 oder höher wird empfohlen.
 
 ### Schritt-für-Schritt-Anleitung
 
 #### Download
-- Lade die neueste Version des Tutrials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases/new) herunter.
+- Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases) herunter.
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
-2. **Falls dein PC langsam ist**, benutze die Datei `AlgDat_Start_Low.bat`.
+2. **Falls dein PC weniger leistungsstark ist**, benutze die Datei `AlgDat_Start_Low.bat`.
 3. **Wenn Java nicht installiert ist**:
    - Öffne den Ordner `Java`.
    - Führe die Datei `javaInstaller.bat` aus.
@@ -54,18 +54,19 @@
 **Falls dies nicht funktioniert:**
 - Gehe über das Minecraft-Hauptmenü:
   - **Multiplayer > Wähle den ersten Server in der Liste aus und klicke doppelt darauf.**
-  !["./bilder/menu_server.png"](asda)
-
+  ![Serverliste](./bilder/menu_multiplayer.png)
+  ![Serverliste](./bilder/menu_server.png)
+  
 ---
 
 ## Minecraft-Steuerung
 
-### Wichtige Befehle
-- **Laufen:** `W`, `A`, `S`, `D`-Tasten.
-- **Umschauen:** Mausbewegen.
-- **Springen:** `Leertaste`.
-- **Rechtsklick:** Nutze Items oder aktiviere Objekte.
-- **Inventar öffnen:** `E`-Taste.
+- **Laufen:** `W`, `A`, `S`, `D`-Tasten
+- **Umschauen:** Mausbewegen
+- **Springen:** `Leertaste`
+- **Mausklick:** Nutze Items oder aktiviere Objekte
+- **Inventar schließen:** `E`-Taste
+- **Item in linke Hand legen:** `F`-Taste
 
 ---
 
@@ -76,26 +77,26 @@
 2. Nutze die Buttons oder Schilder:
    - **Tag/Nacht wechseln**.
    - **Tutorial starten**.
-   - *(Ein Screenshot wird hier eingefügt.)* <!-- TODO: Screenshot einfügen -->
+![Startinsel](./bilder/startinsel.png)
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
 - Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen.
-- **NPCs erklären die Aufgaben in jedem Level.**
+- **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
-- **Weiter (blauer Farbstoff):** Führt den Ablauf des Tutorials fort.
-- **Wiederholen (grüner Farbstoff):** Wiederholt die aktuelle Aufgabe.
-- **Zurück (roter Farbstoff):** Setzt Schritte innerhalb eines Levels zurück.
+- **Weiter:** Führt den Ablauf des Tutorials fort.
+- **Wiederholen:** Wiederholt die aktuelle Aufgabe.
+- **Zurück:** geht zum vorherigen Schritt zurück, **ACHTUNG:** dieser muss dann wiederholt werden.
 
 ### Abschluss eines Levels
 - **Bei erfolgreichem Abschluss:**
   - Ein Blitz schlägt am Ausgangstor ein.
   - Ein blaues Feuer erscheint.
 
-**Um ins nächste Level zu gelangen:**
-- **Flohpulver in der Luft verwenden** oder
-- **Rechtsklick auf das blaue Feuer mit dem Flohpulver.**
+- **Um ins nächste Level zu gelangen:**
+  - Auf das blaue Feuer stellen und **Flohpulver** in der Luft verwenden oder
+  - Rechtsklick auf das blaue Feuer mit dem **Flohpulver**.
 
 ---
 
@@ -121,7 +122,6 @@
 - **Entferne Schachbrett (Barrier):** Löscht das aktuelle Schachbrett.
 - **Größe ändern (Redstone-Fackel):** Erhöht oder verringert die Größe des nächsten zu spawnenden Schachbretts.
 - **Teppiche anzeigen (Roter Teppich):** Schaltet die Anzeige der Bedrohungszonen auf dem Brett ein oder aus.
-- **Lösungen anzeigen (Grüner Teppich):** Zeigt eine Lösung der Figurenbewegungen auf dem Brett.
 
 #### Figuren-Optionen
 - **Spawne Dame (Eisenhelm):** Setzt oder entfernt eine Dame auf dem Brett.
