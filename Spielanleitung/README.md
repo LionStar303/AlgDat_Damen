@@ -1,6 +1,34 @@
 # Spielanleitung für das Minecraft-Plugin "AlgDat Damen"
 
 ## Installation und Start
+- [Spielanleitung für das Minecraft-Plugin "AlgDat Damen"](#spielanleitung-für-das-minecraft-plugin-algdat-damen)
+  - [Installation und Start](#installation-und-start)
+    - [Voraussetzungen](#voraussetzungen)
+    - [Schritt-für-Schritt-Anleitung](#schritt-für-schritt-anleitung)
+      - [Download](#download)
+      - [Ausführen](#ausführen)
+      - [Server starten](#server-starten)
+  - [Minecraft-Steuerung](#minecraft-steuerung)
+    - [Wichtige Befehle](#wichtige-befehle)
+  - [Tutorialübersicht](#tutorialübersicht)
+    - [Einstieg ins Tutorial](#einstieg-ins-tutorial)
+    - [Navigation im Tutorial](#navigation-im-tutorial)
+    - [Steuerung der Tutorial-Items](#steuerung-der-tutorial-items)
+    - [Abschluss eines Levels](#abschluss-eines-levels)
+  - [Zusätzliche Tutorial-Funktionen](#zusätzliche-tutorial-funktionen)
+    - [Figuren setzen](#figuren-setzen)
+    - [Bewegungen und Bedrohungen](#bewegungen-und-bedrohungen)
+  - [Dev-Menü Steuerung](#dev-menü-steuerung)
+    - [Funktionen des Dev-Menüs](#funktionen-des-dev-menüs)
+      - [Schachbrett-Optionen](#schachbrett-optionen)
+      - [Figuren-Optionen](#figuren-optionen)
+      - [Backtracking-Optionen](#backtracking-optionen)
+      - [Ästhetische Anpassungen](#ästhetische-anpassungen)
+  - [Häufige Probleme und Lösungen](#häufige-probleme-und-lösungen)
+    - [Minecraft öffnet sich nicht](#minecraft-öffnet-sich-nicht)
+    - [Keine Verbindung zum Server](#keine-verbindung-zum-server)
+    - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
+  - [Kontakt und Support](#kontakt-und-support)
 
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
@@ -9,7 +37,7 @@
 ### Schritt-für-Schritt-Anleitung
 
 #### Download
-- Lade die neueste Version des Plugins von der [Release-Seite](#) herunter.
+- Lade die neueste Version des Tutrials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases/new) herunter.
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
@@ -26,7 +54,7 @@
 **Falls dies nicht funktioniert:**
 - Gehe über das Minecraft-Hauptmenü:
   - **Multiplayer > Wähle den ersten Server in der Liste aus und klicke doppelt darauf.**
-  - *(Screenshots werden eingefügt.)* <!-- TODO: Screenshot einfügen -->
+  !["./bilder/menu_server.png"](asda)
 
 ---
 
@@ -34,6 +62,7 @@
 
 ### Wichtige Befehle
 - **Laufen:** `W`, `A`, `S`, `D`-Tasten.
+- **Umschauen:** Mausbewegen.
 - **Springen:** `Leertaste`.
 - **Rechtsklick:** Nutze Items oder aktiviere Objekte.
 - **Inventar öffnen:** `E`-Taste.
