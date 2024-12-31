@@ -1,7 +1,8 @@
-# Spielanleitung für das Minecraft-Plugin "AlgDat Damen"
+# Anleitung für das Minecraft-Tutorial zum N-Damenproblem
 
-## Installation und Start
-- [Spielanleitung für das Minecraft-Plugin "AlgDat Damen"](#spielanleitung-für-das-minecraft-plugin-algdat-damen)
+## Inhaltsverzeichnis
+- [Anleitung für das Minecraft-Tutorial zum N-Damenproblem](#anleitung-für-das-minecraft-tutorial-zum-n-damenproblem)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
   - [Installation und Start](#installation-und-start)
     - [Voraussetzungen](#voraussetzungen)
     - [Schritt-für-Schritt-Anleitung](#schritt-für-schritt-anleitung)
@@ -27,10 +28,10 @@
     - [Minecraft öffnet sich nicht](#minecraft-öffnet-sich-nicht)
     - [Keine Verbindung zum Server](#keine-verbindung-zum-server)
     - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
-  - [Kontakt und Support](#kontakt-und-support)
 
+## Installation und Start
 ### Voraussetzungen
-- **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
+- **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt - [siehe 3.](#ausführen)).
 - Internetverbindung
 - Ein PC mit Windows 10 oder höher wird empfohlen.
 
@@ -38,6 +39,7 @@
 
 #### Download
 - Lade die neueste Version des Tutorials von der [Release-Seite](https://github.com/LionStar303/AlgDat_Damen/releases) herunter.
+- Entpacke die Datei in einen beliebigen Ordner (`Rechtsklick -> Alle extrahieren`)
 
 #### Ausführen
 1. **Wenn Java 21 installiert ist**, starte die Datei `AlgDat_Start.bat`.
@@ -48,7 +50,7 @@
    - Starte anschließend die `.bat`-Datei wie oben beschrieben.
 
 #### Server starten
-1. Zwei Terminal-Fenster öffnen sich automatisch und laden die notwendigen Dateien.
+1. Zwei Terminal-Fenster öffnen sich automatisch und laden die notwendigen Dateien. **Diese Fenster müssen während des Tutorials geöffnet bleiben**
 2. Nach kurzer Zeit sollte Minecraft starten, und du wirst automatisch auf den Server verbunden.
 
 **Falls dies nicht funktioniert:**
@@ -62,11 +64,14 @@
 ## Minecraft-Steuerung
 
 - **Laufen:** `W`, `A`, `S`, `D`-Tasten
-- **Umschauen:** Mausbewegen
+- **Umschauen:** Mausbewegung
 - **Springen:** `Leertaste`
 - **Mausklick:** Nutze Items oder aktiviere Objekte
 - **Inventar schließen:** `E`-Taste
 - **Item in linke Hand legen:** `F`-Taste
+- **Chat öffnen:** `T`-Taste
+  - **Nachricht senden:** Mit `Enter`-Taste bestätigen
+- **Fenster, Chat oder Spiel schließen:** `ESC`-Taste
 
 ---
 
@@ -81,15 +86,20 @@
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
-- Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen.
+- Du wirst immer zum Eingangstor eines Levels teleportiert. Von dort kannst du zu den Schachbrettern gehen. Folge einfach dem NPC.
 - **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
+Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt werden. Für das voranschreiten Im level hat man immer die Folgenden 3 Items im Inventar. Wenn man diese rechtsklickt, dann aktiviert man deren Funktion.
+
 - **Weiter:** Führt den Ablauf des Tutorials fort.
 - **Wiederholen:** Wiederholt die aktuelle Aufgabe.
 - **Zurück:** geht zum vorherigen Schritt zurück, **ACHTUNG:** dieser muss dann wiederholt werden.
 
+![Inventarleiste](./bilder/items.png)
+
 ### Abschluss eines Levels
+![Startinsel](./bilder/teleporter.png)
 - **Bei erfolgreichem Abschluss:**
   - Ein Blitz schlägt am Ausgangstor ein.
   - Ein blaues Feuer erscheint.
@@ -103,13 +113,13 @@
 ## Zusätzliche Tutorial-Funktionen
 
 ### Figuren setzen
-- **Dame setzen (gelber Farbstoff).**
-- **Springer setzen (orangener Farbstoff).**
-- **Superdame setzen (hellblauer Farbstoff).**
+- **Dame setzen (gelber Farbstoff / Krone).**
+- **Springer setzen (orangener Farbstoff / Springer).**
+- **Superdame setzen (hellblauer Farbstoff / Krone).**
 
 ### Bewegungen und Bedrohungen
-- **Bewegung markieren (magentafarbener Farbstoff).**
-- **Bedrohungen anzeigen (brauner Farbstoff).**
+- **Bewegung markieren (magentafarbener Farbstoff / Teppich).**
+- **Bedrohungen anzeigen (brauner Farbstoff / Lupe).**
 
 ---
 
@@ -117,25 +127,33 @@
 
 ### Funktionen des Dev-Menüs
 
+![Developer-Menü](./bilder/dev-menu.png)
+
 #### Schachbrett-Optionen
+In der Überschrift des Menüs wird angezeigt, ob ein Schachbrett angeklickt wurde oder nicht.
 - **Spawne Schachbrett (Diamant):** Erstellt ein neues Schachbrett in der aktuellen Größe.
 - **Entferne Schachbrett (Barrier):** Löscht das aktuelle Schachbrett.
 - **Größe ändern (Redstone-Fackel):** Erhöht oder verringert die Größe des nächsten zu spawnenden Schachbretts.
 - **Teppiche anzeigen (Roter Teppich):** Schaltet die Anzeige der Bedrohungszonen auf dem Brett ein oder aus.
+- **Bewegungs Teppiche (lila, türkis, grün):** Zum Setzen und Checken von eigens gesetzten Teppichen zum Markieren von Laufwegen.
 
 #### Figuren-Optionen
 - **Spawne Dame (Eisenhelm):** Setzt oder entfernt eine Dame auf dem Brett.
 - **Rotiere Figuren (Kompass):** Rotiert die Figuren auf dem Brett, um ihre Bewegungsmöglichkeiten zu analysieren.
 - **Entferne alle Figuren (TNT):** Löscht alle Figuren vom Schachbrett.
+- **Figuren Neuladen (End-Kristall)**: Lädt bei Fehlern die Figuren neu.
 
 #### Backtracking-Optionen
-- **Backtracking starten (Diamantschwert):** Startet das Backtracking, um das Brett zu lösen.
+- **Backtracking Animation starten (Diamantschwert):** Startet das Backtracking, um das Brett zu lösen.
 - **Nächster Schritt (Eisenpickel):** Führt den nächsten Schritt des Backtracking-Algorithmus aus.
 - **Schritt zurück (Goldene Hacke):** Geht einen Schritt im Algorithmus zurück.
 - **Backtracking Animation (Diamantaxt):** Löst das Brett schrittweise, wobei die Animation alle Bewegungen zeigt.
+- **Backtracking ausführen (Goldschwert):** Startet das Backtracking und löst das Brett ohne Animation.
+- **Backtrack Animation zurück (Diamant- und Goldharke):** Animation des Algorithmus rückwärts.
+- **Zufällige Lösung per Bongosort (Weißglasierte Terrakotta)**
 
 #### Ästhetische Anpassungen
-- **Ändere weiße Blöcke (Weißglasierte Terrakotta):** Ändert das Aussehen der weißen Felder.
+- **Ändere weiße Blöcke (Weiße Blöcke):** Ändert das Aussehen der weißen Felder.
 - **Ändere schwarze Blöcke (Schwarze Blöcke):** Passt das Aussehen der schwarzen Felder an.
 
 ---
@@ -148,15 +166,11 @@
 
 ### Keine Verbindung zum Server
 - Stelle sicher, dass du den richtigen Server auswählst.
-  - *(Screenshot einfügen.)* <!-- TODO: Screenshot einfügen -->
+  - siehe [Server starten](#server-starten)
+  ![Serverliste](./bilder/menu_server.png)
 
 ### Spiel hängt oder läuft langsam
 - Nutze `AlgDat_Start_Low.bat` für eine ressourcenschonende Version.
-
----
-
-## Kontakt und Support
-- Bei weiteren Fragen oder technischen Problemen wende dich bitte an das Entwicklungsteam über das [GitHub-Repository](#) oder die angegebene Support-Adresse.
 
 ---
 
