@@ -2,11 +2,13 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -39,12 +41,18 @@ public class Level2 extends Level {
     }
 
     @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -61, -35, 139), console);
+        this.npc.spawn();
+        this.npc.setType(Villager.Type.PLAINS);
+    }
+
+    @Override
     protected void initializeSteps() {
         // Erklärung des N-Damen-Problems durch NPC
         currentStep = new Step(
                 () -> {
-                    npc.playTrack(NPCTrack.NPC_201_INTRO);  
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -66, -35, 138), 1);
+                    npc.playTrack(NPCTrack.NPC_201_INTRO);
                 },
                 () -> {}
                 );
@@ -62,11 +70,13 @@ public class Level2 extends Level {
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].addPiece(new Queen(4, 2));
                     chessBoards[0].updatePieces();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -66, -35, 138), 1);
                 },
                 () -> {
                     // Dame entfernen und Chessboard despawnen
                     chessBoards[0].removeAllPieces();
                     chessBoards[0].despawnChessBoard();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -61, -35, 139), 1);
                 }));
         setupStep = setupStep.getNext();
 
