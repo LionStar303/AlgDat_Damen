@@ -88,6 +88,8 @@
 - **der NPC erklärt die Aufgaben in jedem Level.**
 
 ### Steuerung der Tutorial-Items
+Mit dem Mausrad kann das Element welches der Spieler in der Hand hat gewechselt werden. Für das voranschreiten Im level hat man immer die Folgenden 3 Items im Inventar. Wenn man diese rechtsklickt, dann aktiviert man deren Funktion.
+![Startinsel](./bilder/levelsteuerung.png)
 - **Weiter:** Führt den Ablauf des Tutorials fort.
 - **Wiederholen:** Wiederholt die aktuelle Aufgabe.
 - **Zurück:** geht zum vorherigen Schritt zurück, **ACHTUNG:** dieser muss dann wiederholt werden.
