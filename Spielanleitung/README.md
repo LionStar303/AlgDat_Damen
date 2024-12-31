@@ -55,8 +55,9 @@
 **Falls dies nicht funktioniert:**
 - Gehe über das Minecraft-Hauptmenü:
   - **Multiplayer > Wähle den ersten Server in der Liste aus und klicke doppelt darauf.**
-  !["./bilder/menu_server.png"](asda)
-
+  ![Serverliste](./bilder/menu_multiplayer.png)
+  ![Serverliste](./bilder/menu_server.png)
+  
 ---
 
 ## Minecraft-Steuerung
@@ -78,7 +79,7 @@
 2. Nutze die Buttons oder Schilder:
    - **Tag/Nacht wechseln**.
    - **Tutorial starten**.
- - ![Startinsel](./bilder/startinsel.png)
+![Startinsel](./bilder/startinsel.png)
 
 ### Navigation im Tutorial
 - Das Tutorial besteht aus verschiedenen Leveln, die Schritt für Schritt durchlaufen werden.
@@ -123,7 +124,6 @@
 - **Entferne Schachbrett (Barrier):** Löscht das aktuelle Schachbrett.
 - **Größe ändern (Redstone-Fackel):** Erhöht oder verringert die Größe des nächsten zu spawnenden Schachbretts.
 - **Teppiche anzeigen (Roter Teppich):** Schaltet die Anzeige der Bedrohungszonen auf dem Brett ein oder aus.
-- **Lösungen anzeigen (Grüner Teppich):** Zeigt eine Lösung der Figurenbewegungen auf dem Brett.
 
 #### Figuren-Optionen
 - **Spawne Dame (Eisenhelm):** Setzt oder entfernt eine Dame auf dem Brett.
