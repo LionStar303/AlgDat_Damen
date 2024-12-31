@@ -32,7 +32,7 @@
 ### Voraussetzungen
 - **Java 21** (Falls nicht installiert, wird ein Installer bereitgestellt).
 - Internetverbindung
-- Ein Windows 10 oder höher wird empfohlen.
+- Ein PC mit Windows 10 oder höher wird empfohlen.
 
 ### Schritt-für-Schritt-Anleitung
 
