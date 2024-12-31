@@ -28,7 +28,7 @@
     - [Minecraft öffnet sich nicht](#minecraft-öffnet-sich-nicht)
     - [Keine Verbindung zum Server](#keine-verbindung-zum-server)
     - [Spiel hängt oder läuft langsam](#spiel-hängt-oder-läuft-langsam)
-  - [Kontakt und Support](#kontakt-und-support)
+  - [Häufige Probleme und Lösungen](#häufige-probleme-und-lösungen-1)
 
 ## Installation und Start
 ### Voraussetzungen
@@ -157,9 +157,18 @@
 
 ---
 
-## Kontakt und Support
-- Bei weiteren Fragen oder technischen Problemen wende dich bitte an das Entwicklungsteam über das [GitHub-Repository](#) oder die angegebene Support-Adresse.
+## Häufige Probleme und Lösungen
+**Minecraft öffnet sich nicht:**
+- Stelle sicher, dass Java 21 korrekt installiert ist.
 
+- Prüfe, ob die .bat-Datei mit Administratorrechten ausgeführt wurde.
+
+**Keine Verbindung zum Server:**
+
+- Stelle sicher, dass du den richtigen Server auswählst. ![Serverliste](./bilder/menu_server.png)
+
+**Spiel hängt oder läuft langsam:**
+- Nutze AlgDat_Start_Low.bat für eine ressourcenschonende Version.
 ---
 
 **Viel Spaß beim Lösen des n-Damen-Problems!**
