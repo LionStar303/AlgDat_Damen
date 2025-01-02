@@ -3,7 +3,6 @@
 ## Inhaltsverzeichnis
 - [AlgDat\_Damen](#algdat_damen)
   - [Inhaltsverzeichnis](#inhaltsverzeichnis)
-  - [Links](#links)
   - [Das Damenproblem](#das-damenproblem)
     - [Einführung](#einführung)
     - [Wie man es löst](#wie-man-es-löst)
@@ -20,11 +19,6 @@
     - [Level 7- Eiskönigin:](#level-7--eiskönigin)
 
 ---
-
-## Links
-- [Spielanleitung](./Spielanleitung/README.md)
-- [Aufgaben](Aufgaben%20Übersicht.pdf)
-
 
 ## Das Damenproblem
 
