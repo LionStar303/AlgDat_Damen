@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
@@ -10,6 +11,7 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -33,6 +35,13 @@ public class Level4 extends Level {
             boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
+    }
+
+    @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -110, -24, 84), console);
+        this.npc.setType(Villager.Type.SWAMP);
+        this.npc.spawn();
     }
 
     @Override
@@ -135,6 +144,7 @@ public class Level4 extends Level {
 
                 unused -> {
                     if (chessBoards[0].isSolved()) {
+                        animation.cancel();
                         return true;
                     } else {
                         player.sendMessage("Die Animation ist noch nicht beendet und das Schachbrett noch nicht gelöst");

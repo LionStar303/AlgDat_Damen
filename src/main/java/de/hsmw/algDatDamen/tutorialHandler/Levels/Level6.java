@@ -2,6 +2,7 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 import de.hsmw.algDatDamen.AlgDatDamen;
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
@@ -9,6 +10,7 @@ import de.hsmw.algDatDamen.ChessBoard.MChessBoardMode;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -26,6 +28,13 @@ public class Level6 extends Level {
     public Level6(boolean console, Player player, Location startLocation, Location teleporterLocation, boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
+    }
+
+    @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -184, -11, -24), console);
+        this.npc.setType(Villager.Type.TAIGA);
+        this.npc.spawn();
     }
 
     @Override
@@ -111,7 +120,7 @@ public class Level6 extends Level {
 
                     if (chessBoards[0].getPieces().size() > 2) {
                         setInventory();
-                        npc.playTrackPositive();
+                        if(!chessBoards[0].isAnimationRunning()) npc.playTrackPositive();
                         chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                         chessBoards[0].animationPiece2Piece(AlgDatDamen.getInstance(), 1, new Queen());
                     }

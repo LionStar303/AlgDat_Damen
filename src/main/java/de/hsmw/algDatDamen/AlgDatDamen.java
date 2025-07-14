@@ -48,7 +48,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     public static Material SUPERQUEEN_BLOCK_TOP = Material.DIAMOND_BLOCK;
     public static Material KNIGHT_BLOCK_TOP = Material.LAPIS_BLOCK;
     public static Material KNIGHT_BLOCK_BOTTOM = Material.SHROOMLIGHT;
-    public static final boolean CONSOLE = true;
+    public static final boolean CONSOLE = false;
     private static int MIN_HEIGHT = -60;
 
     @Override
@@ -84,7 +84,7 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, 0f);
+        Location startLocation = new Location(event.getPlayer().getWorld(), 5.5, -45, 176.5, -90f, -5f);
         NPC startMessageNPC = new NPC(startLocation, false);
 
         // Spieler erst teleportieren, damit er das Audio hört
@@ -113,10 +113,9 @@ public final class AlgDatDamen extends JavaPlugin implements Listener {
             }
         });
 
-        // Tutorial erstellen falls Spieler neu ist und zu Start teleportieren
-        // saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(),
-        // saveManager.getProgress(event.getPlayer())));
-        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(), 6)); // <- nur zum testen
+        // Tutorial erstellen falls Spieler neu ist
+        saveManager.getTutorialList().add(new Tutorial(CONSOLE, event.getPlayer(),
+                saveManager.getProgress(event.getPlayer())));
         saveManager.getTutorialList().getLast().initialize();
     }
 

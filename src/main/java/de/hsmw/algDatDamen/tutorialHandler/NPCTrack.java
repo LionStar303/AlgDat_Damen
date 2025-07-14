@@ -142,8 +142,8 @@ public enum NPCTrack {
             + "Richtung springen oder umgekehrt. "),
     NPC_703_KNIGHT_2(Sound.ENTITY_BLAZE_BURN, "Ziemlich genauso würde das dann aussehen. "),
     // TODO huh?
-    NPC_704_KNIGHT_AND_QUEEN_1(Sound.ENTITY_BLAZE_DEATH, "Jetzt wollen wir beide kombinieren. Platziere Damen und "
-            + "Springer so, dass sich niemand gegenseitig schlägt. "),
+    NPC_704_KNIGHT_AND_QUEEN_1(Sound.ENTITY_BLAZE_DEATH, "Jetzt wollen wir beide kombinieren. Platziere eine Dame und "
+            + "einen Springer so, dass sich niemand gegenseitig schlägt. "),
     NPC_705_KNIGHT_AND_QUEEN_2(Sound.ENTITY_BLAZE_HURT, "Ich habe vollstes Vertrauen, dass du diese Herausforderung "
             + "lösen kannst."),
     NPC_706_SUPERQUEEN_INTRO(Sound.ENTITY_BLAZE_SHOOT, "Und da du das nun verstanden hast, kommen wir zum letzten "
@@ -203,7 +203,7 @@ public enum NPCTrack {
 
     public static String insertLineBreaks(String input) {
         StringBuilder formattedString = new StringBuilder();
-        int lineLength = 60;
+        int lineLength = 58;
     
         int i = 0;
         while (i + lineLength < input.length()) {

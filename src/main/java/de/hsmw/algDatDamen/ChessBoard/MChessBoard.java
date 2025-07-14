@@ -485,15 +485,9 @@ public class MChessBoard extends ChessBoard {
                 }
 
                 // keine Kollision aber Carpet
-                if(!checkCollision(x, y) && block.getType() == USER_CARPET_MATERIAL) {
-                    System.out.println("keine Kollision" + x + "," + y);
-                    return false;
-                }
+                if(!checkCollision(x, y) && block.getType() == USER_CARPET_MATERIAL) return false;
                 // Kollision aber kein Carpet
-                if(checkCollision(x, y) && block.getType() != USER_CARPET_MATERIAL) {
-                    System.out.println("kein carpet" + x + "," + y);
-                    return false;
-                }
+                if(checkCollision(x, y) && block.getType() != USER_CARPET_MATERIAL) return false;
             }
         }
         // true wenn keine Fehler
@@ -797,12 +791,10 @@ public class MChessBoard extends ChessBoard {
     public boolean spawnPiece(Piece p) {
         int x = p.getX();
         int y = p.getY();
-        System.out.println("spawning Piece " + p.getLetter() + " at " + x + ", " + y);
 
         Location pieceLocation = originCorner.clone().add(x, 2, y);
 
         if (pieceLocation.getBlock().getType() != Material.AIR) {
-            System.out.println("could not Spawn Piece at non air block");
             return false;
         }
 
@@ -1015,7 +1007,6 @@ public class MChessBoard extends ChessBoard {
      */
     public void restoreBlocks() {
         if (savedBlocks == null) {
-            System.out.println("Fehler beim Laden der originalen Blöcke.");
             return;
         }
         for (int y = 0; y < 3; y++) {
@@ -1371,7 +1362,6 @@ public class MChessBoard extends ChessBoard {
         if (currentAnimationTask != null) {
             currentAnimationTask.cancel(); // Stoppe den aktuellen Task
             isAnimationRunning = false; // Setze das Flag zurück
-            System.out.println("Aktuelle Animation wurde abgebrochen.");
         }
     }
 

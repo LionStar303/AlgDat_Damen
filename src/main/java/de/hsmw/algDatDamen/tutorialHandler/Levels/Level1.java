@@ -2,11 +2,13 @@ package de.hsmw.algDatDamen.tutorialHandler.Levels;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 
 import de.hsmw.algDatDamen.ChessBoard.MChessBoard;
 import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -44,13 +46,19 @@ public class Level1 extends Level {
     }
 
     @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -19, -44, 136), console);
+        this.npc.spawn();
+        this.npc.setType(Villager.Type.DESERT);
+    }
+
+    @Override
     public void initializeSteps() {
         // Step 1 - Erklärung des Schachbretts durch NPC
         currentStep = new Step(
                 () -> {
                     chessBoards[0].spawnChessBoard();
                     npc.playTrack(NPCTrack.NPC_101_EXPLAIN_CHESSBOARD);
-                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 0.5);
                 },
                 () -> {
                     chessBoards[0].despawnChessBoard();
@@ -88,6 +96,7 @@ public class Level1 extends Level {
                 () -> {
                     chessBoards[0].setCollisionCarpets(false);
                     chessBoards[0].updateCollisionCarpets();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -19, -44, 136), 0.5);
                 }));
         setupStep = setupStep.getNext();
 
@@ -106,6 +115,7 @@ public class Level1 extends Level {
                     // entferne zuletzt gesetzte Dame von Feld (6,5)
                     chessBoards[0].removeLastQueen();
                     chessBoards[0].updateBoard();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -27, -44, 128), 0.5);
                 }));
         setupStep = setupStep.getNext();
 
@@ -122,19 +132,18 @@ public class Level1 extends Level {
                 },
                 () -> {
                     setInventory();
-                    chessBoards[0].removeLastQueen();
+                    chessBoards[0].removeAllPieces();
                     chessBoards[0].setCollisionCarpets(true);
                     // spawne Queen auf Feld (6,5) und Feld(3,2)
-                    chessBoards[0].addPiece(new Queen(6, 5));
                     chessBoards[0].addPiece(new Queen(3, 2));
+                    chessBoards[0].addPiece(new Queen(6, 5));
                     chessBoards[0].updateBoard();
                 },
                 unused -> {
                     if (chessBoards[0].checkUserCarpets()) {
                         npc.playTrackPositive();
                         return true;
-                    } else
-                        return false;
+                    } else return false;
                 }));
         setupStep = setupStep.getNext();
 
@@ -155,6 +164,7 @@ public class Level1 extends Level {
                     teleporter.setEnabled(false, true);
                     chessBoards[0].spawnChessBoard();
                     chessBoards[0].spawnAllPieces();
+                    npc.moveVillagerWithPathfinding(new Location(player.getWorld(), -24, -44, 139), 0.5);
                 }));
 
         // alle Steps in beide Richtungen miteinander verknüpfen

@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +21,7 @@ import de.hsmw.algDatDamen.ChessBoard.Queen;
 import de.hsmw.algDatDamen.ChessBoard.Superqueen;
 import de.hsmw.algDatDamen.tutorialHandler.ControlItem;
 import de.hsmw.algDatDamen.tutorialHandler.Level;
+import de.hsmw.algDatDamen.tutorialHandler.NPC;
 import de.hsmw.algDatDamen.tutorialHandler.NPCTrack;
 import de.hsmw.algDatDamen.tutorialHandler.Step;
 import de.hsmw.algDatDamen.tutorialHandler.Tutorial;
@@ -44,6 +46,13 @@ public class Level7 extends Level {
             boolean completed, Tutorial parent) {
         // ruft den Konstruktor der Elternklasse Level auf
         super(console, LEVEL_NAME, LEVEL_DESCRIPTION, player, startLocation, teleporterLocation, completed, parent);
+    }
+
+    @Override
+    protected void spawnVillager() {
+        this.npc = new NPC(new Location(player.getWorld(), -129, -7, -71), console);
+        this.npc.setType(Villager.Type.SNOW);
+        this.npc.spawn();
     }
 
     @Override
@@ -116,6 +125,8 @@ public class Level7 extends Level {
                     setInventory();
                     chessBoards[0].setMode(MChessBoardMode.INACTIVE);
                     chessBoards[0].setCollisionCarpets(true);
+                    chessBoards[0].addPiece(new Knight(5, 5));
+                    chessBoards[0].addPiece(new Queen(4, 3));
                 },
                 // Step ist complete wenn das Schachbrett gelöst ist
 

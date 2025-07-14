@@ -24,21 +24,17 @@ public class TutorialCommand implements CommandExecutor {
             if (sender instanceof Player) {
                 for (Tutorial t : allTutorials) {
                     if (t.getPlayer().equals((Player) sender)) {
-                        t.start();
-                        /*if (t.getCurrentLevel().isActive()) {
+                        if (t.getCurrentLevel().isActive()) {
                             t.setProgress(0);
                             t.initialize();
                             t.start();
                         } else {
                             t.start();
-                        }*/
-                        sender.sendMessage("Tutorial erfolgreich gestartet.");
+                        }
                         return true;
                     }
-                    sender.sendMessage("Tutorial existiert nicht.");
                     return false;
                 }
-                sender.sendMessage("keine Tutorials vorhanden.");
                 return false;
             } else {
                 // Fehlermeldung, falls der Sender kein Spieler ist

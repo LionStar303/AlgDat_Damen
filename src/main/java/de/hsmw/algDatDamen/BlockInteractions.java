@@ -37,12 +37,12 @@ public class BlockInteractions implements Listener {
         if (block != null) {
 
             // Tag, Nacht Setzen
-            if (block.getType() == Material.POLISHED_BLACKSTONE_BUTTON && block.getLocation().getBlockX() == 9
-                    && block.getLocation().getBlockY() == -44) {
+            if ((block.getType() == Material.POLISHED_BLACKSTONE_BUTTON || block.getType() == Material.SPRUCE_WALL_SIGN) && block.getLocation().getBlockX() == 9
+                    && (block.getLocation().getBlockY() == -44 || block.getLocation().getBlockY() == -43)) {
 
                 World world = event.getPlayer().getWorld();
 
-                // case für z-koordinate
+                // case für z-koordinates
                 switch (block.getLocation().getBlockZ()) {
                     // Tag
                     case 175:
